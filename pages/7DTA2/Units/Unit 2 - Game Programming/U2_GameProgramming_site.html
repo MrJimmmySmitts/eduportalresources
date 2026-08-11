@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 2 &#8212; Game Programming | Reference Site</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0D1117; --bg2:#151B23; --bg3:#1C232C;
+  --fg:#E8EDF4; --fg2:#B7C0CC; --fg3:#7D8794;
+  --border:#252D38; --border2:#333D4A;
+  --blue:#4361EE;  --blue-bg:rgba(67,97,238,.14);  --blue-fg:#9DB0FF;
+  --green:#10B981; --green-bg:rgba(16,185,129,.13); --green-fg:#5EE9B5;
+  --amber:#F59E0B; --amber-bg:rgba(245,158,11,.13); --amber-fg:#FBC66B;
+  --purple:#8B5CF6;--purple-bg:rgba(139,92,246,.14);--purple-fg:#BFA4FD;
+  --red:#EF4444;   --red-bg:rgba(239,68,68,.13);   --red-fg:#FF9090;
+  --sans:'DM Sans',sans-serif; --read:'Atkinson Hyperlegible','DM Sans',sans-serif;
+  --serif:'DM Serif Display',serif; --mono:'DM Mono',monospace;
+}
+[data-theme="light"]{
+  --bg:#FFFFFF; --bg2:#F5F7FA; --bg3:#EDF1F6;
+  --fg:#0D1117; --fg2:#39414D; --fg3:#69737F;
+  --border:#DDE3EA; --border2:#C6CED8;
+  --blue-fg:#2E45B8; --green-fg:#07835A; --amber-fg:#9A6206; --purple-fg:#6234D6; --red-fg:#C22B2B;
+  --blue-bg:rgba(67,97,238,.09); --green-bg:rgba(16,185,129,.10);
+  --amber-bg:rgba(245,158,11,.12); --purple-bg:rgba(139,92,246,.10); --red-bg:rgba(239,68,68,.09);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--bg);color:var(--fg);font-size:15px;line-height:1.75;}
+.site-nav{position:sticky;top:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:0 24px;height:46px;}
+.nav-brand{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--fg3);text-transform:uppercase;margin-right:auto;}
+.theme-btn{background:transparent;border:1px solid var(--border2);color:var(--fg2);font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;padding:5px 12px;border-radius:4px;cursor:pointer;text-transform:uppercase;transition:all .15s;}
+.theme-btn:hover{border-color:var(--blue);color:var(--blue-fg);}
+.cover{background:var(--bg2);border-bottom:1px solid var(--border);padding:56px 48px 46px;}
+.cover-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--blue-fg);text-transform:uppercase;margin-bottom:18px;}
+.cover-title{font-family:var(--serif);font-size:44px;line-height:1.1;margin-bottom:10px;color:var(--fg);}
+.cover-sub{font-size:15px;color:var(--fg2);max-width:640px;margin-bottom:0;font-family:var(--read);}
+.cover-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+.cover-link{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;padding:6px 14px;border-radius:4px;border:1px solid var(--border2);color:var(--fg2);text-decoration:none;transition:all .15s;text-transform:uppercase;}
+.cover-link:hover{border-color:var(--blue);color:var(--blue-fg);background:var(--blue-bg);}
+.body-wrap{display:grid;grid-template-columns:238px 1fr;}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:26px 14px;position:sticky;top:46px;height:calc(100vh - 46px);overflow-y:auto;}
+.sidebar-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg3);margin-bottom:12px;padding-left:8px;}
+.sidebar a{display:block;font-size:12.5px;color:var(--fg2);text-decoration:none;padding:6px 9px;border-radius:4px;margin-bottom:2px;transition:all .15s;line-height:1.4;}
+.sidebar a:hover{background:var(--blue-bg);color:var(--blue-fg);}
+.content{padding:0 48px 90px;max-width:940px;min-width:0;}
+section{padding-top:26px;}
+.lesson-divider{border-bottom:1px solid var(--border);padding:34px 0 22px;margin-bottom:8px;}
+.ld-title{font-family:var(--serif);font-size:31px;line-height:1.15;margin-bottom:6px;}
+.ld-sub{font-size:14px;color:var(--fg3);font-family:var(--read);}
+.section-band{display:flex;align-items:center;gap:12px;padding:16px 0 12px;border-bottom:1px solid var(--border);margin:28px 0 20px;}
+.sn{width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.si .slbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg3);}
+.si .stit{font-family:var(--serif);font-size:21px;line-height:1.15;color:var(--fg);}
+.sbadge{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:3px;letter-spacing:.04em;margin-left:auto;flex-shrink:0;text-transform:uppercase;}
+.b-def{background:var(--blue-bg);color:var(--blue-fg);border:1px solid var(--blue);}
+.b-case{background:var(--amber-bg);color:var(--amber-fg);border:1px solid var(--amber);}
+.b-crit{background:var(--red-bg);color:var(--red-fg);border:1px solid var(--red);}
+p,li{font-family:var(--read);color:var(--fg2);margin-bottom:10px;}
+li{margin-bottom:7px;}
+ol,ul{padding-left:22px;margin:10px 0 14px;}
+h3{font-family:var(--serif);font-size:19px;color:var(--fg);margin:22px 0 10px;font-weight:400;}
+h4{font-family:var(--sans);font-size:14px;color:var(--fg);margin:16px 0 6px;font-weight:600;letter-spacing:.01em;}
+strong{color:var(--fg);font-weight:600;}
+code{font-family:var(--mono);font-size:.88em;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;color:var(--blue-fg);}
+a{color:var(--blue-fg);}
+.def-box{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:0 6px 6px 0;padding:14px 18px;margin:14px 0;}
+.def-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue-fg);margin-bottom:5px;}
+.def-text{font-family:var(--read);font-size:15px;color:var(--fg);line-height:1.6;}
+.callout{border-left:3px solid;border-radius:0 6px 6px 0;padding:13px 17px;margin:16px 0;font-size:13.5px;line-height:1.65;font-family:var(--read);color:var(--fg2);}
+.callout-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:5px;}
+.callout-info{border-color:var(--blue);background:var(--blue-bg);} .callout-info .callout-label{color:var(--blue-fg);}
+.callout-tip{border-color:var(--green);background:var(--green-bg);} .callout-tip .callout-label{color:var(--green-fg);}
+.callout-note{border-color:var(--amber);background:var(--amber-bg);} .callout-note .callout-label{color:var(--amber-fg);}
+.callout-extend{border-color:var(--purple);background:var(--purple-bg);} .callout-extend .callout-label{color:var(--purple-fg);}
+.copy-banner{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;background:var(--amber-bg);color:var(--amber-fg);border:1px solid var(--amber);border-radius:4px;padding:7px 13px;margin:18px 0 8px;display:inline-block;}
+.crit-grid,.criteria-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:12px 0 18px;}
+.crit-card,.crit-tile{border:1px solid var(--border2);border-radius:7px;padding:14px;background:var(--bg2);}
+.cc-found{border-color:var(--green);background:var(--green-bg);}
+.cc-devel{border-color:var(--amber);background:var(--amber-bg);}
+.cc-ext{border-color:var(--purple);background:var(--purple-bg);}
+.crit-tier{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
+.cc-found .crit-tier{color:var(--green-fg);} .cc-devel .crit-tier{color:var(--amber-fg);} .cc-ext .crit-tier{color:var(--purple-fg);}
+.crit-card p{font-size:12.8px;line-height:1.55;margin:0;}
+.data-table,.roadmap-table,.match-table{width:100%;border-collapse:collapse;margin:14px 0 18px;font-family:var(--read);}
+.data-table th,.roadmap-table th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg3);text-align:left;padding:9px 12px;background:var(--bg3);border-bottom:1px solid var(--border2);}
+.data-table td,.roadmap-table td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:13.5px;color:var(--fg2);vertical-align:top;}
+.data-table tr:last-child td{border-bottom:none;}
+.code-block{font-family:var(--mono);font-size:13px;background:var(--bg2);border:1px solid var(--border2);border-radius:7px;padding:16px 20px;margin:14px 0;color:var(--green-fg);line-height:1.85;overflow-x:auto;white-space:pre-wrap;}
+.block-demo{display:flex;flex-direction:column;gap:8px;margin:14px 0;align-items:flex-start;}
+.block{font-family:var(--mono);font-size:12.5px;padding:8px 15px;border-radius:5px;color:#fff;}
+.block.evt{background:var(--amber);color:#1A1206;}
+.block.dec{background:var(--blue);}
+.block.proc{background:var(--green);color:#04241A;}
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0;}
+.process-card{background:var(--bg2);border:1px solid var(--border2);border-radius:7px;padding:14px;}
+.pc-num{font-family:var(--mono);font-size:10px;color:var(--blue-fg);margin-bottom:4px;}
+.pc-title{font-family:var(--serif);font-size:16px;margin-bottom:5px;color:var(--fg);}
+.pc-body{font-size:12.5px;color:var(--fg2);line-height:1.5;font-family:var(--read);}
+.debug-steps{display:grid;gap:9px;margin:14px 0;}
+.debug-step{display:flex;align-items:center;gap:13px;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:11px 15px;font-size:13.5px;color:var(--fg2);font-family:var(--read);}
+.dn{font-family:var(--mono);font-size:11px;width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.box-demo{display:flex;align-items:center;gap:18px;margin:16px 0;}
+.box{border:1px solid var(--border2);background:var(--bg2);border-radius:6px;padding:12px 18px;text-align:center;min-width:104px;}
+.box-label{font-family:var(--mono);font-size:10px;color:var(--fg3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;}
+.box-val{font-family:var(--mono);font-size:22px;color:var(--green-fg);}
+.arrow{font-size:20px;color:var(--fg3);}
+.pixel-demo,.swatches{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0;}
+.swatch{width:52px;height:52px;border-radius:5px;border:1px solid var(--border2);}
+.flow-demo{display:flex;gap:26px;margin:14px 0;flex-wrap:wrap;}
+.flow-col{flex:1;min-width:210px;}
+.flow-col-label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg3);margin-bottom:8px;}
+.flow-step{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:9px 13px;font-size:13px;color:var(--fg2);margin-bottom:6px;font-family:var(--read);}
+.flow-branch{border-color:var(--blue);color:var(--blue-fg);}
+.flow-arrow{color:var(--fg3);text-align:center;font-size:13px;margin-bottom:6px;}
+.checkpoint{background:var(--bg2);border:1px solid var(--green);border-left:3px solid var(--green);border-radius:0 6px 6px 0;padding:12px 16px;margin:12px 0;}
+.cp-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--green-fg);margin-bottom:4px;}
+.ct-title{font-family:var(--serif);font-size:16px;color:var(--fg);margin-bottom:4px;}
+.ct-q{font-size:13px;color:var(--fg2);font-family:var(--read);}
+.step-card{background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:16px 20px;margin:14px 0;}
+.step-head{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.step-n{font-family:var(--mono);font-size:11px;width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-title{font-family:var(--serif);font-size:18px;color:var(--fg);}
+.step-tag{margin-left:auto;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:3px;}
+.tag-cond{background:var(--blue-bg);color:var(--blue-fg);border:1px solid var(--blue);}
+.tag-loop{background:var(--green-bg);color:var(--green-fg);border:1px solid var(--green);}
+.tag-both{background:var(--purple-bg);color:var(--purple-fg);border:1px solid var(--purple);}
+.tag-debug{background:var(--red-bg);color:var(--red-fg);border:1px solid var(--red);}
+.footer{border-top:1px solid var(--border);padding:26px 48px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--fg3);text-transform:uppercase;}
+@media (max-width:900px){
+  .body-wrap{grid-template-columns:1fr;}
+  .sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border);}
+  .content{padding:0 22px 70px;}
+  .cover{padding:38px 22px 32px;} .cover-title{font-size:32px;}
+  .crit-grid,.criteria-cards,.process-grid{grid-template-columns:1fr;}
+}
+
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <span class="nav-brand">EduPortal &#183; Y7 Digital Technology &#183; Unit 2</span>
+  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">Light mode</button>
+</nav>
+
+<div class="cover">
+  <div class="cover-eyebrow">Year 7 &#183; Digital Technology &#183; Unit 2</div>
+  <div class="cover-title">Game Programming</div>
+  <div class="cover-sub">Reference site for the whole unit &#8212; every lesson's full notes, in one place. Eight lessons, building toward CAT 1: Game Design. Use the sidebar to jump to any lesson.</div>
+</div>
+
+<div class="body-wrap">
+  <nav class="sidebar">
+    <div class="sidebar-label">Lessons</div>
+<a href="#y7-dt-u2-l1-game-design-process">L1. The Design Process &amp; Your Game Brief</a>
+<a href="#y7-dt-u2-l2-pixel-art-sprites">L2. Pixel Art &amp; Sprites</a>
+<a href="#y7-dt-u2-l3-algorithms-flowcharts">L3. Algorithms &amp; Flowcharts</a>
+<a href="#y7-dt-u2-l4-makecode-variables">L4. MakeCode Arcade &amp; Variables</a>
+<a href="#y7-dt-u2-l5-conditionals-loops">L5. Conditionals &amp; Loops</a>
+<a href="#y7-dt-u2-l6-making-our-game">L6. Making Our Game</a>
+<a href="#y7-dt-u2-l7-cat-studio-2">L7. CAT Studio 2: Modify, Poster &amp; Document</a>
+<a href="#y7-dt-u2-l8-showcase-reflection">L8. Game Showcase &amp; Reflection</a>
+  </nav>
+
+  <main class="content">
+
+    <section id="y7-dt-u2-l1-game-design-process">
+      <div class="lesson-divider">
+        <div class="cover-eyebrow">Lesson 1 of 8</div>
+        <div class="ld-title">The Design Process &amp; Your Game Brief</div>
+        <div class="ld-sub">Lesson reference notes — how designers work, and what CAT 1 is asking you to make.</div>
+        <div class="cover-links">
+          <a href="L1_DesignProcess.pptx" class="cover-link">&#8599; Slides</a>
+          <a href="L1_DesignProcess_workbook.html" class="cover-link">&#8599; Workbook</a>
+        </div>
+      </div>
+<div id="l1-s1">
+<div class="section-band">
+<div class="sn">1</div>
+<div class="si"><div class="slbl">Lesson 1</div><div class="stit">Learning Objective &amp; Success Criteria</div></div>
+<span class="sbadge b-def">Objective</span>
+</div>
+<div class="def-box">
+<div class="def-label">Learning Objective</div>
+<div class="def-text">Understand the steps of the design process and how it applies to building a game, and unpack what CAT 1: Game Design will require.</div>
+</div>
+<h3>Success Criteria</h3>
+<div class="crit-grid">
+<div class="crit-card cc-found"><div class="crit-tier">🟢 Foundation</div><p>List the four stages of the design process and name the three CAT 1 tasks.</p></div>
+<div class="crit-card cc-devel"><div class="crit-tier">🟡 Developing</div><p>Explain why each design-process stage matters for a game project specifically, using the paper-tower activity as an example.</p></div>
+<div class="crit-card cc-ext"><div class="crit-tier">🟣 Extending</div><p>Predict which stage of the design process is likely to take the most iteration for a game (vs. a physical model), and justify why.</p></div>
+</div>
+</div>
+<div id="l1-s2">
+<div class="section-band">
+<div class="sn">2</div>
+<div class="si"><div class="slbl">Explicit Explanation</div><div class="stit">The Design Process</div></div>
+<span class="sbadge b-case">Explanation</span>
+</div>
+<p>Making something and <strong>designing</strong> something aren't the same thing. Making is just doing — picking up materials and producing a result. Designing is doing it with a process: understanding the problem first, planning a response, building it, then checking whether it actually solved the problem. Every project in this unit, including your CAT, follows this process.</p>
+<div id="l1-s2-stages">
+<h3>The Four Stages</h3>
+<div class="process-grid">
+<div class="process-card"><div class="pc-num">1</div><div class="pc-title">Identify</div><div class="pc-body">What's the actual problem or brief? What does a successful solution need to do?</div></div>
+<div class="process-card"><div class="pc-num">2</div><div class="pc-title">Plan</div><div class="pc-body">Sketch, sequence, or flowchart your approach before you start building.</div></div>
+<div class="process-card"><div class="pc-num">3</div><div class="pc-title">Create</div><div class="pc-body">Build the thing — following your plan, but adjusting as you discover problems.</div></div>
+<div class="process-card"><div class="pc-num">4</div><div class="pc-title">Evaluate</div><div class="pc-body">Check the result against the brief. What works? What would you change?</div></div>
+</div>
+</div>
+<div class="callout callout-tip">
+<div class="callout-label">Why this matters for code</div>
+        Most bugs in a program are actually <strong>Plan</strong>-stage problems showing up during <strong>Create</strong>. If your algorithm or flowchart was vague, the code built from it will be vague too. Lesson 3 teaches you how to plan precisely, before any building starts.
+      </div>
+<div class="copy-banner">Copy this — your workbook needs it</div>
+<p>Your "goal for today": which success-criteria tier are you aiming for, and why? Write this in your workbook before the paper tower challenge.</p>
+</div>
+<div id="l1-s3">
+<div class="section-band">
+<div class="sn">3</div>
+<div class="si"><div class="slbl">The Assessment</div><div class="stit">CAT 1: Game Design</div></div>
+<span class="sbadge b-crit">Assessment</span>
+</div>
+<p>Everything in this unit builds toward one assessment. Here's the brief at a glance — full detail is on the CAT Task Sheet, linked below.</p>
+<h4>Task 1 — Build &amp; Customise</h4>
+<p>Choose a single-player MakeCode Arcade tutorial, complete it, then replace every default image with art you've made yourself (player, enemies/collectibles, background). Change at least one aspect of how the game works.</p>
+<h4>Task 2 — Promote</h4>
+<p>Create a poster for your game in Canva, including a screenshot and a one-sentence blurb.</p>
+<h4>Task 3 — Document &amp; Evaluate</h4>
+<p>Answer questions about your game's title, theme, your modification and why you made it, your target audience, and similar games — then submit your poster and a link to your game.</p>
+<div id="l1-s3-rubric">
+<h3>Rubric Tiers</h3>
+<table class="data-table">
+<tr><th>Tier</th><th>What it looks like</th></tr>
+<tr><td>🟢 Foundation</td><td>Tutorial runs; some art replaced; a change is attempted; poster has a screenshot or blurb; questions answered briefly.</td></tr>
+<tr><td>🟡 Developing</td><td>Tutorial runs correctly start to finish; all required art is original; one mechanic is changed and explained; poster is clear; all questions answered with specific detail.</td></tr>
+<tr><td>🟣 Extending</td><td>Extra polish beyond the tutorial; the modification meaningfully changes player experience and is justified; poster would genuinely attract a player; reflection compares to similar games.</td></tr>
+</table>
+</div>
+<div class="callout callout-info">
+<div class="callout-label">Full detail</div>
+        See the CAT Task Sheet for the complete rubric, all criteria, and curriculum links — this page is a summary only.
+      </div>
+</div>
+<div id="l1-s4">
+<div class="section-band">
+<div class="sn">4</div>
+<div class="si"><div class="slbl">Where We're Headed</div><div class="stit">Unit Roadmap</div></div>
+<span class="sbadge b-def">Roadmap</span>
+</div>
+<p>Ten lessons, each building one piece of what you need for the CAT.</p>
+<table class="data-table roadmap-table">
+<tr><th>#</th><th>Lesson</th><th>Builds toward</th></tr>
+<tr><td>L1</td><td>The Design Process &amp; Your Game Brief</td><td>You are here</td></tr>
+<tr><td>L2</td><td>Pixel Art &amp; Sprites</td><td>Original art for Task 1</td></tr>
+<tr><td>L3</td><td class="combined">Algorithms &amp; Flowcharts</td><td>Planning artefact for Task 1</td></tr>
+<tr><td>L4</td><td>Introduction to MakeCode Arcade</td><td>The tool you'll build in</td></tr>
+<tr><td>L5</td><td>Variables: Score &amp; Lives</td><td>A common modification choice</td></tr>
+<tr><td>L6</td><td class="combined">Conditionals &amp; Loops</td><td>Win/lose logic, repeating behaviour, debugging</td></tr>
+<tr><td>L7</td><td>What Makes a Good Game?</td><td>Justifying your modification</td></tr>
+<tr><td>L8</td><td>CAT Studio 1: Build &amp; Reskin</td><td>Task 1, first half — assessed</td></tr>
+<tr><td>L9</td><td>CAT Studio 2: Modify, Poster &amp; Document</td><td>Tasks 1–3 complete — assessed</td></tr>
+<tr><td>L10</td><td>Game Showcase &amp; Reflection</td><td>Evaluate stage, closing the loop</td></tr>
+</table>
+</div>
+<div id="l1-s5">
+<div class="section-band">
+<div class="sn">5</div>
+<div class="si"><div class="slbl">Application of Learning</div><div class="stit">Paper Tower Challenge</div></div>
+<span class="sbadge b-case">Activity</span>
+</div>
+<p>In small groups, build the tallest freestanding tower using only paper and tape — working through Identify → Plan → Create → Evaluate explicitly, with a teacher prompt at each stage.</p>
+<div class="callout callout-tip">
+<div class="callout-label">Watch for this</div>
+        Notice where your group gets stuck. Is it a <strong>Plan</strong> problem (you didn't know what you were building) or a <strong>Create</strong> problem (the plan was fine but execution was hard)? Record this in your workbook — it's the same distinction you'll use when debugging code later in the unit.
+      </div>
+</div>
+<div id="l1-s6">
+<div class="section-band">
+<div class="sn">6</div>
+<div class="si"><div class="slbl">Reference</div><div class="stit">Key Terms</div></div>
+<span class="sbadge b-def">Glossary</span>
+</div>
+<table class="data-table">
+<tr><th>Term</th><th>Meaning</th></tr>
+<tr><td>Design process</td><td>A repeatable sequence (Identify → Plan → Create → Evaluate) for solving a problem with a designed solution.</td></tr>
+<tr><td>Brief</td><td>The set of requirements a solution must meet — for CAT 1, this is the three-task game brief.</td></tr>
+<tr><td>Iteration</td><td>Going back through a stage of the design process again based on what you learned in a later stage.</td></tr>
+<tr><td>Rubric tier</td><td>One of three levels (Foundation / Developing / Extending) describing the quality of a piece of assessed work.</td></tr>
+</table>
+</div>
+    </section>
+
+
+    <section id="y7-dt-u2-l2-pixel-art-sprites">
+      <div class="lesson-divider">
+        <div class="cover-eyebrow">Lesson 2 of 8</div>
+        <div class="ld-title">Pixel Art &amp; Sprites</div>
+        <div class="ld-sub">Lesson reference notes — making the art your game will be built from.</div>
+        <div class="cover-links">
+          <a href="L2_PixelArtSprites.pptx" class="cover-link">&#8599; Slides</a>
+          <a href="L2_PixelArtSprites_workbook.html" class="cover-link">&#8599; Workbook</a>
+        </div>
+      </div>
+<div id="l2-s1">
+<div class="section-band">
+<div class="sn">1</div>
+<div class="si"><div class="slbl">Lesson 2</div><div class="stit">Learning Objective &amp; Success Criteria</div></div>
+<span class="sbadge b-def">Objective</span>
+</div>
+<div class="def-box">
+<div class="def-label">Learning Objective</div>
+<div class="def-text">Understand how digital images are built from pixels, and create original sprite art for use in your game.</div>
+</div>
+<h3>Success Criteria</h3>
+<div class="crit-grid">
+<div class="crit-card cc-found"><div class="crit-tier">🟢 Foundation</div><p>Create a simple original sprite (player character) using a pixel art editor.</p></div>
+<div class="crit-card cc-devel"><div class="crit-tier">🟡 Developing</div><p>Create a small matching set of sprites (player, enemy/collectible, background) with a consistent colour palette.</p></div>
+<div class="crit-card cc-ext"><div class="crit-tier">🟣 Extending</div><p>Design sprites with a 2-frame animation in mind, ready for MakeCode's animation blocks.</p></div>
+</div>
+</div>
+<div id="l2-s2">
+<div class="section-band">
+<div class="sn">2</div>
+<div class="si"><div class="slbl">Explicit Explanation</div><div class="stit">How Pixels Work</div></div>
+<span class="sbadge b-case">Explanation</span>
+</div>
+<p>Every digital image — a photo, an icon, a game sprite — is built from a grid of <strong>pixels</strong>, each one a single block of colour. Zoom into any image far enough and you'll see the grid. Pixel art embraces this directly: instead of hiding the grid, it designs with it.</p>
+<div id="l2-s2-grid">
+<h3>Pixels &amp; Resolution</h3>
+<p>MakeCode Arcade sprites are typically <strong>16×16 pixels</strong> — a small grid. That sounds limiting, but it's exactly what makes pixel art readable at game speed: a player glancing at the screen for a fraction of a second needs to recognise your character instantly.</p>
+<div class="pixel-demo" id="l2-pixelDemo"></div>
+<p style="font-size:12.5px;color:var(--ink3);">An 8×8 grid, for illustration — your actual canvas in Piskel will usually be 16×16.</p>
+</div>
+<div class="callout callout-info">
+<div class="callout-label">Connection to Data</div>
+        Each pixel's colour is stored as data — usually as numbers representing red, green and blue values. This is the same "representing data in binary and through media" idea from the Digital Systems strand, just applied directly.
+      </div>
+</div>
+<div id="l2-s3">
+<div class="section-band">
+<div class="sn">3</div>
+<div class="si"><div class="slbl">Tool Walkthrough</div><div class="stit">Using Piskel</div></div>
+<span class="sbadge b-case">Tool</span>
+</div>
+<p>Piskel is a free, browser-based pixel art editor. The core tools you'll use:</p>
+<table class="data-table">
+<tr><th>Tool</th><th>What it does</th></tr>
+<tr><td>Canvas size</td><td>Set this to match MakeCode's sprite size (16×16 is the default and safest choice).</td></tr>
+<tr><td>Pencil</td><td>Draws one pixel at a time in the selected colour.</td></tr>
+<tr><td>Fill (bucket)</td><td>Fills a connected area of the same colour — fast for backgrounds and large shapes.</td></tr>
+<tr><td>Eraser</td><td>Clears a pixel back to transparent.</td></tr>
+<tr><td>Colour palette</td><td>Pick and save the colours you're using — keep this small and consistent.</td></tr>
+<tr><td>Export → PNG</td><td>Saves your sprite as an image file you can import into MakeCode.</td></tr>
+</table>
+<div class="swatches">
+<div class="swatch" style="background:#1B5E47;"></div>
+<div class="swatch" style="background:#B8620A;"></div>
+<div class="swatch" style="background:#2B3A8C;"></div>
+<div class="swatch" style="background:#8C1F28;"></div>
+<div class="swatch" style="background:#F7F3EC;border:1px solid #C4BFB6;"></div>
+</div>
+<p style="font-size:12.5px;color:var(--ink3);">Example of a small, deliberate palette — 3 to 5 colours, reused across every sprite in your game.</p>
+</div>
+<div id="l2-s4">
+<div class="section-band">
+<div class="sn">4</div>
+<div class="si"><div class="slbl">Design Principles</div><div class="stit">Designing Readable Sprites</div></div>
+<span class="sbadge b-def">Principles</span>
+</div>
+<ul>
+<li><strong>Work small and bold.</strong> Fine detail disappears at 16×16 — strong, simple shapes read better than intricate ones.</li>
+<li><strong>High contrast.</strong> Your player should stand out clearly from your background, even at a glance.</li>
+<li><strong>Limit your palette.</strong> 3–5 colours, reused across all your sprites, makes your game feel like one cohesive world instead of a random collection of images.</li>
+<li><strong>Silhouette first.</strong> If you can recognise the shape with all colours removed, the detail you add on top will only help.</li>
+</ul>
+<div class="callout callout-tip">
+<div class="callout-label">Animation preview</div>
+        If you're aiming for the Extending criterion, sketch a second frame of your player sprite now — a walk cycle only needs a small change (e.g. legs swapped, or a slight bounce) to read as movement once MakeCode animates between the two frames.
+      </div>
+</div>
+<div id="l2-s5">
+<div class="section-band">
+<div class="sn">5</div>
+<div class="si"><div class="slbl">Application of Learning</div><div class="stit">Your Sprite Set</div></div>
+<span class="sbadge b-case">Task</span>
+</div>
+<p>Today you'll create the original art that replaces every default image in your CAT game. At minimum, you need:</p>
+<ol>
+<li>A <strong>player character</strong> sprite</li>
+<li>At least one <strong>enemy or collectible</strong> sprite</li>
+<li>A <strong>background</strong> tile or scene</li>
+</ol>
+<div class="copy-banner">Copy this — your workbook needs it</div>
+<p>Export each sprite as a PNG and save them into a personal "game assets" folder — you'll import them directly into MakeCode in Lesson 4.</p>
+</div>
+<div id="l2-s6">
+<div class="section-band">
+<div class="sn">6</div>
+<div class="si"><div class="slbl">Reference</div><div class="stit">Key Terms</div></div>
+<span class="sbadge b-def">Glossary</span>
+</div>
+<table class="data-table">
+<tr><th>Term</th><th>Meaning</th></tr>
+<tr><td>Pixel</td><td>The smallest single block of colour in a digital image.</td></tr>
+<tr><td>Sprite</td><td>A small image representing a game object — a character, enemy, item, or tile.</td></tr>
+<tr><td>Palette</td><td>The set of colours used across an artwork or game.</td></tr>
+<tr><td>Silhouette</td><td>The recognisable outline shape of a sprite, with detail and colour removed.</td></tr>
+</table>
+</div>
+    </section>
+
+
+    <section id="y7-dt-u2-l3-algorithms-flowcharts">
+      <div class="lesson-divider">
+        <div class="cover-eyebrow">Lesson 3 of 8</div>
+        <div class="ld-title">Algorithms &amp; Flowcharts</div>
+        <div class="ld-sub">Lesson reference notes — planning a program precisely, before any building starts.</div>
+        <div class="cover-links">
+          <a href="L3_AlgorithmsFlowcharts.pptx" class="cover-link">&#8599; Slides</a>
+          <a href="L3_AlgorithmsFlowcharts_workbook.html" class="cover-link">&#8599; Workbook</a>
+        </div>
+      </div>
+<div id="l3-s1">
+<div class="section-band">
+<div class="sn">1</div>
+<div class="si"><div class="slbl">Lesson 3 — Combined Lesson</div><div class="stit">Learning Objective &amp; Success Criteria</div></div>
+<span class="sbadge b-def">Objective</span>
+</div>
+<div class="def-box">
+<div class="def-label">Learning Objective</div>
+<div class="def-text">Understand what an algorithm is, write one as a precise ordered sequence of steps, and represent it visually as a flowchart — including a decision point.</div>
+</div>
+<h3>Success Criteria</h3>
+<div class="crit-grid">
+<div class="crit-card cc-found"><div class="crit-tier">🟢 Foundation</div><p>Define "algorithm," identify standard flowchart symbols, and convert a simple given algorithm into a flowchart.</p></div>
+<div class="crit-card cc-devel"><div class="crit-tier">🟡 Developing</div><p>Write a step-by-step algorithm for a game event and convert it into a flowchart, including one decision point.</p></div>
+<div class="crit-card cc-ext"><div class="crit-tier">🟣 Extending</div><p>Write and flowchart an algorithm with more than one decision point, covering a fuller slice of the game loop.</p></div>
+</div>
+<div class="callout callout-note">
+<div class="callout-label">Why this lesson is combined</div>
+        Algorithms and flowcharts are the same skill in two forms — write the steps precisely, then map them visually. Teaching them back-to-back against one example keeps that connection obvious.
+      </div>
+</div>
+<div id="l3-s2">
+<div class="section-band">
+<div class="sn">2</div>
+<div class="si"><div class="slbl">Explicit Explanation</div><div class="stit">What Is an Algorithm?</div></div>
+<span class="sbadge b-case">Explanation</span>
+</div>
+<div class="def-box">
+<div class="def-label">Definition</div>
+<div class="def-text">An algorithm is a precise, ordered sequence of steps to solve a problem or complete a task.</div>
+</div>
+<p><strong>Precise</strong> matters as much as <strong>ordered</strong>. "Make a sandwich" is not an algorithm — it skips every actual step. "Get bread, butter one slice, butter the other, add filling, put slices together" is closer, because someone with no context could follow it.</p>
+<h4>Worked Example — A Game Event</h4>
+<p>Here's an algorithm for "player touches an enemy," including a decision:</p>
+<ol>
+<li>Player presses A → character jumps</li>
+<li>If character lands on enemy → enemy disappears, score + 1</li>
+<li>Else → nothing happens</li>
+</ol>
+<div class="callout callout-info">
+<div class="callout-label">Preview vocabulary</div>
+        Notice three patterns here: <strong>sequence</strong> (do this, then this), <strong>decision</strong> (if... then... else...), and later <strong>repetition</strong> (do this again and again). You'll build all three directly into MakeCode blocks in Lessons 4 and 5.
+      </div>
+</div>
+<div id="l3-s3">
+<div class="section-band">
+<div class="sn">3</div>
+<div class="si"><div class="slbl">Explicit Explanation</div><div class="stit">From Algorithm to Flowchart</div></div>
+<span class="sbadge b-case">Explanation</span>
+</div>
+<p>A flowchart is the same algorithm, drawn as a visual map. Every step gets a shape; arrows show the order; one shape (a diamond) shows a decision splitting into two paths.</p>
+<div id="l3-s3-symbols">
+<h3>The Four Symbols</h3>
+<table class="data-table">
+<tr><th>Symbol</th><th>Shape</th><th>Meaning</th></tr>
+<tr><td>Start / End</td><td>Oval</td><td>Marks where the algorithm begins or ends.</td></tr>
+<tr><td>Process</td><td>Rectangle</td><td>A single action or step.</td></tr>
+<tr><td>Decision</td><td>Diamond</td><td>A yes/no question — splits into two paths.</td></tr>
+<tr><td>Flow line</td><td>Arrow</td><td>Shows the direction and order of steps.</td></tr>
+</table>
+</div>
+<div id="l3-s3-example">
+<h3>Worked Example, Mapped</h3>
+<div class="flow-demo">
+<div class="flow-step">Player presses A</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step proc">Character jumps</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step dec"><span>Landed on enemy?</span></div>
+<div class="flow-branch">
+<div class="flow-col">
+<div class="flow-col-label">YES</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step proc">Enemy disappears, score +1</div>
+</div>
+<div class="flow-col">
+<div class="flow-col-label">NO</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step proc">Nothing happens</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-tip">
+<div class="callout-label">Check your flowchart</div>
+        Trace it by following arrows aloud, exactly as drawn. If it doesn't make sense read literally, that's the gap to fix — and every decision diamond needs both a "yes" and a "no" path going somewhere.
+      </div>
+</div>
+<div id="l3-s4">
+<div class="section-band">
+<div class="sn">4</div>
+<div class="si"><div class="slbl">Application of Learning</div><div class="stit">Your Turn</div></div>
+<span class="sbadge b-case">Task</span>
+</div>
+<p>Choose one key event from the game you're planning — collecting an item, losing a life, reaching a goal — and:</p>
+<ol>
+<li>Write it as an algorithm: precise, ordered steps, including at least one decision.</li>
+<li>Convert it into a flowchart using the correct symbols.</li>
+</ol>
+<div class="copy-banner">Copy this — your workbook needs it</div>
+<p>This flowchart is a required planning artefact for the CAT — bring it (or a photo of it) to Lesson 6.</p>
+</div>
+<div id="l3-s5">
+<div class="section-band">
+<div class="sn">5</div>
+<div class="si"><div class="slbl">Reference</div><div class="stit">Key Terms</div></div>
+<span class="sbadge b-def">Glossary</span>
+</div>
+<table class="data-table">
+<tr><th>Term</th><th>Meaning</th></tr>
+<tr><td>Algorithm</td><td>A precise, ordered sequence of steps to solve a problem.</td></tr>
+<tr><td>Flowchart</td><td>A visual diagram representing an algorithm using standard symbols.</td></tr>
+<tr><td>Sequence</td><td>Steps that happen one after another, in order.</td></tr>
+<tr><td>Decision</td><td>A point where the algorithm branches based on a condition (if/else).</td></tr>
+</table>
+</div>
+    </section>
+
+
+    <section id="y7-dt-u2-l4-makecode-variables">
+      <div class="lesson-divider">
+        <div class="cover-eyebrow">Lesson 4 of 8</div>
+        <div class="ld-title">MakeCode Arcade &amp; Variables</div>
+        <div class="ld-sub">Lesson reference notes — combined lesson: meet the tool, build your first game, and give it something to remember.</div>
+        <div class="cover-links">
+          <a href="L4_MakeCodeVariables.pptx" class="cover-link">&#8599; Slides</a>
+          <a href="L4_MakeCodeVariables_workbook.html" class="cover-link">&#8599; Workbook</a>
+        </div>
+      </div>
+<div id="l4-s1">
+<div class="section-band">
+<div class="sn">1</div>
+<div class="si"><div class="slbl">Lesson 4 — Combined Lesson</div><div class="stit">Learning Objective &amp; Success Criteria</div></div>
+<span class="sbadge b-def">Objective</span>
+</div>
+<div class="def-box">
+<div class="def-label">Learning Objective</div>
+<div class="def-text">Build a working game in MakeCode Arcade using event blocks, and use variables to track values that change while the game runs.</div>
+</div>
+<h3>Success Criteria</h3>
+<div class="crit-grid">
+<div class="crit-card cc-found"><div class="crit-tier">🟢 Foundation</div><p>Name the main block categories, complete a guided tutorial, and add a score variable that goes up.</p></div>
+<div class="crit-card cc-devel"><div class="crit-tier">🟡 Developing</div><p>Explain what an event block does, and set a starting value and change a variable correctly in response to an event.</p></div>
+<div class="crit-card cc-ext"><div class="crit-tier">🟣 Extending</div><p>Add an extra event-driven behaviour of your own, and use two variables together correctly.</p></div>
+</div>
+<div class="callout callout-note">
+<div class="callout-label">Why this lesson is combined</div>
+        The tool and the first thing you build with it are taught together. There is no point meeting MakeCode without immediately giving your game something to remember — score and lives are the first things every game needs, so they arrive in the same lesson as the interface.
+      </div>
+</div>
+<div id="l4-s2">
+<div class="section-band">
+<div class="sn">2</div>
+<div class="si"><div class="slbl">Tool Walkthrough</div><div class="stit">The Interface</div></div>
+<span class="sbadge b-case">Tool</span>
+</div>
+<table class="data-table">
+<tr><th>Area</th><th>What it's for</th></tr>
+<tr><td>Simulator</td><td>The live preview of your game — runs in real time as you build.</td></tr>
+<tr><td>Toolbox</td><td>Block categories on the left — drag blocks from here into your workspace.</td></tr>
+<tr><td>Workspace</td><td>Where you snap blocks together to build your program.</td></tr>
+<tr><td>Blocks / JavaScript toggle</td><td>Switch to see the same program as text code. You won't need this yet — it's there if you're curious.</td></tr>
+</table>
+<p>The Arcade screen is <strong>160 pixels wide and 120 pixels tall</strong>. That matters when you position sprites: an x value of 200 puts a sprite off the edge of the world.</p>
+</div>
+<div id="l4-s3">
+<div class="section-band">
+<div class="sn">3</div>
+<div class="si"><div class="slbl">Explicit Explanation</div><div class="stit">The Event Model</div></div>
+<span class="sbadge b-case">Explanation</span>
+</div>
+<p>Most MakeCode programs are NOT a list of instructions that run top to bottom, like a recipe. Instead, they're built from <strong>events</strong> — the program waits, and reacts when something happens.</p>
+<div class="block-demo">
+<div class="block evt">on start</div>
+<div class="block evt">on A button pressed</div>
+<div class="block evt">on sprite of kind Player overlaps sprite of kind Enemy</div>
+</div>
+<p>Each event block holds the instructions that should run when that specific thing happens — and nothing happens until it does.</p>
+<div class="callout callout-tip">
+<div class="callout-label">Connecting back to Lesson 3</div>
+        The diamond shapes in your flowchart often become event blocks here — a decision point in your algorithm usually corresponds to an "on [event]" block checking a condition.
+      </div>
+</div>
+<div id="l4-s4">
+<div class="section-band">
+<div class="sn">4</div>
+<div class="si"><div class="slbl">Reference</div><div class="stit">Block Categories</div></div>
+<span class="sbadge b-def">Reference</span>
+</div>
+<table class="data-table">
+<tr><th>Category</th><th>Used for</th></tr>
+<tr><td>Sprites</td><td>Creating, moving, and changing the appearance of game objects.</td></tr>
+<tr><td>Controller</td><td>Reading button presses (A, B, directional pad).</td></tr>
+<tr><td>Game</td><td>Score, lives, win/lose conditions, game-level settings.</td></tr>
+<tr><td>Variables</td><td>Storing and changing values like score — covered in the second half of today's lesson.</td></tr>
+<tr><td>Loops</td><td>Repeating blocks of code (covered properly in Lesson 5).</td></tr>
+<tr><td>Logic</td><td>If/else conditions and comparisons (covered properly in Lesson 5).</td></tr>
+</table>
+</div>
+<div id="l4-s5">
+<div class="section-band">
+<div class="sn">5</div>
+<div class="si"><div class="slbl">Explicit Explanation</div><div class="stit">What Is a Variable?</div></div>
+<span class="sbadge b-case">Explanation</span>
+</div>
+<div class="def-box">
+<div class="def-label">Definition</div>
+<div class="def-text">A variable is a named place to store a value that can change while the program runs.</div>
+</div>
+<div class="box-demo">
+<div class="box"><div class="box-label">score</div><div class="box-val">0</div></div>
+<div class="arrow">→</div>
+<div class="box"><div class="box-label">score</div><div class="box-val">1</div></div>
+</div>
+<p>Think of a variable as a labelled box. <code>change score by 1</code> doesn't create a new box — it swaps the number card inside the existing one.</p>
+<p>A game without variables can't remember anything. Score, lives, ammo, level, time remaining, whether the door is unlocked — all of it lives in variables.</p>
+</div>
+<div id="l4-s6">
+<div class="section-band">
+<div class="sn">6</div>
+<div class="si"><div class="slbl">Tool Walkthrough</div><div class="stit">Score &amp; Lives in MakeCode</div></div>
+<span class="sbadge b-case">Tool</span>
+</div>
+<table class="data-table">
+<tr><th>Block</th><th>What it does</th></tr>
+<tr><td><code>set score to 0</code></td><td>Sets the starting value — use this once, on start.</td></tr>
+<tr><td><code>change score by 1</code></td><td>Adds to the current value — use this on an event, like a collision.</td></tr>
+<tr><td><code>set life to 3</code></td><td>Sets the number of lives, drawn as hearts at the top of the screen.</td></tr>
+<tr><td><code>change life by -1</code></td><td>Takes a life away. When life reaches 0, MakeCode ends the game for you.</td></tr>
+<tr><td><code>set [myVariable] to 0</code></td><td>A custom variable you name yourself, for anything score and life don't cover.</td></tr>
+</table>
+<p>MakeCode has a built-in score and life system that draws itself on screen. You can also make entirely custom variables from the Variables category for anything else you want to track.</p>
+</div>
+<div id="l4-s7">
+<div class="section-band">
+<div class="sn">7</div>
+<div class="si"><div class="slbl">Common Pitfalls</div><div class="stit">What Goes Wrong</div></div>
+<span class="sbadge b-crit">Pitfalls</span>
+</div>
+<ul>
+<li><strong>Forgetting a starting value.</strong> If you never <code>set score to 0</code>, your variable starts undefined — unpredictable behaviour follows.</li>
+<li><strong>Using <code>set</code> instead of <code>change</code>.</strong> <code>set score to 1</code> always makes score exactly 1, no matter what it was before — it overwrites instead of adding.</li>
+<li><strong>Putting <code>set score to 0</code> inside the collision event.</strong> Then the score resets every time the player scores, so it never gets past 1.</li>
+</ul>
+<div class="callout callout-note">
+<div class="callout-label">Test this yourself</div>
+        In your own project, try swapping <code>change score by 1</code> for <code>set score to 1</code> on a repeated collision event, and watch what happens to the displayed score. This is the kind of thing worth breaking on purpose, once, so you recognise it later.
+      </div>
+</div>
+<div id="l4-s8">
+<div class="section-band">
+<div class="sn">8</div>
+<div class="si"><div class="slbl">Application of Learning</div><div class="stit">Your First Game</div></div>
+<span class="sbadge b-case">Task</span>
+</div>
+<ol>
+<li>Complete the official "Chase the Pizza" tutorial (or an equivalent single-player tutorial your teacher provides).</li>
+<li>Import your Lesson 2 sprite art to replace at least the player sprite — your first taste of customisation.</li>
+<li>Add a <code>score</code> variable set to 0 on start, and make it go up on a collision.</li>
+<li>Add <code>life</code>, set to 3 on start.</li>
+<li><strong>(Extending)</strong> Add one extra event-driven behaviour beyond the tutorial — a sound on collision, a second collectible type — and use score and life together.</li>
+</ol>
+<div class="copy-banner">Copy this — your workbook needs it</div>
+<p>Save your project. You'll keep building on this exact file in Lesson 5, and it becomes the starting point for your CAT.</p>
+</div>
+<div id="l4-s9">
+<div class="section-band">
+<div class="sn">9</div>
+<div class="si"><div class="slbl">Reference</div><div class="stit">Key Terms</div></div>
+<span class="sbadge b-def">Glossary</span>
+</div>
+<table class="data-table">
+<tr><th>Term</th><th>Meaning</th></tr>
+<tr><td>Event</td><td>Something that happens during a game (a button press, a collision) that triggers code to run.</td></tr>
+<tr><td>Block</td><td>A single visual instruction in MakeCode, snapped together with other blocks to build a program.</td></tr>
+<tr><td>Simulator</td><td>The live preview window showing your game running as you build it.</td></tr>
+<tr><td>Sprite of kind</td><td>A category used to group game objects (e.g. Player, Enemy) so events can check interactions between them.</td></tr>
+<tr><td>Variable</td><td>A named place to store a value that can change while a program runs.</td></tr>
+<tr><td>Set</td><td>Overwrites a variable's value completely, regardless of what it was before.</td></tr>
+<tr><td>Change (by)</td><td>Adjusts a variable's existing value up or down by an amount.</td></tr>
+<tr><td>Starting value</td><td>The value a variable holds before any events have changed it — set once, on start.</td></tr>
+</table>
+</div>
+
+    </section>
+
+
+    <section id="y7-dt-u2-l5-conditionals-loops">
+      <div class="lesson-divider">
+        <div class="cover-eyebrow">Lesson 5 of 8</div>
+        <div class="ld-title">Conditionals &amp; Loops</div>
+        <div class="ld-sub">Lesson reference notes — decisions, repetition, a guided build, and a structured way to fix bugs.</div>
+        <div class="cover-links">
+          <a href="L5_ConditionalsLoops.pptx" class="cover-link">&#8599; Slides</a>
+          <a href="L5_ConditionalsLoops_workbook.html" class="cover-link">&#8599; Workbook</a>
+        </div>
+      </div>
+<div id="l5-s1">
+<div class="section-band">
+<div class="sn">1</div>
+<div class="si"><div class="slbl">Lesson 5</div><div class="stit">Learning Objective &amp; Success Criteria</div></div>
+<span class="sbadge b-def">Objective</span>
+</div>
+<div class="def-box">
+<div class="def-label">Learning Objective</div>
+<div class="def-text">Apply conditionals and loops in a MakeCode Arcade program to make decisions and create repeating behaviour, and use a structured method to find and fix bugs.</div>
+</div>
+<h3>Success Criteria</h3>
+<div class="crit-grid">
+<div class="crit-card cc-found"><div class="crit-tier">🟢 Foundation</div><p>Identify an if/else block and a loop block, and complete the guided build up to Step 3.</p></div>
+<div class="crit-card cc-devel"><div class="crit-tier">🟡 Developing</div><p>Complete all six guided steps, so your game has a working win condition, a lose condition and a spawn loop.</p></div>
+<div class="crit-card cc-ext"><div class="crit-tier">🟣 Extending</div><p>Extend the guided build with a conditional of your own design inside a loop, and log a bug you fixed using all four debugging steps.</p></div>
+</div>
+</div>
+<div id="l5-s2">
+<div class="section-band">
+<div class="sn">2</div>
+<div class="si"><div class="slbl">Explicit Explanation</div><div class="stit">Conditionals</div></div>
+<span class="sbadge b-case">Explanation</span>
+</div>
+<div class="def-box">
+<div class="def-label">Definition</div>
+<div class="def-text">A conditional runs one block of code if a condition is true, and (optionally) a different block if it's false.</div>
+</div>
+<div class="code-block">on sprite of kind Player overlaps otherSprite of kind Enemy
+    if life &lt;= 1 then
+        game over LOSE
+    else
+        change life by -1</div>
+<p>Read it as one sentence: <em>when the player touches an enemy, if that was their last life, end the game — otherwise just take a life away.</em> This maps directly onto the decision diamond from Lesson 3 — the diamond's "yes" and "no" exits become the <code>if</code> and <code>else</code> branches here.</p>
+<div class="callout callout-info">
+<div class="callout-label">If without else</div>
+        <code>else</code> is optional. <code>if score &gt;= 5 then game over WIN</code> is a complete, valid conditional — when the condition is false, nothing happens and the game carries on.
+      </div>
+</div>
+<div id="l5-s3">
+<div class="section-band">
+<div class="sn">3</div>
+<div class="si"><div class="slbl">Reference</div><div class="stit">Comparison Operators</div></div>
+<span class="sbadge b-def">Reference</span>
+</div>
+<p>The condition inside an <code>if</code> is almost always a comparison. These live in the Logic category.</p>
+<table class="data-table">
+<tr><th>Operator</th><th>True when…</th><th>Game example</th></tr>
+<tr><td><code>=</code></td><td>The two values are exactly equal</td><td><code>if life = 0</code></td></tr>
+<tr><td><code>≠</code></td><td>The two values are not equal</td><td><code>if level ≠ 1</code></td></tr>
+<tr><td><code>&lt;</code></td><td>The left value is smaller</td><td><code>if score &lt; 5</code></td></tr>
+<tr><td><code>&gt;</code></td><td>The left value is bigger</td><td><code>if enemies &gt; 10</code></td></tr>
+<tr><td><code>&lt;=</code></td><td>The left value is smaller, or equal</td><td><code>if life &lt;= 1</code></td></tr>
+<tr><td><code>&gt;=</code></td><td>The left value is bigger, or equal</td><td><code>if score &gt;= 5</code></td></tr>
+</table>
+<div class="callout callout-note">
+<div class="callout-label">The classic off-by-one bug</div>
+        <code>&lt;</code> and <code>&lt;=</code> are not interchangeable. <code>if score &gt; 5</code> needs six points to fire; <code>if score &gt;= 5</code> fires on the fifth. Choosing the wrong one is the most common logic bug in this unit — and the program will never tell you, because it isn't an error, just the wrong rule.
+      </div>
+</div>
+<div id="l5-s4">
+<div class="section-band">
+<div class="sn">4</div>
+<div class="si"><div class="slbl">Explicit Explanation</div><div class="stit">Loops</div></div>
+<span class="sbadge b-case">Explanation</span>
+</div>
+<div class="def-box">
+<div class="def-label">Definition</div>
+<div class="def-text">A loop repeats a block of code, either forever or a set number of times.</div>
+</div>
+<table class="data-table">
+<tr><th>Loop</th><th>What it does</th><th>Use it for</th></tr>
+<tr><td><code>repeat (4) times</code></td><td>Runs the blocks inside exactly 4 times, then stops</td><td>Setting up a starting wave of enemies or coins</td></tr>
+<tr><td><code>forever</code></td><td>Runs the blocks inside over and over until the game ends</td><td>Spawning enemies, background music, continuous checks</td></tr>
+<tr><td><code>while &lt;condition&gt;</code></td><td>Keeps repeating only while the condition stays true</td><td>Behaviour that should stop once something changes</td></tr>
+</table>
+<div class="code-block">forever
+    create enemy sprite
+    pause (1500) ms</div>
+<p>This spawns a new enemy every 1.5 seconds, indefinitely.</p>
+<div class="callout callout-note">
+<div class="callout-label">Every forever loop needs a pause</div>
+        Remove the <code>pause</code> and the loop runs hundreds of times a second — the game floods with sprites and freezes almost immediately. You will deliberately cause this bug in Step 6 so you recognise it when it happens by accident.
+      </div>
+</div>
+<div id="l5-s5">
+<div class="section-band">
+<div class="sn">5</div>
+<div class="si"><div class="slbl">Worked Example</div><div class="stit">A Conditional Inside a Loop</div></div>
+<span class="sbadge b-case">Explanation</span>
+</div>
+<p>Conditionals and loops are far more useful together than apart. A loop asks "do this again"; a conditional inside it asks "…but should I do it the same way this time?"</p>
+<div class="code-block">forever
+    spawn an enemy at a random x position
+    if score &gt;= 3 then
+        pause (700) ms
+    else
+        pause (1500) ms</div>
+<p>The loop always spawns. The conditional decides <strong>how long to wait before the next one</strong> — so the game speeds up once the player reaches 3 points. That is a difficulty ramp, written in five blocks.</p>
+<div class="flow-demo">
+<div class="flow-col">
+<div class="flow-col-label">What the loop does</div>
+<div class="flow-step">Spawn enemy</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step flow-branch">Check score</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">Pause (long or short)</div>
+<div class="flow-arrow">↓ back to the top</div>
+</div>
+<div class="flow-col">
+<div class="flow-col-label">What the player feels</div>
+<div class="flow-step">Early game: enemies trickle in</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step flow-branch">3 points reached</div>
+<div class="flow-arrow">↓</div>
+<div class="flow-step">Late game: pressure builds</div>
+</div>
+</div>
+</div>
+<div id="l5-s6">
+<div class="section-band">
+<div class="sn">6</div>
+<div class="si"><div class="slbl">Guided Activity</div><div class="stit">Build: Survive the Swarm</div></div>
+<span class="sbadge b-case">Guided Build</span>
+</div>
+<p>Open the MakeCode project you saved in Lesson 4 and follow these six steps in order. After each step, <strong>run the simulator and check the described result before moving on</strong> — that is the whole point of building in small steps. Every step is also a checkpoint in your workbook.</p>
+
+<div class="step-card">
+<div class="step-head"><div class="step-n">1</div><div class="step-title">Set the starting state</div><span class="step-tag tag-cond">Recap</span></div>
+<div class="code-block">on start
+    set score to 0
+    set life to 3</div>
+<div class="checkpoint"><div class="cp-label">Check before moving on</div>The simulator shows a score of 0 and three hearts at the top of the screen.</div>
+</div>
+
+<div class="step-card">
+<div class="step-head"><div class="step-n">2</div><div class="step-title">Spawn enemies with a forever loop</div><span class="step-tag tag-loop">Loop</span></div>
+<div class="code-block">forever
+    set enemy to sprite [your enemy image] of kind Enemy
+    set enemy position to x: pick random 0 to 155  y: 0
+    set enemy velocity to vx: 0  vy: 40
+    pause (1500) ms</div>
+<div class="checkpoint"><div class="cp-label">Check before moving on</div>A new enemy drops from a random spot along the top roughly every 1.5 seconds.</div>
+</div>
+
+<div class="step-card">
+<div class="step-head"><div class="step-n">3</div><div class="step-title">Lose a life — with if / else</div><span class="step-tag tag-cond">Conditional</span></div>
+<div class="code-block">on sprite of kind Player overlaps otherSprite of kind Enemy
+    destroy otherSprite
+    if life &lt;= 1 then
+        game over LOSE
+    else
+        change life by -1</div>
+<div class="checkpoint"><div class="cp-label">Check before moving on</div>Touching an enemy destroys it and removes one heart. On the third hit, the game-over screen appears.</div>
+</div>
+
+<div class="step-card">
+<div class="step-head"><div class="step-n">4</div><div class="step-title">Add a win condition — repeat loop + if</div><span class="step-tag tag-both">Loop + Conditional</span></div>
+<div class="code-block">on start
+    repeat (5) times
+        set coin to sprite [your collectible image] of kind Food
+        set coin position to x: pick random 10 to 150  y: pick random 20 to 110
+
+on sprite of kind Player overlaps otherSprite of kind Food
+    destroy otherSprite
+    change score by 1
+    if score &gt;= 5 then
+        game over WIN</div>
+<div class="checkpoint"><div class="cp-label">Check before moving on</div>Five collectibles appear when the game starts. Collecting all five triggers the win screen — and the fifth one wins it, not the sixth.</div>
+</div>
+
+<div class="step-card">
+<div class="step-head"><div class="step-n">5</div><div class="step-title">Make it get harder — conditional inside the loop</div><span class="step-tag tag-both">Loop + Conditional</span></div>
+<p>Go back to your <code>forever</code> loop from Step 2 and replace the single pause:</p>
+<div class="code-block">forever
+    set enemy to sprite [your enemy image] of kind Enemy
+    set enemy position to x: pick random 0 to 155  y: 0
+    set enemy velocity to vx: 0  vy: 40
+    if score &gt;= 3 then
+        pause (700) ms
+    else
+        pause (1500) ms</div>
+<div class="checkpoint"><div class="cp-label">Check before moving on</div>Enemies arrive at a steady trickle at first, then noticeably faster once you have collected three coins.</div>
+</div>
+
+<div class="step-card">
+<div class="step-head"><div class="step-n">6</div><div class="step-title">Break it on purpose, then fix it</div><span class="step-tag tag-debug">Debug</span></div>
+<p>Delete the <code>pause</code> blocks from inside your forever loop. Run it. Watch what happens, then put them back.</p>
+<p>Now write up what you just saw using the four-step method below — this is the exact format you will use in your CAT documentation.</p>
+<div class="checkpoint"><div class="cp-label">Check before moving on</div>Your project is back to a working state, and your workbook has one completed four-step debugging log.</div>
+</div>
+
+<div class="callout callout-extend">
+<div class="callout-label">🟣 Extending — go further</div>
+        Add a conditional of your own design inside a loop. Ideas: only spawn enemies while <code>score &lt; 5</code>; spawn a rarer, faster enemy when <code>score &gt;= 4</code>; give a bonus life when the score hits a chosen number. Whatever you choose, be ready to explain in one sentence what the condition is checking and what the loop is repeating.
+      </div>
+<div class="copy-banner">Copy this — your workbook needs it</div>
+<p>Save your project under a new name at the end of the lesson so you keep a working version. This file is the base you build your CAT on.</p>
+</div>
+<div id="l5-s7">
+<div class="section-band">
+<div class="sn">7</div>
+<div class="si"><div class="slbl">Reference</div><div class="stit">The Four-Step Debugging Method</div></div>
+<span class="sbadge b-crit">Debugging</span>
+</div>
+<div class="debug-steps">
+<div class="debug-step"><span class="dn">1</span><span>What did you expect to happen?</span></div>
+<div class="debug-step"><span class="dn">2</span><span>What actually happened?</span></div>
+<div class="debug-step"><span class="dn">3</span><span>Which block runs right before the problem shows up?</span></div>
+<div class="debug-step"><span class="dn">4</span><span>Test one change at a time.</span></div>
+</div>
+<h3>Bug Hunt — three broken snippets</h3>
+<p>Each of these runs without an error message, and each does the wrong thing. Work out what a player would actually see, then name the single block that needs changing.</p>
+<table class="data-table">
+<tr><th>#</th><th>Broken code</th><th>What a player reports</th></tr>
+<tr><td>A</td><td><code>on overlap → set score to 1</code></td><td>"My score is stuck on 1 no matter how many coins I get."</td></tr>
+<tr><td>B</td><td><code>forever → create enemy</code> (no pause)</td><td>"The game freezes the second I press start."</td></tr>
+<tr><td>C</td><td><code>if score &gt; 5 then game over WIN</code> with only 5 coins on screen</td><td>"I collected everything and the win screen never came."</td></tr>
+</table>
+<div class="callout callout-tip">
+<div class="callout-label">Use this in CAT Studio</div>
+        This exact method is what you'll use in Lessons 6–7 when something in your CAT build doesn't work. Get comfortable with it now, on low-stakes bugs.
+      </div>
+</div>
+<div id="l5-s8">
+<div class="section-band">
+<div class="sn">8</div>
+<div class="si"><div class="slbl">Reference</div><div class="stit">Key Terms</div></div>
+<span class="sbadge b-def">Glossary</span>
+</div>
+<table class="data-table">
+<tr><th>Term</th><th>Meaning</th></tr>
+<tr><td>Conditional</td><td>A structure that runs different code depending on whether a condition is true or false.</td></tr>
+<tr><td>Condition</td><td>The true-or-false test a conditional checks, usually a comparison between two values.</td></tr>
+<tr><td>Loop</td><td>A structure that repeats a block of code, forever or a set number of times.</td></tr>
+<tr><td>Iteration</td><td>One single pass through the blocks inside a loop.</td></tr>
+<tr><td>Bug</td><td>An error in a program causing it to behave unexpectedly.</td></tr>
+<tr><td>Debug</td><td>The process of finding and fixing a bug.</td></tr>
+</table>
+</div>
+
+    </section>
+
+
+    <section id="y7-dt-u2-l6-making-our-game">
+      <div class="lesson-divider">
+        <div class="cover-eyebrow">Lesson 6 of 8</div>
+        <div class="ld-title">Making Our Game</div>
+        <div class="ld-sub">Lesson reference notes — combined lesson: critique games against real criteria, then begin assessed CAT build time.</div>
+        <div class="cover-links">
+          <a href="L6_MakingOurGame.pptx" class="cover-link">&#8599; Slides</a>
+          <a href="L6_MakingOurGame_workbook.html" class="cover-link">&#8599; Workbook</a>
+        </div>
+      </div>
+<div id="l6-s1">
+<div class="section-band">
+<div class="sn">1</div>
+<div class="si"><div class="slbl">Lesson 6 — Combined Lesson</div><div class="stit">Learning Objective &amp; Success Criteria</div></div>
+<span class="sbadge b-def">Objective</span>
+</div>
+<div class="def-box">
+<div class="def-label">Learning Objective</div>
+<div class="def-text">Critique a game against named design criteria — then apply that judgement to your own game as CAT build time begins.</div>
+</div>
+<h3>Success Criteria</h3>
+<div class="crit-grid">
+<div class="crit-card cc-found"><div class="crit-tier">🟢 Foundation</div><p>Identify the core gameplay elements of a given game. Tutorial runs; some art replaced.</p></div>
+<div class="crit-card cc-devel"><div class="crit-tier">🟡 Developing</div><p>Critique a game against named criteria with a strength and a weakness. All required art original.</p></div>
+<div class="crit-card cc-ext"><div class="crit-tier">🟣 Extending</div><p>Propose a specific, justified improvement to your own game. Polish beyond the tutorial.</p></div>
+</div>
+<div class="callout callout-note">
+<div class="callout-label">Two halves — and only one of them is assessed</div>
+        The first half of this lesson is critique work and is not assessed. From the studio section onwards you are working on <strong>CAT 1, Task 1</strong>. Your teacher will say clearly when that line is crossed.
+      </div>
+</div>
+<div id="l6-s2">
+<div class="section-band">
+<div class="sn">2</div>
+<div class="si"><div class="slbl">Explicit Explanation</div><div class="stit">Four Critique Criteria</div></div>
+<span class="sbadge b-case">Explanation</span>
+</div>
+<div class="criteria-cards">
+<div class="crit-tile"><div class="ct-title">Controls</div><div class="ct-q">Do they feel responsive and intuitive?</div></div>
+<div class="crit-tile"><div class="ct-title">Goal</div><div class="ct-q">Is it clear what you're trying to do?</div></div>
+<div class="crit-tile"><div class="ct-title">Feedback</div><div class="ct-q">Does the game tell you what's happening — score, hits, wins?</div></div>
+<div class="crit-tile"><div class="ct-title">Difficulty</div><div class="ct-q">Is the challenge fair, and does it build over time?</div></div>
+</div>
+<div class="callout callout-info">
+<div class="callout-label">These aren't vague opinions</div>
+        "The controls felt slightly delayed when jumping" is a critique. "It's good" is not. Every critique you write today should name a specific criterion and give a specific reason.
+      </div>
+<h3>The Sentence Frame</h3>
+<div class="def-box">
+<div class="def-label">Use this for every observation</div>
+<div class="def-text">The [criterion] was [specific observation], because [what happened when you played].</div>
+</div>
+<div class="copy-banner">Copy this — your workbook needs it</div>
+<p>All four criteria, the question each one asks, and the sentence frame above.</p>
+</div>
+<div id="l6-s3">
+<div class="section-band">
+<div class="sn">3</div>
+<div class="si"><div class="slbl">Application of Learning</div><div class="stit">Task 1 — Critiquing a Given Game</div></div>
+<span class="sbadge b-case">Task</span>
+</div>
+<p>In pairs, play the game your teacher names. Take turns — one plays, one watches and notices. Give it a fair go before you judge anything.</p>
+<ol>
+<li>Comment on all four criteria, not just the interesting ones.</li>
+<li>Identify at least one genuine strength, backed with a specific reason.</li>
+<li>Identify at least one genuine weakness, backed with a specific reason — something you'd actually change, not something trivial.</li>
+</ol>
+</div>
+<div id="l6-s4">
+<div class="section-band">
+<div class="sn">4</div>
+<div class="si"><div class="slbl">Application of Learning</div><div class="stit">Task 2 — Critiquing Your Own Game</div></div>
+<span class="sbadge b-crit">Task</span>
+</div>
+<p>Apply the same four criteria to your own in-progress game from Lessons 4–5. This is harder than critiquing someone else's — you already know what you meant it to do, which makes weaknesses easy to miss.</p>
+<div class="callout callout-tip">
+<div class="callout-label">Start by watching, not explaining</div>
+        Hand your game to your partner and say nothing while they play. Where they hesitate, where they get confused, what they do that you didn't expect — that is your data, and it is worth more than any amount of self-reflection.
+      </div>
+<div class="copy-banner">Copy this — your workbook needs it</div>
+<p>Write a one-sentence proposed fix for your identified weakness. This becomes your CAT mechanic modification, which you build in Lesson 7.</p>
+<h3>Choosing a Realistic Fix</h3>
+<p>Not every good idea is buildable with what you know right now. That isn't a failure — it's scope. Favour a fix that uses variables, conditionals or loops.</p>
+<table class="data-table">
+<tr><th>Buildable with your skills</th><th>Too big for this unit</th></tr>
+<tr><td>A difficulty ramp using a conditional</td><td>Multiplayer over the internet</td></tr>
+<tr><td>A bonus life at a certain score</td><td>Saving progress between sessions</td></tr>
+<tr><td>A second enemy type in the spawn loop</td><td>Twelve fully designed levels</td></tr>
+<tr><td>A sound or score change for clearer feedback</td><td>3D graphics</td></tr>
+</table>
+<p>A small change that works beats an ambitious one that never gets finished.</p>
+</div>
+<div id="l6-s5">
+<div class="section-band">
+<div class="sn">5</div>
+<div class="si"><div class="slbl">CAT 1 · Assessed</div><div class="stit">Studio — Build &amp; Reskin</div></div>
+<span class="sbadge b-crit">Assessed</span>
+</div>
+<p>The second half of this lesson <strong>is</strong> the assessment — CAT 1, Task 1, first half. There's no new instruction here; this is checkpointed, teacher-conferenced build time using everything you've learned in Lessons 1–5.</p>
+<p><strong>Objective for this half:</strong> complete your MakeCode Arcade tutorial and replace all default art with original pixel art.</p>
+<h3>Today's Checkpoints</h3>
+<div class="checkpoint">
+<div class="cp-label">Checkpoint A — Mid-Lesson</div>
+<p style="margin-bottom:0;">Briefly run your game in the simulator for your teacher. Confirms:</p>
+<ul>
+<li>Tutorial logic is intact and runs without errors</li>
+<li>At least the player sprite is replaced with original art</li>
+</ul>
+</div>
+<div class="checkpoint">
+<div class="cp-label">Checkpoint B — End of Lesson</div>
+<p style="margin-bottom:0;">Confirms:</p>
+<ul>
+<li>All required elements (player, enemy/collectible, background) are original art</li>
+<li>Game still runs without errors</li>
+</ul>
+</div>
+<h3>Studio Work Order</h3>
+<ol>
+<li><strong>Finish your tutorial first.</strong> Everything else depends on a running game.</li>
+<li><strong>Replace every default sprite</strong> — player, enemy or collectible, background — working through them systematically.</li>
+<li><strong>Test after every replacement.</strong> One change, then run it. Don't swap five sprites and then wonder which one broke it.</li>
+<li><strong>Save often, and save at the end</strong> under a name you'll recognise next lesson.</li>
+</ol>
+<div class="callout callout-tip">
+<div class="callout-label">Bring with you</div>
+        Your Lesson 2 sprite files, your Lesson 3 flowchart/algorithm, and the proposed modification you wrote in Task 2 — you'll need all three across today and Lesson 7.
+      </div>
+</div>
+<div id="l6-s6">
+<div class="section-band">
+<div class="sn">6</div>
+<div class="si"><div class="slbl">Reference</div><div class="stit">Rubric — Today's Relevant Criteria</div></div>
+<span class="sbadge b-crit">Rubric</span>
+</div>
+<table class="data-table">
+<tr><th>Criterion</th><th>🟢 Foundation</th><th>🟡 Developing</th><th>🟣 Extending</th></tr>
+<tr><td>Tutorial completion &amp; functionality</td><td>Runs, but bugs or missing steps</td><td>Completed and runs correctly start to finish</td><td>Runs correctly with extra polish beyond the tutorial</td></tr>
+<tr><td>Custom visual assets</td><td>Some default art replaced</td><td>All required elements use original art</td><td>Art is cohesive and reflects the game's identity</td></tr>
+</table>
+<p>The full rubric — all six criteria — is on the CAT Task Sheet. The other four are assessed in Lesson 7, when you build your modification and make your poster.</p>
+</div>
+<div id="l6-s7">
+<div class="section-band">
+<div class="sn">7</div>
+<div class="si"><div class="slbl">Note</div><div class="stit">If You Finish Early</div></div>
+<span class="sbadge b-def">Note</span>
+</div>
+<p>Sketch your planned mechanic modification — which blocks it will need, where in your existing code it goes, and how you'll know it worked. <strong>Do not start building it.</strong> Lesson 7 is dedicated to that, and students who start early usually arrive next lesson with a broken game and no time to fix it.</p>
+</div>
+<div id="l6-s8">
+<div class="section-band">
+<div class="sn">8</div>
+<div class="si"><div class="slbl">Reference</div><div class="stit">Key Terms</div></div>
+<span class="sbadge b-def">Glossary</span>
+</div>
+<table class="data-table">
+<tr><th>Term</th><th>Meaning</th></tr>
+<tr><td>Critique</td><td>A specific, reasoned evaluation against named criteria — not a general opinion.</td></tr>
+<tr><td>Feedback (game design)</td><td>Signals a game gives the player about what's happening — score changes, sound effects, visual cues.</td></tr>
+<tr><td>Difficulty curve</td><td>How challenge increases (or doesn't) as a player progresses through a game.</td></tr>
+<tr><td>Scope</td><td>How much a project sets out to do, measured against the time and skills actually available.</td></tr>
+</table>
+</div>
+
+    </section>
+
+
+    <section id="y7-dt-u2-l7-cat-studio-2">
+      <div class="lesson-divider">
+        <div class="cover-eyebrow">Lesson 7 of 8</div>
+        <div class="ld-title">CAT Studio 2: Modify, Poster &amp; Document</div>
+        <div class="ld-sub">Lesson reference notes — assessed modification, promotion and documentation.</div>
+        <div class="cover-links">
+          <a href="L7_CATStudio2.pptx" class="cover-link">&#8599; Slides</a>
+          <a href="L7_CATStudio2_workbook.html" class="cover-link">&#8599; Workbook</a>
+        </div>
+      </div>
+<div id="l7-s1">
+<div class="section-band">
+<div class="sn">1</div>
+<div class="si"><div class="slbl">Lesson 7 — Assessed</div><div class="stit">Learning Objective &amp; Success Criteria</div></div>
+<span class="sbadge b-crit">CAT Studio</span>
+</div>
+<p>This lesson <strong>is</strong> the assessment — the rest of CAT 1: your mechanic modification, your poster, and your documentation. By the end of today, you submit.</p>
+<p><strong>Learning Objective:</strong> Implement a justified game-mechanic modification, then promote and document the finished game.</p>
+</div>
+<div id="l7-s2">
+<div class="section-band">
+<div class="sn">2</div>
+<div class="si"><div class="slbl">Studio Structure</div><div class="stit">The Three Remaining Pieces</div></div>
+<span class="sbadge b-case">Tasks</span>
+</div>
+<ol>
+<li><strong>Modification</strong> — implement your planned change from Lesson 6, testing it with the Lesson 5 debugging method as needed.</li>
+<li><strong>Poster</strong> — build it in Canva: a screenshot from your game plus a one-sentence blurb.</li>
+<li><strong>Documentation</strong> — answer the required questions, embed your poster, and link your game.</li>
+</ol>
+<div class="callout callout-tip">
+<div class="callout-label">If you're short on time</div>
+        Lock in the modification first — it's the highest-weighted, hardest-to-fake criterion. A complete simple poster and documentation beats a polished poster with no working modification.
+      </div>
+</div>
+<div id="l7-s3">
+<div class="section-band">
+<div class="sn">3</div>
+<div class="si"><div class="slbl">Reference</div><div class="stit">Documentation Questions</div></div>
+<span class="sbadge b-def">Reference</span>
+</div>
+<ul>
+<li>What is your game called, and what is its theme?</li>
+<li>How did you modify how your game works, and why did you make that change?</li>
+<li>Who is the target audience for your game?</li>
+<li>What other games is yours similar to, and what makes yours different?</li>
+<li>Insert your poster into the document, and add a link to your playable game.</li>
+</ul>
+</div>
+<div id="l7-s4">
+<div class="section-band">
+<div class="sn">4</div>
+<div class="si"><div class="slbl">Studio Structure</div><div class="stit">Final Checkpoint &amp; Submission</div></div>
+<span class="sbadge b-crit">Checkpoint</span>
+</div>
+<div class="checkpoint">
+<div class="cp-label">Final Checkpoint</div>
+<ul style="margin-top:0;">
+<li>Game runs correctly</li>
+<li>Modification is present and working</li>
+<li>Poster includes screenshot and blurb</li>
+<li>Documentation answers all required questions</li>
+</ul>
+</div>
+<p>Submit via Google Classroom / the EduPortal workbook submit action once your teacher confirms the final checkpoint.</p>
+</div>
+<div id="l7-s5">
+<div class="section-band">
+<div class="sn">5</div>
+<div class="si"><div class="slbl">Reference</div><div class="stit">Rubric — Today's Relevant Criteria</div></div>
+<span class="sbadge b-crit">Rubric</span>
+</div>
+<table class="data-table">
+<tr><th>Criterion</th><th>Foundation</th><th>Developing</th><th>Extending</th></tr>
+<tr><td>Mechanic modification</td><td>Attempted but unclear purpose</td><td>Works correctly and is explained</td><td>Meaningfully changes player experience, justified</td></tr>
+<tr><td>Poster</td><td>Screenshot or blurb, not both</td><td>Clear screenshot and accurate blurb</td><td>Well-designed, would attract a player</td></tr>
+<tr><td>Documentation &amp; reflection</td><td>Brief, minimal detail</td><td>Specific, relevant detail</td><td>Thoughtful comparison to similar games</td></tr>
+</table>
+<p style="font-size:12.5px;color:var(--ink3);">Full rubric, all six criteria, on the CAT Task Sheet.</p>
+</div>
+    </section>
+
+
+    <section id="y7-dt-u2-l8-showcase-reflection">
+      <div class="lesson-divider">
+        <div class="cover-eyebrow">Lesson 8 of 8</div>
+        <div class="ld-title">Game Showcase &amp; Reflection</div>
+        <div class="ld-sub">Lesson reference notes — play, give feedback, and close the design loop.</div>
+        <div class="cover-links">
+          <a href="L8_ShowcaseReflection.pptx" class="cover-link">&#8599; Slides</a>
+          <a href="L8_ShowcaseReflection_workbook.html" class="cover-link">&#8599; Workbook</a>
+        </div>
+      </div>
+<div id="l8-s1">
+<div class="section-band">
+<div class="sn">1</div>
+<div class="si"><div class="slbl">Lesson 8</div><div class="stit">Learning Objective &amp; Success Criteria</div></div>
+<span class="sbadge b-def">Objective</span>
+</div>
+<div class="def-box">
+<div class="def-label">Learning Objective</div>
+<div class="def-text">Present your finished game to peers, give and receive constructive feedback, and reflect on what you'd do differently next time.</div>
+</div>
+<h3>Success Criteria</h3>
+<div class="crit-grid">
+<div class="crit-card cc-found"><div class="crit-tier">🟢 Foundation</div><p>Share your game and describe what it does.</p></div>
+<div class="crit-card cc-devel"><div class="crit-tier">🟡 Developing</div><p>Give specific, criteria-based feedback using the Lesson 6 critique vocabulary.</p></div>
+<div class="crit-card cc-ext"><div class="crit-tier">🟣 Extending</div><p>Write a reflection identifying a genuine limitation and a concrete next step — not just praise.</p></div>
+</div>
+</div>
+<div id="l8-s2">
+<div class="section-band">
+<div class="sn">2</div>
+<div class="si"><div class="slbl">Explicit Explanation</div><div class="stit">Giving Good Feedback</div></div>
+<span class="sbadge b-case">Explanation</span>
+</div>
+<p>Good peer feedback is specific and criteria-based — not generic praise.</p>
+<table class="data-table">
+<tr><th>Generic (avoid)</th><th>Specific (aim for)</th></tr>
+<tr><td>"It's good."</td><td>"The controls felt slightly delayed when jumping."</td></tr>
+<tr><td>"I like it."</td><td>"The score feedback made it really clear when I was doing well."</td></tr>
+</table>
+<p>Use the four criteria from Lesson 6 — controls, goal, feedback, difficulty — as your starting point for every comment.</p>
+</div>
+<div id="l8-s3">
+<div class="section-band">
+<div class="sn">3</div>
+<div class="si"><div class="slbl">Application of Learning</div><div class="stit">Showcase Format</div></div>
+<span class="sbadge b-case">Activity</span>
+</div>
+<ol>
+<li>Small groups of 3–4 students.</li>
+<li>Each student demos their game for ~2 minutes while others play or watch.</li>
+<li>Observers note one piece of feedback against the four critique criteria.</li>
+<li>Rotate until everyone in the group has presented.</li>
+</ol>
+<div class="callout callout-info">
+<div class="callout-label">Uncomfortable presenting live?</div>
+        You can pre-record a short screen capture of your game instead, and play it to your small group rather than presenting in real time. The same critique process applies either way.
+      </div>
+</div>
+<div id="l8-s4">
+<div class="section-band">
+<div class="sn">4</div>
+<div class="si"><div class="slbl">Application of Learning</div><div class="stit">Reflection</div></div>
+<span class="sbadge b-case">Task</span>
+</div>
+<p>After collecting feedback from at least two peers, write a short personal reflection covering:</p>
+<ul>
+<li>One thing that worked well</li>
+<li>One genuine limitation</li>
+<li>One concrete next step if you kept developing the game</li>
+</ul>
+</div>
+<div id="l8-s5">
+<div class="section-band">
+<div class="sn">5</div>
+<div class="si"><div class="slbl">Closing</div><div class="stit">Closing the Loop</div></div>
+<span class="sbadge b-def">Reflection</span>
+</div>
+<p>Back in Lesson 1, you learned the design process: Identify → Plan → Create → Evaluate. Today's showcase and reflection <strong>is</strong> the Evaluate stage — the loop closes here. Every project you do from now on, in any subject, can follow this same structure.</p>
+</div>
+    </section>
+
+  </main>
+</div>
+
+<div class="footer">EduPortal &#183; Reference material only &#8212; all work is recorded in your lesson workbooks.</div>
+
+<script>
+function toggleTheme(){
+  var r = document.documentElement;
+  var light = r.getAttribute('data-theme') === 'light';
+  r.setAttribute('data-theme', light ? 'dark' : 'light');
+  document.getElementById('themeBtn').textContent = light ? 'Light mode' : 'Dark mode';
+}
+</script>
+</body>
+</html>

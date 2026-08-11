@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L5 — Conditionals &amp; Loops | Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0D1117; --bg2:#151B23; --bg3:#1C232C;
+  --fg:#E8EDF4; --fg2:#B7C0CC; --fg3:#7D8794;
+  --border:#252D38; --border2:#333D4A;
+  --blue:#4361EE;  --blue-bg:rgba(67,97,238,.14);  --blue-fg:#9DB0FF;
+  --green:#10B981; --green-bg:rgba(16,185,129,.13); --green-fg:#5EE9B5;
+  --amber:#F59E0B; --amber-bg:rgba(245,158,11,.13); --amber-fg:#FBC66B;
+  --purple:#8B5CF6;--purple-bg:rgba(139,92,246,.14);--purple-fg:#BFA4FD;
+  --red:#EF4444;   --red-bg:rgba(239,68,68,.13);   --red-fg:#FF9090;
+  --sans:'DM Sans',sans-serif; --read:'Atkinson Hyperlegible','DM Sans',sans-serif;
+  --serif:'DM Serif Display',serif; --mono:'DM Mono',monospace;
+}
+[data-theme="light"]{
+  --bg:#FFFFFF; --bg2:#F5F7FA; --bg3:#EDF1F6;
+  --fg:#0D1117; --fg2:#39414D; --fg3:#69737F;
+  --border:#DDE3EA; --border2:#C6CED8;
+  --blue-fg:#2E45B8; --green-fg:#07835A; --amber-fg:#9A6206; --purple-fg:#6234D6; --red-fg:#C22B2B;
+  --blue-bg:rgba(67,97,238,.09); --green-bg:rgba(16,185,129,.10);
+  --amber-bg:rgba(245,158,11,.12); --purple-bg:rgba(139,92,246,.10); --red-bg:rgba(239,68,68,.09);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--bg);color:var(--fg);font-size:15px;line-height:1.7;padding-bottom:90px;}
+.top-bar{position:sticky;top:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;padding:0 18px;height:46px;}
+.tb-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.09em;color:var(--fg3);text-transform:uppercase;}
+.tb-progress{flex:1;height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;min-width:60px;}
+.tb-fill{height:100%;background:var(--blue);border-radius:3px;transition:width .4s ease;}
+.tb-pct{font-family:var(--mono);font-size:11px;color:var(--fg2);min-width:38px;text-align:right;}
+.tb-btn{background:transparent;border:1px solid var(--border2);color:var(--fg2);font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;padding:5px 11px;border-radius:4px;cursor:pointer;transition:all .15s;text-transform:uppercase;}
+.tb-btn:hover{border-color:var(--blue);color:var(--blue-fg);background:var(--blue-bg);}
+.tb-btn.acc{border-color:var(--green);color:var(--green-fg);background:var(--green-bg);}
+.cover{background:var(--bg2);border-bottom:1px solid var(--border);padding:46px 34px 40px;}
+.cover-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--blue-fg);text-transform:uppercase;margin-bottom:16px;}
+.cover-title{font-family:var(--serif);font-size:38px;line-height:1.1;margin-bottom:6px;}
+.cover-sub{font-size:14px;color:var(--fg2);margin-bottom:26px;font-family:var(--read);}
+.cover-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px;max-width:580px;}
+.cfield label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg3);display:block;margin-bottom:4px;}
+.cfield input{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:5px;padding:8px 10px;color:var(--fg);font-family:var(--sans);font-size:14px;outline:none;}
+.cfield input:focus{border-color:var(--blue);}
+.pw{max-width:820px;margin:0 auto;padding:0 24px;}
+.wbs{margin-top:40px;}
+.sb{display:flex;align-items:center;gap:12px;padding:14px 0 12px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+.sn{width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.si .slbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg3);}
+.si .stit{font-family:var(--serif);font-size:21px;color:var(--fg);line-height:1.15;}
+.sbadge{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:3px;letter-spacing:.04em;margin-left:auto;flex-shrink:0;text-transform:uppercase;}
+.b-obj{background:var(--blue-bg);color:var(--blue-fg);border:1px solid var(--blue);}
+.b-expl{background:var(--amber-bg);color:var(--amber-fg);border:1px solid var(--amber);}
+.b-app{background:var(--green-bg);color:var(--green-fg);border:1px solid var(--green);}
+.b-resp{background:var(--purple-bg);color:var(--purple-fg);border:1px solid var(--purple);}
+.b-exit{background:var(--red-bg);color:var(--red-fg);border:1px solid var(--red);}
+.rl{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--fg3);margin:22px 0 8px;}
+.field-label{font-size:14px;color:var(--fg);margin-bottom:6px;display:block;font-weight:600;font-family:var(--read);}
+.hint{font-size:12.5px;color:var(--fg3);font-style:italic;margin-top:5px;font-family:var(--read);}
+p.body{font-size:14px;color:var(--fg2);margin-bottom:12px;line-height:1.7;font-family:var(--read);}
+code{font-family:var(--mono);font-size:.88em;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;color:var(--blue-fg);}
+a{color:var(--blue-fg);}
+.ta{width:100%;border:1px solid var(--border2);border-radius:6px;padding:10px 12px;font-family:var(--read);font-size:14px;color:var(--fg);background:var(--bg2);resize:vertical;outline:none;transition:border-color .15s;line-height:1.6;}
+.ta:focus{border-color:var(--blue);}
+.rb{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:15px 17px;margin-bottom:12px;}
+.callout{border-left:3px solid;border-radius:0 6px 6px 0;padding:12px 16px;margin:16px 0;font-size:13.5px;line-height:1.65;font-family:var(--read);color:var(--fg2);}
+.callout-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:5px;}
+.callout-info{border-color:var(--blue);background:var(--blue-bg);} .callout-info .callout-label{color:var(--blue-fg);}
+.callout-tip{border-color:var(--green);background:var(--green-bg);} .callout-tip .callout-label{color:var(--green-fg);}
+.callout-note{border-color:var(--amber);background:var(--amber-bg);} .callout-note .callout-label{color:var(--amber-fg);}
+.callout-extend{border-color:var(--purple);background:var(--purple-bg);} .callout-extend .callout-label{color:var(--purple-fg);}
+.crit-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;margin-bottom:16px;}
+.crit{border:1.5px solid var(--border2);border-radius:7px;padding:14px;cursor:pointer;transition:all .2s;user-select:none;background:var(--bg2);}
+.crit.checked{border-width:2px;}
+.cf-found.checked{background:var(--green-bg);border-color:var(--green);}
+.cf-devel.checked{background:var(--amber-bg);border-color:var(--amber);}
+.cf-ext.checked{background:var(--purple-bg);border-color:var(--purple);}
+.crit-tier{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
+.cf-found .crit-tier{color:var(--green-fg);} .cf-devel .crit-tier{color:var(--amber-fg);} .cf-ext .crit-tier{color:var(--purple-fg);}
+.crit p{font-size:12.5px;color:var(--fg2);line-height:1.5;font-family:var(--read);}
+.crit input[type=checkbox]{display:none;}
+.q{margin-bottom:20px;}
+.qnum{font-family:var(--mono);font-size:10px;color:var(--fg3);letter-spacing:.08em;}
+.mc-opts{display:flex;flex-direction:column;gap:6px;margin:9px 0;}
+.mc-opt{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border:1px solid var(--border2);border-radius:6px;cursor:pointer;font-size:13.5px;color:var(--fg2);transition:all .15s;line-height:1.5;background:var(--bg2);font-family:var(--read);}
+.mc-opt:hover{border-color:var(--blue);}
+.mc-opt input{margin-top:3px;flex-shrink:0;accent-color:var(--blue);}
+.mc-opt.correct-ans{background:var(--green-bg);border-color:var(--green);color:var(--green-fg);}
+.mc-opt.wrong-ans{background:var(--red-bg);border-color:var(--red);color:var(--red-fg);}
+.mc-result{font-family:var(--mono);font-size:11.5px;margin-top:6px;display:none;}
+.mc-result.show-c{display:block;color:var(--green-fg);}
+.mc-result.show-w{display:block;color:var(--red-fg);}
+.match-table{width:100%;border-collapse:collapse;margin:10px 0;}
+.match-table th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg3);padding:8px 10px;border-bottom:1px solid var(--border2);text-align:left;background:var(--bg3);}
+.match-table td{padding:9px 10px;border-bottom:1px solid var(--border);font-size:13.5px;color:var(--fg2);font-family:var(--read);}
+select{font-family:var(--sans);font-size:13px;padding:6px 9px;border:1px solid var(--border2);border-radius:5px;background:var(--bg2);color:var(--fg);outline:none;max-width:100%;}
+select:focus{border-color:var(--blue);}
+.check-btn{font-family:var(--mono);font-size:10px;letter-spacing:.06em;padding:7px 15px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--fg2);cursor:pointer;transition:all .15s;margin-top:8px;text-transform:uppercase;}
+.check-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.res-line{font-family:var(--mono);font-size:12px;margin-top:8px;color:var(--fg3);}
+.tf-row{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);}
+.tf-row:last-child{border-bottom:none;}
+.tf-q{flex:1;font-size:13.5px;color:var(--fg2);font-family:var(--read);}
+.tf-btns{display:flex;gap:6px;flex-shrink:0;}
+.tf-btn{font-family:var(--mono);font-size:10.5px;padding:5px 13px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--fg3);cursor:pointer;transition:all .15s;}
+.tf-btn.sel-t{background:var(--green-bg);color:var(--green-fg);border-color:var(--green);}
+.tf-btn.sel-f{background:var(--red-bg);color:var(--red-fg);border-color:var(--red);}
+.step-card{background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:16px 18px;margin:14px 0;}
+.step-head{display:flex;align-items:center;gap:11px;margin-bottom:10px;}
+.step-n{font-family:var(--mono);font-size:11px;width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-title{font-family:var(--serif);font-size:17px;color:var(--fg);}
+.step-tag{margin-left:auto;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:3px;}
+.tag-cond{background:var(--blue-bg);color:var(--blue-fg);border:1px solid var(--blue);}
+.tag-loop{background:var(--green-bg);color:var(--green-fg);border:1px solid var(--green);}
+.tag-both{background:var(--purple-bg);color:var(--purple-fg);border:1px solid var(--purple);}
+.tag-debug{background:var(--red-bg);color:var(--red-fg);border:1px solid var(--red);}
+.done-row{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:9px 13px;margin:10px 0;font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--fg2);text-transform:uppercase;cursor:pointer;}
+.done-row input{accent-color:var(--green);width:16px;height:16px;}
+.code-block{font-family:var(--mono);font-size:12.5px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:13px 16px;margin:10px 0;color:var(--green-fg);line-height:1.8;white-space:pre-wrap;overflow-x:auto;}
+.exit-wrap{background:var(--bg2);border:1px solid var(--red);border-radius:8px;overflow:hidden;margin-bottom:20px;}
+.exit-hdr{background:var(--red);color:#fff;padding:12px 18px;}
+.exit-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.8;margin-bottom:2px;}
+.exit-title{font-size:14px;font-weight:600;}
+.exit-q{padding:14px 18px;border-bottom:1px solid var(--border);}
+.exit-q:last-child{border-bottom:none;}
+.exit-q label{font-size:13.5px;color:var(--fg);display:block;margin-bottom:6px;font-weight:600;font-family:var(--read);}
+.submit-row{display:flex;gap:12px;align-items:center;margin:34px 0 10px;flex-wrap:wrap;}
+.submit-btn{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:12px 26px;border-radius:6px;border:none;background:var(--blue);color:#fff;cursor:pointer;transition:opacity .15s;}
+.submit-btn:hover{opacity:.88;}
+.linkline{font-family:var(--mono);font-size:11px;color:var(--fg3);margin:8px 0 0;}
+@media print{.top-bar,.tb-btn,.check-btn,.submit-btn{display:none;}}
+@media (max-width:760px){.crit-grid{grid-template-columns:1fr;} .cover-fields{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="tb-lbl">L5 Workbook</span>
+  <div class="tb-progress"><div class="tb-fill" id="tbFill" style="width:0%"></div></div>
+  <span class="tb-pct" id="tbPct">0%</span>
+  <button class="tb-btn" onclick="toggleTheme()" id="themeBtn">Light</button>
+  <button class="tb-btn" onclick="DataService.save()">Save</button>
+  <button class="tb-btn" onclick="DataService.load()">Load</button>
+  <button class="tb-btn" onclick="window.print()">Export</button>
+</div>
+
+<div class="cover">
+  <div class="cover-eyebrow">Year 7 · Digital Technology · Unit 2: Game Programming · Lesson 5 of 8</div>
+  <div class="cover-title">Conditionals &amp; Loops</div>
+  <div class="cover-sub">Make your game decide things and repeat things — then learn a real method for fixing it when it breaks.</div>
+  <div class="cover-fields">
+    <div class="cfield"><label>Name</label><input type="text" id="stu_name" placeholder="Your full name"></div>
+    <div class="cfield"><label>Class</label><input type="text" id="stu_class" placeholder="e.g. 7DT-A"></div>
+    <div class="cfield"><label>Date</label><input type="text" id="stu_date" placeholder="YYYY-MM-DD"></div>
+    <div class="cfield"><label>Teacher</label><input type="text" id="stu_teacher" placeholder="Mr Smith"></div>
+  </div>
+</div>
+
+<div class="pw">
+
+<!-- ================= 1. OBJECTIVE ================= -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">1</div>
+    <div class="si"><div class="slbl">Learning Objective</div><div class="stit">What We're Learning Today</div></div>
+    <span class="sbadge b-obj">Objective</span>
+  </div>
+  <div class="rb">
+    <p class="body"><strong>Objective:</strong> Apply conditionals and loops in a MakeCode Arcade program to make decisions and create repeating behaviour, and use a structured method to find and fix bugs.</p>
+  </div>
+  <div class="rl">Tick the tier you are aiming for — you may tick more than one</div>
+  <div class="crit-grid">
+    <div class="crit cf-found" onclick="toggleCrit(this,'sc1')"><input type="checkbox" id="sc1"><div class="crit-tier">🟢 Foundation</div><p>Identify an if/else block and a loop block, and complete the guided build up to Step 3.</p></div>
+    <div class="crit cf-devel" onclick="toggleCrit(this,'sc2')"><input type="checkbox" id="sc2"><div class="crit-tier">🟡 Developing</div><p>Complete all six guided steps, so your game has a working win condition, a lose condition and a spawn loop.</p></div>
+    <div class="crit cf-ext" onclick="toggleCrit(this,'sc3')"><input type="checkbox" id="sc3"><div class="crit-tier">🟣 Extending</div><p>Extend the build with a conditional of your own inside a loop, and log a bug using all four debugging steps.</p></div>
+  </div>
+  <p class="linkline">Full notes for this lesson: <a href="U2_GameProgramming_site.html#y7-dt-u2-l5-conditionals-loops">unit site → Lesson 5 →</a></p>
+</div>
+
+<!-- ================= 2. WARM UP ================= -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">2</div>
+    <div class="si"><div class="slbl">Warm Up</div><div class="stit">Conditionals in Real Life</div></div>
+    <span class="sbadge b-expl">Warm Up</span>
+  </div>
+  <p class="body">Complete this after the class discussion, before you open MakeCode.</p>
+
+  <div class="q">
+    <label class="field-label"><span class="qnum">W1</span> &nbsp;Write down one rule you personally follow that works like a conditional.</label>
+    <textarea class="ta" id="w1" rows="2" placeholder="Use the words 'if' and 'else' in your sentence." oninput="updateProgress()"></textarea>
+    <div class="hint">Think about decisions you make without thinking — weather, time of day, whether something is charged.</div>
+  </div>
+
+  <div class="q">
+    <label class="field-label"><span class="qnum">W2</span> &nbsp;Write down something you repeat a <strong>set number of times</strong>, and something you repeat <strong>until something changes</strong>.</label>
+    <textarea class="ta" id="w2" rows="3" placeholder="Two separate examples — label which is which." oninput="updateProgress()"></textarea>
+    <div class="hint">One of these has a number attached to it. The other has a stopping condition instead.</div>
+  </div>
+
+  <div class="q">
+    <label class="field-label"><span class="qnum">W3</span> &nbsp;What would go wrong in real life if a rule you follow had <em>no</em> stopping condition?</label>
+    <textarea class="ta" id="w3" rows="2" placeholder="Pick one of your W2 examples and remove its ending." oninput="updateProgress()"></textarea>
+  </div>
+</div>
+
+<!-- ================= 3. RETRIEVAL ================= -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">3</div>
+    <div class="si"><div class="slbl">Responsive Teaching</div><div class="stit">Check Your Understanding</div></div>
+    <span class="sbadge b-resp">Auto-marked</span>
+  </div>
+  <div class="callout callout-note">
+    <div class="callout-label">Before you start</div>
+    Answer these from your paper notes and from memory, not by scrolling the unit site. If you get one wrong, that's the signal to go back and reread that part of your notes.
+  </div>
+
+  <div class="rl">Part A — Multiple choice</div>
+
+  <div class="q">
+    <label class="field-label"><span class="qnum">Q1</span> &nbsp;When does the <code>else</code> branch of a conditional run?</label>
+    <div class="mc-opts">
+      <label class="mc-opt"><input type="radio" name="mc1" value="a" onchange="recordMC('mc1',this,MC_ANSWERS.mc1)"> Every time the program runs</label>
+      <label class="mc-opt"><input type="radio" name="mc1" value="b" onchange="recordMC('mc1',this,MC_ANSWERS.mc1)"> Only when the condition is false</label>
+      <label class="mc-opt"><input type="radio" name="mc1" value="c" onchange="recordMC('mc1',this,MC_ANSWERS.mc1)"> Straight after the if branch has run</label>
+      <label class="mc-opt"><input type="radio" name="mc1" value="d" onchange="recordMC('mc1',this,MC_ANSWERS.mc1)"> Only inside an on start block</label>
+    </div>
+    <div class="mc-result" id="mc1_result"></div>
+  </div>
+
+  <div class="q">
+    <label class="field-label"><span class="qnum">Q2</span> &nbsp;Which loop runs a set number of times and then stops on its own?</label>
+    <div class="mc-opts">
+      <label class="mc-opt"><input type="radio" name="mc2" value="a" onchange="recordMC('mc2',this,MC_ANSWERS.mc2)"> <code>forever</code></label>
+      <label class="mc-opt"><input type="radio" name="mc2" value="b" onchange="recordMC('mc2',this,MC_ANSWERS.mc2)"> <code>repeat (n) times</code></label>
+      <label class="mc-opt"><input type="radio" name="mc2" value="c" onchange="recordMC('mc2',this,MC_ANSWERS.mc2)"> <code>while</code></label>
+      <label class="mc-opt"><input type="radio" name="mc2" value="d" onchange="recordMC('mc2',this,MC_ANSWERS.mc2)"> <code>on start</code></label>
+    </div>
+    <div class="mc-result" id="mc2_result"></div>
+  </div>
+
+  <div class="q">
+    <label class="field-label"><span class="qnum">Q3</span> &nbsp;<code>if score &gt;= 5</code> is true when the score is…</label>
+    <div class="mc-opts">
+      <label class="mc-opt"><input type="radio" name="mc3" value="a" onchange="recordMC('mc3',this,MC_ANSWERS.mc3)"> 4 or more</label>
+      <label class="mc-opt"><input type="radio" name="mc3" value="b" onchange="recordMC('mc3',this,MC_ANSWERS.mc3)"> exactly 5, and nothing else</label>
+      <label class="mc-opt"><input type="radio" name="mc3" value="c" onchange="recordMC('mc3',this,MC_ANSWERS.mc3)"> 5 or more</label>
+      <label class="mc-opt"><input type="radio" name="mc3" value="d" onchange="recordMC('mc3',this,MC_ANSWERS.mc3)"> 6 or more</label>
+    </div>
+    <div class="mc-result" id="mc3_result"></div>
+  </div>
+
+  <div class="q">
+    <label class="field-label"><span class="qnum">Q4</span> &nbsp;What happens to a <code>forever</code> loop that has no <code>pause</code> inside it?</label>
+    <div class="mc-opts">
+      <label class="mc-opt"><input type="radio" name="mc4" value="a" onchange="recordMC('mc4',this,MC_ANSWERS.mc4)"> It runs once and stops</label>
+      <label class="mc-opt"><input type="radio" name="mc4" value="b" onchange="recordMC('mc4',this,MC_ANSWERS.mc4)"> MakeCode shows an error and refuses to run it</label>
+      <label class="mc-opt"><input type="radio" name="mc4" value="c" onchange="recordMC('mc4',this,MC_ANSWERS.mc4)"> It runs hundreds of times a second</label>
+      <label class="mc-opt"><input type="radio" name="mc4" value="d" onchange="recordMC('mc4',this,MC_ANSWERS.mc4)"> It waits for a button press before each repeat</label>
+    </div>
+    <div class="mc-result" id="mc4_result"></div>
+  </div>
+
+  <div class="q">
+    <label class="field-label"><span class="qnum">Q5</span> &nbsp;Which of these is a <strong>condition</strong>?</label>
+    <div class="mc-opts">
+      <label class="mc-opt"><input type="radio" name="mc5" value="a" onchange="recordMC('mc5',this,MC_ANSWERS.mc5)"> <code>change life by -1</code></label>
+      <label class="mc-opt"><input type="radio" name="mc5" value="b" onchange="recordMC('mc5',this,MC_ANSWERS.mc5)"> <code>life &lt;= 1</code></label>
+      <label class="mc-opt"><input type="radio" name="mc5" value="c" onchange="recordMC('mc5',this,MC_ANSWERS.mc5)"> <code>game over LOSE</code></label>
+      <label class="mc-opt"><input type="radio" name="mc5" value="d" onchange="recordMC('mc5',this,MC_ANSWERS.mc5)"> <code>pause (500) ms</code></label>
+    </div>
+    <div class="mc-result" id="mc5_result"></div>
+  </div>
+
+  <div class="q">
+    <label class="field-label"><span class="qnum">Q6</span> &nbsp;One single pass through the blocks inside a loop is called…</label>
+    <div class="mc-opts">
+      <label class="mc-opt"><input type="radio" name="mc6" value="a" onchange="recordMC('mc6',this,MC_ANSWERS.mc6)"> an event</label>
+      <label class="mc-opt"><input type="radio" name="mc6" value="b" onchange="recordMC('mc6',this,MC_ANSWERS.mc6)"> an iteration</label>
+      <label class="mc-opt"><input type="radio" name="mc6" value="c" onchange="recordMC('mc6',this,MC_ANSWERS.mc6)"> a branch</label>
+      <label class="mc-opt"><input type="radio" name="mc6" value="d" onchange="recordMC('mc6',this,MC_ANSWERS.mc6)"> a sprite</label>
+    </div>
+    <div class="mc-result" id="mc6_result"></div>
+  </div>
+
+  <div class="rl">Part B — True or false</div>
+  <div class="rb" id="tfBox">
+    <div class="tf-row"><div class="tf-q">T1. Every conditional must have an <code>else</code> branch.</div><div class="tf-btns"><button type="button" class="tf-btn" onclick="setTF('tf1','T',this)">True</button><button type="button" class="tf-btn" onclick="setTF('tf1','F',this)">False</button></div></div>
+    <div class="tf-row"><div class="tf-q">T2. A <code>repeat 5 times</code> loop and a <code>forever</code> loop both stop on their own.</div><div class="tf-btns"><button type="button" class="tf-btn" onclick="setTF('tf2','T',this)">True</button><button type="button" class="tf-btn" onclick="setTF('tf2','F',this)">False</button></div></div>
+    <div class="tf-row"><div class="tf-q">T3. A conditional can be placed inside a loop.</div><div class="tf-btns"><button type="button" class="tf-btn" onclick="setTF('tf3','T',this)">True</button><button type="button" class="tf-btn" onclick="setTF('tf3','F',this)">False</button></div></div>
+    <div class="tf-row"><div class="tf-q">T4. <code>&gt;</code> and <code>&gt;=</code> behave identically when the two values are equal.</div><div class="tf-btns"><button type="button" class="tf-btn" onclick="setTF('tf4','T',this)">True</button><button type="button" class="tf-btn" onclick="setTF('tf4','F',this)">False</button></div></div>
+    <div class="tf-row"><div class="tf-q">T5. A loop can be placed inside an event block.</div><div class="tf-btns"><button type="button" class="tf-btn" onclick="setTF('tf5','T',this)">True</button><button type="button" class="tf-btn" onclick="setTF('tf5','F',this)">False</button></div></div>
+    <div class="tf-row"><div class="tf-q">T6. If a condition is false and there is no <code>else</code>, nothing inside that conditional runs.</div><div class="tf-btns"><button type="button" class="tf-btn" onclick="setTF('tf6','T',this)">True</button><button type="button" class="tf-btn" onclick="setTF('tf6','F',this)">False</button></div></div>
+    <input type="hidden" id="tf1"><input type="hidden" id="tf2"><input type="hidden" id="tf3"><input type="hidden" id="tf4"><input type="hidden" id="tf5"><input type="hidden" id="tf6">
+    <button class="check-btn" onclick="checkTF()">Check my answers</button>
+    <div class="res-line" id="tf_result"></div>
+  </div>
+
+  <div class="rl">Part C — Match the block to its job</div>
+  <table class="match-table">
+    <tr><th>Block</th><th>What it does</th></tr>
+    <tr><td><code>if / else</code></td><td><select id="m1" onchange="updateProgress()"><option value="">— choose —</option><option value="a">Chooses between two different paths</option><option value="b">Repeats until the game ends</option><option value="c">Repeats a set number of times</option><option value="d">Makes the program wait</option><option value="e">Compares two values</option><option value="f">Adjusts a stored value up or down</option></select></td></tr>
+    <tr><td><code>forever</code></td><td><select id="m2" onchange="updateProgress()"><option value="">— choose —</option><option value="a">Chooses between two different paths</option><option value="b">Repeats until the game ends</option><option value="c">Repeats a set number of times</option><option value="d">Makes the program wait</option><option value="e">Compares two values</option><option value="f">Adjusts a stored value up or down</option></select></td></tr>
+    <tr><td><code>repeat (4) times</code></td><td><select id="m3" onchange="updateProgress()"><option value="">— choose —</option><option value="a">Chooses between two different paths</option><option value="b">Repeats until the game ends</option><option value="c">Repeats a set number of times</option><option value="d">Makes the program wait</option><option value="e">Compares two values</option><option value="f">Adjusts a stored value up or down</option></select></td></tr>
+    <tr><td><code>pause (1500) ms</code></td><td><select id="m4" onchange="updateProgress()"><option value="">— choose —</option><option value="a">Chooses between two different paths</option><option value="b">Repeats until the game ends</option><option value="c">Repeats a set number of times</option><option value="d">Makes the program wait</option><option value="e">Compares two values</option><option value="f">Adjusts a stored value up or down</option></select></td></tr>
+    <tr><td><code>&gt;=</code></td><td><select id="m5" onchange="updateProgress()"><option value="">— choose —</option><option value="a">Chooses between two different paths</option><option value="b">Repeats until the game ends</option><option value="c">Repeats a set number of times</option><option value="d">Makes the program wait</option><option value="e">Compares two values</option><option value="f">Adjusts a stored value up or down</option></select></td></tr>
+    <tr><td><code>change score by 1</code></td><td><select id="m6" onchange="updateProgress()"><option value="">— choose —</option><option value="a">Chooses between two different paths</option><option value="b">Repeats until the game ends</option><option value="c">Repeats a set number of times</option><option value="d">Makes the program wait</option><option value="e">Compares two values</option><option value="f">Adjusts a stored value up or down</option></select></td></tr>
+  </table>
+  <button class="check-btn" onclick="checkMatching()">Check my answers</button>
+  <div class="res-line" id="match_result"></div>
+
+  <div class="rl">Part D — Trace the code</div>
+  <p class="body">Work out what each program ends up doing. Run through it in your head line by line, the way the computer would.</p>
+  <table class="match-table">
+    <tr><th>Program</th><th>Your answer</th></tr>
+    <tr><td><code>set score to 0</code>, then <code>change score by 1</code> three times. Final score?</td>
+      <td><select id="t1" onchange="updateProgress()"><option value="">— choose —</option><option value="a">0</option><option value="b">1</option><option value="c">3</option><option value="d">4</option></select></td></tr>
+    <tr><td><code>set score to 0</code>, then <code>set score to 1</code> three times. Final score?</td>
+      <td><select id="t2" onchange="updateProgress()"><option value="">— choose —</option><option value="a">0</option><option value="b">1</option><option value="c">3</option><option value="d">4</option></select></td></tr>
+    <tr><td><code>set score to 0</code>, then <code>repeat (4) times { change score by 2 }</code>. Final score?</td>
+      <td><select id="t3" onchange="updateProgress()"><option value="">— choose —</option><option value="a">2</option><option value="b">4</option><option value="c">6</option><option value="d">8</option></select></td></tr>
+    <tr><td>Life starts at 3. On every hit: <code>if life &lt;= 1 then game over else change life by -1</code>. How many hits until game over?</td>
+      <td><select id="t4" onchange="updateProgress()"><option value="">— choose —</option><option value="a">1</option><option value="b">2</option><option value="c">3</option><option value="d">4</option></select></td></tr>
+    <tr><td><code>forever { spawn enemy; pause (2000) ms }</code>. Roughly how many enemies in 10 seconds?</td>
+      <td><select id="t5" onchange="updateProgress()"><option value="">— choose —</option><option value="a">2</option><option value="b">5</option><option value="c">10</option><option value="d">20</option></select></td></tr>
+    <tr><td>Score is 2. Does the code inside <code>if score &gt;= 3</code> run?</td>
+      <td><select id="t6" onchange="updateProgress()"><option value="">— choose —</option><option value="a">Yes</option><option value="b">No</option></select></td></tr>
+  </table>
+  <button class="check-btn" onclick="checkTrace()">Check my answers</button>
+  <div class="res-line" id="trace_result"></div>
+</div>
+
+<!-- ================= 4. GUIDED BUILD ================= -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">4</div>
+    <div class="si"><div class="slbl">Application of Learning</div><div class="stit">Guided Build: Survive the Swarm</div></div>
+    <span class="sbadge b-app">Laptops open</span>
+  </div>
+  <div class="callout callout-tip">
+    <div class="callout-label">Before you start</div>
+    Open the MakeCode project you saved in Lesson 4. Work through the six steps <strong>in order</strong>, running the simulator after each one. Your teacher is showing the blocks on the slides — the full write-up is on the <a href="U2_GameProgramming_site.html#y7-dt-u2-l5-conditionals-loops">unit site</a>.
+  </div>
+
+  <div class="step-card">
+    <div class="step-head"><div class="step-n">1</div><div class="step-title">Set the starting state</div><span class="step-tag tag-cond">Recap</span></div>
+    <div class="code-block">on start
+    set score to 0
+    set life to 3</div>
+    <label class="done-row"><input type="checkbox" id="cp1" onchange="updateProgress()"> Step 1 working — score 0 and three hearts showing</label>
+    <label class="field-label">Why does <code>set score to 0</code> belong in <code>on start</code> rather than in the collision event?</label>
+    <textarea class="ta" id="g1" rows="2" placeholder="Think about how often each of those two blocks runs." oninput="updateProgress()"></textarea>
+  </div>
+
+  <div class="step-card">
+    <div class="step-head"><div class="step-n">2</div><div class="step-title">Spawn enemies with a forever loop</div><span class="step-tag tag-loop">Loop</span></div>
+    <div class="code-block">forever
+    set enemy to sprite [your enemy image] of kind Enemy
+    set enemy position to x: pick random 0 to 155  y: 0
+    set enemy velocity to vx: 0  vy: 40
+    pause (1500) ms</div>
+    <label class="field-label">PREDICT first — before you press run, what do you expect to see?</label>
+    <textarea class="ta" id="g2a" rows="2" placeholder="Write your prediction now. You are not marked on being right." oninput="updateProgress()"></textarea>
+    <label class="field-label">Now run it. What actually happened?</label>
+    <textarea class="ta" id="g2b" rows="2" placeholder="Describe what you saw — timing, position, direction." oninput="updateProgress()"></textarea>
+    <label class="done-row"><input type="checkbox" id="cp2" onchange="updateProgress()"> Step 2 working — enemies dropping from random spots along the top</label>
+  </div>
+
+  <div class="step-card">
+    <div class="step-head"><div class="step-n">3</div><div class="step-title">Lose a life — with if / else</div><span class="step-tag tag-cond">Conditional</span></div>
+    <div class="code-block">on sprite of kind Player overlaps otherSprite of kind Enemy
+    destroy otherSprite
+    if life &lt;= 1 then
+        game over LOSE
+    else
+        change life by -1</div>
+    <label class="done-row"><input type="checkbox" id="cp3" onchange="updateProgress()"> Step 3 working — hits remove a heart, third hit ends the game</label>
+    <label class="field-label">How many hits can the player survive, and which part of the code decides that number?</label>
+    <textarea class="ta" id="g3" rows="2" placeholder="Point at a specific block or value in the code above." oninput="updateProgress()"></textarea>
+  </div>
+
+  <div class="step-card">
+    <div class="step-head"><div class="step-n">4</div><div class="step-title">Add a win condition</div><span class="step-tag tag-both">Loop + Conditional</span></div>
+    <div class="code-block">on start
+    repeat (5) times
+        set coin to sprite [your collectible image] of kind Food
+        set coin position to x: pick random 10 to 150  y: pick random 20 to 110
+
+on sprite of kind Player overlaps otherSprite of kind Food
+    destroy otherSprite
+    change score by 1
+    if score &gt;= 5 then
+        game over WIN</div>
+    <label class="done-row"><input type="checkbox" id="cp4" onchange="updateProgress()"> Step 4 working — five collectibles appear, collecting all five wins</label>
+    <label class="field-label">Why does <code>&gt;= 5</code> win on the fifth coin? What would <code>&gt; 5</code> do instead?</label>
+    <textarea class="ta" id="g4" rows="2" placeholder="Test it if you're unsure — change the operator, run, change it back." oninput="updateProgress()"></textarea>
+  </div>
+
+  <div class="step-card">
+    <div class="step-head"><div class="step-n">5</div><div class="step-title">Make it get harder</div><span class="step-tag tag-both">Loop + Conditional</span></div>
+    <div class="code-block">forever
+    set enemy to sprite [your enemy image] of kind Enemy
+    set enemy position to x: pick random 0 to 155  y: 0
+    set enemy velocity to vx: 0  vy: 40
+    if score &gt;= 3 then
+        pause (700) ms
+    else
+        pause (1500) ms</div>
+    <label class="done-row"><input type="checkbox" id="cp5" onchange="updateProgress()"> Step 5 working — enemies speed up after three coins</label>
+    <label class="field-label">In your own words: what is the <strong>loop</strong> repeating, and what is the <strong>conditional</strong> deciding?</label>
+    <textarea class="ta" id="g5a" rows="2" placeholder="Two separate jobs — name each one." oninput="updateProgress()"></textarea>
+    <label class="field-label">Describe the difference a player would feel before and after they reach three points.</label>
+    <textarea class="ta" id="g5b" rows="2" placeholder="Describe the experience, not the code." oninput="updateProgress()"></textarea>
+  </div>
+
+  <div class="step-card">
+    <div class="step-head"><div class="step-n">6</div><div class="step-title">Break it on purpose, then fix it</div><span class="step-tag tag-debug">Debug</span></div>
+    <p class="body">Delete the <code>pause</code> blocks from inside your forever loop. Run it. Watch carefully, then put them back.</p>
+    <label class="done-row"><input type="checkbox" id="cp6" onchange="updateProgress()"> Step 6 done — bug observed, and project restored to working</label>
+    <label class="field-label">What did the game do with no pause, and why does removing one small block cause that?</label>
+    <textarea class="ta" id="g6" rows="3" placeholder="Connect what you saw on screen to how fast the loop is now repeating." oninput="updateProgress()"></textarea>
+  </div>
+
+  <div class="callout callout-extend">
+    <div class="callout-label">🟣 Extending — build your own</div>
+    Add a conditional of your own design inside a loop, then describe it below.
+  </div>
+  <label class="field-label">🟣 My own conditional-inside-a-loop: what is the condition checking, and what does the loop repeat?</label>
+  <textarea class="ta" id="ext1" rows="3" placeholder="Describe your idea and whether it worked first try." oninput="updateProgress()"></textarea>
+</div>
+
+<!-- ================= 5. BUG HUNT ================= -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">5</div>
+    <div class="si"><div class="slbl">Application of Learning</div><div class="stit">Bug Hunt</div></div>
+    <span class="sbadge b-app">Auto-marked</span>
+  </div>
+  <p class="body">Each of these three programs runs without any error message, and each one does the wrong thing. Identify the single block that needs changing.</p>
+
+  <table class="match-table">
+    <tr><th>The bug report</th><th>Which block is at fault?</th></tr>
+    <tr><td><strong>A.</strong> "My score is stuck on 1 no matter how many coins I collect."<br><code>on overlap → set score to 1</code></td>
+      <td><select id="b1" onchange="updateProgress()"><option value="">— choose —</option><option value="a">the <code>on overlap</code> event</option><option value="b"><code>set score to 1</code></option><option value="c"><code>destroy otherSprite</code></option></select></td></tr>
+    <tr><td><strong>B.</strong> "The game freezes the second I press start."<br><code>forever → create enemy</code></td>
+      <td><select id="b2" onchange="updateProgress()"><option value="">— choose —</option><option value="a">the <code>forever</code> block itself</option><option value="b"><code>create enemy</code></option><option value="c">the missing <code>pause</code></option></select></td></tr>
+    <tr><td><strong>C.</strong> "I collected all 5 coins and the win screen never came."<br><code>if score &gt; 5 then game over WIN</code></td>
+      <td><select id="b3" onchange="updateProgress()"><option value="">— choose —</option><option value="a"><code>game over WIN</code></option><option value="b">the comparison <code>&gt; 5</code></option><option value="c"><code>change score by 1</code></option></select></td></tr>
+  </table>
+  <button class="check-btn" onclick="checkBugs()">Check my answers</button>
+  <div class="res-line" id="bug_result"></div>
+
+  <div class="rl">Debugging log — use all four steps</div>
+  <p class="body">Choose one bug you hit today (your own, or one from the bug hunt) and log it properly. This is the exact format you will use in your CAT documentation.</p>
+  <div class="rb">
+    <label class="field-label">1. What did you expect to happen?</label>
+    <textarea class="ta" id="d1" rows="2" placeholder="The behaviour you were aiming for." oninput="updateProgress()"></textarea>
+    <label class="field-label" style="margin-top:12px;">2. What actually happened?</label>
+    <textarea class="ta" id="d2" rows="2" placeholder="What you saw on screen — be specific." oninput="updateProgress()"></textarea>
+    <label class="field-label" style="margin-top:12px;">3. Which block runs right before the problem shows up?</label>
+    <textarea class="ta" id="d3" rows="2" placeholder="Name the block, not the whole program." oninput="updateProgress()"></textarea>
+    <label class="field-label" style="margin-top:12px;">4. What one change did you test, and what did it prove?</label>
+    <textarea class="ta" id="d4" rows="2" placeholder="One change only — what did it tell you either way?" oninput="updateProgress()"></textarea>
+  </div>
+</div>
+
+<!-- ================= 6. DIFFERENTIATED CHALLENGE ================= -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">6</div>
+    <div class="si"><div class="slbl">Application of Learning</div><div class="stit">Choose Your Challenge</div></div>
+    <span class="sbadge b-app">Task</span>
+  </div>
+  <p class="body">Attempt any of these that you have time for — you may do more than one.</p>
+
+  <div class="rb">
+    <label class="done-row"><input type="checkbox" id="ch1" onchange="updateProgress()"> 🟢 Foundation — add a second enemy type using the same spawn loop</label>
+    <textarea class="ta" id="ch1t" rows="2" placeholder="What did you change, and did the loop need altering?" oninput="updateProgress()"></textarea>
+  </div>
+  <div class="rb">
+    <label class="done-row"><input type="checkbox" id="ch2" onchange="updateProgress()"> 🟡 Developing — give a bonus life when the score reaches a number you choose</label>
+    <textarea class="ta" id="ch2t" rows="2" placeholder="Write out the condition you used and where you put it." oninput="updateProgress()"></textarea>
+  </div>
+  <div class="rb">
+    <label class="done-row"><input type="checkbox" id="ch3" onchange="updateProgress()"> 🟣 Extending — stop the spawn loop entirely once the player has won</label>
+    <textarea class="ta" id="ch3t" rows="2" placeholder="How did you get a loop to stop? What did you try first?" oninput="updateProgress()"></textarea>
+  </div>
+</div>
+
+<!-- ================= 7. REFLECTION ================= -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">7</div>
+    <div class="si"><div class="slbl">Responsive Teaching</div><div class="stit">Reflection</div></div>
+    <span class="sbadge b-resp">Reflect</span>
+  </div>
+  <label class="field-label">Which of the six steps needed the most attempts, and what finally made it work?</label>
+  <textarea class="ta" id="r1" rows="3" placeholder="Be honest — the useful answer is the one that names a specific step." oninput="updateProgress()"></textarea>
+  <label class="field-label" style="margin-top:14px;">Look at your CAT plan. Name one conditional and one loop your own game will need.</label>
+  <textarea class="ta" id="r2" rows="3" placeholder="Match them to a rule and a repeating behaviour in the game you're planning." oninput="updateProgress()"></textarea>
+  <div class="callout callout-info">
+    <div class="callout-label">CAT progress check</div>
+    By the end of today you should have: sprite art (Lesson 2), a flowchart (Lesson 3), a working game with score and lives (Lesson 4), and win/lose conditions plus a spawn loop (today). Anything missing is homework before Lesson 6 — that's when assessed CAT build time starts.
+  </div>
+</div>
+
+<!-- ================= 8. EXIT TICKET ================= -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">8</div>
+    <div class="si"><div class="slbl">Next Steps</div><div class="stit">Exit Ticket</div></div>
+    <span class="sbadge b-exit">Exit</span>
+  </div>
+  <div class="exit-wrap">
+    <div class="exit-hdr">
+      <div class="exit-lbl">Before you pack up</div>
+      <div class="exit-title">Answer from memory — close the unit site first</div>
+    </div>
+    <div class="exit-q">
+      <label>1. Describe one if/else rule AND one repeating behaviour in your game, in plain English.</label>
+      <textarea class="ta" id="e1" rows="3" placeholder="Two sentences — no block names needed." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="exit-q">
+      <label>2. What are the four steps of the debugging method?</label>
+      <textarea class="ta" id="e2" rows="3" placeholder="From memory. Order matters." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="exit-q">
+      <label>3. What is one thing about conditionals or loops you'd still like explained again?</label>
+      <textarea class="ta" id="e3" rows="2" placeholder="Naming it now means it gets covered next lesson." oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+
+  <div class="submit-row">
+    <button class="submit-btn" onclick="DataService.submit()">Submit workbook</button>
+    <span class="linkline">Next lesson: Making Our Game — you'll critique the game you just built, then assessed build time begins.</span>
+  </div>
+</div>
+
+</div>
+
+<script>
+const LESSON_ID = 'y7-dt-u2-l5-conditionals-loops';
+
+const DataService = {
+  studentId() {
+    const raw = localStorage.getItem('eduportal_session');
+    if (raw) { try { return JSON.parse(raw).id || 'current_student'; } catch(e) {} }
+    return 'current_student';
+  },
+  _key() { return `eduportal_workbook_${this.studentId()}_${LESSON_ID}`; },
+  save() {
+    try {
+      localStorage.setItem(this._key(), JSON.stringify({ ...collectAll(), savedAt: new Date().toISOString() }));
+      this._syncProgress('in-progress', null);
+      showToast('✓ Progress saved');
+    } catch(e) { showToast('⚠ Could not save'); }
+  },
+  load() {
+    try {
+      const raw = localStorage.getItem(this._key());
+      if (!raw) { showToast('No saved progress found'); return; }
+      restoreAll(JSON.parse(raw));
+      updateProgress();
+      showToast('✓ Progress loaded');
+    } catch(e) { showToast('⚠ Could not load'); }
+  },
+  autoSave(d) {
+    try {
+      localStorage.setItem(this._key(), JSON.stringify({ ...d, savedAt: new Date().toISOString() }));
+      this._syncProgress('in-progress', null);
+    } catch(e) {}
+  },
+  autoLoad() {
+    try {
+      const raw = localStorage.getItem(this._key());
+      if (raw) restoreAll(JSON.parse(raw));
+    } catch(e) {}
+  },
+  submit() {
+    try {
+      const studentId    = this.studentId();
+      const submissionId = `${studentId}_${LESSON_ID}_${Date.now()}`;
+      const payload = { id: submissionId, studentId, lessonId: LESSON_ID, ...collectAll(),
+                        submittedAt: new Date().toISOString(), status: 'submitted' };
+      localStorage.setItem(`eduportal_submission_${submissionId}`, JSON.stringify(payload));
+      this._syncProgress('submitted', null, submissionId);
+      showToast('✓ Submitted — thank you!');
+    } catch(e) { showToast('⚠ Submission failed — try again'); }
+  },
+  _syncProgress(status, score, submissionId = null) {
+    try {
+      localStorage.setItem(`eduportal_progress_${this.studentId()}_${LESSON_ID}`,
+        JSON.stringify({ status, score, submissionId, updatedAt: new Date().toISOString() }));
+    } catch(e) {}
+  },
+};
+
+const MC_ANSWERS  = { mc1:'b', mc2:'b', mc3:'c', mc4:'c', mc5:'b', mc6:'b' };
+const TF_ANSWERS  = { tf1:'F', tf2:'F', tf3:'T', tf4:'F', tf5:'T', tf6:'T' };
+const MATCH_ANS   = { m1:'a', m2:'b', m3:'c', m4:'d', m5:'e', m6:'f' };
+const TRACE_ANS   = { t1:'c', t2:'b', t3:'d', t4:'c', t5:'b', t6:'b' };
+const BUG_ANS     = { b1:'b', b2:'c', b3:'b' };
+
+function collectAll() {
+  const d = {};
+  document.querySelectorAll('textarea[id], input[type=text][id], input[type=hidden][id]').forEach(el => { d[el.id] = el.value; });
+  document.querySelectorAll('input[type=checkbox][id]').forEach(el => { d[el.id] = el.checked; });
+  document.querySelectorAll('input[type=radio]:checked').forEach(el => { d['radio_' + el.name] = el.value; });
+  document.querySelectorAll('select[id]').forEach(el => { d[el.id] = el.value; });
+  return d;
+}
+function restoreAll(d) {
+  if (!d) return;
+  Object.entries(d).forEach(([k, v]) => {
+    if (['savedAt','submittedAt','status','id','studentId','lessonId'].includes(k)) return;
+    if (k.startsWith('radio_')) {
+      const name = k.replace('radio_', '');
+      document.querySelectorAll(`input[name="${name}"]`).forEach(el => { el.checked = el.value === v; });
+      return;
+    }
+    const el = document.getElementById(k);
+    if (!el) return;
+    if (el.type === 'checkbox') el.checked = Boolean(v);
+    else el.value = v;
+  });
+  ['sc1','sc2','sc3'].forEach(id => {
+    const cb = document.getElementById(id);
+    if (cb && cb.checked) cb.closest('.crit')?.classList.add('checked');
+  });
+  Object.keys(TF_ANSWERS).forEach(id => paintTF(id));
+}
+function paintTF(id) {
+  const val = document.getElementById(id).value;
+  const row = document.getElementById(id).closest('.rb').querySelectorAll('.tf-row')[Number(id.slice(2)) - 1];
+  if (!row) return;
+  const btns = row.querySelectorAll('.tf-btn');
+  btns.forEach(b => b.classList.remove('sel-t','sel-f'));
+  if (val === 'T') btns[0].classList.add('sel-t');
+  if (val === 'F') btns[1].classList.add('sel-f');
+}
+function setTF(id, val, btn) {
+  document.getElementById(id).value = val;
+  paintTF(id);
+  updateProgress();
+}
+function updateProgress() {
+  const texts  = document.querySelectorAll('textarea[id], input[type=text][id]');
+  const filled = [...texts].filter(el => el.value.trim().length > 1).length;
+  const cbTotal= document.querySelectorAll('input[type=checkbox][id]').length;
+  const cbs    = [...document.querySelectorAll('input[type=checkbox][id]')].filter(cb => cb.checked).length;
+  const rads   = Object.keys(MC_ANSWERS).filter(n => document.querySelector(`input[name="${n}"]:checked`)).length;
+  const tfs    = Object.keys(TF_ANSWERS).filter(id => document.getElementById(id).value).length;
+  const sels   = [...document.querySelectorAll('select[id]')].filter(s => s.value).length;
+  const selTotal = document.querySelectorAll('select[id]').length;
+  const total  = texts.length + Object.keys(MC_ANSWERS).length + Object.keys(TF_ANSWERS).length + cbTotal + selTotal;
+  const done   = filled + rads + tfs + cbs + sels;
+  const pct    = Math.min(100, Math.round(done / Math.max(total,1) * 100));
+  document.getElementById('tbFill').style.width = pct + '%';
+  document.getElementById('tbPct').textContent  = pct + '%';
+  clearTimeout(window._st);
+  window._st = setTimeout(() => DataService.autoSave(collectAll()), 1800);
+}
+function recordMC(groupId, radioEl, correct) {
+  document.querySelectorAll(`input[name="${groupId}"]`).forEach(r => r.parentElement.classList.remove('correct-ans','wrong-ans'));
+  const res = document.getElementById(groupId + '_result');
+  if (radioEl.value === correct) {
+    radioEl.parentElement.classList.add('correct-ans');
+    res.textContent = '✓ Correct'; res.className = 'mc-result show-c';
+  } else {
+    radioEl.parentElement.classList.add('wrong-ans');
+    res.textContent = '✗ Not quite — reread that part of your notes, then try again.'; res.className = 'mc-result show-w';
+  }
+  updateProgress();
+}
+function checkSet(answers, resultId, label) {
+  let correct = 0, answered = 0;
+  Object.entries(answers).forEach(([id, ans]) => {
+    const el = document.getElementById(id);
+    if (el && el.value) answered++;
+    if (el && el.value === ans) correct++;
+  });
+  const total = Object.keys(answers).length;
+  const res = document.getElementById(resultId);
+  if (answered < total) { res.style.color = 'var(--fg3)'; res.textContent = `${answered} of ${total} answered — finish them all first.`; }
+  else if (correct === total) { res.style.color = 'var(--green-fg)'; res.textContent = `✓ All ${total} correct.`; }
+  else { res.style.color = 'var(--amber-fg)'; res.textContent = `${correct} of ${total} correct — check your notes and try the ones you're unsure of again.`; }
+  updateProgress();
+}
+function checkTF()       { checkSet(TF_ANSWERS,  'tf_result'); }
+function checkMatching() { checkSet(MATCH_ANS,   'match_result'); }
+function checkTrace()    { checkSet(TRACE_ANS,   'trace_result'); }
+function checkBugs()     { checkSet(BUG_ANS,     'bug_result'); }
+
+function toggleCrit(card, cbId) {
+  const cb = document.getElementById(cbId);
+  cb.checked = !cb.checked;
+  card.classList.toggle('checked', cb.checked);
+  updateProgress();
+}
+function toggleTheme() {
+  const r = document.documentElement;
+  const light = r.getAttribute('data-theme') === 'light';
+  r.setAttribute('data-theme', light ? 'dark' : 'light');
+  document.getElementById('themeBtn').textContent = light ? 'Light' : 'Dark';
+}
+function showToast(msg) {
+  let t = document.getElementById('_toast');
+  if (!t) {
+    t = document.createElement('div'); t.id = '_toast';
+    t.style.cssText = 'position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#151B23;color:#E8EDF4;border:1px solid #333D4A;padding:9px 20px;border-radius:6px;font-size:12px;font-family:DM Mono,monospace;z-index:9999;transition:opacity .3s;white-space:nowrap;pointer-events:none;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg; t.style.opacity = '1';
+  clearTimeout(t._t); t._t = setTimeout(() => t.style.opacity = '0', 2600);
+}
+window.addEventListener('load', () => { DataService.autoLoad(); updateProgress(); });
+setInterval(() => DataService.autoSave(collectAll()), 60000);
+</script>
+</body>
+</html>

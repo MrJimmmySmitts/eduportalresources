@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L6 — Making Our Game | Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0D1117; --bg2:#151B23; --bg3:#1C232C;
+  --fg:#E8EDF4; --fg2:#B7C0CC; --fg3:#7D8794;
+  --border:#252D38; --border2:#333D4A;
+  --blue:#4361EE;  --blue-bg:rgba(67,97,238,.14);  --blue-fg:#9DB0FF;
+  --green:#10B981; --green-bg:rgba(16,185,129,.13); --green-fg:#5EE9B5;
+  --amber:#F59E0B; --amber-bg:rgba(245,158,11,.13); --amber-fg:#FBC66B;
+  --purple:#8B5CF6;--purple-bg:rgba(139,92,246,.14);--purple-fg:#BFA4FD;
+  --red:#EF4444;   --red-bg:rgba(239,68,68,.13);   --red-fg:#FF9090;
+  --sans:'DM Sans',sans-serif; --read:'Atkinson Hyperlegible','DM Sans',sans-serif;
+  --serif:'DM Serif Display',serif; --mono:'DM Mono',monospace;
+}
+[data-theme="light"]{
+  --bg:#FFFFFF; --bg2:#F5F7FA; --bg3:#EDF1F6;
+  --fg:#0D1117; --fg2:#39414D; --fg3:#69737F;
+  --border:#DDE3EA; --border2:#C6CED8;
+  --blue-fg:#2E45B8; --green-fg:#07835A; --amber-fg:#9A6206; --purple-fg:#6234D6; --red-fg:#C22B2B;
+  --blue-bg:rgba(67,97,238,.09); --green-bg:rgba(16,185,129,.10);
+  --amber-bg:rgba(245,158,11,.12); --purple-bg:rgba(139,92,246,.10); --red-bg:rgba(239,68,68,.09);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--bg);color:var(--fg);font-size:15px;line-height:1.7;padding-bottom:90px;}
+.top-bar{position:sticky;top:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;padding:0 18px;height:46px;}
+.tb-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.09em;color:var(--fg3);text-transform:uppercase;}
+.tb-progress{flex:1;height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;min-width:60px;}
+.tb-fill{height:100%;background:var(--blue);border-radius:3px;transition:width .4s ease;}
+.tb-pct{font-family:var(--mono);font-size:11px;color:var(--fg2);min-width:38px;text-align:right;}
+.tb-btn{background:transparent;border:1px solid var(--border2);color:var(--fg2);font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;padding:5px 11px;border-radius:4px;cursor:pointer;transition:all .15s;text-transform:uppercase;}
+.tb-btn:hover{border-color:var(--blue);color:var(--blue-fg);background:var(--blue-bg);}
+.tb-btn.acc{border-color:var(--green);color:var(--green-fg);background:var(--green-bg);}
+.cover{background:var(--bg2);border-bottom:1px solid var(--border);padding:46px 34px 40px;}
+.cover-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--blue-fg);text-transform:uppercase;margin-bottom:16px;}
+.cover-title{font-family:var(--serif);font-size:38px;line-height:1.1;margin-bottom:6px;}
+.cover-sub{font-size:14px;color:var(--fg2);margin-bottom:26px;font-family:var(--read);}
+.cover-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px;max-width:580px;}
+.cfield label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg3);display:block;margin-bottom:4px;}
+.cfield input{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:5px;padding:8px 10px;color:var(--fg);font-family:var(--sans);font-size:14px;outline:none;}
+.cfield input:focus{border-color:var(--blue);}
+.pw{max-width:820px;margin:0 auto;padding:0 24px;}
+.wbs{margin-top:40px;}
+.sb{display:flex;align-items:center;gap:12px;padding:14px 0 12px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+.sn{width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.si .slbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg3);}
+.si .stit{font-family:var(--serif);font-size:21px;color:var(--fg);line-height:1.15;}
+.sbadge{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:3px;letter-spacing:.04em;margin-left:auto;flex-shrink:0;text-transform:uppercase;}
+.b-obj{background:var(--blue-bg);color:var(--blue-fg);border:1px solid var(--blue);}
+.b-expl{background:var(--amber-bg);color:var(--amber-fg);border:1px solid var(--amber);}
+.b-app{background:var(--green-bg);color:var(--green-fg);border:1px solid var(--green);}
+.b-resp{background:var(--purple-bg);color:var(--purple-fg);border:1px solid var(--purple);}
+.b-exit{background:var(--red-bg);color:var(--red-fg);border:1px solid var(--red);}
+.rl{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--fg3);margin:22px 0 8px;}
+.field-label{font-size:14px;color:var(--fg);margin-bottom:6px;display:block;font-weight:600;font-family:var(--read);}
+.hint{font-size:12.5px;color:var(--fg3);font-style:italic;margin-top:5px;font-family:var(--read);}
+p.body{font-size:14px;color:var(--fg2);margin-bottom:12px;line-height:1.7;font-family:var(--read);}
+code{font-family:var(--mono);font-size:.88em;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 5px;color:var(--blue-fg);}
+a{color:var(--blue-fg);}
+.ta{width:100%;border:1px solid var(--border2);border-radius:6px;padding:10px 12px;font-family:var(--read);font-size:14px;color:var(--fg);background:var(--bg2);resize:vertical;outline:none;transition:border-color .15s;line-height:1.6;}
+.ta:focus{border-color:var(--blue);}
+.rb{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:15px 17px;margin-bottom:12px;}
+.callout{border-left:3px solid;border-radius:0 6px 6px 0;padding:12px 16px;margin:16px 0;font-size:13.5px;line-height:1.65;font-family:var(--read);color:var(--fg2);}
+.callout-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:5px;}
+.callout-info{border-color:var(--blue);background:var(--blue-bg);} .callout-info .callout-label{color:var(--blue-fg);}
+.callout-tip{border-color:var(--green);background:var(--green-bg);} .callout-tip .callout-label{color:var(--green-fg);}
+.callout-note{border-color:var(--amber);background:var(--amber-bg);} .callout-note .callout-label{color:var(--amber-fg);}
+.callout-extend{border-color:var(--purple);background:var(--purple-bg);} .callout-extend .callout-label{color:var(--purple-fg);}
+.crit-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;margin-bottom:16px;}
+.crit{border:1.5px solid var(--border2);border-radius:7px;padding:14px;cursor:pointer;transition:all .2s;user-select:none;background:var(--bg2);}
+.crit.checked{border-width:2px;}
+.cf-found.checked{background:var(--green-bg);border-color:var(--green);}
+.cf-devel.checked{background:var(--amber-bg);border-color:var(--amber);}
+.cf-ext.checked{background:var(--purple-bg);border-color:var(--purple);}
+.crit-tier{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
+.cf-found .crit-tier{color:var(--green-fg);} .cf-devel .crit-tier{color:var(--amber-fg);} .cf-ext .crit-tier{color:var(--purple-fg);}
+.crit p{font-size:12.5px;color:var(--fg2);line-height:1.5;font-family:var(--read);}
+.crit input[type=checkbox]{display:none;}
+.q{margin-bottom:20px;}
+.qnum{font-family:var(--mono);font-size:10px;color:var(--fg3);letter-spacing:.08em;}
+.mc-opts{display:flex;flex-direction:column;gap:6px;margin:9px 0;}
+.mc-opt{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border:1px solid var(--border2);border-radius:6px;cursor:pointer;font-size:13.5px;color:var(--fg2);transition:all .15s;line-height:1.5;background:var(--bg2);font-family:var(--read);}
+.mc-opt:hover{border-color:var(--blue);}
+.mc-opt input{margin-top:3px;flex-shrink:0;accent-color:var(--blue);}
+.mc-opt.correct-ans{background:var(--green-bg);border-color:var(--green);color:var(--green-fg);}
+.mc-opt.wrong-ans{background:var(--red-bg);border-color:var(--red);color:var(--red-fg);}
+.mc-result{font-family:var(--mono);font-size:11.5px;margin-top:6px;display:none;}
+.mc-result.show-c{display:block;color:var(--green-fg);}
+.mc-result.show-w{display:block;color:var(--red-fg);}
+.match-table{width:100%;border-collapse:collapse;margin:10px 0;}
+.match-table th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg3);padding:8px 10px;border-bottom:1px solid var(--border2);text-align:left;background:var(--bg3);}
+.match-table td{padding:9px 10px;border-bottom:1px solid var(--border);font-size:13.5px;color:var(--fg2);font-family:var(--read);}
+select{font-family:var(--sans);font-size:13px;padding:6px 9px;border:1px solid var(--border2);border-radius:5px;background:var(--bg2);color:var(--fg);outline:none;max-width:100%;}
+select:focus{border-color:var(--blue);}
+.check-btn{font-family:var(--mono);font-size:10px;letter-spacing:.06em;padding:7px 15px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--fg2);cursor:pointer;transition:all .15s;margin-top:8px;text-transform:uppercase;}
+.check-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.res-line{font-family:var(--mono);font-size:12px;margin-top:8px;color:var(--fg3);}
+.tf-row{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);}
+.tf-row:last-child{border-bottom:none;}
+.tf-q{flex:1;font-size:13.5px;color:var(--fg2);font-family:var(--read);}
+.tf-btns{display:flex;gap:6px;flex-shrink:0;}
+.tf-btn{font-family:var(--mono);font-size:10.5px;padding:5px 13px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--fg3);cursor:pointer;transition:all .15s;}
+.tf-btn.sel-t{background:var(--green-bg);color:var(--green-fg);border-color:var(--green);}
+.tf-btn.sel-f{background:var(--red-bg);color:var(--red-fg);border-color:var(--red);}
+.step-card{background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:16px 18px;margin:14px 0;}
+.step-head{display:flex;align-items:center;gap:11px;margin-bottom:10px;}
+.step-n{font-family:var(--mono);font-size:11px;width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-title{font-family:var(--serif);font-size:17px;color:var(--fg);}
+.step-tag{margin-left:auto;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:3px;}
+.tag-cond{background:var(--blue-bg);color:var(--blue-fg);border:1px solid var(--blue);}
+.tag-loop{background:var(--green-bg);color:var(--green-fg);border:1px solid var(--green);}
+.tag-both{background:var(--purple-bg);color:var(--purple-fg);border:1px solid var(--purple);}
+.tag-debug{background:var(--red-bg);color:var(--red-fg);border:1px solid var(--red);}
+.done-row{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:9px 13px;margin:10px 0;font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--fg2);text-transform:uppercase;cursor:pointer;}
+.done-row input{accent-color:var(--green);width:16px;height:16px;}
+.code-block{font-family:var(--mono);font-size:12.5px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:13px 16px;margin:10px 0;color:var(--green-fg);line-height:1.8;white-space:pre-wrap;overflow-x:auto;}
+.exit-wrap{background:var(--bg2);border:1px solid var(--red);border-radius:8px;overflow:hidden;margin-bottom:20px;}
+.exit-hdr{background:var(--red);color:#fff;padding:12px 18px;}
+.exit-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.8;margin-bottom:2px;}
+.exit-title{font-size:14px;font-weight:600;}
+.exit-q{padding:14px 18px;border-bottom:1px solid var(--border);}
+.exit-q:last-child{border-bottom:none;}
+.exit-q label{font-size:13.5px;color:var(--fg);display:block;margin-bottom:6px;font-weight:600;font-family:var(--read);}
+.submit-row{display:flex;gap:12px;align-items:center;margin:34px 0 10px;flex-wrap:wrap;}
+.submit-btn{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:12px 26px;border-radius:6px;border:none;background:var(--blue);color:#fff;cursor:pointer;transition:opacity .15s;}
+.submit-btn:hover{opacity:.88;}
+.linkline{font-family:var(--mono);font-size:11px;color:var(--fg3);margin:8px 0 0;}
+@media print{.top-bar,.tb-btn,.check-btn,.submit-btn{display:none;}}
+@media (max-width:760px){.crit-grid{grid-template-columns:1fr;} .cover-fields{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="tb-lbl">L6 Workbook</span>
+  <div class="tb-progress"><div class="tb-fill" id="tbFill" style="width:0%"></div></div>
+  <span class="tb-pct" id="tbPct">0%</span>
+  <button class="tb-btn" onclick="toggleTheme()" id="themeBtn">Light</button>
+  <button class="tb-btn" onclick="DataService.save()">Save</button>
+  <button class="tb-btn" onclick="DataService.load()">Load</button>
+  <button class="tb-btn" onclick="window.print()">Export</button>
+</div>
+
+<div class="cover">
+  <div class="cover-eyebrow">Year 7 · Digital Technology · Unit 2: Game Programming · Lesson 6 of 8</div>
+  <div class="cover-title">Making Our Game</div>
+  <div class="cover-sub">Learn to judge a game properly — including your own. Then CAT build time begins.</div>
+  <div class="cover-fields">
+    <div class="cfield"><label>Name</label><input type="text" id="stu_name" placeholder="Your full name"></div>
+    <div class="cfield"><label>Class</label><input type="text" id="stu_class" placeholder="e.g. 7DT-A"></div>
+    <div class="cfield"><label>Date</label><input type="text" id="stu_date" placeholder="YYYY-MM-DD"></div>
+    <div class="cfield"><label>Teacher</label><input type="text" id="stu_teacher" placeholder="Mr Smith"></div>
+  </div>
+</div>
+
+<div class="pw">
+
+<!-- 1 OBJECTIVE -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">1</div>
+    <div class="si"><div class="slbl">Learning Objective</div><div class="stit">What We're Learning Today</div></div>
+    <span class="sbadge b-obj">Objective</span>
+  </div>
+  <div class="rb">
+    <p class="body"><strong>Objective:</strong> To critique a game against named design criteria — then apply that judgement to your own game as CAT build time begins.</p>
+  </div>
+  <div class="callout callout-note">
+    <div class="callout-label">Two halves today</div>
+    Sections 2 to 4 are critique work and are not assessed. From Section 5 onwards you are working on <strong>CAT 1, Task 1</strong> — that half is assessed.
+  </div>
+  <div class="rl">Tick the tier you are aiming for — you may tick more than one</div>
+  <div class="crit-grid">
+    <div class="crit cf-found" onclick="toggleCrit(this,'sc1')"><input type="checkbox" id="sc1"><div class="crit-tier">🟢 Foundation</div><p>Identify the core gameplay elements of a given game. Tutorial runs; some art replaced.</p></div>
+    <div class="crit cf-devel" onclick="toggleCrit(this,'sc2')"><input type="checkbox" id="sc2"><div class="crit-tier">🟡 Developing</div><p>Critique a game against named criteria with a strength and a weakness. All required art original.</p></div>
+    <div class="crit cf-ext" onclick="toggleCrit(this,'sc3')"><input type="checkbox" id="sc3"><div class="crit-tier">🟣 Extending</div><p>Propose a specific, justified improvement to your own game. Polish beyond the tutorial.</p></div>
+  </div>
+  <p class="linkline">Full notes for this lesson: <a href="U2_GameProgramming_site.html#y7-dt-u2-l6-making-our-game">unit site &rarr; Lesson 6 &rarr;</a></p>
+</div>
+
+<!-- 2 WARM UP -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">2</div>
+    <div class="si"><div class="slbl">Warm Up</div><div class="stit">Justify It Without the Easy Words</div></div>
+    <span class="sbadge b-expl">Warm Up</span>
+  </div>
+  <div class="q">
+    <label class="field-label"><span class="qnum">W1</span> &nbsp;Name a game and give it a score out of ten.</label>
+    <textarea class="ta" id="w1" rows="2" placeholder="Game name, then the number." oninput="updateProgress()"></textarea>
+  </div>
+  <div class="q">
+    <label class="field-label"><span class="qnum">W2</span> &nbsp;Justify that score — <strong>without</strong> using the words good, bad, fun or boring.</label>
+    <textarea class="ta" id="w2" rows="3" placeholder="Describe a specific moment in the game rather than an overall feeling." oninput="updateProgress()"></textarea>
+    <div class="hint">If you get stuck, the banned words are usually hiding a reason. What was the reason?</div>
+  </div>
+  <div class="q">
+    <label class="field-label"><span class="qnum">W3</span> &nbsp;Would someone who has never played it understand your reason? What would you have to add?</label>
+    <textarea class="ta" id="w3" rows="2" placeholder="Read your W2 answer back as if you were a stranger." oninput="updateProgress()"></textarea>
+  </div>
+</div>
+
+<!-- 3 RETRIEVAL -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">3</div>
+    <div class="si"><div class="slbl">Responsive Teaching</div><div class="stit">Check Your Understanding</div></div>
+    <span class="sbadge b-resp">Auto-marked</span>
+  </div>
+  <div class="rl">Part A — Multiple choice</div>
+
+  <div class="q">
+    <label class="field-label"><span class="qnum">Q1</span> &nbsp;Which of these is an actual critique?</label>
+    <div class="mc-opts">
+      <label class="mc-opt"><input type="radio" name="mc1" value="a" onchange="recordMC('mc1',this,MC_ANSWERS.mc1)"> "The game is really good."</label>
+      <label class="mc-opt"><input type="radio" name="mc1" value="b" onchange="recordMC('mc1',this,MC_ANSWERS.mc1)"> "The controls felt delayed when jumping, so I kept missing platforms."</label>
+      <label class="mc-opt"><input type="radio" name="mc1" value="c" onchange="recordMC('mc1',this,MC_ANSWERS.mc1)"> "I liked it a lot."</label>
+      <label class="mc-opt"><input type="radio" name="mc1" value="d" onchange="recordMC('mc1',this,MC_ANSWERS.mc1)"> "The difficulty is bad."</label>
+    </div>
+    <div class="mc-result" id="mc1_result"></div>
+  </div>
+
+  <div class="q">
+    <label class="field-label"><span class="qnum">Q2</span> &nbsp;A player can't tell what they're meant to do when the game starts. Which criterion is weak?</label>
+    <div class="mc-opts">
+      <label class="mc-opt"><input type="radio" name="mc2" value="a" onchange="recordMC('mc2',this,MC_ANSWERS.mc2)"> Controls</label>
+      <label class="mc-opt"><input type="radio" name="mc2" value="b" onchange="recordMC('mc2',this,MC_ANSWERS.mc2)"> Goal</label>
+      <label class="mc-opt"><input type="radio" name="mc2" value="c" onchange="recordMC('mc2',this,MC_ANSWERS.mc2)"> Feedback</label>
+      <label class="mc-opt"><input type="radio" name="mc2" value="d" onchange="recordMC('mc2',this,MC_ANSWERS.mc2)"> Difficulty</label>
+    </div>
+    <div class="mc-result" id="mc2_result"></div>
+  </div>
+
+  <div class="q">
+    <label class="field-label"><span class="qnum">Q3</span> &nbsp;The score changes but nothing on screen shows it. Which criterion is weak?</label>
+    <div class="mc-opts">
+      <label class="mc-opt"><input type="radio" name="mc3" value="a" onchange="recordMC('mc3',this,MC_ANSWERS.mc3)"> Controls</label>
+      <label class="mc-opt"><input type="radio" name="mc3" value="b" onchange="recordMC('mc3',this,MC_ANSWERS.mc3)"> Goal</label>
+      <label class="mc-opt"><input type="radio" name="mc3" value="c" onchange="recordMC('mc3',this,MC_ANSWERS.mc3)"> Feedback</label>
+      <label class="mc-opt"><input type="radio" name="mc3" value="d" onchange="recordMC('mc3',this,MC_ANSWERS.mc3)"> Difficulty</label>
+    </div>
+    <div class="mc-result" id="mc3_result"></div>
+  </div>
+
+  <div class="q">
+    <label class="field-label"><span class="qnum">Q4</span> &nbsp;Which proposed fix is realistic for your CAT?</label>
+    <div class="mc-opts">
+      <label class="mc-opt"><input type="radio" name="mc4" value="a" onchange="recordMC('mc4',this,MC_ANSWERS.mc4)"> Add online multiplayer</label>
+      <label class="mc-opt"><input type="radio" name="mc4" value="b" onchange="recordMC('mc4',this,MC_ANSWERS.mc4)"> Rebuild the game in 3D</label>
+      <label class="mc-opt"><input type="radio" name="mc4" value="c" onchange="recordMC('mc4',this,MC_ANSWERS.mc4)"> Speed up enemy spawning once the score reaches five</label>
+      <label class="mc-opt"><input type="radio" name="mc4" value="d" onchange="recordMC('mc4',this,MC_ANSWERS.mc4)"> Save the player's progress between sessions</label>
+    </div>
+    <div class="mc-result" id="mc4_result"></div>
+  </div>
+
+  <div class="q">
+    <label class="field-label"><span class="qnum">Q5</span> &nbsp;Why is critiquing your own game harder than critiquing someone else's?</label>
+    <div class="mc-opts">
+      <label class="mc-opt"><input type="radio" name="mc5" value="a" onchange="recordMC('mc5',this,MC_ANSWERS.mc5)"> You can't play your own game properly</label>
+      <label class="mc-opt"><input type="radio" name="mc5" value="b" onchange="recordMC('mc5',this,MC_ANSWERS.mc5)"> You already know what you meant it to do, so weaknesses are easy to miss</label>
+      <label class="mc-opt"><input type="radio" name="mc5" value="c" onchange="recordMC('mc5',this,MC_ANSWERS.mc5)"> Your game is always better</label>
+      <label class="mc-opt"><input type="radio" name="mc5" value="d" onchange="recordMC('mc5',this,MC_ANSWERS.mc5)"> The criteria don't apply to your own work</label>
+    </div>
+    <div class="mc-result" id="mc5_result"></div>
+  </div>
+
+  <div class="q">
+    <label class="field-label"><span class="qnum">Q6</span> &nbsp;At Checkpoint B, what does your teacher need to see?</label>
+    <div class="mc-opts">
+      <label class="mc-opt"><input type="radio" name="mc6" value="a" onchange="recordMC('mc6',this,MC_ANSWERS.mc6)"> A written description of your game</label>
+      <label class="mc-opt"><input type="radio" name="mc6" value="b" onchange="recordMC('mc6',this,MC_ANSWERS.mc6)"> All required art original, and the game still running without errors</label>
+      <label class="mc-opt"><input type="radio" name="mc6" value="c" onchange="recordMC('mc6',this,MC_ANSWERS.mc6)"> Your finished modification</label>
+      <label class="mc-opt"><input type="radio" name="mc6" value="d" onchange="recordMC('mc6',this,MC_ANSWERS.mc6)"> Your poster design</label>
+    </div>
+    <div class="mc-result" id="mc6_result"></div>
+  </div>
+
+
+  <div class="rl">Part B — True or false</div>
+  <div class="rb" id="tfBox">
+    <div class="tf-row"><div class="tf-q">T1. "The graphics are nice" is a critique.</div><div class="tf-btns"><button type="button" class="tf-btn" onclick="setTF('tf1','T',this)">True</button><button type="button" class="tf-btn" onclick="setTF('tf1','F',this)">False</button></div></div>
+    <div class="tf-row"><div class="tf-q">T2. A critique needs a named criterion and a specific reason.</div><div class="tf-btns"><button type="button" class="tf-btn" onclick="setTF('tf2','T',this)">True</button><button type="button" class="tf-btn" onclick="setTF('tf2','F',this)">False</button></div></div>
+    <div class="tf-row"><div class="tf-q">T3. Critiquing your own game is usually easier than critiquing someone else's.</div><div class="tf-btns"><button type="button" class="tf-btn" onclick="setTF('tf3','T',this)">True</button><button type="button" class="tf-btn" onclick="setTF('tf3','F',this)">False</button></div></div>
+    <div class="tf-row"><div class="tf-q">T4. A difficulty curve describes how challenge changes as a player progresses.</div><div class="tf-btns"><button type="button" class="tf-btn" onclick="setTF('tf4','T',this)">True</button><button type="button" class="tf-btn" onclick="setTF('tf4','F',this)">False</button></div></div>
+    <div class="tf-row"><div class="tf-q">T5. A good CAT modification is whichever idea is most ambitious.</div><div class="tf-btns"><button type="button" class="tf-btn" onclick="setTF('tf5','T',this)">True</button><button type="button" class="tf-btn" onclick="setTF('tf5','F',this)">False</button></div></div>
+    <div class="tf-row"><div class="tf-q">T6. Adding a sound when the player scores is an improvement to feedback.</div><div class="tf-btns"><button type="button" class="tf-btn" onclick="setTF('tf6','T',this)">True</button><button type="button" class="tf-btn" onclick="setTF('tf6','F',this)">False</button></div></div>
+    <input type="hidden" id="tf1"><input type="hidden" id="tf2"><input type="hidden" id="tf3"><input type="hidden" id="tf4"><input type="hidden" id="tf5"><input type="hidden" id="tf6">
+    <button class="check-btn" onclick="checkTF()">Check my answers</button>
+    <div class="res-line" id="tf_result"></div>
+  </div>
+
+  <div class="rl">Part C — Which criterion is each comment about?</div>
+  <table class="match-table">
+    <tr><th>A player says…</th><th>Criterion</th></tr>
+    <tr><td>"I pressed left and it took a moment to turn."</td><td><select id="m1" onchange="updateProgress()"><option value="">— choose —</option><option value="a">Controls</option><option value="b">Goal</option><option value="c">Feedback</option><option value="d">Difficulty</option></select></td></tr>
+    <tr><td>"I had no idea I was supposed to collect the coins."</td><td><select id="m2" onchange="updateProgress()"><option value="">— choose —</option><option value="a">Controls</option><option value="b">Goal</option><option value="c">Feedback</option><option value="d">Difficulty</option></select></td></tr>
+    <tr><td>"I lost a life and nothing on screen told me."</td><td><select id="m3" onchange="updateProgress()"><option value="">— choose —</option><option value="a">Controls</option><option value="b">Goal</option><option value="c">Feedback</option><option value="d">Difficulty</option></select></td></tr>
+    <tr><td>"Level one was impossible and level four was easy."</td><td><select id="m4" onchange="updateProgress()"><option value="">— choose —</option><option value="a">Controls</option><option value="b">Goal</option><option value="c">Feedback</option><option value="d">Difficulty</option></select></td></tr>
+    <tr><td>"The score went up but I couldn't see where."</td><td><select id="m5" onchange="updateProgress()"><option value="">— choose —</option><option value="a">Controls</option><option value="b">Goal</option><option value="c">Feedback</option><option value="d">Difficulty</option></select></td></tr>
+    <tr><td>"Enemies came so fast I never got started."</td><td><select id="m6" onchange="updateProgress()"><option value="">— choose —</option><option value="a">Controls</option><option value="b">Goal</option><option value="c">Feedback</option><option value="d">Difficulty</option></select></td></tr>
+  </table>
+  <button class="check-btn" onclick="checkMatching()">Check my answers</button>
+  <div class="res-line" id="match_result"></div>
+</div>
+
+<!-- 4 CRITIQUE TASKS -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">4</div>
+    <div class="si"><div class="slbl">Application of Learning</div><div class="stit">Critique — a Game, Then Your Own</div></div>
+    <span class="sbadge b-app">Laptops open</span>
+  </div>
+  <div class="callout callout-info">
+    <div class="callout-label">The sentence frame</div>
+    The [criterion] was [specific observation], because [what happened when you played].
+  </div>
+
+  <div class="rl">Task 1 — The game your teacher named</div>
+  <label class="field-label">Which game did you play?</label>
+  <textarea class="ta" id="g_name" rows="1" placeholder="Name it." oninput="updateProgress()"></textarea>
+
+  <div class="rb">
+    <label class="field-label">Controls — <span style="font-weight:400;color:var(--fg3);">Do they feel responsive and intuitive?</span></label>
+    <textarea class="ta" id="g_c1" rows="2" placeholder="Use the sentence frame. What happened when you played?" oninput="updateProgress()"></textarea>
+  </div>
+  <div class="rb">
+    <label class="field-label">Goal — <span style="font-weight:400;color:var(--fg3);">Is it clear what you're trying to do?</span></label>
+    <textarea class="ta" id="g_c2" rows="2" placeholder="Use the sentence frame. What happened when you played?" oninput="updateProgress()"></textarea>
+  </div>
+  <div class="rb">
+    <label class="field-label">Feedback — <span style="font-weight:400;color:var(--fg3);">Does the game tell you what's happening?</span></label>
+    <textarea class="ta" id="g_c3" rows="2" placeholder="Use the sentence frame. What happened when you played?" oninput="updateProgress()"></textarea>
+  </div>
+  <div class="rb">
+    <label class="field-label">Difficulty — <span style="font-weight:400;color:var(--fg3);">Is the challenge fair, and does it build?</span></label>
+    <textarea class="ta" id="g_c4" rows="2" placeholder="Use the sentence frame. What happened when you played?" oninput="updateProgress()"></textarea>
+  </div>
+  <div class="rb">
+    <label class="field-label">One genuine STRENGTH, with a specific reason</label>
+    <textarea class="ta" id="g_str" rows="2" placeholder="Which criterion does this strength belong to?" oninput="updateProgress()"></textarea>
+  </div>
+  <div class="rb">
+    <label class="field-label">One genuine WEAKNESS, with a specific reason</label>
+    <textarea class="ta" id="g_weak" rows="2" placeholder="Something you'd actually change, not something trivial." oninput="updateProgress()"></textarea>
+  </div>
+
+  <div class="rl">Task 2 — Your own game</div>
+  <div class="callout callout-note">
+    <div class="callout-label">Do this first</div>
+    Hand your game to your partner and say nothing while they play. Watch where they hesitate — that hesitation is your data.
+  </div>
+  <label class="done-row"><input type="checkbox" id="cp_watch" onchange="updateProgress()"> A partner played my game while I stayed silent</label>
+  <label class="field-label" style="margin-top:12px;">Where did your partner hesitate, get confused, or do something you didn't expect?</label>
+  <textarea class="ta" id="o_watch" rows="2" placeholder="Describe what they did, not what you think they should have done." oninput="updateProgress()"></textarea>
+
+  <div class="rb">
+    <label class="field-label">Controls — <span style="font-weight:400;color:var(--fg3);">Do they feel responsive and intuitive?</span></label>
+    <textarea class="ta" id="o_c1" rows="2" placeholder="Use the sentence frame. What happened when you played?" oninput="updateProgress()"></textarea>
+  </div>
+  <div class="rb">
+    <label class="field-label">Goal — <span style="font-weight:400;color:var(--fg3);">Is it clear what you're trying to do?</span></label>
+    <textarea class="ta" id="o_c2" rows="2" placeholder="Use the sentence frame. What happened when you played?" oninput="updateProgress()"></textarea>
+  </div>
+  <div class="rb">
+    <label class="field-label">Feedback — <span style="font-weight:400;color:var(--fg3);">Does the game tell you what's happening?</span></label>
+    <textarea class="ta" id="o_c3" rows="2" placeholder="Use the sentence frame. What happened when you played?" oninput="updateProgress()"></textarea>
+  </div>
+  <div class="rb">
+    <label class="field-label">Difficulty — <span style="font-weight:400;color:var(--fg3);">Is the challenge fair, and does it build?</span></label>
+    <textarea class="ta" id="o_c4" rows="2" placeholder="Use the sentence frame. What happened when you played?" oninput="updateProgress()"></textarea>
+  </div>
+  <div class="rb">
+    <label class="field-label">The one genuine weakness in my game is…</label>
+    <textarea class="ta" id="o_weak" rows="2" placeholder="The one that actually costs the player something." oninput="updateProgress()"></textarea>
+  </div>
+  <div class="rb">
+    <label class="field-label">My proposed fix, in ONE sentence — this becomes your CAT modification</label>
+    <textarea class="ta" id="o_fix" rows="2" placeholder="One sentence. Buildable with variables, conditionals or loops." oninput="updateProgress()"></textarea>
+    <div class="hint">Check it against the buildable/too-big lists on the slides before you commit to it.</div>
+  </div>
+  <div class="rb">
+    <label class="field-label">Which criterion does your fix improve, and how do you know?</label>
+    <textarea class="ta" id="o_why" rows="2" placeholder="Name the criterion, then link it back to what your partner did." oninput="updateProgress()"></textarea>
+  </div>
+</div>
+
+<!-- 5 STUDIO -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">5</div>
+    <div class="si"><div class="slbl">CAT 1 · Assessed</div><div class="stit">Studio — Build &amp; Reskin</div></div>
+    <span class="sbadge b-exit">Assessed</span>
+  </div>
+  <div class="callout callout-note">
+    <div class="callout-label">From here on, this is the assessment</div>
+    Objective: complete your MakeCode tutorial and replace all default art with your own pixel art. Self-check each box below <strong>before</strong> you go to your teacher for that conference.
+  </div>
+
+  <div class="step-card">
+    <div class="step-head"><div class="step-n">A</div><div class="step-title">Checkpoint A — mid-lesson</div><span class="step-tag tag-cond">Conference</span></div>
+    <label class="done-row"><input type="checkbox" id="cpA1" onchange="updateProgress()"> Tutorial logic is intact and the game runs without errors</label>
+    <label class="done-row"><input type="checkbox" id="cpA2" onchange="updateProgress()"> The player sprite is my own original art</label>
+    <label class="field-label" style="margin-top:10px;">If something isn't working yet, what is it — and which debugging step have you tried?</label>
+    <textarea class="ta" id="cpA_note" rows="2" placeholder="Name the problem before the conference so you can use the time well." oninput="updateProgress()"></textarea>
+  </div>
+
+  <div class="step-card">
+    <div class="step-head"><div class="step-n">B</div><div class="step-title">Checkpoint B — end of lesson</div><span class="step-tag tag-loop">Conference</span></div>
+    <label class="done-row"><input type="checkbox" id="cpB1" onchange="updateProgress()"> Player art is original</label>
+    <label class="done-row"><input type="checkbox" id="cpB2" onchange="updateProgress()"> Enemy or collectible art is original</label>
+    <label class="done-row"><input type="checkbox" id="cpB3" onchange="updateProgress()"> Background art is original</label>
+    <label class="done-row"><input type="checkbox" id="cpB4" onchange="updateProgress()"> The game still runs without errors after every replacement</label>
+    <label class="done-row"><input type="checkbox" id="cpB5" onchange="updateProgress()"> Project saved under a name I'll recognise next lesson</label>
+  </div>
+
+  <label class="field-label" style="margin-top:14px;">Which sprite replacement changed the feel of your game the most, and why that one?</label>
+  <textarea class="ta" id="s1" rows="2" placeholder="Think about what the player looks at most of the time." oninput="updateProgress()"></textarea>
+</div>
+
+<!-- 6 MODIFICATION PLAN -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">6</div>
+    <div class="si"><div class="slbl">Planning Ahead</div><div class="stit">Modification Sketch</div></div>
+    <span class="sbadge b-app">Plan only</span>
+  </div>
+  <div class="callout callout-extend">
+    <div class="callout-label">Plan it, don't build it</div>
+    Sketch the plan only. Lesson 7 is dedicated to building the modification — starting early usually means arriving next lesson with a broken game.
+  </div>
+  <label class="field-label">Which blocks do you think your modification will need?</label>
+  <textarea class="ta" id="m_blocks" rows="3" placeholder="List the block types. Look back at Lesson 5 if you're unsure what's available." oninput="updateProgress()"></textarea>
+  <label class="field-label" style="margin-top:14px;">Where in your existing code will it go?</label>
+  <textarea class="ta" id="m_where" rows="2" placeholder="Inside an event? Inside a loop? Name the place." oninput="updateProgress()"></textarea>
+  <label class="field-label" style="margin-top:14px;">How will you know it worked? Describe what you'd see on screen.</label>
+  <textarea class="ta" id="m_test" rows="2" placeholder="Write the test before you build the thing." oninput="updateProgress()"></textarea>
+</div>
+
+<!-- 7 REFLECTION -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">7</div>
+    <div class="si"><div class="slbl">Responsive Teaching</div><div class="stit">Reflection</div></div>
+    <span class="sbadge b-resp">Reflect</span>
+  </div>
+  <label class="field-label">What did watching someone else play your game tell you that playing it yourself never did?</label>
+  <textarea class="ta" id="r1" rows="3" placeholder="Be specific about the moment you noticed it." oninput="updateProgress()"></textarea>
+  <label class="field-label" style="margin-top:14px;">Which of the four criteria is your game currently weakest on, and is that the one you chose to fix?</label>
+  <textarea class="ta" id="r2" rows="3" placeholder="If they're different, explain why you chose the one you did." oninput="updateProgress()"></textarea>
+</div>
+
+<!-- 8 EXIT -->
+<div class="wbs">
+  <div class="sb">
+    <div class="sn">8</div>
+    <div class="si"><div class="slbl">Next Steps</div><div class="stit">Exit Ticket</div></div>
+    <span class="sbadge b-exit">Exit</span>
+  </div>
+  <div class="exit-wrap">
+    <div class="exit-hdr">
+      <div class="exit-lbl">Before you pack up</div>
+      <div class="exit-title">Answer from memory — close the unit site first</div>
+    </div>
+    <div class="exit-q">
+      <label>1. Name all four critique criteria from memory.</label>
+      <textarea class="ta" id="e1" rows="2" placeholder="No looking back." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="exit-q">
+      <label>2. What's the change you're planning for the CAT, and which criterion does it improve?</label>
+      <textarea class="ta" id="e2" rows="3" placeholder="One sentence for the change, one for the criterion." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="exit-q">
+      <label>3. What still needs to happen before you can submit?</label>
+      <textarea class="ta" id="e3" rows="2" placeholder="Be honest — this is what your teacher plans next lesson around." oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+</div>
+
+  <div class="submit-row">
+    <button class="submit-btn" onclick="DataService.submit()">Submit workbook</button>
+    <span class="linkline">Next lesson: CAT Studio 2 — build your modification, make your poster, and submit.</span>
+  </div>
+</div>
+
+<script>
+const LESSON_ID = 'y7-dt-u2-l6-making-our-game';
+
+const DataService = {
+  studentId() {
+    const raw = localStorage.getItem('eduportal_session');
+    if (raw) { try { return JSON.parse(raw).id || 'current_student'; } catch(e) {} }
+    return 'current_student';
+  },
+  _key() { return `eduportal_workbook_${this.studentId()}_${LESSON_ID}`; },
+  save() {
+    try {
+      localStorage.setItem(this._key(), JSON.stringify({ ...collectAll(), savedAt: new Date().toISOString() }));
+      this._syncProgress('in-progress', null);
+      showToast('✓ Progress saved');
+    } catch(e) { showToast('⚠ Could not save'); }
+  },
+  load() {
+    try {
+      const raw = localStorage.getItem(this._key());
+      if (!raw) { showToast('No saved progress found'); return; }
+      restoreAll(JSON.parse(raw));
+      updateProgress();
+      showToast('✓ Progress loaded');
+    } catch(e) { showToast('⚠ Could not load'); }
+  },
+  autoSave(d) {
+    try {
+      localStorage.setItem(this._key(), JSON.stringify({ ...d, savedAt: new Date().toISOString() }));
+      this._syncProgress('in-progress', null);
+    } catch(e) {}
+  },
+  autoLoad() {
+    try {
+      const raw = localStorage.getItem(this._key());
+      if (raw) restoreAll(JSON.parse(raw));
+    } catch(e) {}
+  },
+  submit() {
+    try {
+      const studentId    = this.studentId();
+      const submissionId = `${studentId}_${LESSON_ID}_${Date.now()}`;
+      const payload = { id: submissionId, studentId, lessonId: LESSON_ID, ...collectAll(),
+                        submittedAt: new Date().toISOString(), status: 'submitted' };
+      localStorage.setItem(`eduportal_submission_${submissionId}`, JSON.stringify(payload));
+      this._syncProgress('submitted', null, submissionId);
+      showToast('✓ Submitted — thank you!');
+    } catch(e) { showToast('⚠ Submission failed — try again'); }
+  },
+  _syncProgress(status, score, submissionId = null) {
+    try {
+      localStorage.setItem(`eduportal_progress_${this.studentId()}_${LESSON_ID}`,
+        JSON.stringify({ status, score, submissionId, updatedAt: new Date().toISOString() }));
+    } catch(e) {}
+  },
+};
+
+const MC_ANSWERS  = { mc1:'b', mc2:'b', mc3:'c', mc4:'c', mc5:'b', mc6:'b' };
+const TF_ANSWERS  = { tf1:'F', tf2:'T', tf3:'F', tf4:'T', tf5:'F', tf6:'T' };
+const MATCH_ANS   = { m1:'a', m2:'b', m3:'c', m4:'d', m5:'c', m6:'d' };
+const TRACE_ANS   = {};
+const BUG_ANS     = {};
+
+function collectAll() {
+  const d = {};
+  document.querySelectorAll('textarea[id], input[type=text][id], input[type=hidden][id]').forEach(el => { d[el.id] = el.value; });
+  document.querySelectorAll('input[type=checkbox][id]').forEach(el => { d[el.id] = el.checked; });
+  document.querySelectorAll('input[type=radio]:checked').forEach(el => { d['radio_' + el.name] = el.value; });
+  document.querySelectorAll('select[id]').forEach(el => { d[el.id] = el.value; });
+  return d;
+}
+function restoreAll(d) {
+  if (!d) return;
+  Object.entries(d).forEach(([k, v]) => {
+    if (['savedAt','submittedAt','status','id','studentId','lessonId'].includes(k)) return;
+    if (k.startsWith('radio_')) {
+      const name = k.replace('radio_', '');
+      document.querySelectorAll(`input[name="${name}"]`).forEach(el => { el.checked = el.value === v; });
+      return;
+    }
+    const el = document.getElementById(k);
+    if (!el) return;
+    if (el.type === 'checkbox') el.checked = Boolean(v);
+    else el.value = v;
+  });
+  ['sc1','sc2','sc3'].forEach(id => {
+    const cb = document.getElementById(id);
+    if (cb && cb.checked) cb.closest('.crit')?.classList.add('checked');
+  });
+  Object.keys(TF_ANSWERS).forEach(id => paintTF(id));
+}
+function paintTF(id) {
+  const val = document.getElementById(id).value;
+  const row = document.getElementById(id).closest('.rb').querySelectorAll('.tf-row')[Number(id.slice(2)) - 1];
+  if (!row) return;
+  const btns = row.querySelectorAll('.tf-btn');
+  btns.forEach(b => b.classList.remove('sel-t','sel-f'));
+  if (val === 'T') btns[0].classList.add('sel-t');
+  if (val === 'F') btns[1].classList.add('sel-f');
+}
+function setTF(id, val, btn) {
+  document.getElementById(id).value = val;
+  paintTF(id);
+  updateProgress();
+}
+function updateProgress() {
+  const texts  = document.querySelectorAll('textarea[id], input[type=text][id]');
+  const filled = [...texts].filter(el => el.value.trim().length > 1).length;
+  const cbTotal= document.querySelectorAll('input[type=checkbox][id]').length;
+  const cbs    = [...document.querySelectorAll('input[type=checkbox][id]')].filter(cb => cb.checked).length;
+  const rads   = Object.keys(MC_ANSWERS).filter(n => document.querySelector(`input[name="${n}"]:checked`)).length;
+  const tfs    = Object.keys(TF_ANSWERS).filter(id => document.getElementById(id).value).length;
+  const sels   = [...document.querySelectorAll('select[id]')].filter(s => s.value).length;
+  const selTotal = document.querySelectorAll('select[id]').length;
+  const total  = texts.length + Object.keys(MC_ANSWERS).length + Object.keys(TF_ANSWERS).length + cbTotal + selTotal;
+  const done   = filled + rads + tfs + cbs + sels;
+  const pct    = Math.min(100, Math.round(done / Math.max(total,1) * 100));
+  document.getElementById('tbFill').style.width = pct + '%';
+  document.getElementById('tbPct').textContent  = pct + '%';
+  clearTimeout(window._st);
+  window._st = setTimeout(() => DataService.autoSave(collectAll()), 1800);
+}
+function recordMC(groupId, radioEl, correct) {
+  document.querySelectorAll(`input[name="${groupId}"]`).forEach(r => r.parentElement.classList.remove('correct-ans','wrong-ans'));
+  const res = document.getElementById(groupId + '_result');
+  if (radioEl.value === correct) {
+    radioEl.parentElement.classList.add('correct-ans');
+    res.textContent = '✓ Correct'; res.className = 'mc-result show-c';
+  } else {
+    radioEl.parentElement.classList.add('wrong-ans');
+    res.textContent = '✗ Not quite — reread that part of your notes, then try again.'; res.className = 'mc-result show-w';
+  }
+  updateProgress();
+}
+function checkSet(answers, resultId, label) {
+  let correct = 0, answered = 0;
+  Object.entries(answers).forEach(([id, ans]) => {
+    const el = document.getElementById(id);
+    if (el && el.value) answered++;
+    if (el && el.value === ans) correct++;
+  });
+  const total = Object.keys(answers).length;
+  const res = document.getElementById(resultId);
+  if (answered < total) { res.style.color = 'var(--fg3)'; res.textContent = `${answered} of ${total} answered — finish them all first.`; }
+  else if (correct === total) { res.style.color = 'var(--green-fg)'; res.textContent = `✓ All ${total} correct.`; }
+  else { res.style.color = 'var(--amber-fg)'; res.textContent = `${correct} of ${total} correct — check your notes and try the ones you're unsure of again.`; }
+  updateProgress();
+}
+function checkTF()       { checkSet(TF_ANSWERS,  'tf_result'); }
+function checkMatching() { checkSet(MATCH_ANS,   'match_result'); }
+function checkTrace()    { checkSet(TRACE_ANS,   'trace_result'); }
+function checkBugs()     { checkSet(BUG_ANS,     'bug_result'); }
+
+function toggleCrit(card, cbId) {
+  const cb = document.getElementById(cbId);
+  cb.checked = !cb.checked;
+  card.classList.toggle('checked', cb.checked);
+  updateProgress();
+}
+function toggleTheme() {
+  const r = document.documentElement;
+  const light = r.getAttribute('data-theme') === 'light';
+  r.setAttribute('data-theme', light ? 'dark' : 'light');
+  document.getElementById('themeBtn').textContent = light ? 'Light' : 'Dark';
+}
+function showToast(msg) {
+  let t = document.getElementById('_toast');
+  if (!t) {
+    t = document.createElement('div'); t.id = '_toast';
+    t.style.cssText = 'position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#151B23;color:#E8EDF4;border:1px solid #333D4A;padding:9px 20px;border-radius:6px;font-size:12px;font-family:DM Mono,monospace;z-index:9999;transition:opacity .3s;white-space:nowrap;pointer-events:none;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg; t.style.opacity = '1';
+  clearTimeout(t._t); t._t = setTimeout(() => t.style.opacity = '0', 2600);
+}
+window.addEventListener('load', () => { DataService.autoLoad(); updateProgress(); });
+setInterval(() => DataService.autoSave(collectAll()), 60000);
+</script>
+</body>
+</html>
