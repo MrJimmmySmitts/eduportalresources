@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 4 SAT Portfolio Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#4361EE; --green:#10B981; --amber:#F59E0B; --purple:#8B5CF6;
+  --teal:#14B8A6; --sky:#0EA5E9; --slate:#64748B; --red:#EF4444;
+  --dark-bg:#0D1117; --dark-surface:#161B22; --dark-border:#30363D;
+  --dark-text:#E6EDF3; --dark-text-mute:#8B949E;
+  --light-bg:#FFFFFF; --light-surface:#F6F8FA; --light-border:#D0D7DE;
+  --light-text:#1F2328; --light-text-mute:#57606A;
+  --bg:var(--dark-bg); --surface:var(--dark-surface); --border:var(--dark-border);
+  --text:var(--dark-text); --text-mute:var(--dark-text-mute);
+}
+html.light-mode{
+  --bg:var(--light-bg); --surface:var(--light-surface); --border:var(--light-border);
+  --text:var(--light-text); --text-mute:var(--light-text-mute);
+}
+*{box-sizing:border-box;}
+body{margin:0; background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; line-height:1.6;}
+h1,h2,h3,h4{font-family:'DM Serif Display',serif; font-weight:400; margin:0 0 .5em;}
+.mono{font-family:'DM Mono',monospace;}
+.reading{font-family:'Atkinson Hyperlegible',sans-serif; font-size:18px; line-height:1.7;}
+.skip-link{position:absolute; left:-999px; top:0; background:var(--blue); color:#fff; padding:.75em 1.25em; z-index:200;}
+.skip-link:focus{left:1em; top:1em;}
+
+/* Sticky top bar */
+.topbar{
+  position:sticky; top:0; z-index:100; display:flex; align-items:center; gap:1em; flex-wrap:wrap;
+  padding:.75em 1.5em; background:var(--surface); border-bottom:1px solid var(--border);
+}
+.topbar .brand{font-family:'DM Serif Display',serif; font-size:1.05em; margin-right:auto;}
+.topbar .brand .eyebrow{display:block; font-family:'DM Mono',monospace; font-size:.6em; letter-spacing:.08em; color:var(--text-mute); text-transform:uppercase;}
+.progress-wrap{display:flex; align-items:center; gap:.6em; min-width:180px;}
+.progress-track{flex:1; height:8px; background:var(--border); border-radius:99px; overflow:hidden;}
+.progress-fill{height:100%; background:var(--blue); width:0%; transition:width .3s;}
+.progress-label{font-family:'DM Mono',monospace; font-size:.78em; color:var(--text-mute); white-space:nowrap;}
+.btn{
+  background:transparent; border:1px solid var(--border); color:var(--text); border-radius:8px;
+  padding:.55em 1em; font-family:'DM Mono',monospace; font-size:.8em; cursor:pointer; min-height:44px;
+}
+.btn:hover{border-color:var(--blue);}
+.btn:focus-visible{outline:3px solid var(--blue); outline-offset:2px;}
+.btn.primary{background:var(--blue); border-color:var(--blue); color:#fff;}
+.status-live{font-family:'DM Mono',monospace; font-size:.75em; color:var(--text-mute);}
+[aria-live]{position:absolute; width:1px; height:1px; overflow:hidden;}
+
+/* Cover */
+.cover{padding:3.5em 1.5em 2.5em; background:linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%); border-bottom:1px solid var(--border);}
+.cover-inner{max-width:900px; margin:0 auto;}
+.cover .eyebrow{font-family:'DM Mono',monospace; letter-spacing:.1em; text-transform:uppercase; font-size:.8em; color:var(--sky);}
+.cover h1{font-size:2.3em; margin:.3em 0 .6em;}
+.info-grid{display:grid; grid-template-columns:1fr 1fr; gap:1em; max-width:640px; margin-top:1em;}
+.info-field label{display:block; font-family:'DM Mono',monospace; font-size:.72em; text-transform:uppercase; letter-spacing:.06em; color:var(--text-mute); margin-bottom:.35em;}
+.info-field input{
+  width:100%; padding:.65em .8em; background:var(--surface); border:1px solid var(--border); border-radius:8px;
+  color:var(--text); font-family:'DM Sans',sans-serif; font-size:1em; min-height:44px;
+}
+.info-field input:focus-visible{outline:3px solid var(--blue); outline-offset:1px;}
+
+.container{max-width:880px; margin:0 auto; padding:0 1.5em 6em;}
+
+.section-band{display:flex; align-items:center; gap:1em; padding:2.5em 0 1em; margin-top:2em; border-top:1px solid var(--border);}
+.section-band:first-of-type{border-top:none; margin-top:1.5em;}
+.sn{width:2.4em; height:2.4em; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'DM Mono',monospace; font-weight:600; color:#fff; flex-shrink:0;}
+.si{flex:1;}
+.slbl{font-family:'DM Mono',monospace; font-size:.72em; text-transform:uppercase; letter-spacing:.08em; color:var(--text-mute);}
+.stit{font-family:'DM Serif Display',serif; font-size:1.5em; margin-top:.1em;}
+.crit-badge{font-family:'DM Mono',monospace; font-size:.72em; padding:.35em .8em; border-radius:999px; color:#fff; white-space:nowrap;}
+.section-progress{font-family:'DM Mono',monospace; font-size:.75em; padding:.3em .7em; border-radius:6px; border:1px solid var(--border); color:var(--text-mute);}
+
+.task-block{border-radius:10px; border:1px solid var(--border); background:var(--surface); padding:1.3em 1.4em; margin:1.2em 0;}
+.task-block .task-label{font-family:'DM Mono',monospace; font-size:.72em; text-transform:uppercase; letter-spacing:.06em; color:var(--blue); margin-bottom:.6em; display:flex; align-items:center; gap:.5em;}
+.task-block p.question{font-family:'Atkinson Hyperlegible',sans-serif; font-size:1.05em; margin:0 0 .8em;}
+label.field-label{display:block; font-family:'DM Mono',monospace; font-size:.7em; text-transform:uppercase; letter-spacing:.05em; color:var(--text-mute); margin:.8em 0 .4em;}
+textarea, input[type=text]{
+  width:100%; padding:.85em 1em; background:var(--bg); border:1px solid var(--border); border-radius:8px;
+  color:var(--text); font-family:'Atkinson Hyperlegible',sans-serif; font-size:1em; resize:vertical;
+}
+textarea:focus-visible, input[type=text]:focus-visible{outline:3px solid var(--blue); outline-offset:1px;}
+.hint{font-family:'DM Mono',monospace; font-size:.75em; color:var(--text-mute); margin-top:.4em;}
+
+.checklist-row{display:flex; align-items:flex-start; gap:.7em; margin:.5em 0;}
+.checklist-row input[type=checkbox]{width:22px; height:22px; margin-top:.15em; accent-color:var(--blue);}
+.checklist-row label{font-family:'Atkinson Hyperlegible',sans-serif; font-size:1em;}
+
+.exit-ticket{border-radius:10px; border:1px solid var(--red); background:color-mix(in srgb, var(--red) 10%, transparent); padding:1.3em 1.4em; margin:1.5em 0;}
+.exit-ticket .task-label{color:var(--red);}
+
+.section-submit{display:flex; align-items:center; gap:1em; margin:1.5em 0 3em; padding-top:1em; border-top:1px dashed var(--border);}
+
+footer{text-align:center; padding:3em 1.5em; color:var(--text-mute); font-size:.85em; font-family:'DM Mono',monospace;}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to content</a>
+<div aria-live="polite" id="live-status"></div>
+
+<div class="topbar">
+  <div class="brand"><span class="eyebrow">Software Development · Unit 4</span>SAT Portfolio Workbook</div>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <span class="progress-label" id="progress-label">0 / 3 sections</span>
+  </div>
+  <button class="btn" id="btn-load">Load</button>
+  <button class="btn" id="btn-save">Save</button>
+  <button class="btn" id="btn-export">Export / Print</button>
+  <a href="U4_SoftwareDevelopment_site.html" class="btn" style="text-decoration:none; display:inline-flex; align-items:center;">Unit Site →</a>
+</div>
+
+<div class="cover">
+  <div class="cover-inner">
+    <div class="eyebrow">Year 12 · VCE Applied Computing — Software Development</div>
+    <h1>Unit 4 School-assessed Task Portfolio</h1>
+    <p class="reading" style="color:var(--text-mute); max-width:65ch;">One continuous portfolio for the whole of Unit 4 Outcome 1 (and Outcome 2 prep) — a section per lesson, matching how your evidence for Criteria 6–10 actually accumulates. Save often; each section tracks its own status.</p>
+    <div class="info-grid">
+      <div class="info-field"><label for="f-name">Student name</label><input type="text" id="f-name" autocomplete="name"></div>
+      <div class="info-field"><label for="f-class">Class</label><input type="text" id="f-class"></div>
+      <div class="info-field"><label for="f-date">Date started</label><input type="text" id="f-date" placeholder="YYYY-MM-DD"></div>
+      <div class="info-field"><label for="f-teacher">Teacher</label><input type="text" id="f-teacher"></div>
+    </div>
+  </div>
+</div>
+
+<main id="main-content">
+<div class="container">
+
+  <!-- ============ L1 ============ -->
+  <section id="y12-sd-u4-l1-sat-transition" data-lesson-id="y12-sd-u4-l1-sat-transition">
+    <div class="section-band">
+      <div class="sn" style="background:var(--slate)">1</div>
+      <div class="si">
+        <div class="slbl">Orientation · Pre-Term 3</div>
+        <div class="stit">SAT Transition &amp; Outcome 1 Overview</div>
+      </div>
+      <span class="crit-badge" style="background:var(--slate)">Orientation</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l1-sat-transition">unit site, Section 1</a> for full notes on the Outcome 1 overview and Criteria 6–10.</p>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — What the finished Outcome 1 body of work contains</div>
+      <p class="question">List the four things your finished Unit 4 Outcome 1 body of work needs to contain (see the unit site if you need to check).</p>
+      <label class="field-label" for="l1-t1">Your answer</label>
+      <textarea id="l1-t1" rows="4" placeholder="Write this in your own words — what four things does the finished body of work need to include?"></textarea>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — The transition boundary</div>
+      <p class="question">If you find an issue with your Unit 3 design now, who decides whether to change it — and does changing it affect your Unit 3 score?</p>
+      <label class="field-label" for="l1-t2">Your answer</label>
+      <textarea id="l1-t2" rows="3" placeholder="Who makes the decision, and what happens to your original score?"></textarea>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 3 — First Unit 4 Gantt chart annotation</div>
+      <p class="question">Make your first Unit 4 monitoring entry on your Gantt chart. Record what you changed or confirmed, and why.</p>
+      <label class="field-label" for="l1-t3">Entry description</label>
+      <textarea id="l1-t3" rows="3" placeholder="What did you check or change on your plan, and what's your reason?"></textarea>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 4 — How this gets submitted</div>
+      <p class="question">In your own words: what format does your finished software get delivered in, and what style should your evaluation/project-plan report use?</p>
+      <label class="field-label" for="l1-t4">Your answer</label>
+      <textarea id="l1-t4" rows="2" placeholder="Delivery format, and report style — not an essay, what instead?"></textarea>
+    </div>
+
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">In one or two sentences: how does Unit 4 Outcome 1 connect to what you already did in Unit 3 Outcome 2?</p>
+      <textarea id="l1-exit" rows="2" placeholder="Write your own connection — don't just repeat the outcome statement."></textarea>
+    </div>
+
+    <div class="section-submit">
+      <button class="btn primary" data-submit-section>Mark Section 1 complete</button>
+      <span class="hint" data-submit-status></span>
+    </div>
+  </section>
+
+  <!-- ============ L2 ============ -->
+  <section id="y12-sd-u4-l2-revisiting-design" data-lesson-id="y12-sd-u4-l2-revisiting-design">
+    <div class="section-band">
+      <div class="sn" style="background:var(--slate)">2</div>
+      <div class="si">
+        <div class="slbl">Orientation · Pre-Term 3</div>
+        <div class="stit">Revisiting the Preferred Design</div>
+      </div>
+      <span class="crit-badge" style="background:var(--slate)">Orientation</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l2-revisiting-design">unit site, Section 2</a> for the full design readiness checklist.</p>
+
+    <p class="reading" style="border-left:3px solid var(--amber); padding-left:1em;"><strong>Not the Unit 3 SAC:</strong> Unit 3 Area of Study 1 mandated exactly four teacher-provided modules with a GUI on at least two. The SAT has no such requirement — your solution is structured however your own Unit 3 Outcome 2 design specifies. Fill in only as many module rows below as your own design actually has; leave the rest blank.</p>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Design readiness check</div>
+      <p class="question">For each module in your design, name it and note whether its Input–Process–Output chain is fully specified. (Only fill in as many rows as your design has.)</p>
+      <label class="field-label" for="l2-t1">Module A</label>
+      <textarea id="l2-t1" rows="2" placeholder="Module name — is the IPO chain complete? Anything unclear?"></textarea>
+      <label class="field-label" for="l2-t2">Module B</label>
+      <textarea id="l2-t2" rows="2" placeholder="Module name — is the IPO chain complete? Anything unclear?"></textarea>
+      <label class="field-label" for="l2-t3">Module C (if used)</label>
+      <textarea id="l2-t3" rows="2" placeholder="Module name — is the IPO chain complete? Anything unclear?"></textarea>
+      <label class="field-label" for="l2-t4">Module D (if used)</label>
+      <textarea id="l2-t4" rows="2" placeholder="Module name — is the IPO chain complete? Anything unclear?"></textarea>
+      <label class="field-label" for="l2-t4b">Module E (if used)</label>
+      <textarea id="l2-t4b" rows="2" placeholder="Module name — is the IPO chain complete? Anything unclear?"></textarea>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — GUI modules</div>
+      <p class="question">Which of your modules require a graphical user interface, and what controls does each one need?</p>
+      <label class="field-label" for="l2-t5">Your answer</label>
+      <textarea id="l2-t5" rows="3" placeholder="Name the modules and list the GUI controls each needs — from your design, not from memory."></textarea>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 3 — Gaps and fixes</div>
+      <p class="question">Did you find a genuine gap in your design? Describe it and your proposed fix. If you didn't find one, explain how you checked thoroughly.</p>
+      <label class="field-label" for="l2-t6">Your answer</label>
+      <textarea id="l2-t6" rows="3" placeholder="What's unclear, and what would you change — and why is that your call to make?"></textarea>
+    </div>
+
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">Which module in your design will be hardest to build, and why?</p>
+      <textarea id="l2-exit" rows="2" placeholder="Name the module and give a real reason from your own design."></textarea>
+    </div>
+
+    <div class="section-submit">
+      <button class="btn primary" data-submit-section>Mark Section 2 complete</button>
+      <span class="hint" data-submit-status></span>
+    </div>
+  </section>
+
+  <!-- ============ L3 ============ -->
+  <section id="y12-sd-u4-l3-environment-setup" data-lesson-id="y12-sd-u4-l3-environment-setup">
+    <div class="section-band">
+      <div class="sn" style="background:var(--slate)">3</div>
+      <div class="si">
+        <div class="slbl">Orientation · Pre-Term 3</div>
+        <div class="stit">Development Environment &amp; Repository Setup</div>
+      </div>
+      <span class="crit-badge" style="background:var(--slate)">Orientation</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l3-environment-setup">unit site, Section 3</a> for the full setup checklist.</p>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Environment confirmation</div>
+      <div class="checklist-row"><input type="checkbox" id="l3-c1"><label for="l3-c1">IDE / editor set up and matches my Unit 3 technical environment</label></div>
+      <div class="checklist-row"><input type="checkbox" id="l3-c2"><label for="l3-c2">Code repository created (version control ready)</label></div>
+      <div class="checklist-row"><input type="checkbox" id="l3-c3"><label for="l3-c3">Folder structure matches my module names</label></div>
+      <div class="checklist-row"><input type="checkbox" id="l3-c4"><label for="l3-c4">Backup location confirmed (external / network / cloud)</label></div>
+      <label class="field-label" for="l3-t1">Repository &amp; backup locations</label>
+      <textarea id="l3-t1" rows="2" placeholder="Where is your repository, and where is your backup?"></textarea>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — Build order</div>
+      <p class="question">What order will you build your modules in, and why that order?</p>
+      <label class="field-label" for="l3-t2">Your answer</label>
+      <textarea id="l3-t2" rows="3" placeholder="List the build order and justify it using dependencies between your modules — not just difficulty."></textarea>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 3 — Gantt chart monitoring entry</div>
+      <p class="question">Log today's setup as a completed task, and note any change to your build-order sequence versus your original Unit 3 plan.</p>
+      <label class="field-label" for="l3-t3">Entry description</label>
+      <textarea id="l3-t3" rows="3" placeholder="What changed from your original plan, if anything, and why?"></textarea>
+    </div>
+
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">What's the single biggest risk to your 8-week build timeline, and what would you do about it?</p>
+      <textarea id="l3-exit" rows="2" placeholder="Name a real risk from your own project, not a generic one."></textarea>
+    </div>
+
+    <div class="section-submit">
+      <button class="btn primary" data-submit-section>Mark Section 3 complete</button>
+      <span class="hint" data-submit-status></span>
+    </div>
+  </section>
+
+  <!-- ============ L4 ============ -->
+  <section id="y12-sd-u4-l4-launch-orientation" data-lesson-id="y12-sd-u4-l4-launch-orientation">
+    <div class="section-band">
+      <div class="sn" style="background:var(--blue)">4</div>
+      <div class="si">
+        <div class="slbl">Week 1 · AoS1</div>
+        <div class="stit">Unit 4 Launch &amp; Solution Orientation</div>
+      </div>
+      <span class="crit-badge" style="background:var(--blue)">Criterion 6</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l4-launch-orientation">unit site, Section 4</a> for the 8-week Outcome 1 timeline.</p>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Readiness check</div>
+      <div class="checklist-row"><input type="checkbox" id="l4-c1"><label for="l4-c1">Design readiness check complete (Lesson 2)</label></div>
+      <div class="checklist-row"><input type="checkbox" id="l4-c2"><label for="l4-c2">Environment and repository set up (Lesson 3)</label></div>
+      <div class="checklist-row"><input type="checkbox" id="l4-c3"><label for="l4-c3">Build order decided and justified (Lesson 3)</label></div>
+      <label class="field-label" for="l4-t1">Anything still outstanding?</label>
+      <textarea id="l4-t1" rows="2" placeholder="If any box above is unchecked, what's your plan to close it today?"></textarea>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — First module — starting code</div>
+      <p class="question">Declare your first module's variables and constants with data types matching your data dictionary.</p>
+      <label class="field-label" for="l4-t2">Variable / constant declarations (paste or describe)</label>
+      <textarea id="l4-t2" rows="4" placeholder="List each variable/constant, its data type, and whether it's local or global."></textarea>
+    </div>
+
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">What's the first concrete line or function you wrote today?</p>
+      <textarea id="l4-exit" rows="2" placeholder="Be specific — not \"I started coding\"."></textarea>
+    </div>
+
+    <div class="section-submit">
+      <button class="btn primary" data-submit-section>Mark Section 4 complete</button>
+      <span class="hint" data-submit-status></span>
+    </div>
+  </section>
+
+  <!-- ============ L5 ============ -->
+  <section id="y12-sd-u4-l5-prog-features-1" data-lesson-id="y12-sd-u4-l5-prog-features-1">
+    <div class="section-band">
+      <div class="sn" style="background:var(--blue)">5</div>
+      <div class="si">
+        <div class="slbl">Week 1 · AoS1</div>
+        <div class="stit">Programming Language Features I</div>
+      </div>
+      <span class="crit-badge" style="background:var(--blue)">Criterion 6</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l5-prog-features-1">unit site, Section 5</a> for the local/global variable and control structure notes.</p>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Data types check</div>
+      <p class="question">For each variable/constant in your first module, name it and match it to a data type or structure (Character, String, Integer, Floating point, Date/time, 1D array, 2D array, Record).</p>
+      <label class="field-label" for="l5-t1">Your answer</label>
+      <textarea id="l5-t1" rows="3" placeholder="List each variable/constant and its matching data type/structure, per your data dictionary."></textarea>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — Local vs global, and why</div>
+      <p class="question">Which variables/constants did you declare as local vs global, and why — scope, not convenience?</p>
+      <label class="field-label" for="l5-t2b">Your answer</label>
+      <textarea id="l5-t2b" rows="3" placeholder="Name each one and justify local vs global against your own design."></textarea>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 3 — Sequence and selection</div>
+      <p class="question">Implement at least one sequence and one selection structure from your first module's pseudocode. Is your selection binary (If/Then) or multiple branching (Switch/Case)? Stacked or nested?</p>
+      <label class="field-label" for="l5-t2">Describe what you implemented</label>
+      <textarea id="l5-t2" rows="4" placeholder="What does the sequence do? What decision does your selection branch on, and which shape is it?"></textarea>
+    </div>
+
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">Where in your first module did you choose a global variable over a local one — and can you justify it?</p>
+      <textarea id="l5-exit" rows="2" placeholder="If you didn't use any globals, explain why that was the right call."></textarea>
+    </div>
+
+    <div class="section-submit">
+      <button class="btn primary" data-submit-section>Mark Section 5 complete</button>
+      <span class="hint" data-submit-status></span>
+    </div>
+  </section>
+
+  <!-- ============ L6 ============ -->
+  <section id="y12-sd-u4-l6-prog-features-2" data-lesson-id="y12-sd-u4-l6-prog-features-2">
+    <div class="section-band">
+      <div class="sn" style="background:var(--blue)">6</div>
+      <div class="si">
+        <div class="slbl">Week 2 · AoS1</div>
+        <div class="stit">Programming Language Features II</div>
+      </div>
+      <span class="crit-badge" style="background:var(--blue)">Criterion 6</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l6-prog-features-2">unit site, Section 6</a> for loop types and operator notes.</p>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Iteration structure</div>
+      <p class="question">Implement an iteration structure from your first module's pseudocode. Name its type — pre-test, post-test, or counted — and explain why that type fits.</p>
+      <label class="field-label" for="l6-t1">Your answer</label>
+      <textarea id="l6-t1" rows="4" placeholder="What does the loop do? Which of the three types is it, and why is that the right choice?"></textarea>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — Avoiding an infinite loop</div>
+      <p class="question">What inside your loop guarantees the condition eventually becomes false?</p>
+      <label class="field-label" for="l6-t2">Your answer</label>
+      <textarea id="l6-t2" rows="2" placeholder="Be specific about what changes each iteration."></textarea>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 3 — Operators used</div>
+      <p class="question">List the arithmetic, logical or conditional operators you used in your first module so far, and what each does in context.</p>
+      <label class="field-label" for="l6-t3">Your answer</label>
+      <textarea id="l6-t3" rows="3" placeholder="e.g. modulus to check even/odd, AND to combine two conditions, etc."></textarea>
+    </div>
+
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">If your loop ran one too many or one too few times, where would you look first?</p>
+      <textarea id="l6-exit" rows="2" placeholder="Name the specific part of your loop condition or counter."></textarea>
+    </div>
+
+    <div class="section-submit">
+      <button class="btn primary" data-submit-section>Mark Section 6 complete</button>
+      <span class="hint" data-submit-status></span>
+    </div>
+  </section>
+
+  <!-- ============ L7 ============ -->
+  <section id="y12-sd-u4-l7-prog-features-3" data-lesson-id="y12-sd-u4-l7-prog-features-3">
+    <div class="section-band">
+      <div class="sn" style="background:var(--blue)">7</div>
+      <div class="si">
+        <div class="slbl">Week 2 · AoS1</div>
+        <div class="stit">Programming Language Features III</div>
+      </div>
+      <span class="crit-badge" style="background:var(--blue)">Criterion 6</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l7-prog-features-3">unit site, Section 7</a> for event-driven programming and function/method notes.</p>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Second module — GUI elements</div>
+      <p class="question">List the GUI elements your second module needs and the event each one responds to.</p>
+      <label class="field-label" for="l7-t1">Your answer</label>
+      <textarea id="l7-t1" rows="4" placeholder="e.g. 'Submit button — click event — validates and saves the entry'"></textarea>
+    </div>
+
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — Functions vs methods</div>
+      <p class="question">For each function/method you wrote today, is it standalone or does it belong to an object? Why?</p>
+      <label class="field-label" for="l7-t2">Your answer</label>
+      <textarea id="l7-t2" rows="4" placeholder="Name each one and justify function vs method."></textarea>
+    </div>
+
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">What's one thing that could go wrong if two of your GUI event handlers try to change the same data at once?</p>
+      <textarea id="l7-exit" rows="2" placeholder="Think about it even if your solution doesn't hit this yet."></textarea>
+    </div>
+
+    <div class="section-submit">
+      <button class="btn primary" data-submit-section>Mark Section 7 complete</button>
+      <span class="hint" data-submit-status></span>
+    </div>
+  </section>
+
+  <!-- ============ L8 ============ -->
+  <section id="y12-sd-u4-l8-prog-features-4" data-lesson-id="y12-sd-u4-l8-prog-features-4">
+    <div class="section-band">
+      <div class="sn" style="background:var(--blue)">8</div>
+      <div class="si"><div class="slbl">Week 3 · AoS1</div><div class="stit">Programming Language Features IV</div></div>
+      <span class="crit-badge" style="background:var(--blue)">Criterion 6 — completion</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l8-prog-features-4">unit site, Section 8</a> for classes, objects and access modifiers.</p>
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Class/object implementation</div>
+      <p class="question">Describe a class/object you implemented and the access modifier(s) used, with justification.</p>
+      <label class="field-label" for="l8-t1">Your answer</label>
+      <textarea id="l8-t1" rows="3" placeholder="Class name, what it represents, access modifiers used and why."></textarea>
+    </div>
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — Criterion 6 evidence checkpoint</div>
+      <p class="question">For each module in your design, list which language features it demonstrates (variables/types, control structures, GUI, functions/methods, classes/OOP). Only fill in as many rows as your design has.</p>
+      <label class="field-label" for="l8-t2">Module A</label>
+      <textarea id="l8-t2" rows="2" placeholder="Features demonstrated"></textarea>
+      <label class="field-label" for="l8-t3">Module B</label>
+      <textarea id="l8-t3" rows="2" placeholder="Features demonstrated"></textarea>
+      <label class="field-label" for="l8-t4">Module C (if used)</label>
+      <textarea id="l8-t4" rows="2" placeholder="Features demonstrated"></textarea>
+      <label class="field-label" for="l8-t5">Module D (if used)</label>
+      <textarea id="l8-t5" rows="2" placeholder="Features demonstrated"></textarea>
+      <label class="field-label" for="l8-t5b">Module E (if used)</label>
+      <textarea id="l8-t5b" rows="2" placeholder="Features demonstrated"></textarea>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">Which module is weakest on language-feature variety, and what's your plan to strengthen it?</p>
+      <textarea id="l8-exit" rows="2"></textarea>
+    </div>
+    <div class="section-submit"><button class="btn primary" data-submit-section>Mark Section 8 complete</button><span class="hint" data-submit-status></span></div>
+  </section>
+
+  <!-- ============ L9 ============ -->
+  <section id="y12-sd-u4-l9-naming-documentation" data-lesson-id="y12-sd-u4-l9-naming-documentation">
+    <div class="section-band">
+      <div class="sn" style="background:var(--green)">9</div>
+      <div class="si"><div class="slbl">Week 3 · AoS1</div><div class="stit">Naming Conventions &amp; Internal Documentation</div></div>
+      <span class="crit-badge" style="background:var(--green)">Criterion 7 begins</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l9-naming-documentation">unit site, Section 9</a>.</p>
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Naming pass</div>
+      <p class="question">List anything you renamed today for clarity (variables, interface controls, code structures).</p>
+      <label class="field-label" for="l9-t1">Your answer</label>
+      <textarea id="l9-t1" rows="3"></textarea>
+    </div>
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — Internal documentation</div>
+      <p class="question">Paste or describe the internal documentation you wrote for one completed module.</p>
+      <label class="field-label" for="l9-t2">Your answer</label>
+      <textarea id="l9-t2" rows="4"></textarea>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">Give one example where your naming alone makes a comment unnecessary.</p>
+      <textarea id="l9-exit" rows="2"></textarea>
+    </div>
+    <div class="section-submit"><button class="btn primary" data-submit-section>Mark Section 9 complete</button><span class="hint" data-submit-status></span></div>
+  </section>
+
+  <!-- ============ L10 ============ -->
+  <section id="y12-sd-u4-l10-validation" data-lesson-id="y12-sd-u4-l10-validation">
+    <div class="section-band">
+      <div class="sn" style="background:var(--green)">10</div>
+      <div class="si"><div class="slbl">Week 4 · AoS1</div><div class="stit">Validation Techniques</div></div>
+      <span class="crit-badge" style="background:var(--green)">Criterion 7</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l10-validation">unit site, Section 10</a>.</p>
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Validation map</div>
+      <p class="question">List each input field and which check(s) — existence, type, range — apply.</p>
+      <label class="field-label" for="l10-t1">Your answer</label>
+      <textarea id="l10-t1" rows="4"></textarea>
+    </div>
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — Implemented validation</div>
+      <p class="question">Describe the validation you implemented today, and what happens when it fails.</p>
+      <label class="field-label" for="l10-t2">Your answer</label>
+      <textarea id="l10-t2" rows="3"></textarea>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">Give an example of data your validation would accept but that could still be untrue.</p>
+      <textarea id="l10-exit" rows="2"></textarea>
+    </div>
+    <div class="section-submit"><button class="btn primary" data-submit-section>Mark Section 10 complete</button><span class="hint" data-submit-status></span></div>
+  </section>
+
+  <!-- ============ L11 ============ -->
+  <section id="y12-sd-u4-l11-dev-approaches" data-lesson-id="y12-sd-u4-l11-dev-approaches">
+    <div class="section-band">
+      <div class="sn" style="background:var(--green)">11</div>
+      <div class="si"><div class="slbl">Week 4 · AoS1</div><div class="stit">Established &amp; Innovative Development Approaches</div></div>
+      <span class="crit-badge" style="background:var(--green)">Criterion 6/7 support</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l11-dev-approaches">unit site, Section 11</a>.</p>
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Development approach log</div>
+      <p class="question">Record any repository, API/library or AI assistant used so far, and justify each.</p>
+      <label class="field-label" for="l11-t1">Your answer</label>
+      <textarea id="l11-t1" rows="4"></textarea>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">If you used an AI assistant, how did you verify its suggestion before using it?</p>
+      <textarea id="l11-exit" rows="2"></textarea>
+    </div>
+    <div class="section-submit"><button class="btn primary" data-submit-section>Mark Section 11 complete</button><span class="hint" data-submit-status></span></div>
+  </section>
+
+  <!-- ============ L12 ============ -->
+  <section id="y12-sd-u4-l12-debug-alpha-1" data-lesson-id="y12-sd-u4-l12-debug-alpha-1">
+    <div class="section-band">
+      <div class="sn" style="background:var(--amber)">12</div>
+      <div class="si"><div class="slbl">Week 5 · AoS1</div><div class="stit">Debugging &amp; Alpha Testing I</div></div>
+      <span class="crit-badge" style="background:var(--amber)">Criterion 8</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l12-debug-alpha-1">unit site, Section 12</a>.</p>
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Bug log</div>
+      <p class="question">Log a real bug found today: the technique that revealed it (breakpoint / commenting out) and the fix.</p>
+      <label class="field-label" for="l12-t1">Your answer</label>
+      <textarea id="l12-t1" rows="4"></textarea>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">Why does alpha testing happen before beta testing, not the other way round?</p>
+      <textarea id="l12-exit" rows="2"></textarea>
+    </div>
+    <div class="section-submit"><button class="btn primary" data-submit-section>Mark Section 12 complete</button><span class="hint" data-submit-status></span></div>
+  </section>
+
+  <!-- ============ L13 ============ -->
+  <section id="y12-sd-u4-l13-debug-alpha-2" data-lesson-id="y12-sd-u4-l13-debug-alpha-2">
+    <div class="section-band">
+      <div class="sn" style="background:var(--amber)">13</div>
+      <div class="si"><div class="slbl">Week 5 · AoS1</div><div class="stit">Debugging &amp; Alpha Testing II</div></div>
+      <span class="crit-badge" style="background:var(--amber)">Criterion 8</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l13-debug-alpha-2">unit site, Section 13</a>.</p>
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Testing table</div>
+      <p class="question">Build a testing table: what was tested, valid/valid-but-unusual/invalid data used, expected vs actual result, fix if needed.</p>
+      <label class="field-label" for="l13-t1">Your answer</label>
+      <textarea id="l13-t1" rows="5"></textarea>
+    </div>
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — All-modules confirmation</div>
+      <p class="question" style="margin-bottom:.6em;">Tick each module in your own design once it's alpha-tested and functioning. Leave any unused rows blank.</p>
+      <div class="checklist-row"><input type="checkbox" id="l13-c1"><label for="l13-c1">Module A alpha-tested and functioning</label></div>
+      <div class="checklist-row"><input type="checkbox" id="l13-c2"><label for="l13-c2">Module B alpha-tested and functioning</label></div>
+      <div class="checklist-row"><input type="checkbox" id="l13-c3"><label for="l13-c3">Module C alpha-tested and functioning (if used)</label></div>
+      <div class="checklist-row"><input type="checkbox" id="l13-c4"><label for="l13-c4">Module D alpha-tested and functioning (if used)</label></div>
+      <div class="checklist-row"><input type="checkbox" id="l13-c5"><label for="l13-c5">Module E alpha-tested and functioning (if used)</label></div>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">Which module took the most rounds of debugging, and what was the recurring issue?</p>
+      <textarea id="l13-exit" rows="2"></textarea>
+    </div>
+    <div class="section-submit"><button class="btn primary" data-submit-section>Mark Section 13 complete</button><span class="hint" data-submit-status></span></div>
+  </section>
+
+  <!-- ============ L14 ============ -->
+  <section id="y12-sd-u4-l14-beta-testing" data-lesson-id="y12-sd-u4-l14-beta-testing">
+    <div class="section-band">
+      <div class="sn" style="background:var(--purple)">14</div>
+      <div class="si"><div class="slbl">Week 6 · AoS1 tail</div><div class="stit">Beta Testing</div></div>
+      <span class="crit-badge" style="background:var(--purple)">Criterion 9</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l14-beta-testing">unit site, Section 14</a>.</p>
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Beta testing plan</div>
+      <p class="question">Write your test scenarios targeting your functional and non-functional requirements.</p>
+      <label class="field-label" for="l14-t1">Your answer</label>
+      <textarea id="l14-t1" rows="4"></textarea>
+    </div>
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — Recruited users</div>
+      <p class="question">Who are your (at least two) potential users, and why did you choose them?</p>
+      <label class="field-label" for="l14-t2">Your answer</label>
+      <textarea id="l14-t2" rows="3"></textarea>
+    </div>
+    <div class="task-block">
+      <div class="task-label">📋 Task 3 — Results collection method</div>
+      <p class="question">How will you collect and document results as they happen?</p>
+      <label class="field-label" for="l14-t3">Your answer</label>
+      <textarea id="l14-t3" rows="2"></textarea>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">What's your timeline for completing beta testing before next lesson block?</p>
+      <textarea id="l14-exit" rows="2"></textarea>
+    </div>
+    <div class="section-submit"><button class="btn primary" data-submit-section>Mark Section 14 complete</button><span class="hint" data-submit-status></span></div>
+  </section>
+
+  <!-- ============ L15 ============ -->
+  <section id="y12-sd-u4-l15-orgs-vulnerabilities" data-lesson-id="y12-sd-u4-l15-orgs-vulnerabilities">
+    <div class="section-band">
+      <div class="sn" style="background:var(--sky)">15</div>
+      <div class="si"><div class="slbl">Week 6 · AoS2</div><div class="stit">Organisations, Development Models &amp; Vulnerabilities</div></div>
+      <span class="crit-badge" style="background:var(--sky)">Outcome 2</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l15-orgs-vulnerabilities">unit site, Section 15</a>.</p>
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Case-study organisation</div>
+      <p class="question">Is your case-study organisation in-house or external development? What's the evidence for your answer?</p>
+      <label class="field-label" for="l15-t1">Your answer</label>
+      <textarea id="l15-t1" rows="3"></textarea>
+    </div>
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — Relevant vulnerabilities</div>
+      <p class="question">Which vulnerabilities from today's list are most relevant to your case-study organisation, and why?</p>
+      <label class="field-label" for="l15-t2">Your answer</label>
+      <textarea id="l15-t2" rows="4"></textarea>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">Why does combining development, testing and production environments increase risk?</p>
+      <textarea id="l15-exit" rows="2"></textarea>
+    </div>
+    <div class="section-submit"><button class="btn primary" data-submit-section>Mark Section 15 complete</button><span class="hint" data-submit-status></span></div>
+  </section>
+
+  <!-- ============ L16 ============ -->
+  <section id="y12-sd-u4-l16-evaluation" data-lesson-id="y12-sd-u4-l16-evaluation">
+    <div class="section-band">
+      <div class="sn" style="background:var(--teal)">16</div>
+      <div class="si"><div class="slbl">Week 7 · AoS1 tail</div><div class="stit">Evaluation of Solution &amp; Project Plan</div></div>
+      <span class="crit-badge" style="background:var(--teal)">Criterion 10</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l16-evaluation">unit site, Section 16</a>.</p>
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Solution evaluation</div>
+      <p class="question">For each Unit 3 evaluation criterion, what method (objective/subjective) did you use, and what did you find?</p>
+      <label class="field-label" for="l16-t1">Your answer</label>
+      <textarea id="l16-t1" rows="5"></textarea>
+    </div>
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — Future evaluation strategy</div>
+      <p class="question">Propose a timeframe, the criteria to use, and who would be responsible for a future evaluation.</p>
+      <label class="field-label" for="l16-t2">Your answer</label>
+      <textarea id="l16-t2" rows="3"></textarea>
+    </div>
+    <div class="task-block">
+      <div class="task-label">📋 Task 3 — Project plan effectiveness</div>
+      <p class="question">Summarise your change log data and the reasons behind your plan's biggest changes (scope creep, personnel, technical issues).</p>
+      <label class="field-label" for="l16-t3">Your answer</label>
+      <textarea id="l16-t3" rows="4"></textarea>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">If you started this project again, what's the one change you'd make to your original plan?</p>
+      <textarea id="l16-exit" rows="2"></textarea>
+    </div>
+    <div class="section-submit"><button class="btn primary" data-submit-section>Mark Section 16 complete</button><span class="hint" data-submit-status></span></div>
+  </section>
+
+  <!-- ============ L17 ============ -->
+  <section id="y12-sd-u4-l17-controls-legislation" data-lesson-id="y12-sd-u4-l17-controls-legislation">
+    <div class="section-band">
+      <div class="sn" style="background:var(--sky)">17</div>
+      <div class="si"><div class="slbl">Week 7 · AoS2</div><div class="stit">Security Controls, Threat Modelling, Legislation &amp; Ethics</div></div>
+      <span class="crit-badge" style="background:var(--sky)">Outcome 2</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l17-controls-legislation">unit site, Section 17</a>.</p>
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Case-study practice run</div>
+      <p class="question">For your case-study organisation: one threat, the control that mitigates it, one relevant law, and one ethical consideration.</p>
+      <label class="field-label" for="l17-t1">Your answer</label>
+      <textarea id="l17-t1" rows="5"></textarea>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">Name one thing that could be legal but still unethical in software development.</p>
+      <textarea id="l17-exit" rows="2"></textarea>
+    </div>
+    <div class="section-submit"><button class="btn primary" data-submit-section>Mark Section 17 complete</button><span class="hint" data-submit-status></span></div>
+  </section>
+
+  <!-- ============ L18 ============ -->
+  <section id="y12-sd-u4-l18-sac-revision" data-lesson-id="y12-sd-u4-l18-sac-revision">
+    <div class="section-band">
+      <div class="sn" style="background:var(--sky)">18</div>
+      <div class="si"><div class="slbl">Week 8</div><div class="stit">SAC Revision</div></div>
+      <span class="crit-badge" style="background:var(--sky)">Outcome 2</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l18-sac-revision">unit site, Section 18</a>.</p>
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Self-assessment</div>
+      <p class="question">Rate your confidence (1–5) on: organisations/dev models, vulnerabilities, security controls, threat modelling, legislation, ethics.</p>
+      <label class="field-label" for="l18-t1">Your answer</label>
+      <textarea id="l18-t1" rows="4"></textarea>
+    </div>
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — Practice case-study response</div>
+      <p class="question">Attempt one practice case-study question under timed conditions. Note which command term it used and how you addressed it.</p>
+      <label class="field-label" for="l18-t2">Your answer</label>
+      <textarea id="l18-t2" rows="5"></textarea>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">What's your single weakest area, and what will you do about it before the SAC?</p>
+      <textarea id="l18-exit" rows="2"></textarea>
+    </div>
+    <div class="section-submit"><button class="btn primary" data-submit-section>Mark Section 18 complete</button><span class="hint" data-submit-status></span></div>
+  </section>
+
+  <!-- ============ L19 ============ -->
+  <section id="y12-sd-u4-l19-sac-day" data-lesson-id="y12-sd-u4-l19-sac-day">
+    <div class="section-band">
+      <div class="sn" style="background:var(--red)">19</div>
+      <div class="si"><div class="slbl">Week 8</div><div class="stit">SAC — Assessment Day</div></div>
+      <span class="crit-badge" style="background:var(--red)">Assessed · Outcome 2</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">This is assessment day — no workbook tasks. See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l19-sac-day">unit site, Section 19</a> for logistics.</p>
+    <div class="section-submit"><button class="btn primary" data-submit-section>Mark Section 19 complete (SAC sat)</button><span class="hint" data-submit-status></span></div>
+  </section>
+
+  <!-- ============ L20 ============ -->
+  <section id="y12-sd-u4-l20-exam-revision-1" data-lesson-id="y12-sd-u4-l20-exam-revision-1">
+    <div class="section-band">
+      <div class="sn" style="background:var(--slate)">20</div>
+      <div class="si"><div class="slbl">Week 9</div><div class="stit">General Exam Revision I</div></div>
+      <span class="crit-badge" style="background:var(--slate)">Exam prep</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l20-exam-revision-1">unit site, Section 20</a>.</p>
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Coverage checklist</div>
+      <p class="question">List every Unit 3 &amp; 4 topic. Mark each: confident / needs review / genuine gap.</p>
+      <label class="field-label" for="l20-t1">Your answer</label>
+      <textarea id="l20-t1" rows="6"></textarea>
+    </div>
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — Practice question attempt</div>
+      <p class="question">Attempt one past exam-style question under timed conditions. How did it go?</p>
+      <label class="field-label" for="l20-t2">Your answer</label>
+      <textarea id="l20-t2" rows="3"></textarea>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">Name your top 3 genuine gaps to prioritise next lesson.</p>
+      <textarea id="l20-exit" rows="2"></textarea>
+    </div>
+    <div class="section-submit"><button class="btn primary" data-submit-section>Mark Section 20 complete</button><span class="hint" data-submit-status></span></div>
+  </section>
+
+  <!-- ============ L21 ============ -->
+  <section id="y12-sd-u4-l21-exam-revision-2" data-lesson-id="y12-sd-u4-l21-exam-revision-2">
+    <div class="section-band">
+      <div class="sn" style="background:var(--slate)">21</div>
+      <div class="si"><div class="slbl">Week 9</div><div class="stit">General Exam Revision II</div></div>
+      <span class="crit-badge" style="background:var(--slate)">Exam prep</span>
+      <span class="section-progress" data-progress-badge>Not started</span>
+    </div>
+    <p class="reading">See the <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l21-exam-revision-2">unit site, Section 21</a>.</p>
+    <div class="task-block">
+      <div class="task-label">📋 Task 1 — Targeted gap-closing</div>
+      <p class="question">Work through your top 3 weak spots from L20. What did you do for each, and did it help?</p>
+      <label class="field-label" for="l21-t1">Your answer</label>
+      <textarea id="l21-t1" rows="5"></textarea>
+    </div>
+    <div class="task-block">
+      <div class="task-label">📋 Task 2 — Final gap-closing plan</div>
+      <p class="question">Your top 3 remaining weak spots and a specific, concrete plan for each before trial exams.</p>
+      <label class="field-label" for="l21-t2">Your answer</label>
+      <textarea id="l21-t2" rows="4"></textarea>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket</div>
+      <p class="question">What's the one thing you're most confident about going into trials?</p>
+      <textarea id="l21-exit" rows="2"></textarea>
+    </div>
+    <div class="section-submit"><button class="btn primary" data-submit-section>Mark Section 21 complete</button><span class="hint" data-submit-status></span></div>
+  </section>
+
+</div>
+</main>
+
+<footer>EduPortal · Unit 4 SAT Portfolio · Autosaves as you type · No marking happens in this document</footer>
+
+<script>
+(function(){
+  const STATUS = { NONE:'none', IN_PROGRESS:'in-progress', SUBMITTED:'submitted', MARKED:'marked' };
+  const LESSON_IDS = [
+    'y12-sd-u4-l1-sat-transition',
+    'y12-sd-u4-l2-revisiting-design',
+    'y12-sd-u4-l3-environment-setup',
+    'y12-sd-u4-l4-launch-orientation',
+    'y12-sd-u4-l5-prog-features-1',
+    'y12-sd-u4-l6-prog-features-2',
+    'y12-sd-u4-l7-prog-features-3',
+    'y12-sd-u4-l8-prog-features-4',
+    'y12-sd-u4-l9-naming-documentation',
+    'y12-sd-u4-l10-validation',
+    'y12-sd-u4-l11-dev-approaches',
+    'y12-sd-u4-l12-debug-alpha-1',
+    'y12-sd-u4-l13-debug-alpha-2',
+    'y12-sd-u4-l14-beta-testing',
+    'y12-sd-u4-l15-orgs-vulnerabilities',
+    'y12-sd-u4-l16-evaluation',
+    'y12-sd-u4-l17-controls-legislation',
+    'y12-sd-u4-l18-sac-revision',
+    'y12-sd-u4-l19-sac-day',
+    'y12-sd-u4-l20-exam-revision-1',
+    'y12-sd-u4-l21-exam-revision-2'
+  ];
+
+  const DataService = {
+    getStudentId(){
+      try{ return (JSON.parse(localStorage.getItem('eduportal_session') || '{}').id) || 'current_student'; }
+      catch(e){ return 'current_student'; }
+    },
+    workbookKey(lessonId){ return 'eduportal_workbook_' + this.getStudentId() + '_' + lessonId; },
+    progressKey(lessonId){ return 'eduportal_progress_' + this.getStudentId() + '_' + lessonId; },
+    saveSection(lessonId, data){
+      // POST /api/workbooks/{studentId}/{lessonId} — currently localStorage key eduportal_workbook_{studentId}_{lessonId}
+      localStorage.setItem(this.workbookKey(lessonId), JSON.stringify(data));
+    },
+    loadSection(lessonId){
+      // GET /api/workbooks/{studentId}/{lessonId} — currently localStorage key eduportal_workbook_{studentId}_{lessonId}
+      try{ return JSON.parse(localStorage.getItem(this.workbookKey(lessonId)) || 'null'); }
+      catch(e){ return null; }
+    },
+    syncProgress(lessonId, status){
+      // Status must be one of: 'in-progress' | 'submitted' | 'marked' — never 'done'
+      localStorage.setItem(this.progressKey(lessonId), JSON.stringify({ status: status, updatedAt: new Date().toISOString() }));
+    },
+    getProgress(lessonId){
+      try{ return JSON.parse(localStorage.getItem(this.progressKey(lessonId)) || 'null'); }
+      catch(e){ return null; }
+    },
+    submitSection(lessonId){
+      // POST /api/workbooks/{studentId}/{lessonId}/submit
+      this.syncProgress(lessonId, STATUS.SUBMITTED);
+    }
+  };
+
+  const liveStatus = document.getElementById('live-status');
+  function announce(msg){ liveStatus.textContent = msg; }
+
+  function fieldsFor(section){
+    return Array.from(section.querySelectorAll('textarea, input[type=text]'));
+  }
+  function checkboxesFor(section){
+    return Array.from(section.querySelectorAll('input[type=checkbox]'));
+  }
+
+  function collect(section){
+    const data = {};
+    fieldsFor(section).forEach(f => data[f.id] = f.value);
+    checkboxesFor(section).forEach(c => data[c.id] = c.checked);
+    return data;
+  }
+  function populate(section, data){
+    if(!data) return;
+    fieldsFor(section).forEach(f => { if(data[f.id] !== undefined) f.value = data[f.id]; });
+    checkboxesFor(section).forEach(c => { if(data[c.id] !== undefined) c.checked = data[c.id]; });
+  }
+
+  function updateSectionBadge(section){
+    const lessonId = section.dataset.lessonId;
+    const badge = section.querySelector('[data-progress-badge]');
+    const progress = DataService.getProgress(lessonId);
+    const status = progress ? progress.status : STATUS.NONE;
+    const labels = { none:'Not started', 'in-progress':'In progress', submitted:'Submitted', marked:'Marked' };
+    badge.textContent = labels[status] || 'Not started';
+  }
+
+  function updateOverallProgress(){
+    const completed = LESSON_IDS.filter(id => {
+      const p = DataService.getProgress(id);
+      return p && (p.status === STATUS.SUBMITTED || p.status === STATUS.MARKED);
+    }).length;
+    const pct = Math.round((completed / LESSON_IDS.length) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = completed + ' / ' + LESSON_IDS.length + ' sections';
+  }
+
+  const debounceTimers = {};
+  function debouncedSave(section){
+    const lessonId = section.dataset.lessonId;
+    clearTimeout(debounceTimers[lessonId]);
+    debounceTimers[lessonId] = setTimeout(() => {
+      DataService.saveSection(lessonId, collect(section));
+      const progress = DataService.getProgress(lessonId);
+      if(!progress || progress.status === STATUS.NONE){
+        DataService.syncProgress(lessonId, STATUS.IN_PROGRESS);
+      }
+      updateSectionBadge(section);
+      updateOverallProgress();
+      announce('Draft saved');
+    }, 1500);
+  }
+
+  document.querySelectorAll('section[data-lesson-id]').forEach(section => {
+    const lessonId = section.dataset.lessonId;
+    populate(section, DataService.loadSection(lessonId));
+    updateSectionBadge(section);
+
+    fieldsFor(section).concat(checkboxesFor(section)).forEach(el => {
+      el.addEventListener('input', () => debouncedSave(section));
+      el.addEventListener('change', () => debouncedSave(section));
+    });
+
+    const submitBtn = section.querySelector('[data-submit-section]');
+    const statusEl = section.querySelector('[data-submit-status]');
+    submitBtn.addEventListener('click', () => {
+      DataService.saveSection(lessonId, collect(section));
+      DataService.submitSection(lessonId);
+      updateSectionBadge(section);
+      updateOverallProgress();
+      statusEl.textContent = 'Submitted ' + new Date().toISOString().slice(0,10);
+      announce('Section submitted');
+    });
+  });
+
+  updateOverallProgress();
+
+  document.getElementById('btn-save').addEventListener('click', () => {
+    document.querySelectorAll('section[data-lesson-id]').forEach(section => {
+      DataService.saveSection(section.dataset.lessonId, collect(section));
+    });
+    announce('All sections saved');
+  });
+  document.getElementById('btn-load').addEventListener('click', () => {
+    document.querySelectorAll('section[data-lesson-id]').forEach(section => {
+      populate(section, DataService.loadSection(section.dataset.lessonId));
+      updateSectionBadge(section);
+    });
+    updateOverallProgress();
+    announce('Portfolio reloaded');
+  });
+  document.getElementById('btn-export').addEventListener('click', () => window.print());
+
+  // Theme: no toggle button on workbook top bar per space, but respect saved site-wide preference
+  const savedTheme = localStorage.getItem('eduportal_theme_pref');
+  if(savedTheme === 'light'){ document.documentElement.classList.add('light-mode'); }
+})();
+</script>
+</body>
+</html>

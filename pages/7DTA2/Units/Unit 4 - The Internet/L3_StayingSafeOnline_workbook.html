@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workbook — Staying Safe Online | Year 7 DT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#12100E;--ink2:#2C2A28;--ink3:#6B6762;--cream:#F7F3EC;--cream2:#EDE8DF;--white:#FFFFFF;--border:#D8D3CA;--border2:#C4BFB6;--pine:#1B5E47;--amber:#B8620A;--indigo:#2B3A8C;--crimson:#8C1F28;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink2);line-height:1.6;}
+  .mono{font-family:'DM Mono',monospace;}
+  .progress-bar{position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:10px 20px;flex-wrap:wrap;}
+  .progress-bar .label{font-family:'DM Mono',monospace;font-size:12px;color:var(--ink3);}
+  .progress-track{flex:1;min-width:110px;height:8px;background:var(--cream2);border-radius:4px;overflow:hidden;}
+  .progress-fill{height:100%;width:0;background:var(--pine);transition:width .4s;}
+  .pbtn{font-family:'DM Mono',monospace;font-size:12px;border:1px solid var(--border2);background:var(--white);color:var(--ink2);padding:6px 12px;border-radius:6px;cursor:pointer;}
+  .pbtn:hover{background:var(--cream2);}
+  .pbtn.save{background:var(--pine);color:#fff;border-color:var(--pine);}
+  .pbtn.submit{background:var(--crimson);color:#fff;border-color:var(--crimson);}
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px 90px;}
+  .cover{background:var(--ink);color:var(--white);border-radius:0 0 18px 18px;padding:40px 36px 32px;margin-bottom:30px;}
+  .cover .eyebrow{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:2px;color:#B7AE9F;text-transform:uppercase;}
+  .cover h1{font-family:'DM Serif Display',serif;font-size:40px;line-height:1.05;margin:12px 0 6px;}
+  .cover .sub{color:#D8D3CA;font-size:16px;}
+  .cover .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:24px;}
+  .field span{display:block;font-family:'DM Mono',monospace;font-size:11px;color:#8C857A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+  .field input{width:100%;background:#1E1B18;border:1px solid #36322C;border-radius:7px;color:#fff;padding:8px 10px;font-family:'DM Sans';font-size:14px;}
+  section{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:28px 30px;margin-bottom:24px;}
+  .section-band{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+  .num{width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--white);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:18px;flex-shrink:0;}
+  .section-label{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:1.5px;color:var(--ink3);text-transform:uppercase;}
+  h2{font-family:'DM Serif Display',serif;font-size:24px;color:var(--ink);line-height:1.15;}
+  .ref{margin-left:auto;font-family:'DM Mono',monospace;font-size:11px;color:var(--indigo);background:#EEF0F8;padding:5px 10px;border-radius:14px;}
+  .q{margin:18px 0;padding-top:16px;border-top:1px dashed var(--border);}
+  .q:first-of-type{border-top:none;padding-top:0;}
+  .q .qtext{font-weight:600;color:var(--ink);margin-bottom:8px;}
+  .q .qtext .qn{font-family:'DM Mono',monospace;color:var(--ink3);margin-right:6px;}
+  textarea,input.txt{width:100%;border:1px solid var(--border2);border-radius:8px;padding:10px 12px;font-family:'DM Sans';font-size:14.5px;color:var(--ink2);background:var(--cream);resize:vertical;}
+  textarea{min-height:64px;}
+  input.txt{max-width:280px;}
+  .tier-tag{display:inline-block;font-family:'DM Mono',monospace;font-size:11px;color:var(--white);padding:4px 11px;border-radius:20px;margin-bottom:10px;letter-spacing:.5px;}
+  .t-found{background:var(--pine);}.t-dev{background:var(--amber);}.t-ext{background:var(--indigo);}
+  .tier-note{font-size:13px;color:var(--ink3);font-style:italic;margin-bottom:14px;}
+  .opts{display:flex;flex-direction:column;gap:7px;margin-top:6px;}
+  .opt{display:flex;align-items:center;gap:9px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:var(--cream);font-size:14.5px;}
+  .opt input{accent-color:var(--indigo);}
+  .opt.correct{background:#EAF0EC;border-color:var(--pine);}
+  .opt.wrong{background:#F6ECEC;border-color:var(--crimson);}
+  select.match{border:1px solid var(--border2);border-radius:7px;padding:7px 9px;font-family:'DM Sans';font-size:14px;background:var(--white);min-width:200px;}
+  select.match.correct{border-color:var(--pine);background:#EAF0EC;}
+  select.match.wrong{border-color:var(--crimson);background:#F6ECEC;}
+  .match-row{display:flex;align-items:center;gap:12px;margin:8px 0;flex-wrap:wrap;}
+  .match-row .label{flex:1;min-width:170px;font-weight:600;color:var(--ink);}
+  .checkbtn{font-family:'DM Mono',monospace;font-size:12px;background:var(--indigo);color:#fff;border:none;padding:8px 16px;border-radius:7px;cursor:pointer;margin-top:12px;}
+  .feedback{margin-top:10px;font-size:13.5px;font-family:'DM Mono',monospace;}
+  .feedback.ok{color:var(--pine);}.feedback.partial{color:var(--amber);}
+  .callout{border-radius:10px;padding:14px 16px;margin:14px 0;font-size:14px;}
+  .callout-tip{background:#EAF0EC;border:1px solid var(--pine);}.callout-tip b{color:var(--pine);}
+  .callout-note{background:#FBF1E6;border:1px solid var(--amber);}.callout-note b{color:var(--amber);}
+  .scenario{background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin:10px 0;font-family:'DM Mono',monospace;font-size:13.5px;color:var(--ink2);}
+  .sort-row{display:flex;align-items:center;gap:12px;margin:8px 0;flex-wrap:wrap;background:var(--cream);border:1px solid var(--border);border-radius:8px;padding:10px 14px;}
+  .sort-row .label{flex:1;min-width:200px;font-size:14px;color:var(--ink2);}
+  .teacher{border:2px solid var(--crimson);border-radius:14px;padding:24px 28px;margin-top:30px;background:#FCF7F7;}
+  .teacher h3{font-family:'DM Serif Display',serif;color:var(--crimson);font-size:20px;margin-bottom:6px;}
+  .teacher .tlabel{font-family:'DM Mono',monospace;font-size:11px;color:var(--crimson);letter-spacing:1px;text-transform:uppercase;}
+  .teacher textarea{background:#fff;border-color:#E0C4C4;}
+  .markrow{display:flex;align-items:center;gap:10px;margin-top:12px;}
+  footer{text-align:center;font-family:'DM Mono',monospace;font-size:12px;color:var(--ink3);margin-top:24px;}
+  .savestate{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3);}
+</style>
+</head>
+<body>
+<div class="progress-bar">
+  <span class="label">COMPLETION</span>
+  <div class="progress-track"><div class="progress-fill" id="pfill"></div></div>
+  <span class="label" id="ppct">0%</span>
+  <button class="pbtn save" onclick="DataService.save(true)">Save</button>
+  <button class="pbtn" onclick="DataService.load(true)">Load</button>
+  <button class="pbtn" onclick="window.print()">Export</button>
+  <button class="pbtn submit" onclick="DataService.submit()">Submit</button>
+  <span class="savestate" id="savestate"></span>
+</div>
+
+<div class="cover">
+  <div class="eyebrow">Year 7 Digital Technologies · Workbook</div>
+  <h1>Staying Safe Online</h1>
+  <div class="sub">Lesson 3 of 3 — work through the sections. Pick the tier that challenges you; you can do more than one.</div>
+  <div class="meta">
+    <div class="field"><span>Name</span><input data-f="name" type="text" placeholder="Your name"></div>
+    <div class="field"><span>Class</span><input data-f="class" type="text" placeholder="e.g. 7C"></div>
+    <div class="field"><span>Date</span><input data-f="date" type="text" placeholder="dd/mm/yyyy"></div>
+    <div class="field"><span>Teacher</span><input data-f="teacher" type="text" value="Mr Smith"></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- SECTION 1: WARM-UP -->
+  <section>
+    <div class="section-band"><div class="num">1</div><span class="section-label">Warm-Up</span><span class="ref">Slide 2</span></div>
+    <h2>Spot the red flag</h2>
+    <div class="q">
+      <div class="qtext"><span class="qn">1.1</span>From the warm-up, which message felt the most obviously unsafe? Which one made you pause and think?</div>
+      <textarea data-f="q_warm_pick" placeholder="Name the message and what made it stand out to you."></textarea>
+    </div>
+    <div class="q">
+      <div class="qtext"><span class="qn">1.2</span>Was there a feeling, or something specific in the wording, that gave it away? Explain.</div>
+      <textarea data-f="q_warm_why" placeholder="What exactly tipped you off?"></textarea>
+    </div>
+  </section>
+
+  <!-- SECTION 2: DIGITAL FOOTPRINT (sort + foundation) -->
+  <section>
+    <div class="section-band"><div class="num">2</div><span class="section-label">Your digital footprint</span><span class="ref">Slide 4 · Website §2</span></div>
+    <h2>Sort it: share or keep private?</h2>
+    <span class="tier-tag t-found">Foundation</span>
+    <div class="tier-note">Everyone completes this. Use the drop-downs.</div>
+    <div id="sortFootprint">
+      <div class="match-row"><span class="label">Your home address</span>
+        <select class="match" data-match="f1" data-answer="Private"><option value="">— choose —</option><option>Share</option><option>Private</option></select></div>
+      <div class="match-row"><span class="label">Your favourite game or show</span>
+        <select class="match" data-match="f2" data-answer="Share"><option value="">— choose —</option><option>Share</option><option>Private</option></select></div>
+      <div class="match-row"><span class="label">Your account passwords</span>
+        <select class="match" data-match="f3" data-answer="Private"><option value="">— choose —</option><option>Share</option><option>Private</option></select></div>
+      <div class="match-row"><span class="label">A general opinion about a movie</span>
+        <select class="match" data-match="f4" data-answer="Share"><option value="">— choose —</option><option>Share</option><option>Private</option></select></div>
+      <div class="match-row"><span class="label">Your daily routine / when you're home alone</span>
+        <select class="match" data-match="f5" data-answer="Private"><option value="">— choose —</option><option>Share</option><option>Private</option></select></div>
+    </div>
+    <button class="checkbtn" onclick="checkMatch('sortFootprint','fb_footprint')">Check answers</button>
+    <div class="feedback" id="fb_footprint"></div>
+    <div class="q">
+      <div class="qtext"><span class="qn">2.1</span>In your own words, what is a "digital footprint"?</div>
+      <textarea data-f="q_footprint_def" placeholder="Write this in your own words — don't copy from the website."></textarea>
+    </div>
+    <div class="q">
+      <div class="qtext"><span class="qn">2.2</span>Why is some information harder to "take back" once it's posted, compared to something you said out loud?</div>
+      <textarea data-f="q_footprint_why" placeholder="Think about who can see it and for how long."></textarea>
+    </div>
+  </section>
+
+  <!-- SECTION 3: PASSWORDS (Developing) -->
+  <section>
+    <div class="section-band"><div class="num">3</div><span class="section-label">Strong passwords</span><span class="ref">Slide 5 · Website §3</span></div>
+    <h2>Rate these passwords</h2>
+    <span class="tier-tag t-dev">Developing</span>
+    <div class="tier-note">Decide weak or strong, then explain why.</div>
+    <div id="matchPw">
+      <div class="match-row"><span class="label mono">tyler2012</span>
+        <select class="match" data-match="p1" data-answer="Weak"><option value="">— choose —</option><option>Weak</option><option>Strong</option></select></div>
+      <div class="match-row"><span class="label mono">password123</span>
+        <select class="match" data-match="p2" data-answer="Weak"><option value="">— choose —</option><option>Weak</option><option>Strong</option></select></div>
+      <div class="match-row"><span class="label mono">PurpleLamp$Jumping47!</span>
+        <select class="match" data-match="p3" data-answer="Strong"><option value="">— choose —</option><option>Weak</option><option>Strong</option></select></div>
+      <div class="match-row"><span class="label mono">CharlotteSmith2011</span>
+        <select class="match" data-match="p4" data-answer="Weak"><option value="">— choose —</option><option>Weak</option><option>Strong</option></select></div>
+    </div>
+    <button class="checkbtn" onclick="checkMatch('matchPw','fb_pw')">Check answers</button>
+    <div class="feedback" id="fb_pw"></div>
+    <div class="q">
+      <div class="qtext"><span class="qn">3.1</span>Pick one password you marked "weak." What specifically makes it easy to guess?</div>
+      <textarea data-f="q_pw_weak" placeholder="Name the password and the specific weakness — not just 'it's bad'."></textarea>
+    </div>
+    <div class="q">
+      <div class="qtext"><span class="qn">3.2</span>Why is using the <i>same</i> password on every account risky, even if that password is long and strong?</div>
+      <textarea data-f="q_pw_reuse" placeholder="Think about what happens if just one account gets discovered."></textarea>
+    </div>
+  </section>
+
+  <!-- SECTION 4: PHISHING (Developing) -->
+  <section>
+    <div class="section-band"><div class="num">4</div><span class="section-label">Spotting phishing</span><span class="ref">Slide 6 · Website §4</span></div>
+    <h2>Find the red flags</h2>
+    <span class="tier-tag t-dev">Developing</span>
+    <div class="tier-note">Read the message below, then answer.</div>
+    <div class="scenario">
+      Subject: URGENT — Your account will be suspended!<br><br>
+      Hi, this is the Support Team. We noticed unusual activity on your account. You must confirm your password and date of birth within 30 minutes or your account will be permanently deleted. Click here: bit.ly/acc0unt-verify
+    </div>
+    <div class="q">
+      <div class="qtext"><span class="qn">4.1</span>List at least two red flags in this message.</div>
+      <textarea data-f="q_phish_flags" placeholder="Be specific — quote or describe the parts that gave it away."></textarea>
+    </div>
+    <div class="q">
+      <div class="qtext"><span class="qn">4.2</span>Which of these is the safest first move if you received this message?</div>
+      <div class="opts" data-mcq="q_phish_action" data-answer="c">
+        <label class="opt"><input type="radio" name="q_phish_action" value="a"> Click the link quickly before the 30 minutes runs out</label>
+        <label class="opt"><input type="radio" name="q_phish_action" value="b"> Reply with your password to be safe</label>
+        <label class="opt"><input type="radio" name="q_phish_action" value="c"> Don't click anything — check the real account directly another way</label>
+        <label class="opt"><input type="radio" name="q_phish_action" value="d"> Forward it to all your friends to warn them</label>
+      </div>
+      <button class="checkbtn" onclick="checkMCQ('q_phish_action')">Check answer</button>
+      <div class="feedback" id="fb_q_phish_action"></div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: MALWARE / DEVICE PROTECTION (Extending) -->
+  <section>
+    <div class="section-band"><div class="num">5</div><span class="section-label">Protecting devices</span><span class="ref">Slide 7 · Website §5</span></div>
+    <h2>When something's wrong</h2>
+    <span class="tier-tag t-ext">Extending</span>
+    <div class="tier-note">This is where you connect the ideas together.</div>
+    <div class="q">
+      <div class="qtext"><span class="qn">5.1</span>A friend's device has started showing constant pop-ups and apps they don't remember installing. What is likely going on, and what should they do first?</div>
+      <textarea data-f="q_malware_friend" style="min-height:90px" placeholder="Name what this could be, and the first sensible step — not a technical fix."></textarea>
+    </div>
+    <div class="q">
+      <div class="qtext"><span class="qn">5.2</span>Explain how a phishing message and malware could be connected — how could clicking one bad link lead to the other problem?</div>
+      <textarea data-f="q_malware_link" placeholder="Connect the two ideas from this lesson."></textarea>
+    </div>
+    <div class="q">
+      <div class="qtext"><span class="qn">5.3</span><b>Write a short safety guide</b> for a younger student (Year 5–6). Cover: one digital footprint rule, one password habit, and one device-protection habit.</div>
+      <textarea data-f="q_guide" style="min-height:110px" placeholder="Write it as advice you'd actually give them — in your own words."></textarea>
+    </div>
+    <div class="callout callout-tip"><b>To reach Extending</b>A strong answer connects ideas across the lesson: what you share, how you protect accounts, and how you protect devices all work together to keep you safe.</div>
+  </section>
+
+  <!-- SECTION 6: EXIT TICKET -->
+  <section>
+    <div class="section-band"><div class="num">6</div><span class="section-label">Exit Ticket</span><span class="ref">Slide 11</span></div>
+    <h2>Before you go</h2>
+    <div class="q">
+      <div class="qtext"><span class="qn">6.1</span>In your own words, explain why your digital footprint matters.</div>
+      <textarea data-f="q_exit_footprint" placeholder="From memory — no looking back."></textarea>
+    </div>
+    <div class="q">
+      <div class="qtext"><span class="qn">6.2</span>Write one strong-password habit and one phishing red flag you'll remember.</div>
+      <textarea data-f="q_exit_habits" placeholder="One of each, in your own words."></textarea>
+    </div>
+    <div class="q">
+      <div class="qtext"><span class="qn">6.3</span>Self-rate against today's success criteria. Tick the highest you can honestly say.</div>
+      <div class="opts" data-mcq="q_selfrate" data-answer="">
+        <label class="opt"><input type="radio" name="q_selfrate" value="found"> 🟢 Foundation — I can identify private information and one scam warning sign.</label>
+        <label class="opt"><input type="radio" name="q_selfrate" value="dev"> 🟡 Developing — I can also explain strong passwords and spot phishing tricks.</label>
+        <label class="opt"><input type="radio" name="q_selfrate" value="ext"> 🔵 Extending — I can also explain malware and justify a set of safety habits.</label>
+      </div>
+    </div>
+  </section>
+
+  <div class="teacher">
+    <span class="tlabel">Teacher use only</span>
+    <h3>Marking &amp; feedback</h3>
+    <p style="font-size:13.5px;color:var(--ink3)">Auto-marked items (sorting, matching, MCQ) score automatically below. Written responses are for teacher judgement against the success criteria.</p>
+    <div class="markrow"><span style="font-weight:600">Auto-mark total:</span><span class="mono" id="autoscore">—</span></div>
+    <div style="margin-top:14px"><span class="tlabel">Criteria achieved</span>
+      <div class="opts" style="margin-top:6px">
+        <label class="opt"><input type="checkbox" data-f="t_found"> Foundation met</label>
+        <label class="opt"><input type="checkbox" data-f="t_dev"> Developing met</label>
+        <label class="opt"><input type="checkbox" data-f="t_ext"> Extending met</label>
+      </div>
+    </div>
+    <div style="margin-top:14px"><span class="tlabel">Feedback to student</span><textarea data-f="t_feedback" placeholder="Teacher comments..."></textarea></div>
+  </div>
+
+  <footer>Staying Safe Online · Lesson 3 of 3 · Year 7 Digital Technologies · Mr Smith</footer>
+</div>
+
+<script>
+  const LESSON_ID='y7-dt-u3-l3-staying-safe-online';
+  const STORAGE_KEY='wb_'+LESSON_ID;
+  const websiteUrl='L3_StayingSafeOnline_site.html';
+  const slidesUrl='#';
+
+  const DataService={
+    studentId(){return localStorage.getItem('eduportal_currentStudent')||'current_student';},
+    _key(){return STORAGE_KEY+'_'+this.studentId();},
+    collect(){
+      const d={};
+      document.querySelectorAll('[data-f]').forEach(el=>{ d[el.dataset.f]= el.type==='checkbox'?el.checked:el.value; });
+      document.querySelectorAll('[data-mcq]').forEach(g=>{ const s=document.querySelector(`input[name="${g.dataset.mcq}"]:checked`); d['mcq_'+g.dataset.mcq]=s?s.value:''; });
+      document.querySelectorAll('select.match').forEach(s=>{ d['match_'+s.dataset.match]=s.value; });
+      return d;
+    },
+    apply(d){
+      if(!d)return;
+      document.querySelectorAll('[data-f]').forEach(el=>{ if(d[el.dataset.f]===undefined)return; if(el.type==='checkbox')el.checked=d[el.dataset.f]; else el.value=d[el.dataset.f]; });
+      document.querySelectorAll('[data-mcq]').forEach(g=>{ const v=d['mcq_'+g.dataset.mcq]; if(v){const r=document.querySelector(`input[name="${g.dataset.mcq}"][value="${v}"]`);if(r)r.checked=true;} });
+      document.querySelectorAll('select.match').forEach(s=>{ const v=d['match_'+s.dataset.match]; if(v!==undefined)s.value=v; });
+    },
+    save(manual){ try{ localStorage.setItem(this._key(),JSON.stringify({data:this.collect(),t:Date.now()})); if(manual)flash('Saved ✓'); }catch(e){ if(manual)flash('Save failed'); } },
+    load(manual){ try{ const raw=localStorage.getItem(this._key()); if(raw){this.apply(JSON.parse(raw).data); if(manual)flash('Loaded ✓'); updateProgress();} else if(manual)flash('Nothing saved yet'); }catch(e){ if(manual)flash('Load failed'); } },
+    autoSave(){ clearTimeout(this._t); this._t=setTimeout(()=>{this.save(false);flash('Auto-saved');},800); },
+    autoLoad(){ this.load(false); },
+    submit(){ this.save(false); this._syncProgress('done', autoScore().pct); flash('Submitted ✓ — your teacher can now see your work'); },
+    _syncProgress(status,score){ try{ const sid=this.studentId(); localStorage.setItem(`eduportal_progress_${sid}_${LESSON_ID}`,JSON.stringify({status,score,t:Date.now()})); }catch(e){} }
+  };
+  function flash(m){ const s=document.getElementById('savestate'); s.textContent=m; setTimeout(()=>{if(s.textContent===m)s.textContent='';},2500); }
+
+  function checkMCQ(name){
+    const g=document.querySelector(`[data-mcq="${name}"]`);
+    const sel=document.querySelector(`input[name="${name}"]:checked`);
+    const fb=document.getElementById('fb_'+name);
+    g.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));
+    if(!sel){ if(fb){fb.textContent='Choose an option first.';fb.className='feedback partial';} return; }
+    const lbl=sel.closest('.opt');
+    if(sel.value===g.dataset.answer){ lbl.classList.add('correct'); if(fb){fb.textContent='Correct ✓';fb.className='feedback ok';} }
+    else { lbl.classList.add('wrong'); if(fb){fb.textContent='Not quite — check your notes and try again.';fb.className='feedback partial';} }
+    DataService.save(false);
+  }
+  function checkMatch(containerId, fbId){
+    const c=document.getElementById(containerId);
+    let right=0,total=0;
+    c.querySelectorAll('select.match').forEach(s=>{ total++; s.classList.remove('correct','wrong'); if(s.value==='')return; if(s.value===s.dataset.answer){s.classList.add('correct');right++;} else s.classList.add('wrong'); });
+    const fb=document.getElementById(fbId); fb.textContent=`${right} / ${total} correct`; fb.className='feedback '+(right===total?'ok':'partial');
+    DataService.save(false);
+  }
+  function autoScore(){
+    let right=0,total=0;
+    document.querySelectorAll('select.match').forEach(s=>{ total++; if(s.value===s.dataset.answer)right++; });
+    document.querySelectorAll('[data-mcq]').forEach(g=>{ if(g.dataset.answer==='')return; total++; const s=document.querySelector(`input[name="${g.dataset.mcq}"]:checked`); if(s&&s.value===g.dataset.answer)right++; });
+    const pct=total?Math.round(right/total*100):0; return {right,total,pct};
+  }
+  function updateProgress(){
+    const fields=[...document.querySelectorAll('[data-f]')].filter(el=>!el.dataset.f.startsWith('t_') && el.dataset.f!=='teacher');
+    let filled=0; fields.forEach(el=>{ if(el.type==='checkbox'){if(el.checked)filled++;} else if(el.value.trim())filled++; });
+    const mcqM=[...document.querySelectorAll('[data-mcq]')].filter(g=>document.querySelector(`input[name="${g.dataset.mcq}"]:checked`)).length;
+    const matchM=[...document.querySelectorAll('select.match')].filter(s=>s.value!=='').length;
+    const totalItems=fields.length+document.querySelectorAll('[data-mcq]').length+document.querySelectorAll('select.match').length;
+    const done=filled+mcqM+matchM;
+    const p=totalItems?Math.min(100,Math.round(done/totalItems*100)):0;
+    document.getElementById('pfill').style.width=p+'%'; document.getElementById('ppct').textContent=p+'%';
+    const as=autoScore(); document.getElementById('autoscore').textContent= as.total?`${as.right} / ${as.total}  (${as.pct}%)`:'—';
+  }
+  let firstEntry=true;
+  function onChange(){ if(firstEntry){DataService._syncProgress('in-progress',null);firstEntry=false;} updateProgress(); DataService.autoSave(); }
+  document.addEventListener('input',onChange);
+  document.addEventListener('change',onChange);
+  window.addEventListener('load',()=>{ DataService.autoLoad(); updateProgress(); });
+</script>
+</body>
+</html>

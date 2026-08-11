@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D6 — Solving One-Step Equations — Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dark-bg:#0D1117; --light-bg:#FFFFFF;
+  --blue:#4361EE; --green:#10B981; --amber:#F59E0B; --purple:#8B5CF6; --red:#EF4444;
+  --ink:#E6EDF3; --ink2:#9CA8B8; --ink3:#6E7A8A; --border:#232B36; --card:#161B22; --card2:#1C232D;
+  --l-ink:#111827; --l-ink2:#4B5563; --l-ink3:#9CA3AF; --l-border:#E5E7EB; --l-card:#F8F9FC; --l-card2:#FFFFFF;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--dark-bg);color:var(--ink);font-family:'Atkinson Hyperlegible',sans-serif;transition:background .2s,color .2s;}
+body.light{background:var(--light-bg);color:var(--l-ink);}
+h1,h2,h3{font-family:'DM Serif Display',serif;font-weight:400;}
+.mono{font-family:'DM Mono',monospace;}
+.wrap{max-width:920px;margin:0 auto;padding:0 1.2rem 4rem;}
+
+#topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:1rem;padding:.7rem 1.2rem;background:var(--card);border-bottom:1px solid var(--border);}
+body.light #topbar{background:var(--l-card);border-color:var(--l-border);}
+#topbar .lesson-tag{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--ink3);white-space:nowrap;}
+body.light #topbar .lesson-tag{color:var(--l-ink3);}
+.progress-track{flex:1;height:10px;border-radius:6px;background:var(--border);overflow:hidden;}
+body.light .progress-track{background:var(--l-border);}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--purple));transition:width .3s;}
+#progpct{font-family:'DM Mono',monospace;font-size:.8rem;color:var(--ink2);width:3.2rem;text-align:right;}
+body.light #progpct{color:var(--l-ink2);}
+.tb-btn{font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:500;padding:.4rem .75rem;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--ink);cursor:pointer;}
+body.light .tb-btn{border-color:var(--l-border);background:var(--l-card2);color:var(--l-ink);}
+.tb-btn:hover{border-color:var(--blue);color:var(--blue);}
+.tb-btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+.cover{padding:2.4rem 0 1.6rem;border-bottom:1px solid var(--border);}
+body.light .cover{border-color:var(--l-border);}
+.cover-eyebrow{font-family:'DM Mono',monospace;font-size:.8rem;letter-spacing:.06em;color:var(--blue);margin-bottom:.6rem;}
+.cover h1{font-size:2.4rem;margin:0 0 .3rem;}
+.cover-sub{color:var(--ink2);font-size:1.05rem;margin:0 0 1.2rem;}
+body.light .cover-sub{color:var(--l-ink2);}
+.cover-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;}
+.cover-grid label{display:flex;flex-direction:column;gap:.3rem;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;}
+body.light .cover-grid label{color:var(--l-ink3);}
+.cover-grid input{font-family:'DM Sans',sans-serif;font-size:.95rem;padding:.5rem .6rem;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--ink);}
+body.light .cover-grid input{border-color:var(--l-border);background:var(--l-card2);color:var(--l-ink);}
+.wb-links{margin-top:1.2rem;font-size:.9rem;color:var(--ink2);}
+body.light .wb-links{color:var(--l-ink2);}
+.wb-links a{color:var(--blue);}
+
+.section-band{display:flex;align-items:center;gap:.9rem;margin:2.4rem 0 1rem;}
+.bnum{width:2.2rem;height:2.2rem;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'DM Mono',monospace;font-weight:700;flex-shrink:0;}
+.section-band h2{font-size:1.5rem;margin:0;}
+.badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:.72rem;padding:.3rem .6rem;border-radius:6px;background:var(--card2);color:var(--ink2);border:1px solid var(--border);white-space:nowrap;}
+body.light .badge{background:var(--l-card2);color:var(--l-ink2);border-color:var(--l-border);}
+
+.callout{border-radius:10px;padding:1rem 1.2rem;margin:1rem 0;font-size:.95rem;line-height:1.5;}
+.callout-info{background:rgba(67,97,238,.12);border:1px solid rgba(67,97,238,.35);}
+.callout-tip{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.35);}
+.callout-note{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.35);}
+
+.tier-block{margin-bottom:1.6rem;}
+.tier-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem;}
+.tier-pill{font-family:'DM Mono',monospace;font-size:.75rem;font-weight:700;padding:.3rem .7rem;border-radius:20px;color:#fff;}
+.tier-pill.foundation{background:var(--green);} .tier-pill.developing{background:var(--amber);} .tier-pill.extending{background:var(--purple);}
+.tier-count{font-size:.82rem;color:var(--ink3);}
+body.light .tier-count{color:var(--l-ink3);}
+
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.9rem 1.1rem;margin-bottom:.7rem;display:flex;gap:.8rem;}
+body.light .q-card{background:var(--l-card);border-color:var(--l-border);}
+.q-num{flex-shrink:0;width:1.8rem;height:1.8rem;border-radius:50%;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:.8rem;color:var(--ink2);}
+body.light .q-num{background:var(--l-card2);border-color:var(--l-border);color:var(--l-ink2);}
+.q-body{flex:1;}
+.q-eq{font-family:'DM Mono',monospace;font-size:1.05rem;margin-bottom:.55rem;}
+.q-prompt{font-size:.95rem;line-height:1.5;margin-bottom:.6rem;}
+.field-label{display:inline-flex;align-items:center;gap:.4rem;font-family:'DM Mono',monospace;font-size:.85rem;color:var(--ink2);margin-right:1rem;}
+body.light .field-label{color:var(--l-ink2);}
+.field-label.full{display:flex;margin-bottom:.5rem;}
+.ans-input{font-family:'DM Mono',monospace;font-size:.95rem;width:5rem;padding:.35rem .5rem;border-radius:6px;border:1px solid var(--border);background:var(--card2);color:var(--ink);}
+.ans-input.wide{width:100%;}
+body.light .ans-input{border-color:var(--l-border);background:var(--l-card2);color:var(--l-ink);}
+.ans-input:focus{outline:2px solid var(--blue);outline-offset:1px;}
+.ans-textarea{width:100%;font-family:'Atkinson Hyperlegible',sans-serif;font-size:.92rem;padding:.6rem .7rem;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--ink);resize:vertical;}
+body.light .ans-textarea{border-color:var(--l-border);background:var(--l-card2);color:var(--l-ink);}
+.ans-textarea:focus{outline:2px solid var(--blue);outline-offset:1px;}
+.flow-hint{font-size:.82rem;font-style:italic;color:var(--ink3);margin-bottom:.5rem;}
+body.light .flow-hint{color:var(--l-ink3);}
+.radio-row{display:flex;gap:1.2rem;margin-bottom:.6rem;font-size:.9rem;}
+.radio-row label{display:flex;align-items:center;gap:.35rem;}
+.tier-tag{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:700;padding:.25rem .55rem;border-radius:6px;color:#fff;align-self:flex-start;}
+.tier-tag.foundation{background:var(--green);} .tier-tag.developing{background:var(--amber);} .tier-tag.extending{background:var(--purple);}
+
+.reflect-box textarea{width:100%;min-height:5rem;font-family:'Atkinson Hyperlegible',sans-serif;font-size:.95rem;padding:.7rem;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--ink);}
+body.light .reflect-box textarea{border-color:var(--l-border);background:var(--l-card2);color:var(--l-ink);}
+.selfcheck-row{display:flex;align-items:center;gap:.8rem;padding:.6rem 0;border-bottom:1px solid var(--border);}
+body.light .selfcheck-row{border-color:var(--l-border);}
+.selfcheck-row:last-child{border-bottom:none;}
+.selfcheck-row .crit{flex:1;font-size:.92rem;}
+.selfcheck-row select{font-family:'DM Sans',sans-serif;font-size:.85rem;padding:.35rem .5rem;border-radius:6px;border:1px solid var(--border);background:var(--card2);color:var(--ink);}
+body.light .selfcheck-row select{border-color:var(--l-border);background:var(--l-card2);color:var(--l-ink);}
+
+footer{text-align:center;padding:2rem 0 1rem;font-size:.8rem;color:var(--ink3);border-top:1px solid var(--border);margin-top:3rem;}
+body.light footer{color:var(--l-ink3);border-color:var(--l-border);}
+
+.submit-bar{display:flex;justify-content:center;margin:2.4rem 0;}
+.submit-btn{font-family:'DM Sans',sans-serif;font-weight:700;font-size:1rem;padding:.85rem 2.2rem;border-radius:10px;border:none;background:var(--green);color:#fff;cursor:pointer;}
+.submit-btn:hover{opacity:.9;}
+#submit-msg{text-align:center;font-size:.9rem;color:var(--green);margin-top:.6rem;display:none;}
+
+@media print{
+  #topbar,.tb-btn{display:none !important;}
+  body{background:#fff !important;color:#000 !important;}
+  .q-card{break-inside:avoid;border-color:#ccc !important;background:#fff !important;}
+}
+@media(max-width:640px){
+  .cover-grid{grid-template-columns:1fr 1fr;}
+  .cover h1{font-size:1.9rem;}
+  #topbar{flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <span class="lesson-tag">D6 · WORKBOOK</span>
+  <div class="progress-track"><div class="progress-fill" id="progfill"></div></div>
+  <span id="progpct">0%</span>
+  <button class="tb-btn" onclick="DataService.save()">Save</button>
+  <button class="tb-btn" onclick="DataService.load()">Load</button>
+  <button class="tb-btn" onclick="window.print()">Export</button>
+  <button class="tb-btn" onclick="document.body.classList.toggle('light')">☀/☾</button>
+</div>
+
+<div class="wrap">
+
+  <div class="cover">
+    <div class="cover-eyebrow">YEAR 7 MATHEMATICS · ALGEBRAIC TECHNIQUES · DOUBLE 6</div>
+    <h1>Solving One-Step Equations</h1>
+    <p class="cover-sub">Balance Method &amp; Flowchart Method — Student Workbook</p>
+    <div class="cover-grid">
+      <label>Name <input type="text" id="student-name"></label>
+      <label>Class <input type="text" id="student-class"></label>
+      <label>Date <input type="text" id="student-date" placeholder="YYYY-MM-DD"></label>
+      <label>Teacher <input type="text" value="Mr Smith" readonly></label>
+    </div>
+    <p class="wb-links">Your teacher will show slide numbers as you work — keep your notes page (Golden Rule, method steps, inverse operations table) open beside you. This workbook is for practice, not for re-teaching the methods.</p>
+  </div>
+
+  <div class="callout callout-info">
+    <strong>Choose your tier as you go.</strong> Start with Foundation if you're still building confidence, or jump to Developing / Extending if you're ready. You can attempt more than one tier in any task.
+  </div>
+
+  <!-- TASK 1 -->
+  <div class="section-band">
+    <div class="bnum" style="background:var(--blue)">T1</div>
+    <h2>Balance Method — Addition &amp; Subtraction</h2>
+    <span class="badge">21 questions</span>
+  </div>
+  <div class="tier-block">
+    <div class="tier-head"><span class="tier-pill foundation">🟢 FOUNDATION</span><span class="tier-count">8 questions</span></div>
+    <div class="q-card">
+      <div class="q-num">1</div>
+      <div class="q-body">
+        <div class="q-eq">x + 3 = 10</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-foundation-1" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">2</div>
+      <div class="q-body">
+        <div class="q-eq">x + 8 = 15</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-foundation-2" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">3</div>
+      <div class="q-body">
+        <div class="q-eq">x − 5 = 12</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-foundation-3" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">4</div>
+      <div class="q-body">
+        <div class="q-eq">x − 9 = 20</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-foundation-4" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">5</div>
+      <div class="q-body">
+        <div class="q-eq">x + 6 = 14</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-foundation-5" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">6</div>
+      <div class="q-body">
+        <div class="q-eq">x − 3 = 17</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-foundation-6" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">7</div>
+      <div class="q-body">
+        <div class="q-eq">x + 11 = 19</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-foundation-7" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">8</div>
+      <div class="q-body">
+        <div class="q-eq">x − 8 = 8</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-foundation-8" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div>
+  </div>
+  <div class="tier-block">
+    <div class="tier-head"><span class="tier-pill developing">🟡 DEVELOPING</span><span class="tier-count">8 questions</span></div>
+    <div class="q-card">
+      <div class="q-num">1</div>
+      <div class="q-body">
+        <div class="q-eq">14 + x = 26</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-developing-1" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">2</div>
+      <div class="q-body">
+        <div class="q-eq">x − 17 = 25</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-developing-2" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">3</div>
+      <div class="q-body">
+        <div class="q-eq">x + 23 = 40</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-developing-3" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">4</div>
+      <div class="q-body">
+        <div class="q-eq">32 = x + 15</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-developing-4" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">5</div>
+      <div class="q-body">
+        <div class="q-eq">x − 21 = 19</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-developing-5" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">6</div>
+      <div class="q-body">
+        <div class="q-eq">45 = x − 12</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-developing-6" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">7</div>
+      <div class="q-body">
+        <div class="q-eq">x + 16 = 34</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-developing-7" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">8</div>
+      <div class="q-body">
+        <div class="q-eq">x − 30 = 30</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-developing-8" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div>
+  </div>
+  <div class="tier-block">
+    <div class="tier-head"><span class="tier-pill extending">🟣 EXTENDING</span><span class="tier-count">5 questions</span></div>
+    <div class="q-card">
+        <div class="q-num">1</div>
+        <div class="q-body">
+          <div class="q-eq">x + 32 = 20</div>
+          <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-extending-1" placeholder="?" autocomplete="off"></label>
+        </div>
+      </div><div class="q-card">
+        <div class="q-num">2</div>
+        <div class="q-body">
+          <div class="q-eq">x − 50 = −15</div>
+          <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-extending-2" placeholder="?" autocomplete="off"></label>
+        </div>
+      </div><div class="q-card">
+        <div class="q-num">3</div>
+        <div class="q-body">
+          <div class="q-eq">18 + x = 5</div>
+          <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-extending-3" placeholder="?" autocomplete="off"></label>
+        </div>
+      </div><div class="q-card">
+        <div class="q-num">4</div>
+        <div class="q-body">
+          <div class="q-prompt">A number decreased by 14 gives 6. Write the equation, then solve it.</div>
+          <label class="field-label full">Your equation:
+            <input type="text" class="ans-input wide" data-key="t1-extending-4-eq" placeholder="Write the equation here" autocomplete="off">
+          </label>
+          <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-extending-4-x" placeholder="?" autocomplete="off"></label>
+        </div>
+      </div><div class="q-card">
+        <div class="q-num">5</div>
+        <div class="q-body">
+          <div class="q-prompt">9 more than a number is 2. Write the equation, then solve it.</div>
+          <label class="field-label full">Your equation:
+            <input type="text" class="ans-input wide" data-key="t1-extending-5-eq" placeholder="Write the equation here" autocomplete="off">
+          </label>
+          <label class="field-label">x = <input type="text" class="ans-input" data-key="t1-extending-5-x" placeholder="?" autocomplete="off"></label>
+        </div>
+      </div>
+  </div>
+
+  <!-- TASK 2 -->
+  <div class="section-band">
+    <div class="bnum" style="background:var(--blue)">T2</div>
+    <h2>Balance Method — Multiplication &amp; Division</h2>
+    <span class="badge">16 questions</span>
+  </div>
+  <div class="tier-block">
+    <div class="tier-head"><span class="tier-pill foundation">🟢 FOUNDATION</span><span class="tier-count">6 questions</span></div>
+    <div class="q-card">
+      <div class="q-num">1</div>
+      <div class="q-body">
+        <div class="q-eq">2x = 8</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-foundation-1" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">2</div>
+      <div class="q-body">
+        <div class="q-eq">6x = 24</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-foundation-2" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">3</div>
+      <div class="q-body">
+        <div class="q-eq">x ÷ 2 = 6</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-foundation-3" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">4</div>
+      <div class="q-body">
+        <div class="q-eq">x ÷ 4 = 9</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-foundation-4" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">5</div>
+      <div class="q-body">
+        <div class="q-eq">7x = 21</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-foundation-5" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">6</div>
+      <div class="q-body">
+        <div class="q-eq">x ÷ 3 = 8</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-foundation-6" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div>
+  </div>
+  <div class="tier-block">
+    <div class="tier-head"><span class="tier-pill developing">🟡 DEVELOPING</span><span class="tier-count">6 questions</span></div>
+    <div class="q-card">
+      <div class="q-num">1</div>
+      <div class="q-body">
+        <div class="q-eq">8x = 56</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-developing-1" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">2</div>
+      <div class="q-body">
+        <div class="q-eq">x ÷ 7 = 9</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-developing-2" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">3</div>
+      <div class="q-body">
+        <div class="q-eq">12x = 60</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-developing-3" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">4</div>
+      <div class="q-body">
+        <div class="q-eq">x ÷ 9 = 6</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-developing-4" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">5</div>
+      <div class="q-body">
+        <div class="q-eq">4x = 100</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-developing-5" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">6</div>
+      <div class="q-body">
+        <div class="q-eq">x ÷ 11 = 7</div>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-developing-6" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div>
+  </div>
+  <div class="tier-block">
+    <div class="tier-head"><span class="tier-pill extending">🟣 EXTENDING</span><span class="tier-count">4 questions</span></div>
+    <div class="q-card">
+        <div class="q-num">1</div>
+        <div class="q-body">
+          <div class="q-eq">−4x = 20</div>
+          <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-extending-1" placeholder="?" autocomplete="off"></label>
+        </div>
+      </div><div class="q-card">
+        <div class="q-num">2</div>
+        <div class="q-body">
+          <div class="q-eq">x ÷ −5 = 6</div>
+          <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-extending-2" placeholder="?" autocomplete="off"></label>
+        </div>
+      </div><div class="q-card">
+        <div class="q-num">3</div>
+        <div class="q-body">
+          <div class="q-eq">−2x = −18</div>
+          <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-extending-3" placeholder="?" autocomplete="off"></label>
+        </div>
+      </div><div class="q-card">
+        <div class="q-num">4</div>
+        <div class="q-body">
+          <div class="q-prompt">A number divided by 6 gives −3. Write the equation, then solve it.</div>
+          <label class="field-label full">Your equation:
+            <input type="text" class="ans-input wide" data-key="t2-extending-4-eq" placeholder="Write the equation here" autocomplete="off">
+          </label>
+          <label class="field-label">x = <input type="text" class="ans-input" data-key="t2-extending-4-x" placeholder="?" autocomplete="off"></label>
+        </div>
+      </div>
+  </div>
+
+  <!-- TASK 3 -->
+  <div class="section-band">
+    <div class="bnum" style="background:var(--purple)">T3</div>
+    <h2>Flowchart Method</h2>
+    <span class="badge">16 questions</span>
+  </div>
+  <div class="callout callout-tip">Reminder: reverse the diagram by swapping each operation for its inverse and reversing the arrows.</div>
+  <div class="tier-block">
+    <div class="tier-head"><span class="tier-pill foundation">🟢 FOUNDATION</span><span class="tier-count">6 questions</span></div>
+    <div class="q-card">
+      <div class="q-num">1</div>
+      <div class="q-body">
+        <div class="q-eq">x + 6 = 13</div>
+        <div class="flow-hint">Draw the forward diagram, then reverse it.</div>
+        <label class="field-label">Inverse operation: <input type="text" class="ans-input" data-key="t3-foundation-1-inv" placeholder="e.g. − 6" autocomplete="off"></label>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t3-foundation-1" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">2</div>
+      <div class="q-body">
+        <div class="q-eq">x − 8 = 5</div>
+        <div class="flow-hint">Draw the forward diagram, then reverse it.</div>
+        <label class="field-label">Inverse operation: <input type="text" class="ans-input" data-key="t3-foundation-2-inv" placeholder="e.g. − 6" autocomplete="off"></label>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t3-foundation-2" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">3</div>
+      <div class="q-body">
+        <div class="q-eq">3x = 21</div>
+        <div class="flow-hint">Draw the forward diagram, then reverse it.</div>
+        <label class="field-label">Inverse operation: <input type="text" class="ans-input" data-key="t3-foundation-3-inv" placeholder="e.g. − 6" autocomplete="off"></label>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t3-foundation-3" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">4</div>
+      <div class="q-body">
+        <div class="q-eq">x ÷ 4 = 6</div>
+        <div class="flow-hint">Draw the forward diagram, then reverse it.</div>
+        <label class="field-label">Inverse operation: <input type="text" class="ans-input" data-key="t3-foundation-4-inv" placeholder="e.g. − 6" autocomplete="off"></label>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t3-foundation-4" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">5</div>
+      <div class="q-body">
+        <div class="q-eq">x + 10 = 22</div>
+        <div class="flow-hint">Draw the forward diagram, then reverse it.</div>
+        <label class="field-label">Inverse operation: <input type="text" class="ans-input" data-key="t3-foundation-5-inv" placeholder="e.g. − 6" autocomplete="off"></label>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t3-foundation-5" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">6</div>
+      <div class="q-body">
+        <div class="q-eq">5x = 35</div>
+        <div class="flow-hint">Draw the forward diagram, then reverse it.</div>
+        <label class="field-label">Inverse operation: <input type="text" class="ans-input" data-key="t3-foundation-6-inv" placeholder="e.g. − 6" autocomplete="off"></label>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t3-foundation-6" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div>
+  </div>
+  <div class="tier-block">
+    <div class="tier-head"><span class="tier-pill developing">🟡 DEVELOPING</span><span class="tier-count">6 questions</span></div>
+    <div class="q-card">
+      <div class="q-num">1</div>
+      <div class="q-body">
+        <div class="q-eq">x + 9 = 16</div>
+        <label class="field-label full">Operation done to x: <input type="text" class="ans-input" data-key="t3-developing-1-op" placeholder="e.g. + 9" autocomplete="off"></label>
+        <label class="field-label full">Inverse operation: <input type="text" class="ans-input" data-key="t3-developing-1-inv" placeholder="e.g. − 9" autocomplete="off"></label>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t3-developing-1" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">2</div>
+      <div class="q-body">
+        <div class="q-eq">x − 6 = 11</div>
+        <label class="field-label full">Operation done to x: <input type="text" class="ans-input" data-key="t3-developing-2-op" placeholder="e.g. + 9" autocomplete="off"></label>
+        <label class="field-label full">Inverse operation: <input type="text" class="ans-input" data-key="t3-developing-2-inv" placeholder="e.g. − 9" autocomplete="off"></label>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t3-developing-2" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">3</div>
+      <div class="q-body">
+        <div class="q-eq">5x = 40</div>
+        <label class="field-label full">Operation done to x: <input type="text" class="ans-input" data-key="t3-developing-3-op" placeholder="e.g. + 9" autocomplete="off"></label>
+        <label class="field-label full">Inverse operation: <input type="text" class="ans-input" data-key="t3-developing-3-inv" placeholder="e.g. − 9" autocomplete="off"></label>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t3-developing-3" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">4</div>
+      <div class="q-body">
+        <div class="q-eq">x ÷ 7 = 3</div>
+        <label class="field-label full">Operation done to x: <input type="text" class="ans-input" data-key="t3-developing-4-op" placeholder="e.g. + 9" autocomplete="off"></label>
+        <label class="field-label full">Inverse operation: <input type="text" class="ans-input" data-key="t3-developing-4-inv" placeholder="e.g. − 9" autocomplete="off"></label>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t3-developing-4" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">5</div>
+      <div class="q-body">
+        <div class="q-eq">x − 13 = 24</div>
+        <label class="field-label full">Operation done to x: <input type="text" class="ans-input" data-key="t3-developing-5-op" placeholder="e.g. + 9" autocomplete="off"></label>
+        <label class="field-label full">Inverse operation: <input type="text" class="ans-input" data-key="t3-developing-5-inv" placeholder="e.g. − 9" autocomplete="off"></label>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t3-developing-5" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">6</div>
+      <div class="q-body">
+        <div class="q-eq">8x = 72</div>
+        <label class="field-label full">Operation done to x: <input type="text" class="ans-input" data-key="t3-developing-6-op" placeholder="e.g. + 9" autocomplete="off"></label>
+        <label class="field-label full">Inverse operation: <input type="text" class="ans-input" data-key="t3-developing-6-inv" placeholder="e.g. − 9" autocomplete="off"></label>
+        <label class="field-label">x = <input type="text" class="ans-input" data-key="t3-developing-6" placeholder="?" autocomplete="off"></label>
+      </div>
+    </div>
+  </div>
+  <div class="tier-block">
+    <div class="tier-head"><span class="tier-pill extending">🟣 EXTENDING</span><span class="tier-count">4 questions</span></div>
+    
+<div class="q-card">
+  <div class="q-num">1</div>
+  <div class="q-body">
+    <div class="q-prompt">Spot the error: a student solved <strong>x + 5 = 11</strong> by writing "reverse: 11 + 5 = x, so x = 16." Explain the mistake, then give the correct answer.</div>
+    <textarea class="ans-textarea" data-key="t3-extending-1" placeholder="What went wrong, and what is the correct answer?" rows="3"></textarea>
+  </div>
+</div>
+<div class="q-card">
+  <div class="q-num">2</div>
+  <div class="q-body">
+    <div class="q-prompt">Create your own one-step equation whose solution is x = 9, then give its inverse operation.</div>
+    <label class="field-label full">Your equation: <input type="text" class="ans-input wide" data-key="t3-extending-2-eq" placeholder="e.g. x + ___ = ___" autocomplete="off"></label>
+    <label class="field-label full">Inverse operation: <input type="text" class="ans-input" data-key="t3-extending-2-inv" placeholder="?" autocomplete="off"></label>
+  </div>
+</div>
+<div class="q-card">
+  <div class="q-num">3</div>
+  <div class="q-body">
+    <div class="q-prompt">Solve <strong>x − 7 = 15</strong> using the flowchart method AND the balance method. Which steps end up matching between the two methods?</div>
+    <textarea class="ans-textarea" data-key="t3-extending-3" placeholder="Show both methods and compare the steps" rows="4"></textarea>
+  </div>
+</div>
+<div class="q-card">
+  <div class="q-num">4</div>
+  <div class="q-body">
+    <div class="q-prompt">Why does the reverse flow diagram always use the inverse operation, rather than the same operation? Explain in your own words.</div>
+    <textarea class="ans-textarea" data-key="t3-extending-4" placeholder="Think about what 'undoing' an operation means" rows="3"></textarea>
+  </div>
+</div>
+  </div>
+
+  <!-- TASK 4 -->
+  <div class="section-band">
+    <div class="bnum" style="background:var(--green)">T4</div>
+    <h2>Verify by Substitution</h2>
+    <span class="badge">16 questions</span>
+  </div>
+  <div class="callout callout-note">For each equation, substitute the claimed solution back in. Is it True or False? If false, work out what the correct solution should be — don't just guess.</div>
+  <div class="tier-block">
+    <div class="tier-head"><span class="tier-pill foundation">🟢 FOUNDATION</span><span class="tier-count">6 questions</span></div>
+    <div class="q-card">
+      <div class="q-num">1</div>
+      <div class="q-body">
+        <div class="q-eq">x + 4 = 10 &nbsp; &mdash; &nbsp; claimed solution: <strong>x = 6</strong></div>
+        <div class="radio-row">
+          <label><input type="radio" name="t4-foundation-1" value="true" data-key="t4-foundation-1"> True</label>
+          <label><input type="radio" name="t4-foundation-1" value="false" data-key="t4-foundation-1"> False</label>
+        </div>
+        <label class="field-label full">If false, what should the correct solution be? <input type="text" class="ans-input" data-key="t4-foundation-1-correction" placeholder="Leave blank if true" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">2</div>
+      <div class="q-body">
+        <div class="q-eq">x − 3 = 8 &nbsp; &mdash; &nbsp; claimed solution: <strong>x = 12</strong></div>
+        <div class="radio-row">
+          <label><input type="radio" name="t4-foundation-2" value="true" data-key="t4-foundation-2"> True</label>
+          <label><input type="radio" name="t4-foundation-2" value="false" data-key="t4-foundation-2"> False</label>
+        </div>
+        <label class="field-label full">If false, what should the correct solution be? <input type="text" class="ans-input" data-key="t4-foundation-2-correction" placeholder="Leave blank if true" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">3</div>
+      <div class="q-body">
+        <div class="q-eq">5x = 25 &nbsp; &mdash; &nbsp; claimed solution: <strong>x = 5</strong></div>
+        <div class="radio-row">
+          <label><input type="radio" name="t4-foundation-3" value="true" data-key="t4-foundation-3"> True</label>
+          <label><input type="radio" name="t4-foundation-3" value="false" data-key="t4-foundation-3"> False</label>
+        </div>
+        <label class="field-label full">If false, what should the correct solution be? <input type="text" class="ans-input" data-key="t4-foundation-3-correction" placeholder="Leave blank if true" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">4</div>
+      <div class="q-body">
+        <div class="q-eq">x ÷ 2 = 9 &nbsp; &mdash; &nbsp; claimed solution: <strong>x = 16</strong></div>
+        <div class="radio-row">
+          <label><input type="radio" name="t4-foundation-4" value="true" data-key="t4-foundation-4"> True</label>
+          <label><input type="radio" name="t4-foundation-4" value="false" data-key="t4-foundation-4"> False</label>
+        </div>
+        <label class="field-label full">If false, what should the correct solution be? <input type="text" class="ans-input" data-key="t4-foundation-4-correction" placeholder="Leave blank if true" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">5</div>
+      <div class="q-body">
+        <div class="q-eq">x + 12 = 20 &nbsp; &mdash; &nbsp; claimed solution: <strong>x = 8</strong></div>
+        <div class="radio-row">
+          <label><input type="radio" name="t4-foundation-5" value="true" data-key="t4-foundation-5"> True</label>
+          <label><input type="radio" name="t4-foundation-5" value="false" data-key="t4-foundation-5"> False</label>
+        </div>
+        <label class="field-label full">If false, what should the correct solution be? <input type="text" class="ans-input" data-key="t4-foundation-5-correction" placeholder="Leave blank if true" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">6</div>
+      <div class="q-body">
+        <div class="q-eq">x − 9 = 3 &nbsp; &mdash; &nbsp; claimed solution: <strong>x = 11</strong></div>
+        <div class="radio-row">
+          <label><input type="radio" name="t4-foundation-6" value="true" data-key="t4-foundation-6"> True</label>
+          <label><input type="radio" name="t4-foundation-6" value="false" data-key="t4-foundation-6"> False</label>
+        </div>
+        <label class="field-label full">If false, what should the correct solution be? <input type="text" class="ans-input" data-key="t4-foundation-6-correction" placeholder="Leave blank if true" autocomplete="off"></label>
+      </div>
+    </div>
+  </div>
+  <div class="tier-block">
+    <div class="tier-head"><span class="tier-pill developing">🟡 DEVELOPING</span><span class="tier-count">6 questions</span></div>
+    <div class="q-card">
+      <div class="q-num">1</div>
+      <div class="q-body">
+        <div class="q-eq">x + 27 = 45 &nbsp; &mdash; &nbsp; claimed solution: <strong>x = 17</strong></div>
+        <div class="radio-row">
+          <label><input type="radio" name="t4-developing-1" value="true" data-key="t4-developing-1"> True</label>
+          <label><input type="radio" name="t4-developing-1" value="false" data-key="t4-developing-1"> False</label>
+        </div>
+        <label class="field-label full">If false, what should the correct solution be? <input type="text" class="ans-input" data-key="t4-developing-1-correction" placeholder="Leave blank if true" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">2</div>
+      <div class="q-body">
+        <div class="q-eq">6x = 54 &nbsp; &mdash; &nbsp; claimed solution: <strong>x = 9</strong></div>
+        <div class="radio-row">
+          <label><input type="radio" name="t4-developing-2" value="true" data-key="t4-developing-2"> True</label>
+          <label><input type="radio" name="t4-developing-2" value="false" data-key="t4-developing-2"> False</label>
+        </div>
+        <label class="field-label full">If false, what should the correct solution be? <input type="text" class="ans-input" data-key="t4-developing-2-correction" placeholder="Leave blank if true" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">3</div>
+      <div class="q-body">
+        <div class="q-eq">x − 19 = 22 &nbsp; &mdash; &nbsp; claimed solution: <strong>x = 41</strong></div>
+        <div class="radio-row">
+          <label><input type="radio" name="t4-developing-3" value="true" data-key="t4-developing-3"> True</label>
+          <label><input type="radio" name="t4-developing-3" value="false" data-key="t4-developing-3"> False</label>
+        </div>
+        <label class="field-label full">If false, what should the correct solution be? <input type="text" class="ans-input" data-key="t4-developing-3-correction" placeholder="Leave blank if true" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">4</div>
+      <div class="q-body">
+        <div class="q-eq">x ÷ 8 = 7 &nbsp; &mdash; &nbsp; claimed solution: <strong>x = 54</strong></div>
+        <div class="radio-row">
+          <label><input type="radio" name="t4-developing-4" value="true" data-key="t4-developing-4"> True</label>
+          <label><input type="radio" name="t4-developing-4" value="false" data-key="t4-developing-4"> False</label>
+        </div>
+        <label class="field-label full">If false, what should the correct solution be? <input type="text" class="ans-input" data-key="t4-developing-4-correction" placeholder="Leave blank if true" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">5</div>
+      <div class="q-body">
+        <div class="q-eq">x + 16 = 40 &nbsp; &mdash; &nbsp; claimed solution: <strong>x = 24</strong></div>
+        <div class="radio-row">
+          <label><input type="radio" name="t4-developing-5" value="true" data-key="t4-developing-5"> True</label>
+          <label><input type="radio" name="t4-developing-5" value="false" data-key="t4-developing-5"> False</label>
+        </div>
+        <label class="field-label full">If false, what should the correct solution be? <input type="text" class="ans-input" data-key="t4-developing-5-correction" placeholder="Leave blank if true" autocomplete="off"></label>
+      </div>
+    </div><div class="q-card">
+      <div class="q-num">6</div>
+      <div class="q-body">
+        <div class="q-eq">x − 25 = −5 &nbsp; &mdash; &nbsp; claimed solution: <strong>x = 20</strong></div>
+        <div class="radio-row">
+          <label><input type="radio" name="t4-developing-6" value="true" data-key="t4-developing-6"> True</label>
+          <label><input type="radio" name="t4-developing-6" value="false" data-key="t4-developing-6"> False</label>
+        </div>
+        <label class="field-label full">If false, what should the correct solution be? <input type="text" class="ans-input" data-key="t4-developing-6-correction" placeholder="Leave blank if true" autocomplete="off"></label>
+      </div>
+    </div>
+  </div>
+  <div class="tier-block">
+    <div class="tier-head"><span class="tier-pill extending">🟣 EXTENDING</span><span class="tier-count">4 questions</span></div>
+    
+<div class="q-card">
+  <div class="q-num">1</div>
+  <div class="q-body">
+    <div class="q-eq">x + 14 = 6 &nbsp;&mdash;&nbsp; claimed solution: <strong>x = −8</strong></div>
+    <div class="radio-row">
+      <label><input type="radio" name="t4-extending-1" value="true" data-key="t4-extending-1"> True</label>
+      <label><input type="radio" name="t4-extending-1" value="false" data-key="t4-extending-1"> False</label>
+    </div>
+    <textarea class="ans-textarea" data-key="t4-extending-1-explain" placeholder="Explain why a negative solution can still be correct here" rows="2"></textarea>
+  </div>
+</div>
+<div class="q-card">
+  <div class="q-num">2</div>
+  <div class="q-body">
+    <div class="q-eq">−3x = 18 &nbsp;&mdash;&nbsp; claimed solution: <strong>x = −6</strong></div>
+    <div class="radio-row">
+      <label><input type="radio" name="t4-extending-2" value="true" data-key="t4-extending-2"> True</label>
+      <label><input type="radio" name="t4-extending-2" value="false" data-key="t4-extending-2"> False</label>
+    </div>
+  </div>
+</div>
+<div class="q-card">
+  <div class="q-num">3</div>
+  <div class="q-body">
+    <div class="q-prompt">Peer challenge: write a one-step equation and a solution that looks plausible but is actually WRONG. Swap with a partner and see if they can catch your mistake.</div>
+    <label class="field-label full">Your equation: <input type="text" class="ans-input wide" data-key="t4-extending-3-eq" placeholder="e.g. x − 6 = 14" autocomplete="off"></label>
+    <label class="field-label full">Your false solution: <input type="text" class="ans-input" data-key="t4-extending-3-false" placeholder="?" autocomplete="off"></label>
+  </div>
+</div>
+<div class="q-card">
+  <div class="q-num">4</div>
+  <div class="q-body">
+    <div class="q-prompt">In your own words, explain why substituting your answer back into the original equation is a useful last step when solving equations.</div>
+    <textarea class="ans-textarea" data-key="t4-extending-4" placeholder="What does checking actually catch?" rows="3"></textarea>
+  </div>
+</div>
+  </div>
+
+  <!-- TASK 5 -->
+  <div class="section-band">
+    <div class="bnum" style="background:var(--amber)">T5</div>
+    <h2>Your Choice</h2>
+    <span class="badge">Capstone · pick your tier</span>
+  </div>
+  
+<div class="q-card">
+  <div class="tier-tag foundation">FOUNDATION</div>
+  <div class="q-body">
+    <div class="q-prompt">Solve <strong>x + 15 = 22</strong> using whichever method you prefer. Show your working.</div>
+    <textarea class="ans-textarea" data-key="t5-foundation" placeholder="Show your steps here" rows="4"></textarea>
+  </div>
+</div>
+<div class="q-card">
+  <div class="tier-tag developing">DEVELOPING</div>
+  <div class="q-body">
+    <div class="q-prompt">Solve <strong>7x = 84</strong> using whichever method you prefer, then verify your answer by substitution.</div>
+    <textarea class="ans-textarea" data-key="t5-developing" placeholder="Show your steps and your check" rows="4"></textarea>
+  </div>
+</div>
+<div class="q-card">
+  <div class="tier-tag extending">EXTENDING</div>
+  <div class="q-body">
+    <div class="q-prompt">Mia has some stickers. After giving away 9, she has 23 left. Write an equation for the number of stickers Mia started with, solve it, and verify your solution.</div>
+    <textarea class="ans-textarea" data-key="t5-extending" placeholder="Equation, working, and check" rows="5"></textarea>
+  </div>
+</div>
+
+  <!-- REFLECTION -->
+  <div class="section-band">
+    <div class="bnum" style="background:var(--red)">✓</div>
+    <h2>Reflection</h2>
+    <span class="badge">Self-assessment</span>
+  </div>
+  <div class="q-card" style="flex-direction:column;">
+    <div class="selfcheck-row">
+      <div class="crit">I can solve one-step addition/subtraction equations using the balance method.</div>
+      <select data-key="reflect-1"><option value="">Rate yourself</option><option>Not yet</option><option>Getting there</option><option>Confident</option></select>
+    </div>
+    <div class="selfcheck-row">
+      <div class="crit">I can solve one-step equations of all four operations using both methods.</div>
+      <select data-key="reflect-2"><option value="">Rate yourself</option><option>Not yet</option><option>Getting there</option><option>Confident</option></select>
+    </div>
+    <div class="selfcheck-row">
+      <div class="crit">I can verify a solution by substitution and explain my method choice.</div>
+      <select data-key="reflect-3"><option value="">Rate yourself</option><option>Not yet</option><option>Getting there</option><option>Confident</option></select>
+    </div>
+  </div>
+  <div class="q-card reflect-box" style="flex-direction:column;">
+    <div class="q-prompt">One thing that clicked for you today, and one thing you still want more practice on:</div>
+    <textarea data-key="reflect-notes" placeholder="Write a couple of sentences..."></textarea>
+  </div>
+
+  <div class="submit-bar">
+    <div style="text-align:center;">
+      <button class="submit-btn" onclick="DataService.submit()">Submit Workbook</button>
+      <div id="submit-msg">Submitted — nice work today!</div>
+    </div>
+  </div>
+
+  <footer>y7-maths-u1-d6-solving-one-step-equations · Mr Smith · Year 7 Mathematics</footer>
+</div>
+
+<script>
+const LESSON_ID = "y7-maths-u1-d6-solving-one-step-equations";
+
+const DataService = {
+  studentId() {
+    return JSON.parse(localStorage.getItem('eduportal_session') || '{}').id || 'current_student';
+  },
+  collect() {
+    const data = {};
+    document.querySelectorAll('[data-key]').forEach(el => {
+      if (el.type === 'radio') {
+        if (el.checked) data[el.name] = el.value;
+      } else {
+        data[el.dataset.key] = el.value;
+      }
+    });
+    data.__student = {
+      name: document.getElementById('student-name').value,
+      class: document.getElementById('student-class').value,
+      date: document.getElementById('student-date').value,
+    };
+    return data;
+  },
+  apply(data) {
+    if (!data) return;
+    document.querySelectorAll('[data-key]').forEach(el => {
+      if (el.type === 'radio') {
+        if (data[el.name] === el.value) el.checked = true;
+      } else if (data[el.dataset.key] !== undefined) {
+        el.value = data[el.dataset.key];
+      }
+    });
+    if (data.__student) {
+      document.getElementById('student-name').value = data.__student.name || '';
+      document.getElementById('student-class').value = data.__student.class || '';
+      document.getElementById('student-date').value = data.__student.date || '';
+    }
+  },
+  save() {
+    const key = `eduportal_workbook_${this.studentId()}_${LESSON_ID}`;
+    localStorage.setItem(key, JSON.stringify(this.collect()));
+    this._syncProgress('in-progress');
+    this.updateProgressBar();
+  },
+  load() {
+    const key = `eduportal_workbook_${this.studentId()}_${LESSON_ID}`;
+    const raw = localStorage.getItem(key);
+    if (raw) this.apply(JSON.parse(raw));
+    this.updateProgressBar();
+  },
+  autoSave: (() => {
+    let t;
+    return function () {
+      clearTimeout(t);
+      t = setTimeout(() => DataService.save(), 600);
+    };
+  })(),
+  autoLoad() { this.load(); },
+  submit() {
+    this.save();
+    this._syncProgress('submitted');
+    document.getElementById('submit-msg').style.display = 'block';
+  },
+  _syncProgress(status) {
+    const key = `eduportal_progress_${this.studentId()}_${LESSON_ID}`;
+    localStorage.setItem(key, JSON.stringify({ status, updated: new Date().toISOString().slice(0, 10) }));
+  },
+  updateProgressBar() {
+    const fields = document.querySelectorAll('[data-key]');
+    const seen = new Set();
+    let total = 0, filled = 0;
+    fields.forEach(el => {
+      const k = el.type === 'radio' ? el.name : el.dataset.key;
+      if (seen.has(k)) return;
+      seen.add(k);
+      total++;
+      if (el.type === 'radio') {
+        if (document.querySelector(`input[name="${k}"]:checked`)) filled++;
+      } else if (el.value && el.value.trim() !== '') {
+        filled++;
+      }
+    });
+    const pct = total ? Math.round((filled / total) * 100) : 0;
+    document.getElementById('progfill').style.width = pct + '%';
+    document.getElementById('progpct').textContent = pct + '%';
+  },
+};
+
+document.addEventListener('input', (e) => {
+  if (e.target.matches('[data-key]') || e.target.id.startsWith('student-')) {
+    DataService.updateProgressBar();
+    DataService.autoSave();
+    if (!DataService._started) {
+      DataService._started = true;
+      DataService._syncProgress('in-progress');
+    }
+  }
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  DataService.autoLoad();
+});
+</script>
+</body>
+</html>

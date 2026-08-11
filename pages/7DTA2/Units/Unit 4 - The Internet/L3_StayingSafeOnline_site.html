@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 3 — Staying Safe Online | Year 7 Digital Technologies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#12100E;--ink2:#2C2A28;--ink3:#6B6762;--cream:#F7F3EC;--cream2:#EDE8DF;--white:#FFFFFF;--border:#D8D3CA;--border2:#C4BFB6;--pine:#1B5E47;--amber:#B8620A;--indigo:#2B3A8C;--crimson:#8C1F28;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink2);line-height:1.65;}
+  .mono{font-family:'DM Mono',monospace;}
+  .progress-bar{position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:10px 22px;flex-wrap:wrap;}
+  .progress-bar .label{font-family:'DM Mono',monospace;font-size:12px;color:var(--ink3);}
+  .progress-track{flex:1;min-width:120px;height:8px;background:var(--cream2);border-radius:4px;overflow:hidden;}
+  .progress-fill{height:100%;width:0;background:var(--pine);transition:width .4s;}
+  .pbtn{font-family:'DM Mono',monospace;font-size:12px;border:1px solid var(--border2);background:var(--white);color:var(--ink2);padding:6px 12px;border-radius:6px;cursor:pointer;}
+  .pbtn:hover{background:var(--cream2);}
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px 80px;}
+  .cover{background:var(--ink);color:var(--white);border-radius:0 0 18px 18px;padding:46px 40px 38px;margin-bottom:34px;}
+  .cover .eyebrow{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:2px;color:#B7AE9F;text-transform:uppercase;}
+  .cover h1{font-family:'DM Serif Display',serif;font-size:46px;line-height:1.05;margin:14px 0 8px;}
+  .cover .sub{color:#D8D3CA;font-size:17px;}
+  .cover .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:26px;border-top:1px solid #36322C;padding-top:20px;}
+  .cover .meta div span{display:block;font-family:'DM Mono',monospace;font-size:11px;color:#8C857A;text-transform:uppercase;letter-spacing:1px;}
+  .cover .meta div b{font-size:15px;color:var(--white);font-weight:500;}
+  .links a{display:inline-block;margin-right:10px;margin-top:16px;font-family:'DM Mono',monospace;font-size:13px;color:var(--ink);background:#E8E2D6;padding:8px 14px;border-radius:8px;text-decoration:none;}
+  section{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:30px 32px;margin-bottom:26px;}
+  .section-band{display:flex;align-items:center;gap:14px;margin-bottom:8px;}
+  .num{width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--white);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:18px;flex-shrink:0;}
+  .section-label{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:1.5px;color:var(--ink3);text-transform:uppercase;}
+  h2{font-family:'DM Serif Display',serif;font-size:27px;color:var(--ink);line-height:1.15;margin:2px 0 16px;}
+  h3{font-family:'DM Serif Display',serif;font-size:20px;color:var(--ink);margin:22px 0 10px;}
+  p{margin-bottom:12px;}
+  .badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:11px;padding:4px 10px;border-radius:20px;background:var(--cream2);color:var(--ink3);text-transform:uppercase;letter-spacing:1px;}
+  .callout{border-radius:10px;padding:16px 18px;margin:16px 0;font-size:15px;}
+  .callout b{display:block;font-family:'DM Sans';font-weight:700;margin-bottom:4px;}
+  .callout-info{background:#EEF0F8;border:1px solid var(--indigo);}.callout-info b{color:var(--indigo);}
+  .callout-tip{background:#EAF0EC;border:1px solid var(--pine);}.callout-tip b{color:var(--pine);}
+  .callout-note{background:#FBF1E6;border:1px solid var(--amber);}.callout-note b{color:var(--amber);}
+  .callout-extend{background:#F6ECEC;border:1px solid var(--crimson);}.callout-extend b{color:var(--crimson);}
+  .copy-banner{display:flex;align-items:center;gap:10px;background:var(--amber);color:var(--white);border-radius:8px;padding:8px 14px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin:18px 0 10px;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;}
+  th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;}
+  th{background:var(--cream2);font-weight:700;color:var(--ink);}
+  td.term{font-weight:700;color:var(--ink);white-space:nowrap;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:640px){.grid2{grid-template-columns:1fr;}}
+  .mini{background:var(--cream);border:1px solid var(--border);border-radius:10px;padding:16px;}
+  .mini h4{font-family:'DM Sans';font-size:16px;color:var(--ink);margin-bottom:6px;}
+  .flag-list{list-style:none;margin:10px 0;}
+  .flag-list li{padding:9px 0 9px 28px;position:relative;border-bottom:1px dashed var(--border);font-size:14.5px;}
+  .flag-list li:last-child{border-bottom:none;}
+  .flag-list li::before{content:"\26A0";position:absolute;left:0;top:9px;color:var(--crimson);}
+  .step-list{list-style:none;margin:10px 0;counter-reset:step;}
+  .step-list li{padding:8px 0 8px 38px;position:relative;font-size:14.5px;}
+  .step-list li::before{counter-increment:step;content:counter(step);position:absolute;left:0;top:6px;width:24px;height:24px;border-radius:50%;background:var(--pine);color:#fff;font-family:'DM Mono';font-size:12px;display:flex;align-items:center;justify-content:center;}
+  footer{text-align:center;font-family:'DM Mono',monospace;font-size:12px;color:var(--ink3);margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="progress-bar">
+  <span class="label">READING PROGRESS</span>
+  <div class="progress-track"><div class="progress-fill" id="pfill"></div></div>
+  <span class="label" id="ppct">0%</span>
+  <button class="pbtn" onclick="window.print()">Export / Print</button>
+</div>
+
+<div class="cover">
+  <div class="eyebrow">Year 7 Digital Technologies · Unit: The Internet</div>
+  <h1>Staying Safe Online</h1>
+  <div class="sub">Lesson 3 of 3 — Protecting yourself, your data, and your devices</div>
+  <div class="links">
+    <a href="#" id="slidesLink">▶ Lesson slides</a>
+    <a href="#" id="wbLink">✎ Open the workbook</a>
+  </div>
+  <div class="meta">
+    <div><span>Subject</span><b>Digital Technologies</b></div>
+    <div><span>Year level</span><b>Year 7</b></div>
+    <div><span>Lesson</span><b>3 of 3</b></div>
+    <div><span>Teacher</span><b>Mr Smith</b></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section id="s1">
+    <div class="section-band"><div class="num">1</div><span class="section-label">Objective</span><span class="badge">Read first</span></div>
+    <h2>What we're learning</h2>
+    <div class="callout callout-info"><b>Learning objective</b>To be able to identify risks to your safety and privacy online, and apply habits that protect you, your data, and your devices.</div>
+    <p><b>Success criteria</b> — aim for Foundation, then push further:</p>
+    <table>
+      <tr><td class="term">Foundation</td><td>I can identify personal information that should stay private, and describe one online scam warning sign.</td></tr>
+      <tr><td class="term">Developing</td><td>I can explain what makes a password strong and describe how to spot a phishing message.</td></tr>
+      <tr><td class="term">Extending</td><td>I can explain how malware can affect a device, and justify a set of safety habits a Year 7 student should follow.</td></tr>
+    </table>
+    <div class="callout callout-tip"><b>Recall from Lessons 1 &amp; 2</b>You've learned how networks connect devices and how data travels across them in packets. Now we look at how to protect yourself, your information, and your devices while you use that network.</div>
+  </section>
+
+  <section id="s2">
+    <div class="section-band"><div class="num">2</div><span class="section-label">Learning</span><span class="badge">Core notes</span></div>
+    <h2>Your digital footprint</h2>
+    <div class="copy-banner">📋 Copy this into your workbook — Section 2</div>
+    <p>Everything you post, share or search online leaves a trace — this is called your <b>digital footprint</b>. Some information is fine to share publicly. Other information, once posted, is very hard to take back, and can be used to find you, impersonate you, or target you with scams.</p>
+    <h3>What's usually OK to share vs. what to keep private</h3>
+    <table>
+      <tr><th>Usually OK to share</th><th>Keep private</th></tr>
+      <tr><td>Your first name</td><td>Full name + home address</td></tr>
+      <tr><td>A hobby or interest</td><td>School name</td></tr>
+      <tr><td>Your favourite game or show</td><td>Phone number</td></tr>
+      <tr><td>General opinions</td><td>Passwords, real-time location, daily routine</td></tr>
+    </table>
+    <div class="callout callout-tip"><b>Rule of thumb</b>If you wouldn't say it to a stranger's face at the shops, don't post it somewhere strangers can see it.</div>
+  </section>
+
+  <section id="s3">
+    <div class="section-band"><div class="num">3</div><span class="section-label">Learning</span><span class="badge">Core notes</span></div>
+    <h2>Building a strong password</h2>
+    <div class="copy-banner">📋 Copy this into your workbook — Section 3</div>
+    <p>A password is a key — and a weak one is like leaving that key under the doormat. A strong password is <b>long</b>, <b>unique</b> to each account, and not something easy to guess from your profile (no names, birthdays, or pet names).</p>
+    <table>
+      <tr><th>Example</th><th>Why</th></tr>
+      <tr><td class="term">tyler2012</td><td>Short, predictable — uses a real name and a year.</td></tr>
+      <tr><td class="term">password123</td><td>One of the most-guessed passwords in the world.</td></tr>
+      <tr><td class="term">PurpleLamp$Jumping47!</td><td>Long, unrelated words, mixed characters — much harder to guess.</td></tr>
+    </table>
+    <h3>Three habits</h3>
+    <ol class="step-list">
+      <li><b>Make it long</b> — aim for 12+ characters; length beats complexity.</li>
+      <li><b>Make it unique</b> — a different password for each important account.</li>
+      <li><b>Never share it</b> — not with friends, not in chat, not even with someone claiming to be from a company.</li>
+    </ol>
+  </section>
+
+  <section id="s4">
+    <div class="section-band"><div class="num">4</div><span class="section-label">Learning</span><span class="badge">Core notes</span></div>
+    <h2>Spotting a phishing message</h2>
+    <div class="copy-banner">📋 Copy this into your workbook — Section 4</div>
+    <p><b>Phishing</b> is a fake message — email, text, or DM — designed to trick you into clicking a bad link, downloading something harmful, or handing over personal information by pretending to be someone trustworthy.</p>
+    <h3>Common red flags</h3>
+    <ul class="flag-list">
+      <li>Urgency or pressure — "act now or lose your account!"</li>
+      <li>Asking for a password, code, or personal details</li>
+      <li>A link or sender that looks almost right, but slightly off</li>
+      <li>An offer that seems too good to be true</li>
+    </ul>
+    <h3>If you spot one</h3>
+    <ol class="step-list">
+      <li>Don't click the link or download anything.</li>
+      <li>Don't reply or enter any details.</li>
+      <li>Check with the real source another way — e.g. go to the website directly, not via the link.</li>
+      <li>Tell a trusted adult or report it in the app.</li>
+    </ol>
+  </section>
+
+  <section id="s5">
+    <div class="section-band"><div class="num">5</div><span class="section-label">Learning</span><span class="badge">Core notes</span></div>
+    <h2>Protecting your devices</h2>
+    <div class="copy-banner">📋 Copy this into your workbook — Section 5</div>
+    <p><b>Malware</b> ("malicious software") is software designed to damage a device, steal information, or let someone else control it without permission. It usually sneaks in through a dodgy download, a phishing link, or an out-of-date app.</p>
+    <div class="grid2">
+      <div class="mini"><h4>Only install from trusted stores</h4>Official app stores check apps before they're listed.</div>
+      <div class="mini"><h4>Keep apps and devices updated</h4>Updates often fix security weaknesses that malware can exploit.</div>
+    </div>
+    <h3>Signs something's wrong</h3>
+    <ul class="flag-list">
+      <li>The device suddenly runs much slower than usual.</li>
+      <li>Pop-ups appear constantly, even when you're not browsing.</li>
+      <li>Apps appear that you don't remember installing.</li>
+      <li>Friends say they're getting strange messages "from you."</li>
+    </ul>
+    <div class="callout callout-note"><b>Key idea</b>If you notice these signs, tell a trusted adult before doing anything else — don't try to fix it alone.</div>
+  </section>
+
+  <section id="s6">
+    <div class="section-band"><div class="num">6</div><span class="section-label">Wrap-up</span><span class="badge">Unit summary</span></div>
+    <h2>The internet unit, end to end</h2>
+    <table>
+      <tr><th>Lesson</th><th>Focus</th></tr>
+      <tr><td class="term">1. How the Internet Works</td><td>Networks, the history of the internet, wired vs wireless connections.</td></tr>
+      <tr><td class="term">2. How Data Travels</td><td>Packets, routing, IP addressing, and why the internet stays reliable.</td></tr>
+      <tr><td class="term">3. Staying Safe Online</td><td>Digital footprint, passwords, phishing, and protecting your devices.</td></tr>
+    </table>
+    <div class="callout callout-extend"><b>Extending challenge</b>Write a short "safety guide" for a younger student. Explain, in your own words, why your digital footprint matters, what makes a password strong, and one habit that protects a device from malware.</div>
+  </section>
+
+  <footer>Staying Safe Online · Lesson 3 of 3 · Year 7 Digital Technologies · Mr Smith</footer>
+</div>
+<script>
+  const LESSON_ID='y7-dt-u3-l3-staying-safe-online';
+  const STORAGE_KEY='wb_'+LESSON_ID;
+  const slidesUrl='#';
+  const workbookUrl='L3_StayingSafeOnline_workbook.html';
+  const DataService={
+    studentId(){return localStorage.getItem('eduportal_currentStudent')||'current_student';},
+    save(){},load(){return null;},autoSave(){},autoLoad(){},submit(){},
+    _syncProgress(status,score){try{const sid=this.studentId();localStorage.setItem(`eduportal_progress_${sid}_${LESSON_ID}`,JSON.stringify({status,score,t:Date.now()}));}catch(e){}}
+  };
+  document.getElementById('slidesLink').href=slidesUrl;
+  document.getElementById('wbLink').href=workbookUrl;
+  const fill=document.getElementById('pfill'),pct=document.getElementById('ppct');
+  function up(){const h=document.documentElement;const s=h.scrollTop/(h.scrollHeight-h.clientHeight);const p=Math.min(100,Math.round(s*100));fill.style.width=p+'%';pct.textContent=p+'%';}
+  window.addEventListener('scroll',up);window.addEventListener('load',up);
+</script>
+</body>
+</html>

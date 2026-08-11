@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en-AU" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unit 1: Algebra — Reference Site · Year 7 Mathematics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#4361EE; --green:#10B981; --amber:#F59E0B; --purple:#8B5CF6; --red:#EF4444;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --read:'Atkinson Hyperlegible',system-ui,sans-serif;
+  --mono:'DM Mono',ui-monospace,monospace;
+}
+html[data-theme="dark"]{
+  --bg:#0D1117; --surface:#161B22; --surface2:#1C2230; --line:#2A3140;
+  --ink:#E6EDF3; --ink2:#9BA7B4; --ink3:#6E7A88; --shadow:rgba(0,0,0,.45);
+}
+html[data-theme="light"]{
+  --bg:#FFFFFF; --surface:#F6F8FA; --surface2:#EEF1F5; --line:#D8DEE6;
+  --ink:#111820; --ink2:#4A5563; --ink3:#6E7A88; --shadow:rgba(16,24,40,.10);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:82px}
+body{margin:0; background:var(--bg); color:var(--ink);
+     font-family:var(--read); font-size:18px; line-height:1.65}
+a{color:var(--blue)}
+code{font-family:var(--mono); font-size:.95em; background:var(--surface2);
+     padding:1px 6px; border-radius:5px; border:1px solid var(--line); white-space:nowrap}
+.skip{position:absolute;left:-9999px}.skip:focus{left:8px;top:8px;background:var(--blue);color:#fff;padding:10px 16px;z-index:99}
+.nav{position:sticky; top:0; z-index:50; background:var(--surface); border-bottom:1px solid var(--line);
+     box-shadow:0 2px 10px var(--shadow)}
+.nav-in{max-width:1320px; margin:0 auto; padding:11px 16px; display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.nav-brand{font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+           color:var(--ink3); flex:1 1 auto}
+.btn{font-family:var(--sans); font-weight:500; font-size:13px; cursor:pointer; text-decoration:none;
+     background:var(--surface2); color:var(--ink); border:1px solid var(--line); border-radius:8px;
+     padding:8px 13px; min-height:38px; display:inline-flex; align-items:center}
+.btn:hover{border-color:var(--blue); color:var(--blue)}
+.btn.primary{background:var(--blue); border-color:var(--blue); color:#fff}
+.btn.primary:hover{filter:brightness(1.12); color:#fff}
+.shell{max-width:1320px; margin:0 auto; display:grid; grid-template-columns:262px minmax(0,1fr);
+       gap:26px; padding:22px 16px 80px}
+.toc{position:sticky; top:96px; align-self:start; background:var(--surface); border:1px solid var(--line);
+     border-radius:14px; padding:14px; max-height:calc(100vh - 120px); overflow-y:auto}
+.toc-h{font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+       color:var(--ink3); padding:2px 6px 10px}
+.toc-link{display:block; padding:8px 10px; border-radius:8px; text-decoration:none; color:var(--ink2);
+          font-family:var(--sans); font-size:13.5px; line-height:1.35}
+.toc-link:hover{background:var(--surface2); color:var(--ink)}
+.cover{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:26px 28px; margin-bottom:24px}
+.eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+         color:var(--blue); margin-bottom:8px}
+.cover h1{font-family:var(--serif); font-size:40px; line-height:1.12; margin:0 0 8px; font-weight:400}
+.cover p{color:var(--ink2); margin:0 0 18px; max-width:66ch}
+.linkrow{display:flex; gap:10px; flex-wrap:wrap}
+.lesson{background:var(--surface); border:1px solid var(--line); border-radius:16px;
+        padding:0 0 24px; margin-bottom:26px; overflow:hidden; scroll-margin-top:90px}
+.lesson-band{padding:20px 26px; border-bottom:1px solid var(--line); background:var(--surface2)}
+.lesson-lbl{font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink3)}
+.lesson-band h2{font-family:var(--serif); font-size:29px; margin:4px 0 0; font-weight:400}
+.inner{padding:0 26px}
+.lo{margin-top:20px; border:1px solid var(--blue); border-radius:12px; padding:15px 18px;
+    background:rgba(67,97,238,.09)}
+.lo b{display:block; font-family:var(--sans); font-size:12px; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--blue); margin-bottom:6px}
+.tiers{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:16px}
+.tier{border:1px solid var(--line); border-radius:12px; padding:14px 16px}
+.tier.F{border-color:var(--green)} .tier.D{border-color:var(--amber)} .tier.E{border-color:var(--purple)}
+.tier b{display:block; font-family:var(--sans); font-size:14px; margin-bottom:6px}
+.tier.F b{color:var(--green)} .tier.D b{color:var(--amber)} .tier.E b{color:var(--purple)}
+.tier span{font-size:16.5px; color:var(--ink2)}
+.note{margin-top:26px; padding-top:22px; border-top:1px solid var(--line); scroll-margin-top:92px}
+.note:first-of-type{border-top:none}
+.note-h{display:flex; align-items:center; gap:13px; margin-bottom:12px}
+.note-n{width:34px; height:34px; flex:0 0 34px; border-radius:50%; background:var(--blue); color:#fff;
+        display:grid; place-items:center; font-family:var(--sans); font-weight:700; font-size:16px}
+.note-lbl{font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink3)}
+.note h3{font-family:var(--serif); font-size:25px; margin:2px 0 0; font-weight:400}
+.copybanner{background:rgba(245,158,11,.12); border:1px solid var(--amber); border-radius:10px;
+            padding:11px 15px; margin-bottom:14px; font-size:16.5px}
+.copybanner b{color:var(--amber)}
+.note-body p{margin:0 0 12px}
+.hex{background:var(--surface2); border:1px solid var(--line); border-radius:10px;
+     padding:14px 16px; margin:12px 0; font-size:16.5px}
+.hsteps{margin:8px 0 0; padding-left:22px} .hsteps li{margin-bottom:7px}
+.hlist{margin:8px 0 0; padding-left:22px} .hlist li{margin-bottom:7px}
+.htab,.etab{width:100%; border-collapse:collapse; margin:12px 0; font-size:16px}
+.htab th,.htab td,.etab th,.etab td{border:1px solid var(--line); padding:9px 12px; text-align:left; vertical-align:top}
+.htab th,.etab th{background:var(--surface2); font-family:var(--sans); font-size:13px;
+                  text-transform:uppercase; letter-spacing:.06em; color:var(--ink2)}
+.hwork{font-family:var(--mono); font-size:16px; line-height:2; margin-top:8px}
+.hann{font-family:var(--sans); font-size:13px; color:var(--amber); padding-left:16px}
+.hflow{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:10px 0; font-family:var(--mono); font-size:15px}
+.hflow.rev .harr{color:var(--green)}
+.hnode{border:2px solid var(--line); border-radius:8px; padding:5px 13px; background:var(--surface2)}
+.hnode.ok{border-color:var(--green); color:var(--green); font-weight:700}
+.harr{color:var(--ink3); font-size:13px}
+.hcols{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px}
+.hcolh{font-family:var(--sans); font-weight:700; font-size:14px; color:var(--blue);
+       text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px}
+.footer{max-width:1320px; margin:0 auto; padding:0 16px 60px; color:var(--ink3);
+        font-family:var(--mono); font-size:11.5px}
+@media (max-width:920px){
+  .shell{grid-template-columns:1fr; padding:16px 12px 60px}
+  .toc{position:static; max-height:none}
+  .cover h1{font-size:31px}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to notes</a>
+
+<nav class="nav">
+  <div class="nav-in">
+    <div class="nav-brand">Year 7 Mathematics &middot; Unit 1: Algebra &middot; Reference</div>
+    <button class="btn" id="themeBtn" type="button">Light</button>
+    <a class="btn primary" href="L1_AlgebraRevision_workbook.html">Open the workbook</a>
+  </div>
+</nav>
+
+<div class="shell">
+  <aside class="toc">
+    <div class="toc-h">On this page</div>
+    <a class="toc-link" href="#y7-ma-u1-l1-algebra-revision">Lesson 1 &mdash; Algebra Revision</a>
+        <a class="toc-link" href="#note-vocab">1. The Language of Algebra</a>
+        <a class="toc-link" href="#note-patterns">2. Patterns & Rules</a>
+        <a class="toc-link" href="#note-sub">3. Substitution</a>
+        <a class="toc-link" href="#note-onestep">4. One-Step Equations</a>
+        <a class="toc-link" href="#note-twostep">5. Two-Step Equations</a>
+        <a class="toc-link" href="#note-mixed">6. Mixed Review & Word Problems</a>
+    <a class="toc-link" href="#errors">Common mistakes</a>
+    <a class="toc-link" href="#glossary">Quick glossary</a>
+  </aside>
+
+  <main id="main">
+    <div class="cover">
+      <div class="eyebrow">Unit Reference Site &middot; Read-only</div>
+      <h1>Unit 1: Algebra</h1>
+      <p>Everything explained in class, written out in full. Nothing here is marked and nothing is
+      tracked &mdash; use it whenever you are stuck, revising, or catching up on a lesson you missed.
+      Your workbook is where you show what you can do; this is where you look things up.</p>
+      <div class="linkrow">
+        <a class="btn primary" href="L1_AlgebraRevision_workbook.html">Lesson 1 workbook</a>
+        <a class="btn" href="#errors">Common mistakes</a>
+        <a class="btn" href="#glossary">Quick glossary</a>
+      </div>
+    </div>
+
+    <section class="lesson" id="y7-ma-u1-l1-algebra-revision">
+      <div class="lesson-band">
+        <div class="lesson-lbl">Lesson 1 &middot; Double period &middot; Revision</div>
+        <h2>Algebra Revision</h2>
+      </div>
+      <div class="inner">
+        <div class="lo">
+          <b>Learning objective</b>
+          To be able to solve one- and two-step equations using both the balance method and the
+          flowchart method &mdash; and to explain which parts of algebra I still need to revise.
+        </div>
+        <div class="tiers">
+          <div class="tier F"><b>&#x1F7E2; Foundation</b><span>I can use the key words correctly,
+            continue a pattern, substitute a number into an expression, and solve a one-step equation.</span></div>
+          <div class="tier D"><b>&#x1F7E1; Developing</b><span>I can write the rule for a pattern,
+            solve two-step equations by both methods, and check my answer by substituting it back in.</span></div>
+          <div class="tier E"><b>&#x1F7E3; Extending</b><span>I can solve equations with brackets,
+            negatives, or x on both sides, and turn a worded problem into an equation of my own.</span></div>
+        </div>
+
+      <article class="note" id="note-vocab">
+        <div class="note-h">
+          <span class="note-n">1</span>
+          <div>
+            <div class="note-lbl">Vocabulary</div>
+            <h3>The Language of Algebra</h3>
+          </div>
+        </div>
+        <div class="copybanner"><b>Copy this onto your bound reference:</b> The seven key words and the invisible-1 rule.</div>
+        <div class="note-body">
+      <p>Every algebra question is written in a code. If you know the words, you can read the code.</p>
+      <table class="htab">
+        <tr><th>Word</th><th>What it means</th></tr>
+        <tr><td><b>Pronumeral</b> (variable)</td><td>A letter standing in for a number we don't know yet.</td></tr>
+        <tr><td><b>Coefficient</b></td><td>The number multiplying a pronumeral.</td></tr>
+        <tr><td><b>Constant</b></td><td>A term that is just a number — no letter attached.</td></tr>
+        <tr><td><b>Term</b></td><td>A chunk separated by <b>+</b> or <b>−</b> signs.</td></tr>
+        <tr><td><b>Expression</b></td><td>Terms joined by operations. <u>No equals sign.</u></td></tr>
+        <tr><td><b>Equation</b></td><td>Two expressions joined by an equals sign.</td></tr>
+        <tr><td><b>Like terms</b></td><td>Terms with <i>exactly</i> the same letter(s) and power.</td></tr>
+      </table>
+      <div class="hex"><b>Example:</b> In <code>6x + 4y − 9</code> there are <b>3 terms</b>.
+      The coefficient of <code>x</code> is <b>6</b>, the coefficient of <code>y</code> is <b>4</b>,
+      and <b>−9</b> is the constant. Because there is no equals sign, this is an
+      <b>expression</b>, not an equation.</div>
+      <div class="hex"><b>Watch out:</b> <code>x</code> on its own has a coefficient of <b>1</b>,
+      and <code>−x</code> has a coefficient of <b>−1</b>. The 1 is invisible but it is there.</div></div>
+      </article>
+
+      <article class="note" id="note-patterns">
+        <div class="note-h">
+          <span class="note-n">2</span>
+          <div>
+            <div class="note-lbl">Sequences</div>
+            <h3>Patterns & Rules</h3>
+          </div>
+        </div>
+        <div class="copybanner"><b>Copy this onto your bound reference:</b> The three-step method for finding a rule, and the worked example.</div>
+        <div class="note-body">
+      <p>A pattern that goes up (or down) by the <b>same amount every time</b> has a rule of the
+      form <code>rule = (common difference) × n + (starting adjustment)</code>, where
+      <code>n</code> is the <b>term number</b> (position), not the term itself.</p>
+      <div class="hex"><b>Worked example — find the rule for 5, 8, 11, 14, …</b>
+        <ol class="hsteps">
+          <li><b>Find the common difference.</b> 8 − 5 = 3. That 3 is the coefficient of <code>n</code>,
+              so the rule starts as <code>3n</code>.</li>
+          <li><b>Test <code>3n</code> against term 1.</b> 3 × 1 = 3, but the real term is 5.</li>
+          <li><b>Adjust.</b> 3 is 2 short of 5, so add 2. Rule = <code>3n + 2</code>.</li>
+          <li><b>Check on a different term.</b> Term 4: 3 × 4 + 2 = 14 ✔</li>
+        </ol>
+      </div>
+      <div class="hex"><b>Using the rule:</b> once you have it, the 50th term needs no counting —
+      substitute <code>n = 50</code>. And to find <i>which</i> term equals a value, set the rule
+      equal to it and solve: <code>3n + 2 = 47</code> → <code>n = 15</code>, so it's the 15th term.</div>
+      <div class="hex"><b>Decreasing patterns</b> have a <b>negative</b> common difference:
+      20, 17, 14, … goes down by 3, so the rule is <code>−3n + 23</code> (also written <code>23 − 3n</code>).</div></div>
+      </article>
+
+      <article class="note" id="note-sub">
+        <div class="note-h">
+          <span class="note-n">3</span>
+          <div>
+            <div class="note-lbl">Evaluating</div>
+            <h3>Substitution</h3>
+          </div>
+        </div>
+        <div class="copybanner"><b>Copy this onto your bound reference:</b> The worked example and all three traps.</div>
+        <div class="note-body">
+      <p><b>Substitution</b> means swapping each pronumeral for the number you've been given,
+      then evaluating using the order of operations (BIDMAS).</p>
+      <div class="hex"><b>Worked example — find <code>3x + 4</code> when <code>x = 5</code></b>
+        <ol class="hsteps">
+          <li>Rewrite with the number in place of the letter, putting the hidden × back in:
+              <code>3 × 5 + 4</code></li>
+          <li>Multiplication before addition: <code>15 + 4</code></li>
+          <li><code>= 19</code></li>
+        </ol>
+      </div>
+      <div class="hex"><b>The three things that catch people out:</b>
+        <ul class="hlist">
+          <li><code>3x</code> means <code>3 × x</code> — never <code>3</code> next to <code>5</code> making 35.</li>
+          <li><code>x²</code> means <code>x × x</code>, not <code>x × 2</code>. So if <code>x = 4</code>, <code>x² = 16</code>, not 8.</li>
+          <li>Brackets and fraction lines are done <i>first</i>, all the way across:
+              <code>(a + b) ÷ 2</code> with <code>a = 7, b = 9</code> is <code>16 ÷ 2 = 8</code>.</li>
+        </ul>
+      </div></div>
+      </article>
+
+      <article class="note" id="note-onestep">
+        <div class="note-h">
+          <span class="note-n">4</span>
+          <div>
+            <div class="note-lbl">Balance & Flowchart</div>
+            <h3>One-Step Equations</h3>
+          </div>
+        </div>
+        <div class="copybanner"><b>Copy this onto your bound reference:</b> The inverse-operations table and one worked example of each method.</div>
+        <div class="note-body">
+      <p>A one-step equation has had <b>one thing</b> done to the pronumeral. To solve it you
+      <b>undo</b> that one thing. Both methods below do exactly that — pick whichever you find
+      clearer, but be able to use one of them fluently.</p>
+      <div class="hex"><b>Method 1 — Balance.</b> An equation is a set of scales. Whatever you do to
+      one side, you must do to the other, or it tips.
+        <div class="hwork">
+          <div>x + 6 = 13</div>
+          <div class="hann">− 6 from both sides</div>
+          <div>x + 6 − 6 = 13 − 6</div>
+          <div><b>x = 7</b></div>
+        </div>
+      </div>
+      <div class="hex"><b>Method 2 — Flowchart.</b> Draw what happened to <code>x</code> going forwards,
+      then walk back through it doing the opposite.
+        <div class="hflow">
+          <span class="hnode">x</span><span class="harr">— +6 →</span><span class="hnode">13</span>
+        </div>
+        <div class="hflow rev">
+          <span class="hnode ok">7</span><span class="harr">← −6 —</span><span class="hnode">13</span>
+        </div>
+        <div class="hann">Going back, every operation flips to its inverse.</div>
+      </div>
+      <table class="htab">
+        <tr><th>Operation</th><th>Its inverse</th></tr>
+        <tr><td>+ (add)</td><td>− (subtract)</td></tr>
+        <tr><td>− (subtract)</td><td>+ (add)</td></tr>
+        <tr><td>× (multiply)</td><td>÷ (divide)</td></tr>
+        <tr><td>÷ (divide)</td><td>× (multiply)</td></tr>
+      </table>
+      <div class="hex"><b>Always check.</b> Substitute your answer back in:
+      <code>7 + 6 = 13</code> ✔ If it doesn't work, the answer is wrong — and you found it yourself.</div></div>
+      </article>
+
+      <article class="note" id="note-twostep">
+        <div class="note-h">
+          <span class="note-n">5</span>
+          <div>
+            <div class="note-lbl">Balance & Flowchart</div>
+            <h3>Two-Step Equations</h3>
+          </div>
+        </div>
+        <div class="copybanner"><b>Copy this onto your bound reference:</b> The reverse-order rule and the side-by-side worked example.</div>
+        <div class="note-body">
+      <p>A two-step equation has had <b>two</b> things done to the pronumeral. The rule that makes
+      this easy: <b>undo in the reverse order</b> — last thing done is the first thing undone.</p>
+      <div class="hex"><b>Worked example — solve <code>3x + 5 = 20</code></b>
+        <div class="hcols">
+          <div>
+            <div class="hcolh">Balance method</div>
+            <div class="hwork">
+              <div>3x + 5 = 20</div>
+              <div class="hann">− 5 from both sides</div>
+              <div>3x = 15</div>
+              <div class="hann">÷ 3 on both sides</div>
+              <div><b>x = 5</b></div>
+            </div>
+          </div>
+          <div>
+            <div class="hcolh">Flowchart method</div>
+            <div class="hflow">
+              <span class="hnode">x</span><span class="harr">— ×3 →</span><span class="hnode">3x</span><span class="harr">— +5 →</span><span class="hnode">20</span>
+            </div>
+            <div class="hflow rev">
+              <span class="hnode ok">5</span><span class="harr">← ÷3 —</span><span class="hnode">15</span><span class="harr">← −5 —</span><span class="hnode">20</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hex"><b>Why undo the +5 first?</b> Going forwards, <code>x</code> was multiplied
+      <i>then</i> added to. Walking back out, you meet the addition first. Undoing the ×3 first
+      would mean dividing the 5 as well — a very common mistake.</div>
+      <div class="hex"><b>Brackets are different.</b> In <code>2(x + 3) = 16</code> the bracket was
+      built <i>first</i>, so the ×2 is the last thing done and the first thing undone:
+      divide both sides by 2 to get <code>x + 3 = 8</code>, then subtract 3.
+      (You may also expand to <code>2x + 6 = 16</code> first — both are correct.)</div>
+      <div class="hex"><b>Always check by substituting:</b> <code>3 × 5 + 5 = 20</code> ✔</div></div>
+      </article>
+
+      <article class="note" id="note-mixed">
+        <div class="note-h">
+          <span class="note-n">6</span>
+          <div>
+            <div class="note-lbl">Applying</div>
+            <h3>Mixed Review & Word Problems</h3>
+          </div>
+        </div>
+        <div class="copybanner"><b>Copy this onto your bound reference:</b> The words-to-algebra translation table.</div>
+        <div class="note-body">
+      <p>Word problems are only hard because the equation is hidden. Build it in three moves.</p>
+      <div class="hex"><b>Worked example.</b> <i>Maya buys 4 identical pens and a $3 notebook. She
+      spends $19 altogether. How much is one pen?</i>
+        <ol class="hsteps">
+          <li><b>Name the unknown.</b> Let <code>p</code> = the cost of one pen, in dollars.</li>
+          <li><b>Build the expression.</b> 4 pens cost <code>4p</code>; add the notebook: <code>4p + 3</code>.</li>
+          <li><b>Set it equal to what you know, then solve.</b>
+              <code>4p + 3 = 19</code> → <code>4p = 16</code> → <code>p = 4</code>.</li>
+          <li><b>Answer in words, with units.</b> One pen costs $4. Check: 4 × 4 + 3 = 19 ✔</li>
+        </ol>
+      </div>
+      <div class="hex"><b>Translation table</b>
+        <table class="htab">
+          <tr><th>Words</th><th>Algebra</th></tr>
+          <tr><td>sum of / more than / increased by</td><td>+</td></tr>
+          <tr><td>difference / less than / decreased by</td><td>−</td></tr>
+          <tr><td>product of / times / double / triple</td><td>×</td></tr>
+          <tr><td>quotient / shared between / half of</td><td>÷</td></tr>
+          <tr><td>is / gives / results in / altogether</td><td>=</td></tr>
+        </table>
+      </div>
+      <div class="hex"><b>Order trap:</b> “<i>5 less than n</i>” is <code>n − 5</code>, not <code>5 − n</code>.
+      Read it as “start with n, take 5 away”.</div></div>
+      </article>
+
+        <article class="note" id="errors">
+          <div class="note-h">
+            <span class="note-n" style="background:var(--red)">!</span>
+            <div><div class="note-lbl">Error log</div><h3>The Mistakes That Cost Marks</h3></div>
+          </div>
+          <p>Every one of these is common, and every one of them is avoidable. If you recognise
+          yourself in the left column, put the right column on your bound reference.</p>
+          <table class="etab">
+            <thead><tr><th style="width:42%">The mistake</th><th>What is actually true</th></tr></thead>
+            <tbody>
+            <tr><td>Says the coefficient of <code>x</code> is 0 or nothing</td><td>It is <b>1</b>. The 1 is invisible but always there — and in <code>&minus;x</code> it is <b>&minus;1</b>.</td></tr>
+            <tr><td>Writes <code>3x + 2x = 5x&sup2;</code></td><td>Add the coefficients only. The letter part never changes: <code>5x</code>.</td></tr>
+            <tr><td>Substitutes <code>x = 5</code> into <code>3x</code> and writes 35</td><td>A number written next to a letter means <b>multiply</b>: <code>3 &times; 5 = 15</code>.</td></tr>
+            <tr><td>Works out <code>x&sup2;</code> when <code>x = 4</code> as 8</td><td><code>x&sup2;</code> means <code>x &times; x</code>, so it is <b>16</b>.</td></tr>
+            <tr><td>Confuses the term number with the term value</td><td><code>n</code> is the <b>position</b> in the pattern, never the number sitting in the pattern.</td></tr>
+            <tr><td>Solves <code>3x + 5 = 20</code> by dividing by 3 first</td><td>Undo in <b>reverse order</b>. The +5 was done last, so it comes off first.</td></tr>
+            <tr><td>Expands <code>2(x + 3)</code> as <code>2x + 3</code></td><td>The 2 multiplies <b>everything</b> inside: <code>2x + 6</code>.</td></tr>
+            <tr><td>Writes “5 less than n” as <code>5 &minus; n</code></td><td>Read it as an instruction: start with <code>n</code>, take 5 away — <code>n &minus; 5</code>.</td></tr>
+            <tr><td>Never checks the answer</td><td>Substitute back into the <b>original</b> equation. It catches most of your own mistakes for free.</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="note" id="glossary">
+          <div class="note-h">
+            <span class="note-n" style="background:var(--purple)">A</span>
+            <div><div class="note-lbl">Reference</div><h3>Quick Glossary</h3></div>
+          </div>
+          <table class="etab">
+            <thead><tr><th style="width:26%">Term</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td>Pronumeral / variable</td><td>A letter standing for a number we do not know yet.</td></tr>
+              <tr><td>Coefficient</td><td>The number multiplying a pronumeral. In <code>7x</code> it is 7; in <code>x</code> it is 1.</td></tr>
+              <tr><td>Constant</td><td>A term that is just a number, with no letter attached.</td></tr>
+              <tr><td>Term</td><td>A chunk of an expression separated by <code>+</code> or <code>&minus;</code> signs.</td></tr>
+              <tr><td>Expression</td><td>Terms joined by operations, with <b>no</b> equals sign. e.g. <code>4y &minus; 9</code></td></tr>
+              <tr><td>Equation</td><td>Two expressions joined by an equals sign. e.g. <code>4y &minus; 9 = 3</code></td></tr>
+              <tr><td>Like terms</td><td>Terms with exactly the same letter(s) and power, so they can be added.</td></tr>
+              <tr><td>Substitute</td><td>Replace a pronumeral with a given number, then evaluate.</td></tr>
+              <tr><td>Solve</td><td>Find the value of the pronumeral that makes an equation true.</td></tr>
+              <tr><td>Solution</td><td>That value. Check it by substituting it back into the original equation.</td></tr>
+              <tr><td>Inverse operation</td><td>The operation that undoes another: + and &minus;, &times; and &divide;.</td></tr>
+              <tr><td>LHS / RHS</td><td>Left-hand side / right-hand side of the equals sign.</td></tr>
+              <tr><td>Term number (<code>n</code>)</td><td>A term's <b>position</b> in a pattern &mdash; 1st, 2nd, 3rd &mdash; not its value.</td></tr>
+              <tr><td>Common difference</td><td>The fixed amount a pattern goes up or down by each step.</td></tr>
+              <tr><td>Expand</td><td>Multiply out a bracket, e.g. <code>3(x + 4)</code> becomes <code>3x + 12</code>.</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <p style="margin-top:26px">
+          <a class="btn primary" href="L1_AlgebraRevision_workbook.html">Open the Lesson 1 workbook &rarr;</a>
+        </p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="footer">Unit 1: Algebra &middot; Year 7 Mathematics &middot; Reference site &mdash; read-only, nothing on this page is recorded or marked.</div>
+
+<script>
+document.getElementById('themeBtn').addEventListener('click', function () {
+  var h = document.documentElement;
+  var next = h.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  h.setAttribute('data-theme', next);
+  this.textContent = next === 'dark' ? 'Light' : 'Dark';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1 — How the Internet Works | Year 7 Digital Technologies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12100E;--ink2:#2C2A28;--ink3:#6B6762;--cream:#F7F3EC;--cream2:#EDE8DF;
+    --white:#FFFFFF;--border:#D8D3CA;--border2:#C4BFB6;
+    --pine:#1B5E47;--amber:#B8620A;--indigo:#2B3A8C;--crimson:#8C1F28;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink2);line-height:1.65;}
+  .mono{font-family:'DM Mono',monospace;}
+  .serif{font-family:'DM Serif Display',serif;}
+
+  /* progress bar */
+  .progress-bar{position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:16px;padding:10px 22px;flex-wrap:wrap;}
+  .progress-bar .label{font-family:'DM Mono',monospace;font-size:12px;color:var(--ink3);}
+  .progress-track{flex:1;min-width:120px;height:8px;background:var(--cream2);border-radius:4px;overflow:hidden;}
+  .progress-fill{height:100%;width:0;background:var(--pine);transition:width .4s;}
+  .pbtn{font-family:'DM Mono',monospace;font-size:12px;border:1px solid var(--border2);background:var(--white);
+    color:var(--ink2);padding:6px 12px;border-radius:6px;cursor:pointer;}
+  .pbtn:hover{background:var(--cream2);}
+
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px 80px;}
+
+  /* cover */
+  .cover{background:var(--ink);color:var(--white);border-radius:0 0 18px 18px;padding:46px 40px 38px;margin-bottom:34px;}
+  .cover .eyebrow{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:2px;color:#B7AE9F;text-transform:uppercase;}
+  .cover h1{font-family:'DM Serif Display',serif;font-size:46px;line-height:1.05;margin:14px 0 8px;}
+  .cover .sub{color:#D8D3CA;font-size:17px;}
+  .cover .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:26px;
+    border-top:1px solid #36322C;padding-top:20px;}
+  .cover .meta div span{display:block;font-family:'DM Mono',monospace;font-size:11px;color:#8C857A;text-transform:uppercase;letter-spacing:1px;}
+  .cover .meta div b{font-size:15px;color:var(--white);font-weight:500;}
+  .links a{display:inline-block;margin-right:10px;margin-top:16px;font-family:'DM Mono',monospace;font-size:13px;
+    color:var(--ink);background:#E8E2D6;padding:8px 14px;border-radius:8px;text-decoration:none;}
+
+  /* section */
+  section{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:30px 32px;margin-bottom:26px;}
+  .section-band{display:flex;align-items:center;gap:14px;margin-bottom:8px;}
+  .num{width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--white);
+    display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:18px;flex-shrink:0;}
+  .section-label{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:1.5px;color:var(--ink3);text-transform:uppercase;}
+  h2{font-family:'DM Serif Display',serif;font-size:27px;color:var(--ink);line-height:1.15;margin:2px 0 16px;}
+  h3{font-family:'DM Serif Display',serif;font-size:20px;color:var(--ink);margin:22px 0 10px;}
+  p{margin-bottom:12px;}
+  .badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:11px;padding:4px 10px;border-radius:20px;
+    background:var(--cream2);color:var(--ink3);text-transform:uppercase;letter-spacing:1px;}
+
+  /* callouts */
+  .callout{border-radius:10px;padding:16px 18px;margin:16px 0;font-size:15px;}
+  .callout b{display:block;font-family:'DM Sans';font-weight:700;margin-bottom:4px;}
+  .callout-info{background:#EEF0F8;border:1px solid var(--indigo);}
+  .callout-info b{color:var(--indigo);}
+  .callout-tip{background:#EAF0EC;border:1px solid var(--pine);}
+  .callout-tip b{color:var(--pine);}
+  .callout-note{background:#FBF1E6;border:1px solid var(--amber);}
+  .callout-note b{color:var(--amber);}
+  .callout-extend{background:#F6ECEC;border:1px solid var(--crimson);}
+  .callout-extend b{color:var(--crimson);}
+
+  .copy-banner{display:flex;align-items:center;gap:10px;background:var(--amber);color:var(--white);
+    border-radius:8px;padding:8px 14px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:1px;
+    text-transform:uppercase;margin:18px 0 10px;}
+
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;}
+  th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;}
+  th{background:var(--cream2);font-family:'DM Sans';font-weight:700;color:var(--ink);}
+  td.term{font-weight:700;color:var(--ink);white-space:nowrap;}
+
+  .tier-row{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+  .tier-tag{flex-shrink:0;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:var(--white);
+    padding:5px 12px;border-radius:20px;letter-spacing:.5px;}
+  .t-found{background:var(--pine);}.t-dev{background:var(--amber);}.t-ext{background:var(--indigo);}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:640px){.grid2{grid-template-columns:1fr;}}
+  .mini{background:var(--cream);border:1px solid var(--border);border-radius:10px;padding:16px;}
+  .mini h4{font-family:'DM Sans';font-size:16px;color:var(--ink);margin-bottom:6px;}
+  .pill{display:inline-block;font-family:'DM Mono',monospace;font-size:12px;background:var(--ink);color:var(--white);
+    padding:3px 10px;border-radius:14px;margin-bottom:8px;}
+
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:14px 0;}
+  .flow .node{background:var(--cream2);border:1px solid var(--border2);border-radius:8px;padding:8px 12px;
+    font-size:13.5px;font-weight:600;color:var(--ink);}
+  .flow .arr{color:var(--amber);font-weight:700;}
+  footer{text-align:center;font-family:'DM Mono',monospace;font-size:12px;color:var(--ink3);margin-top:30px;}
+</style>
+</head>
+<body>
+
+<div class="progress-bar">
+  <span class="label">READING PROGRESS</span>
+  <div class="progress-track"><div class="progress-fill" id="pfill"></div></div>
+  <span class="label" id="ppct">0%</span>
+  <button class="pbtn" onclick="window.print()">Export / Print</button>
+</div>
+
+<div class="cover">
+  <div class="eyebrow">Year 7 Digital Technologies · Unit: The Internet</div>
+  <h1>How the Internet Works</h1>
+  <div class="sub">Lesson 1 of 3 — Networks, connections &amp; the story of the internet</div>
+  <div class="links">
+    <a href="#" id="slidesLink">▶ Lesson slides</a>
+    <a href="#" id="wbLink">✎ Open the workbook</a>
+  </div>
+  <div class="meta">
+    <div><span>Subject</span><b>Digital Technologies</b></div>
+    <div><span>Year level</span><b>Year 7</b></div>
+    <div><span>Lesson</span><b>1 of 3</b></div>
+    <div><span>Teacher</span><b>Mr Smith</b></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- SECTION 1: OBJECTIVE -->
+  <section id="s1">
+    <div class="section-band"><div class="num">1</div><span class="section-label">Objective</span><span class="badge">Read first</span></div>
+    <h2>What we're learning</h2>
+    <div class="callout callout-info">
+      <b>Learning objective</b>
+      To be able to explain what the internet is, how it grew, and how networks connect devices to share data.
+    </div>
+    <p><b>Success criteria</b> — aim for Foundation, then push further:</p>
+    <div class="tier-row"><span class="tier-tag t-found">Foundation</span><div>I can describe what the internet is and name the main parts of a network (device, server, router, modem).</div></div>
+    <div class="tier-row"><span class="tier-tag t-dev">Developing</span><div>I can compare the types of network (PAN, LAN, WLAN, WAN) and explain what each part of a network does.</div></div>
+    <div class="tier-row"><span class="tier-tag t-ext">Extending</span><div>I can explain how data travels (wired vs wireless) and justify which connection suits a given situation.</div></div>
+  </section>
+
+  <!-- SECTION 2: WHAT IS THE INTERNET -->
+  <section id="s2">
+    <div class="section-band"><div class="num">2</div><span class="section-label">Learning</span><span class="badge">Core notes</span></div>
+    <h2>What actually is the internet?</h2>
+    <p>The <b>internet</b> is a giant <b>network of networks</b> — millions of computers and devices all over the world, connected together so they can share data. No single computer "is" the internet. It works because all those devices agree on a shared set of rules for sending information to each other.</p>
+
+    <div class="copy-banner">📋 Copy this into your workbook — Section 2</div>
+    <div class="callout callout-tip">
+      <b>Two ideas to remember</b>
+      1. The internet is a <b>network of networks</b>.<br>
+      2. The <b>Internet</b> and the <b>World Wide Web</b> are NOT the same thing. The Web (the websites you visit) is just <i>one</i> of the things that runs <i>on</i> the internet — others include email, online games and streaming.
+    </div>
+
+    <h3>A helpful analogy: the road network</h3>
+    <table>
+      <tr><th>In a road network…</th><th>…on the internet</th></tr>
+      <tr><td class="term">Roads</td><td>The cables and wireless signals that carry data</td></tr>
+      <tr><td class="term">Houses</td><td>Devices, like your laptop or phone</td></tr>
+      <tr><td class="term">Cars</td><td>The data being delivered</td></tr>
+      <tr><td class="term">Traffic rules</td><td>The shared rules that keep data heading to the right place</td></tr>
+    </table>
+  </section>
+
+  <!-- SECTION 3: HISTORY & IMPACT -->
+  <section id="s3">
+    <div class="section-band"><div class="num">3</div><span class="section-label">Learning</span><span class="badge">Context</span></div>
+    <h2>A very short history</h2>
+    <table>
+      <tr><th>When</th><th>What happened</th></tr>
+      <tr><td class="term">1969</td><td><b>ARPANET</b> — the first version. A small US research network links a few university computers for the first time.</td></tr>
+      <tr><td class="term">1989</td><td><b>The Web is invented.</b> Tim Berners-Lee designs the World Wide Web: web pages and clickable links.</td></tr>
+      <tr><td class="term">1990s</td><td><b>The internet goes public.</b> Home computers, dial-up modems and the first popular browsers bring it to ordinary households.</td></tr>
+      <tr><td class="term">Today</td><td><b>Always-on &amp; everywhere.</b> Phones, watches, TVs, fridges and cars — billions of devices connected, mostly wirelessly.</td></tr>
+    </table>
+
+    <h3>How it changed daily life</h3>
+    <div class="grid2">
+      <div class="mini">
+        <h4 style="color:var(--pine)">The good</h4>
+        <p style="font-size:14px;margin:0"><b>Connect:</b> message family overseas instantly.<br><b>Learn:</b> look up anything, watch tutorials, online classes.<br><b>Create &amp; share:</b> post to a global audience.</p>
+      </div>
+      <div class="mini">
+        <h4 style="color:var(--crimson)">The trade-offs</h4>
+        <p style="font-size:14px;margin:0"><b>Screen time:</b> easy to lose hours; affects sleep.<br><b>Not always true:</b> anyone can post anything.<br><b>Always reachable:</b> hard to switch off.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: PARTS OF A NETWORK -->
+  <section id="s4">
+    <div class="section-band"><div class="num">4</div><span class="section-label">Learning</span><span class="badge">Core notes</span></div>
+    <h2>The parts of a network</h2>
+    <div class="copy-banner">📋 Copy this table into your workbook — Section 3</div>
+    <table>
+      <tr><th>Part</th><th>What it does</th></tr>
+      <tr><td class="term">Device (client)</td><td>Anything a person uses — laptop, phone, tablet, smart TV. It <b>asks</b> for data.</td></tr>
+      <tr><td class="term">Server</td><td>A powerful computer that <b>stores</b> data and sends it out when devices ask. Websites live on servers.</td></tr>
+      <tr><td class="term">Router</td><td>Directs data between networks and sends it to the right device — the "traffic controller".</td></tr>
+      <tr><td class="term">Modem</td><td>Connects your home network to the internet through your ISP.</td></tr>
+      <tr><td class="term">Switch</td><td>Connects several devices together inside one local network (e.g. a computer lab).</td></tr>
+      <tr><td class="term">ISP</td><td>Internet Service Provider — the company you pay for an internet connection (e.g. Telstra).</td></tr>
+    </table>
+
+    <h3>How a request travels</h3>
+    <div class="flow">
+      <span class="node">Your device</span><span class="arr">→</span>
+      <span class="node">Router + Modem</span><span class="arr">→</span>
+      <span class="node">ISP</span><span class="arr">→</span>
+      <span class="node">The internet</span><span class="arr">→</span>
+      <span class="node">Website's server</span>
+    </div>
+    <p>When you open a website, your device sends a request out through your router and modem, to your ISP, across the internet to the server that stores that website. The server sends the data back along the same kind of path — all in a fraction of a second.</p>
+  </section>
+
+  <!-- SECTION 5: TYPES OF NETWORK -->
+  <section id="s5">
+    <div class="section-band"><div class="num">5</div><span class="section-label">Learning</span><span class="badge">Core notes</span></div>
+    <h2>Types of network: small to huge</h2>
+    <div class="copy-banner">📋 Copy this table into your workbook — Section 4</div>
+    <table>
+      <tr><th>Type</th><th>Reach / size</th><th>Example</th></tr>
+      <tr><td class="term">PAN<br><span style="font-weight:400;color:var(--ink3);font-size:13px">Personal Area Network</span></td><td>Tiny — around one person.</td><td>Bluetooth earbuds linked to your phone.</td></tr>
+      <tr><td class="term">LAN<br><span style="font-weight:400;color:var(--ink3);font-size:13px">Local Area Network</span></td><td>One building or room, usually wired.</td><td>Computers cabled together in a classroom.</td></tr>
+      <tr><td class="term">WLAN<br><span style="font-weight:400;color:var(--ink3);font-size:13px">Wireless LAN</span></td><td>A LAN, but connected by Wi-Fi.</td><td>Home Wi-Fi, or the school Wi-Fi.</td></tr>
+      <tr><td class="term">WAN<br><span style="font-weight:400;color:var(--ink3);font-size:13px">Wide Area Network</span></td><td>Huge — across cities and countries.</td><td>The internet itself is the biggest WAN.</td></tr>
+    </table>
+    <div class="callout callout-note">
+      <b>Watch out</b>
+      The only difference between a <b>LAN</b> and a <b>WLAN</b> is wired vs wireless — they're the same size. Don't mix that up!
+    </div>
+  </section>
+
+  <!-- SECTION 6: TRANSMISSION -->
+  <section id="s6">
+    <div class="section-band"><div class="num">6</div><span class="section-label">Learning</span><span class="badge">Core notes</span></div>
+    <h2>How does data travel?</h2>
+    <div class="copy-banner">📋 Copy this comparison into your workbook — Section 5</div>
+    <div class="grid2">
+      <div class="mini">
+        <span class="pill" style="background:var(--amber)">WIRED</span>
+        <p style="font-size:14px;margin:0"><i>Through a physical cable.</i><br><br>
+        <b>Ethernet</b> (copper cable) — common in offices and labs.<br>
+        <b>Fibre optic</b> — sends data as pulses of <b>light</b> through thin glass. Very fast; used by the NBN.<br><br>
+        <b style="color:var(--pine)">Strengths:</b> fast, reliable, secure.<br>
+        <b style="color:var(--crimson)">Catch:</b> you're tied to a cable.</p>
+      </div>
+      <div class="mini">
+        <span class="pill" style="background:var(--indigo)">WIRELESS</span>
+        <p style="font-size:14px;margin:0"><i>Through the air as signals.</i><br><br>
+        <b>Wi-Fi</b> — radio waves over short distances.<br>
+        <b>Mobile data (4G/5G)</b> — phone towers; works almost anywhere.<br>
+        <b>Bluetooth</b> — very short range. <b>Satellite</b> — remote areas.<br><br>
+        <b style="color:var(--pine)">Strengths:</b> move around freely.<br>
+        <b style="color:var(--crimson)">Catch:</b> slower, weaker through walls/distance.</p>
+      </div>
+    </div>
+    <div class="callout callout-extend">
+      <b>Extending challenge</b>
+      For any device, ask: does it move around? How far is it from the connection? How much speed does it need? Use those three questions to <i>justify</i> whether wired or wireless is the better choice.
+    </div>
+  </section>
+
+  <footer>How the Internet Works · Lesson 1 of 3 · Year 7 Digital Technologies · Mr Smith</footer>
+</div>
+
+<script>
+  const LESSON_ID = 'y7-dt-u3-l1-how-internet-works';
+  const STORAGE_KEY = 'wb_' + LESSON_ID;
+  const slidesUrl = '#';
+  const workbookUrl = 'L1_HowTheInternetWorks_workbook.html';
+
+  // DataService layer — currently localStorage, structured for future API swap
+  const DataService = {
+    studentId(){ return localStorage.getItem('eduportal_currentStudent') || 'current_student'; },
+    save(){ /* POST /api/workbooks/{studentId}/{lessonId} — currently localStorage (read-only site: no-op) */ },
+    load(){ /* GET /api/workbooks/{studentId}/{lessonId} */ return null; },
+    autoSave(d){ /* debounced — n/a for read-only reference site */ },
+    autoLoad(){ /* n/a for read-only reference site */ },
+    submit(){ /* n/a */ },
+    _syncProgress(status, score){
+      try{
+        const sid = this.studentId();
+        localStorage.setItem(`eduportal_progress_${sid}_${LESSON_ID}`, JSON.stringify({status, score, t:Date.now()}));
+      }catch(e){}
+    }
+  };
+
+  document.getElementById('slidesLink').href = slidesUrl;
+  document.getElementById('wbLink').href = workbookUrl;
+
+  // reading progress based on scroll
+  const fill = document.getElementById('pfill'), pct = document.getElementById('ppct');
+  function updateProgress(){
+    const h = document.documentElement;
+    const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight);
+    const p = Math.min(100, Math.round(scrolled*100));
+    fill.style.width = p + '%'; pct.textContent = p + '%';
+  }
+  window.addEventListener('scroll', updateProgress);
+  window.addEventListener('load', updateProgress);
+</script>
+</body>
+</html>

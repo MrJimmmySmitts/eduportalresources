@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XENOLOGY LAB — Student Field Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Space+Mono:wght@400;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400;1,9..144,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:        #0a1014;
+  --panel:     #111a1f;
+  --panel-2:   #0d1418;
+  --ink:       #d4dde2;
+  --ink-soft:  #8b9ba4;
+  --ink-mute:  #5b6a73;
+  --line:      #1d2a31;
+  --line-soft: #16222a;
+  --glow:      #aaff3c;       /* alien lime */
+  --glow-dim:  #6e9c34;
+  --cyan:      #4ad2c9;        /* signal cyan */
+  --warn:      #ff8866;
+  --paper:     #efe9dd;        /* student-write panels */
+  --paper-ink: #2a2620;
+  --paper-line:#c4b8a0;
+  --font-display: "Major Mono Display", ui-monospace, monospace;
+  --font-mono:    "Space Mono", ui-monospace, monospace;
+  --font-body:    "Fraunces", Georgia, serif;
+  --shadow-soft: 0 1px 0 rgba(255,255,255,0.04) inset, 0 30px 60px -30px rgba(0,0,0,0.6);
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  /* subtle scan-line atmosphere */
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(170,255,60,0.06), transparent 50%),
+    radial-gradient(ellipse at 100% 100%, rgba(74,210,201,0.05), transparent 50%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 3px);
+  background-attachment: fixed;
+}
+
+/* ---------------- Layout ---------------- */
+.page{
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 60px 48px;
+  position: relative;
+}
+.page + .page{ border-top: 1px dashed var(--line); }
+
+@media (max-width: 700px){
+  .page{ padding: 40px 22px; }
+  body{ font-size: 15px; }
+}
+
+/* ---------------- Typography ---------------- */
+h1, h2, h3, h4{ font-family: var(--font-display); font-weight: 400; letter-spacing: 0.02em; color: var(--ink); }
+.eyebrow{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--glow);
+  margin: 0 0 14px;
+}
+h1{ font-size: clamp(36px, 6vw, 64px); line-height: 1; margin: 0 0 18px; }
+h2{ font-size: clamp(24px, 3.4vw, 34px); line-height: 1.08; margin: 0 0 14px; }
+h3{ font-size: 18px; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 10px; color: var(--cyan); font-family: var(--font-mono); font-weight: 700; }
+h4{ font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 8px; color: var(--ink-soft); font-family: var(--font-mono); font-weight: 700; }
+p{ margin: 0 0 14px; }
+strong{ color: var(--ink); }
+em{ color: var(--glow); font-style: italic; }
+a{ color: var(--cyan); }
+code{ font-family: var(--font-mono); color: var(--glow); background: rgba(170,255,60,0.08); padding: 1px 6px; border-radius: 3px; font-size: 0.92em; }
+ul, ol{ margin: 0 0 16px; padding-left: 22px; }
+ul li, ol li{ margin-bottom: 6px; }
+ul li::marker{ color: var(--glow); }
+ol li::marker{ color: var(--cyan); font-family: var(--font-mono); }
+
+/* ---------------- Cover ---------------- */
+.cover{
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 40px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.cover::before{
+  content:"";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 70% 30%, rgba(170,255,60,0.10), transparent 40%),
+    radial-gradient(circle at 30% 80%, rgba(74,210,201,0.08), transparent 50%);
+  pointer-events: none;
+}
+.cover-head{
+  display: flex; justify-content: space-between; align-items: flex-start;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em;
+  color: var(--ink-mute); text-transform: uppercase;
+  position: relative;
+}
+.cover-mark{
+  display: flex; align-items: center; gap: 10px;
+  color: var(--glow);
+}
+.cover-dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--glow); box-shadow: 0 0 12px var(--glow); animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse{ 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+.cover-body{
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: center;
+  padding: 60px 0;
+  position: relative;
+}
+.cover-title{
+  font-family: var(--font-display);
+  font-size: clamp(48px, 11vw, 130px);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+.cover-title em{
+  font-style: normal;
+  color: var(--glow);
+  text-shadow: 0 0 30px rgba(170,255,60,0.4);
+}
+.cover-subtitle{
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: clamp(18px, 2.2vw, 24px);
+  color: var(--ink-soft);
+  margin-top: 24px;
+  max-width: 560px;
+}
+
+.cover-meta{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px;
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+  letter-spacing: 0.08em;
+  position: relative;
+}
+.cover-meta .field-label{ display: block; font-size: 10px; letter-spacing: 0.3em; color: var(--ink-mute); text-transform: uppercase; margin-bottom: 8px; }
+.cover-meta .field-value{
+  background: var(--paper);
+  color: var(--paper-ink);
+  padding: 10px 12px;
+  min-height: 36px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  border-bottom: 2px solid var(--paper-line);
+}
+
+/* ---------------- Specimen sketch decoration (cover) ---------------- */
+.cover-creature{
+  position: absolute;
+  right: -40px;
+  bottom: 100px;
+  width: 320px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+@media (max-width: 700px){ .cover-creature{ display:none; } }
+
+/* ---------------- Section labels ---------------- */
+.lesson-marker{
+  display: flex; align-items: center; gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 24px;
+}
+.lesson-marker .num{
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 0;
+  color: var(--glow);
+  padding: 4px 10px;
+  border: 1px solid var(--glow-dim);
+  background: rgba(170,255,60,0.05);
+}
+
+/* ---------------- Panels ---------------- */
+.panel{
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 24px 28px;
+  margin: 20px 0;
+  position: relative;
+}
+.panel--accent{
+  border-color: var(--glow-dim);
+  background: linear-gradient(180deg, rgba(170,255,60,0.04), rgba(170,255,60,0.01));
+}
+.panel--transmission{
+  border-color: var(--cyan);
+  background:
+    linear-gradient(180deg, rgba(74,210,201,0.06), rgba(74,210,201,0.01));
+}
+.panel--transmission::before{
+  content: "▌TRANSMISSION RECEIVED ▌";
+  position: absolute;
+  top: -10px; left: 20px;
+  background: var(--bg);
+  padding: 0 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--cyan);
+}
+.panel--objective{
+  border-color: var(--glow-dim);
+  background:
+    linear-gradient(180deg, rgba(170,255,60,0.06), rgba(170,255,60,0.01));
+}
+.panel--objective::before{
+  content: "▌MISSION OBJECTIVE ▌";
+  position: absolute;
+  top: -10px; left: 20px;
+  background: var(--bg);
+  padding: 0 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--glow);
+}
+.panel--warning{
+  border-color: var(--warn);
+  background: linear-gradient(180deg, rgba(255,136,102,0.05), rgba(255,136,102,0.01));
+}
+.panel--warning::before{
+  content: "▌FIELD HAZARD ▌";
+  position: absolute;
+  top: -10px; left: 20px;
+  background: var(--bg);
+  padding: 0 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--warn);
+}
+
+/* ---------------- Student-write fields ---------------- */
+.write-field{
+  background: var(--paper);
+  color: var(--paper-ink);
+  border: 1px solid var(--paper-line);
+  padding: 14px 16px;
+  min-height: 80px;
+  font-family: var(--font-body);
+  /* lined-paper effect */
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 27px,
+    var(--paper-line) 27px,
+    var(--paper-line) 28px
+  );
+  background-size: 100% 28px;
+  background-position: 0 0;
+  margin: 8px 0 16px;
+}
+.write-field.lines-3{ min-height: 84px; }
+.write-field.lines-4{ min-height: 112px; }
+.write-field.lines-5{ min-height: 140px; }
+.write-field.lines-6{ min-height: 168px; }
+.write-field.lines-8{ min-height: 224px; }
+.write-field--label{
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--paper-ink);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  display: inline-block;
+  background: var(--paper-line);
+  padding: 2px 8px;
+}
+
+/* sketch box — graph paper style */
+.sketch-box{
+  background: var(--paper);
+  border: 1px solid var(--paper-line);
+  height: 280px;
+  position: relative;
+  margin: 10px 0 20px;
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 19px, rgba(0,0,0,0.05) 19px 20px),
+    repeating-linear-gradient(90deg, transparent 0 19px, rgba(0,0,0,0.05) 19px 20px),
+    repeating-linear-gradient(0deg, transparent 0 99px, rgba(0,0,0,0.15) 99px 100px),
+    repeating-linear-gradient(90deg, transparent 0 99px, rgba(0,0,0,0.15) 99px 100px);
+}
+.sketch-box::before{
+  content: attr(data-label);
+  position: absolute;
+  top: 8px; left: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--paper-line);
+  text-transform: uppercase;
+}
+.sketch-box.tall{ height: 380px; }
+.sketch-box.short{ height: 180px; }
+
+/* dimension field */
+.dim-field{
+  display: inline-block;
+  background: var(--paper);
+  color: var(--paper-ink);
+  border-bottom: 2px solid var(--paper-line);
+  min-width: 60px;
+  padding: 2px 8px;
+  font-family: var(--font-mono);
+  text-align: center;
+  margin: 0 4px;
+}
+
+/* checkbox tickable */
+.tick{
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 1.5px solid var(--ink-soft);
+  background: transparent;
+  margin-right: 10px;
+  vertical-align: -3px;
+}
+
+ul.check-list{ list-style: none; padding-left: 0; }
+ul.check-list li{ padding-left: 0; margin-bottom: 10px; line-height: 1.5; }
+ul.check-list li::before{
+  content: "";
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 1.5px solid var(--cyan);
+  margin-right: 12px;
+  vertical-align: -2px;
+  background: transparent;
+}
+
+/* ---------------- Two-column blocks ---------------- */
+.two-col{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.three-col{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 700px){
+  .two-col, .three-col{ grid-template-columns: 1fr; }
+}
+
+/* Tiered card */
+.tier-card{
+  border: 1px solid var(--line);
+  padding: 18px;
+  background: var(--panel-2);
+}
+.tier-card .tier-label{
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  display: inline-block;
+  padding: 3px 10px;
+  margin-bottom: 12px;
+}
+.tier-card.must .tier-label{ background: var(--cyan); color: var(--bg); }
+.tier-card.should .tier-label{ background: var(--glow); color: var(--bg); }
+.tier-card.could .tier-label{ background: var(--warn); color: var(--bg); }
+.tier-card h4{ color: var(--ink); margin-bottom: 12px; }
+
+/* Spec / glossary list */
+dl.spec{ display: grid; grid-template-columns: 180px 1fr; gap: 8px 18px; font-family: var(--font-mono); font-size: 13px; }
+dl.spec dt{ color: var(--ink-mute); letter-spacing: 0.1em; text-transform: uppercase; font-size: 11px; }
+dl.spec dd{ margin: 0; color: var(--ink); }
+
+/* Table — rubric */
+table.rubric{
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  margin: 16px 0;
+}
+table.rubric th, table.rubric td{
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+table.rubric th{
+  background: var(--panel-2);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 10px;
+  color: var(--cyan);
+}
+table.rubric td:first-child{
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--glow);
+  width: 110px;
+}
+
+/* Stamp */
+.stamp{
+  position: relative;
+  display: inline-block;
+  padding: 8px 18px;
+  border: 2px solid var(--warn);
+  color: var(--warn);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  transform: rotate(-3deg);
+  opacity: 0.9;
+}
+
+/* Specimen header card */
+.specimen-card{
+  border: 1px solid var(--glow-dim);
+  background: var(--panel-2);
+  padding: 18px 22px;
+  margin: 16px 0;
+}
+.specimen-card .row{
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--line);
+  align-items: center;
+}
+.specimen-card .row:last-child{ border-bottom: none; }
+.specimen-card .row .k{
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+}
+.specimen-card .row .v{
+  background: var(--paper);
+  color: var(--paper-ink);
+  padding: 6px 12px;
+  font-family: var(--font-body);
+  border-bottom: 1px solid var(--paper-line);
+}
+
+/* TOC */
+.toc-list{ list-style: none; padding: 0; margin: 0; font-family: var(--font-mono); }
+.toc-list li{
+  border-bottom: 1px solid var(--line);
+}
+.toc-list li a{
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: 24px;
+  align-items: center;
+  padding: 18px 0;
+  color: inherit;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+.toc-list li a:hover{ background: rgba(170,255,60,0.04); }
+.toc-list li a:hover .toc-title{ color: var(--glow); }
+.toc-list li .toc-num{ color: var(--glow); font-family: var(--font-display); font-size: 26px; line-height: 1; }
+.toc-list li .toc-title{
+  display: block;
+  font-family: var(--font-body);
+  font-size: 22px;
+  color: var(--ink);
+  line-height: 1.15;
+}
+.toc-list li .toc-sub{
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--ink-mute);
+  margin-top: 6px;
+  text-transform: uppercase;
+}
+.toc-list li .toc-page{ color: var(--ink-mute); font-size: 12px; letter-spacing: 0.15em; }
+
+/* Section dividers */
+hr.divider{
+  border: none;
+  border-top: 1px dashed var(--line);
+  margin: 30px 0;
+}
+.section-rule{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 40px 0 28px;
+}
+.section-rule::before, .section-rule::after{
+  content:"";
+  flex:1; height: 1px;
+  background: var(--line);
+}
+.section-rule span{
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+/* Page foot */
+.page-foot{
+  margin-top: 60px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  display: flex; justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+}
+
+/* dim/cyan/glow accent helpers */
+.c-glow{ color: var(--glow); }
+.c-cyan{ color: var(--cyan); }
+.c-warn{ color: var(--warn); }
+.c-mute{ color: var(--ink-mute); }
+.font-mono{ font-family: var(--font-mono); }
+.font-display{ font-family: var(--font-display); }
+
+/* Force serif rendering for glyphs that don't exist in mono/display fonts */
+.icon{
+  font-family: "Apple Color Emoji", "Segoe UI Symbol", "Noto Sans Symbols2", "Noto Color Emoji", var(--font-body);
+  font-feature-settings: normal;
+  letter-spacing: 0;
+}
+
+/* Process steps */
+.steps{
+  counter-reset: stepcount;
+  list-style: none;
+  padding: 0;
+}
+.steps > li{
+  counter-increment: stepcount;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+.steps > li::before{
+  content: counter(stepcount, decimal-leading-zero);
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--glow);
+  border: 1px solid var(--glow-dim);
+  padding: 6px 0;
+  text-align: center;
+  background: rgba(170,255,60,0.04);
+  height: fit-content;
+}
+.steps > li .step-body strong{ display: block; margin-bottom: 4px; color: var(--ink); }
+.steps > li .step-body{ font-size: 14px; color: var(--ink-soft); }
+
+/* Glossary */
+dl.glossary{ display: grid; grid-template-columns: 1fr; gap: 14px; }
+dl.glossary dt{
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--glow);
+  letter-spacing: 0.05em;
+}
+dl.glossary dd{
+  margin: 4px 0 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  border-left: 2px solid var(--line);
+  padding-left: 12px;
+}
+
+/* Exit ticket — perforated edge */
+.exit-ticket{
+  background: var(--paper);
+  color: var(--paper-ink);
+  padding: 24px 26px;
+  position: relative;
+  margin: 30px 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 27px, var(--paper-line) 27px 28px);
+  background-size: 100% 28px;
+  border: 1px solid var(--paper-line);
+}
+.exit-ticket::before{
+  content: "✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
+  position: absolute;
+  top: -14px; left: 0; right: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink-mute);
+  background: var(--bg);
+  padding: 0 8px;
+  width: max-content;
+  margin: 0 auto;
+}
+.exit-ticket h3{
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--paper-ink);
+  margin: 0 0 8px;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+.exit-ticket .et-row{
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 10px;
+  align-items: start;
+  margin-top: 14px;
+}
+.exit-ticket .et-icon{
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--paper-ink);
+  background: var(--paper-line);
+  padding: 4px 6px;
+  text-align: center;
+  font-size: 12px;
+}
+.exit-ticket .et-input{
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed var(--paper-line);
+  min-height: 56px;
+  padding: 0 0 4px;
+}
+
+/* Peer feedback table */
+.peer{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin: 16px 0;
+  border: 1px solid var(--line);
+}
+.peer > div{
+  padding: 14px 16px;
+}
+.peer > div:nth-child(odd){
+  border-right: 1px dashed var(--line);
+}
+.peer > div h4{ margin-bottom: 6px; }
+
+/* Hide nothing on print — but tweak for paper */
+@media print{
+  body{ background: white; color: #111; font-size: 11pt; }
+  .page{ padding: 24mm 18mm; page-break-after: always; }
+  .cover{ min-height: auto; }
+  h1, h2, h3, h4{ color: #111; }
+  h3{ color: #444; }
+  .eyebrow{ color: #555; }
+  .panel, .panel--accent, .panel--transmission, .panel--objective, .panel--warning,
+  .tier-card, .specimen-card{ background: white; border-color: #999; }
+  .panel--transmission::before, .panel--objective::before, .panel--warning::before{ background: white; color: #333; }
+  .write-field, .sketch-box, .exit-ticket{ background-color: white; }
+  .dim-field, .specimen-card .v{ background: white; color: #111; }
+  body{ background-image: none; }
+  a{ color: #111; text-decoration: none; }
+}
+
+
+/* ---------------- Editable workbook + PDF export controls ---------------- */
+.export-toolbar{
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  background: rgba(10,16,20,0.96);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+  font-family: var(--font-mono);
+}
+.export-toolbar button{
+  border: 1px solid var(--glow-dim);
+  background: rgba(170,255,60,0.08);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 9px 12px;
+  cursor: pointer;
+}
+.export-toolbar button:hover,
+.export-toolbar button:focus{
+  background: rgba(170,255,60,0.18);
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+.export-toolbar .toolbar-note{
+  color: var(--ink-soft);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+[contenteditable="true"]{
+  cursor: text;
+  outline: none;
+}
+[contenteditable="true"]:focus{
+  box-shadow: 0 0 0 3px rgba(74,210,201,0.25), 0 0 0 1px var(--cyan) inset;
+}
+[contenteditable="true"]:empty::before{
+  content: attr(data-placeholder);
+  color: rgba(42,38,32,0.45);
+  font-style: italic;
+}
+.specimen-card .v[contenteditable="true"]:empty::before,
+.cover-meta .field-value[contenteditable="true"]:empty::before,
+.dim-field[contenteditable="true"]:empty::before{
+  content: attr(data-placeholder);
+  color: rgba(42,38,32,0.45);
+  font-style: italic;
+}
+.sketch-box[contenteditable="true"]{
+  padding: 34px 12px 12px;
+  color: var(--paper-ink);
+  overflow: auto;
+}
+.workbook-checkbox{
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--cyan);
+  background: transparent;
+  margin: 0 10px 0 0;
+  vertical-align: -3px;
+  cursor: pointer;
+}
+.workbook-checkbox:checked{
+  background: var(--cyan);
+  box-shadow: inset 0 0 0 3px var(--panel);
+}
+ul.check-list li::before{ display:none; }
+.tick{ display:none; }
+@media print{
+  .export-toolbar{ display:none !important; }
+  [contenteditable="true"]:focus{ box-shadow:none; }
+  [contenteditable="true"]:empty::before{ content:""; }
+  .workbook-checkbox{ border-color:#111; }
+  .workbook-checkbox:checked{ background:#111; box-shadow: inset 0 0 0 3px white; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="export-toolbar" role="region" aria-label="Workbook controls">
+  <button type="button" id="exportPdfButton">Export / Save as PDF</button>
+  <button type="button" id="saveWorkbookButton">Save Progress</button>
+  <button type="button" id="clearWorkbookButton">Clear Saved Answers</button>
+  <span class="toolbar-note">Students: type directly into the workbook, then use Export / Save as PDF to submit.</span>
+</div>
+
+
+<!-- =========================================================
+     COVER
+     ========================================================= -->
+<section class="page cover">
+  <header class="cover-head">
+    <div class="cover-mark">
+      <span class="cover-dot"></span>
+      <span>XEN-LAB · TRANSMISSION 03</span>
+    </div>
+    <div>YEAR 9 · DESIGN &amp; TECHNOLOGIES</div>
+  </header>
+
+  <div class="cover-body">
+    <p class="eyebrow">Student Field Workbook · 4 Lessons</p>
+    <h1 class="cover-title">XENO<em>LOGY</em><br>LAB</h1>
+    <p class="cover-subtitle">A four-lesson dossier on 3D modelling with CAD, in which you will design, refine and 3D-print an original alien specimen.</p>
+
+    <!-- decorative alien doodle SVG -->
+    <svg class="cover-creature" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g fill="none" stroke="#aaff3c" stroke-width="1.2">
+        <!-- head -->
+        <ellipse cx="160" cy="120" rx="80" ry="65"/>
+        <!-- eyes -->
+        <ellipse cx="135" cy="115" rx="14" ry="20"/>
+        <ellipse cx="185" cy="115" rx="14" ry="20"/>
+        <circle cx="135" cy="118" r="4" fill="#aaff3c"/>
+        <circle cx="185" cy="118" r="4" fill="#aaff3c"/>
+        <!-- third eye -->
+        <ellipse cx="160" cy="80" rx="8" ry="12"/>
+        <circle cx="160" cy="83" r="2.5" fill="#aaff3c"/>
+        <!-- mouth -->
+        <path d="M 140 150 Q 160 165 180 150"/>
+        <!-- antennae -->
+        <path d="M 130 70 Q 110 30 100 20"/>
+        <circle cx="100" cy="20" r="4"/>
+        <path d="M 190 70 Q 210 30 220 20"/>
+        <circle cx="220" cy="20" r="4"/>
+        <!-- neck + body -->
+        <path d="M 130 180 L 140 220 L 180 220 L 190 180"/>
+        <ellipse cx="160" cy="250" rx="60" ry="40"/>
+        <!-- tentacle legs -->
+        <path d="M 120 270 Q 100 295 110 315"/>
+        <path d="M 200 270 Q 220 295 210 315"/>
+        <path d="M 160 290 Q 165 305 155 315"/>
+        <!-- spots -->
+        <circle cx="150" cy="245" r="3"/>
+        <circle cx="170" cy="255" r="3"/>
+        <circle cx="180" cy="240" r="2"/>
+      </g>
+    </svg>
+  </div>
+
+  <footer class="cover-meta">
+    <div>
+      <span class="field-label">Field operator</span>
+      <div class="field-value" contenteditable="true" data-placeholder="Type here"></div>
+    </div>
+    <div>
+      <span class="field-label">Class / Period</span>
+      <div class="field-value" contenteditable="true" data-placeholder="Type here"></div>
+    </div>
+    <div>
+      <span class="field-label">Issued</span>
+      <div class="field-value" contenteditable="true" data-placeholder="Type here"></div>
+    </div>
+  </footer>
+</section>
+
+<!-- =========================================================
+     CONTENTS / MISSION OVERVIEW
+     ========================================================= -->
+<section class="page" id="contents">
+  <p class="eyebrow">▌ Mission Dossier ▌ Contents</p>
+  <h2>Four transmissions. One specimen.</h2>
+  <p class="c-mute" style="max-width:640px;">Each transmission is a 100-minute double period. By the final lesson, you will export your alien as an STL file and prepare it for 3D printing. Bring this dossier to every lesson.</p>
+
+  <ol class="toc-list">
+    <li><a href="#lesson-1">
+      <span class="toc-num">01</span>
+      <span>
+        <span class="toc-title">Intro to CAD</span>
+        <span class="toc-sub">Workspace · Move/Rotate/Scale · Solids &amp; Holes</span>
+      </span>
+      <span class="toc-page">L1</span>
+    </a></li>
+    <li><a href="#lesson-2">
+      <span class="toc-num">02</span>
+      <span>
+        <span class="toc-title">Designing for the printer</span>
+        <span class="toc-sub">Overhangs · Wall thickness · Tolerances · Specimen brief</span>
+      </span>
+      <span class="toc-page">L2</span>
+    </a></li>
+    <li><a href="#lesson-3">
+      <span class="toc-num">03</span>
+      <span>
+        <span class="toc-title">Build &amp; refine</span>
+        <span class="toc-sub">Workplane · Align · Dimensions · Build log</span>
+      </span>
+      <span class="toc-page">L3</span>
+    </a></li>
+    <li><a href="#lesson-4">
+      <span class="toc-num">04</span>
+      <span>
+        <span class="toc-title">Export &amp; print</span>
+        <span class="toc-sub">STL · Slicer preview · Peer feedback · Submission</span>
+      </span>
+      <span class="toc-page">L4</span>
+    </a></li>
+    <li><a href="#brief">
+      <span class="toc-num">⌬</span>
+      <span>
+        <span class="toc-title">The specimen brief &amp; rubric</span>
+        <span class="toc-sub">Constraints · Success criteria · Grading bands</span>
+      </span>
+      <span class="toc-page">REF</span>
+    </a></li>
+    <li><a href="#glossary">
+      <span class="toc-num">∴</span>
+      <span>
+        <span class="toc-title">Glossary</span>
+        <span class="toc-sub">CAD &amp; 3D printing vocabulary</span>
+      </span>
+      <span class="toc-page">REF</span>
+    </a></li>
+  </ol>
+
+  <div class="panel panel--transmission" style="margin-top:30px;">
+    <h3 style="color:var(--cyan); margin-top:6px;">Your assignment, in one sentence.</h3>
+    <p style="font-family:var(--font-body); font-style:italic; font-size: 20px; color: var(--ink); margin: 8px 0 0;">Design and 3D-print an original alien — a creature that has never been seen before — built from a minimum of 5 and a maximum of 12 parts.</p>
+  </div>
+
+  <div class="page-foot">
+    <span>Xeno-Lab Field Workbook</span>
+    <span>Contents · 00</span>
+  </div>
+</section>
+
+<!-- =========================================================
+     SPECIMEN BRIEF
+     ========================================================= -->
+<section class="page" id="brief">
+  <p class="eyebrow">▌ Reference 01 ▌ Specimen Brief</p>
+  <h2>The brief: design an alien.</h2>
+
+  <div class="panel panel--objective">
+    <h3 style="color:var(--glow); margin-top:6px;">Objective</h3>
+    <p style="font-size: 18px; color: var(--ink); font-style: italic;">Using CAD software, design an original alien creature and prepare it for 3D printing. Your specimen must be buildable from a small number of basic 3D shapes — make every part count.</p>
+  </div>
+
+  <h3>Constraints</h3>
+  <ul class="check-list">
+    <li><strong>Part count:</strong> minimum <span class="c-glow">5</span>, maximum <span class="c-glow">12</span> parts. Count every solid and every hole.</li>
+    <li><strong>Bounding box:</strong> fits inside <code>80 × 80 × 80 mm</code>.</li>
+    <li><strong>Holes:</strong> at least one Hole operation (a mouth, eye socket, nostril, etc.).</li>
+    <li><strong>Self-supporting:</strong> stands or sits without printed supports.</li>
+    <li><strong>Submission:</strong> exported as an STL file by the end of Lesson 4.</li>
+    <li><strong>Original work:</strong> not a recognisable copy of an existing character (no Stitch, no Baby Yoda, no Pokémon).</li>
+  </ul>
+
+  <h3 style="margin-top:30px;">What makes a good alien</h3>
+  <div class="three-col">
+    <div class="panel panel--accent">
+      <h4 class="c-glow">01 · Strange but believable</h4>
+      <p>It should feel like it could survive somewhere — even if that somewhere is weird. Give it a hint of biology.</p>
+    </div>
+    <div class="panel panel--accent">
+      <h4 class="c-glow">02 · Built from simple shapes</h4>
+      <p>Cylinders for legs, spheres for eyes, cones for horns. Show the parts working together.</p>
+    </div>
+    <div class="panel panel--accent">
+      <h4 class="c-glow">03 · One bold idea</h4>
+      <p>Three eyes? Stacked heads? Suction-cup feet? Commit to a single distinctive choice.</p>
+    </div>
+  </div>
+
+  <div class="panel panel--warning" style="margin-top:30px;">
+    <h3 style="color:var(--warn); margin-top:6px;">Part economy</h3>
+    <p>Every shape should earn its place. Five clever parts beats fifteen messy ones. Before you add another shape, ask: <em>is this telling the viewer something new about my alien?</em></p>
+  </div>
+
+  <h3 style="margin-top:30px;">Rubric — how you'll be graded</h3>
+  <table class="rubric">
+    <thead>
+      <tr>
+        <th>Band</th>
+        <th>Design thinking</th>
+        <th>CAD technique</th>
+        <th>Print readiness</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>A</td>
+        <td>Distinctive, original concept; thoughtful part choices; alien feels like it could exist somewhere.</td>
+        <td>Confident use of move/rotate/scale, hole, group, align, workplane; precise mm dimensions.</td>
+        <td>Self-supporting; no overhangs &gt; 45°; walls ≥ 1.5 mm; STL submitted on time.</td>
+      </tr>
+      <tr>
+        <td>B</td>
+        <td>Clear concept; mostly intentional shape choices.</td>
+        <td>Uses all core tools; some minor positioning errors.</td>
+        <td>Print-feasible with minor adjustments.</td>
+      </tr>
+      <tr>
+        <td>C</td>
+        <td>Concept recognisable but generic; some parts feel arbitrary.</td>
+        <td>Builds successfully but relies on a small subset of tools.</td>
+        <td>Would print but with warnings (thin walls or steep overhangs).</td>
+      </tr>
+      <tr>
+        <td>D</td>
+        <td>Incomplete or off-brief.</td>
+        <td>Difficulty combining shapes; key tools unused.</td>
+        <td>Not yet print-ready.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-foot">
+    <span>Xeno-Lab Field Workbook</span>
+    <span>Reference · Specimen Brief</span>
+  </div>
+</section>
+
+<!-- =========================================================
+     LESSON 1
+     ========================================================= -->
+<section class="page" id="lesson-1">
+  <div class="lesson-marker">
+    <span class="num">01</span>
+    <span>Transmission One · 100 minutes</span>
+  </div>
+  <p class="eyebrow">▌ Lesson 1 ▌ Intro to CAD</p>
+  <h2>Open the toolbox.</h2>
+
+  <div class="panel panel--objective">
+    <h3 style="color:var(--glow); margin-top:6px;">Today's objective</h3>
+    <p style="font-size: 17px; color: var(--ink); font-style: italic;">I can use CAD software to build a simple 3D model by combining and editing basic shapes.</p>
+  </div>
+
+  <div class="section-rule"><span>▌ Success criteria — copy &amp; tick when met ▌</span></div>
+
+  <div class="three-col">
+    <div class="tier-card must">
+      <span class="tier-label">Must</span>
+      <p><span class="tick"></span>I can open CAD, place a shape, and move, rotate &amp; scale it correctly.</p>
+    </div>
+    <div class="tier-card should">
+      <span class="tier-label">Should</span>
+      <p><span class="tick"></span>I can combine at least two shapes with Group, and cut a hole with the Hole tool.</p>
+    </div>
+    <div class="tier-card could">
+      <span class="tier-label">Could</span>
+      <p><span class="tick"></span>I can use alignment and the workplane to position shapes precisely, and I have sketched an alien idea.</p>
+    </div>
+  </div>
+
+  <div class="section-rule"><span>▌ Field Notes — Key Terms ▌</span></div>
+
+  <p>Record the meaning in your own words. The first one is done for you.</p>
+
+  <dl class="glossary">
+    <dt>CAD</dt>
+    <dd>Computer-Aided Design. Software used to create accurate 2D or 3D models of physical objects on a computer, before they are built or manufactured.</dd>
+  </dl>
+
+  <div style="margin-top: 14px;">
+    <h4 class="font-mono c-mute">SOLID</h4>
+    <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+
+    <h4 class="font-mono c-mute">HOLE</h4>
+    <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+
+    <h4 class="font-mono c-mute">GROUP</h4>
+    <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+
+    <h4 class="font-mono c-mute">WORKPLANE</h4>
+    <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+
+    <h4 class="font-mono c-mute">STL</h4>
+    <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+  </div>
+
+  <div class="section-rule"><span>▌ The CAD → Print Pipeline ▌</span></div>
+
+  <p>Label each step in your own words.</p>
+
+  <ol class="steps">
+    <li><div class="step-body">
+      <strong>Design</strong>
+      <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+    </div></li>
+    <li><div class="step-body">
+      <strong>Export</strong>
+      <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+    </div></li>
+    <li><div class="step-body">
+      <strong>Slice</strong>
+      <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+    </div></li>
+    <li><div class="step-body">
+      <strong>Print</strong>
+      <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+    </div></li>
+  </ol>
+
+  <div class="section-rule"><span>▌ We Do — Name Tile Walkthrough ▌</span></div>
+
+  <p>Follow the steps on the projector. Record the exact dimensions you used.</p>
+
+  <div class="specimen-card">
+    <div class="row"><span class="k">Tile dimensions</span>
+      <span class="v" contenteditable="true" data-placeholder="Type here"><span class="dim-field" contenteditable="true" data-placeholder=""></span> × <span class="dim-field" contenteditable="true" data-placeholder=""></span> × <span class="dim-field" contenteditable="true" data-placeholder=""></span> mm</span>
+    </div>
+    <div class="row"><span class="k">Text height</span><span class="v" contenteditable="true" data-placeholder="Type here"><span class="dim-field" contenteditable="true" data-placeholder=""></span> mm</span></div>
+    <div class="row"><span class="k">Text raised by</span><span class="v" contenteditable="true" data-placeholder="Type here"><span class="dim-field" contenteditable="true" data-placeholder=""></span> mm</span></div>
+    <div class="row"><span class="k">Cylinder hole diameter</span><span class="v" contenteditable="true" data-placeholder="Type here"><span class="dim-field" contenteditable="true" data-placeholder=""></span> mm</span></div>
+    <div class="row"><span class="k">Hole position from edge</span><span class="v" contenteditable="true" data-placeholder="Type here"><span class="dim-field" contenteditable="true" data-placeholder=""></span> mm</span></div>
+    <div class="row"><span class="k">Final part count</span><span class="v" contenteditable="true" data-placeholder="Type here"><span class="dim-field" contenteditable="true" data-placeholder=""></span></span></div>
+  </div>
+
+  <div class="section-rule"><span>▌ You Do — Differentiated Practice ▌</span></div>
+
+  <p>Choose the level that pushes you a little, but is still finishable today. Tick each success check as you meet it.</p>
+
+  <div class="three-col">
+    <div class="tier-card must">
+      <span class="tier-label">Foundation</span>
+      <h4 style="color:var(--ink);">Stamp tile</h4>
+      <p>A 40 × 40 × 5 mm tile with a raised letter or symbol on top.</p>
+      <ul class="check-list">
+        <li>Tile is exactly 40 × 40 × 5 mm.</li>
+        <li>Letter raised by 2 mm.</li>
+        <li>Centred on the workplane.</li>
+        <li>All parts grouped into one solid.</li>
+      </ul>
+    </div>
+    <div class="tier-card should">
+      <span class="tier-label">Core</span>
+      <h4 style="color:var(--ink);">Keychain</h4>
+      <p>A 60 × 25 × 4 mm keychain with your name and a 5 mm hole at one end.</p>
+      <ul class="check-list">
+        <li>Text legible and ≥ 4 mm tall.</li>
+        <li>Hole goes all the way through.</li>
+        <li>Hole ≥ 5 mm from any edge.</li>
+        <li>Final object is a single grouped solid.</li>
+      </ul>
+    </div>
+    <div class="tier-card could">
+      <span class="tier-label">Extension</span>
+      <h4 style="color:var(--ink);">Alien head prototype</h4>
+      <p>Skip the keychain. Start your specimen early — model an alien <em>head only</em> (3–6 parts).</p>
+      <ul class="check-list">
+        <li>At least 3 primitive shapes used.</li>
+        <li>One Hole used (mouth or eye socket).</li>
+        <li>Uses Align or rotation to position parts.</li>
+        <li>Saved with a clear file name.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-rule"><span>▌ First Contact — Alien Idea Sketches ▌</span></div>
+
+  <p>Draft two early concepts. Note which primitive shapes you'd use for each body part.</p>
+
+  <div class="two-col">
+    <div>
+      <h4>Concept A</h4>
+      <div class="sketch-box" data-label="Sketch A — front view" contenteditable="true" data-placeholder="Type notes here, or paste a screenshot/image if your browser supports it"></div>
+      <span class="write-field--label">Parts list (shape → body part)</span>
+      <div class="write-field lines-5" contenteditable="true" data-placeholder="Type your response here"></div>
+    </div>
+    <div>
+      <h4>Concept B</h4>
+      <div class="sketch-box" data-label="Sketch B — front view" contenteditable="true" data-placeholder="Type notes here, or paste a screenshot/image if your browser supports it"></div>
+      <span class="write-field--label">Parts list (shape → body part)</span>
+      <div class="write-field lines-5" contenteditable="true" data-placeholder="Type your response here"></div>
+    </div>
+  </div>
+
+  <p class="c-mute" style="font-family:var(--font-mono); font-size: 12px;">▌ Circle the concept you want to develop further next lesson.</p>
+
+  <div class="section-rule"><span>▌ Exit Ticket — Two stars and a wish ▌</span></div>
+
+  <div class="exit-ticket">
+    <h3>L1 · Exit Ticket</h3>
+    <p style="font-family:var(--font-mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--paper-line); margin-bottom: 12px;">Submit before you leave.</p>
+    <div class="et-row">
+      <div class="et-icon"><span class="icon">★</span></div>
+      <div>
+        <p style="margin: 0 0 4px; font-size: 13px;">One thing I can now do in CAD that I couldn't this morning.</p>
+        <div class="et-input" contenteditable="true" data-placeholder="Type your response here"></div>
+      </div>
+    </div>
+    <div class="et-row">
+      <div class="et-icon"><span class="icon">★</span></div>
+      <div>
+        <p style="margin: 0 0 4px; font-size: 13px;">One thing about my model I'm proud of.</p>
+        <div class="et-input" contenteditable="true" data-placeholder="Type your response here"></div>
+      </div>
+    </div>
+    <div class="et-row">
+      <div class="et-icon"><span class="icon">✎</span></div>
+      <div>
+        <p style="margin: 0 0 4px; font-size: 13px;">One thing I still need help with — be specific.</p>
+        <div class="et-input" contenteditable="true" data-placeholder="Type your response here"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">
+    <span>Xeno-Lab Field Workbook</span>
+    <span>Lesson 01</span>
+  </div>
+</section>
+
+<!-- =========================================================
+     LESSON 2
+     ========================================================= -->
+<section class="page" id="lesson-2">
+  <div class="lesson-marker">
+    <span class="num">02</span>
+    <span>Transmission Two · 100 minutes</span>
+  </div>
+  <p class="eyebrow">▌ Lesson 2 ▌ Designing for the printer</p>
+  <h2>What the printer can &amp; can't do.</h2>
+
+  <div class="panel panel--objective">
+    <h3 style="color:var(--glow); margin-top:6px;">Today's objective</h3>
+    <p style="font-size: 17px; color: var(--ink); font-style: italic;">I can identify 3D printing constraints and apply them to my own alien design.</p>
+  </div>
+
+  <div class="section-rule"><span>▌ Success criteria ▌</span></div>
+
+  <div class="three-col">
+    <div class="tier-card must">
+      <span class="tier-label">Must</span>
+      <p><span class="tick"></span>I can explain overhangs, wall thickness and tolerances in my own words.</p>
+    </div>
+    <div class="tier-card should">
+      <span class="tier-label">Should</span>
+      <p><span class="tick"></span>I have a sketched alien with labelled dimensions and a part list within the 5–12 limit.</p>
+    </div>
+    <div class="tier-card could">
+      <span class="tier-label">Could</span>
+      <p><span class="tick"></span>I have started building my alien in CAD and identified at least one printability risk.</p>
+    </div>
+  </div>
+
+  <div class="section-rule"><span>▌ Field Hazards — Print Constraints ▌</span></div>
+
+  <div class="panel panel--warning">
+    <h3 style="color:var(--warn); margin-top:6px;">The 45-degree rule</h3>
+    <p>FDM printers build models layer-by-layer from the bottom up. Any surface that overhangs at more than <strong class="c-warn">45° from vertical</strong> will sag, droop, or fail without support material. For our brief: <strong>no supports allowed</strong>.</p>
+  </div>
+
+  <h3 style="margin-top: 30px;">Annotate the printability issues</h3>
+  <p>Three alien designs are shown below. Circle the parts that would have printing problems, and write the reason in the box.</p>
+
+  <div class="two-col" style="margin-top: 16px;">
+    <div>
+      <svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width: 220px; display:block; margin: 0 auto;">
+        <!-- alien A: body with thin antennae -->
+        <g fill="none" stroke="#aaff3c" stroke-width="1.5">
+          <ellipse cx="100" cy="120" rx="55" ry="50"/>
+          <circle cx="85" cy="110" r="8"/><circle cx="115" cy="110" r="8"/>
+          <path d="M 85 70 L 70 30"/>
+          <path d="M 115 70 L 130 30"/>
+          <!-- floating arm sticking out horizontally -->
+          <path d="M 155 120 L 195 120"/>
+          <circle cx="195" cy="120" r="4"/>
+          <!-- tiny feet -->
+          <line x1="80" y1="170" x2="80" y2="200"/>
+          <line x1="120" y1="170" x2="120" y2="200"/>
+        </g>
+        <text x="100" y="218" text-anchor="middle" font-family="Space Mono" font-size="10" fill="#8b9ba4">SPECIMEN α</text>
+      </svg>
+      <span class="write-field--label">Issues spotted</span>
+      <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+    </div>
+    <div>
+      <svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width: 220px; display:block; margin: 0 auto;">
+        <!-- alien B: tall stacked head with wide cap -->
+        <g fill="none" stroke="#4ad2c9" stroke-width="1.5">
+          <!-- huge mushroom top -->
+          <ellipse cx="100" cy="50" rx="80" ry="20"/>
+          <!-- thin neck -->
+          <rect x="92" y="60" width="16" height="60"/>
+          <!-- small base -->
+          <ellipse cx="100" cy="160" rx="30" ry="30"/>
+          <!-- eyes -->
+          <circle cx="92" cy="155" r="5"/><circle cx="108" cy="155" r="5"/>
+        </g>
+        <text x="100" y="218" text-anchor="middle" font-family="Space Mono" font-size="10" fill="#8b9ba4">SPECIMEN β</text>
+      </svg>
+      <span class="write-field--label">Issues spotted</span>
+      <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+    </div>
+  </div>
+
+  <div class="section-rule"><span>▌ Design Rules of Thumb ▌</span></div>
+
+  <div class="panel panel--accent">
+    <dl class="spec">
+      <dt>Min wall</dt><dd>1.5 mm or more — thinner walls become fragile.</dd>
+      <dt>Min feature</dt><dd>Embossed details ≥ 1 mm; engraved details ≥ 0.5 mm.</dd>
+      <dt>Overhang limit</dt><dd>45° from vertical without supports.</dd>
+      <dt>Bridge limit</dt><dd>Short, flat spans only (&lt; 5 mm).</dd>
+      <dt>Tolerance</dt><dd>0.2 mm clearance between moving or fitted parts.</dd>
+      <dt>First layer</dt><dd>Wide, flat base helps the print stick to the build plate.</dd>
+    </dl>
+  </div>
+
+  <div class="section-rule"><span>▌ Specimen Card — Your Alien ▌</span></div>
+
+  <p>Lock in the key facts about your alien before you build. You can revise this card in Lesson 3 if needed.</p>
+
+  <div class="specimen-card">
+    <div class="row"><span class="k">Designation</span><span class="v" contenteditable="true" data-placeholder="Type here"></span></div>
+    <div class="row"><span class="k">Home environment</span><span class="v" contenteditable="true" data-placeholder="Type here"></span></div>
+    <div class="row"><span class="k">Diet / energy source</span><span class="v" contenteditable="true" data-placeholder="Type here"></span></div>
+    <div class="row"><span class="k">Number of eyes</span><span class="v" contenteditable="true" data-placeholder="Type here"></span></div>
+    <div class="row"><span class="k">Number of limbs</span><span class="v" contenteditable="true" data-placeholder="Type here"></span></div>
+    <div class="row"><span class="k">Distinctive feature</span><span class="v" contenteditable="true" data-placeholder="Type here"></span></div>
+    <div class="row"><span class="k">Estimated part count</span><span class="v" contenteditable="true" data-placeholder="Type here">&nbsp; / 12</span></div>
+    <div class="row"><span class="k">Overall size (mm)</span><span class="v" contenteditable="true" data-placeholder="Type here"><span class="dim-field" contenteditable="true" data-placeholder=""></span> × <span class="dim-field" contenteditable="true" data-placeholder=""></span> × <span class="dim-field" contenteditable="true" data-placeholder=""></span></span></div>
+  </div>
+
+  <div class="section-rule"><span>▌ Master Sketch ▌</span></div>
+
+  <p>Three views of your alien with dimensions in mm. Number each part and list what shape you'll use.</p>
+
+  <div class="two-col">
+    <div>
+      <h4>Front view</h4>
+      <div class="sketch-box tall" data-label="Front · grid = 5mm" contenteditable="true" data-placeholder="Type notes here, or paste a screenshot/image if your browser supports it"></div>
+    </div>
+    <div>
+      <h4>Side view</h4>
+      <div class="sketch-box tall" data-label="Side · grid = 5mm" contenteditable="true" data-placeholder="Type notes here, or paste a screenshot/image if your browser supports it"></div>
+    </div>
+  </div>
+
+  <div>
+    <h4>Top view</h4>
+    <div class="sketch-box" data-label="Top · grid = 5mm" contenteditable="true" data-placeholder="Type notes here, or paste a screenshot/image if your browser supports it"></div>
+  </div>
+
+  <h4 style="margin-top: 20px;">Parts list</h4>
+  <p class="c-mute font-mono" style="font-size: 12px;">Number each part on your sketch. Then complete the list. Minimum 5, maximum 12.</p>
+
+  <div class="write-field lines-8" contenteditable="true" data-placeholder="Type your response here"></div>
+
+  <div class="section-rule"><span>▌ Exit Ticket ▌</span></div>
+
+  <div class="exit-ticket">
+    <h3>L2 · Exit Ticket</h3>
+    <div class="et-row">
+      <div class="et-icon">1</div>
+      <div>
+        <p style="margin: 0 0 4px; font-size: 13px;">A print constraint I now understand.</p>
+        <div class="et-input" contenteditable="true" data-placeholder="Type your response here"></div>
+      </div>
+    </div>
+    <div class="et-row">
+      <div class="et-icon">2</div>
+      <div>
+        <p style="margin: 0 0 4px; font-size: 13px;">A part of my alien I'm worried might not print — and why.</p>
+        <div class="et-input" contenteditable="true" data-placeholder="Type your response here"></div>
+      </div>
+    </div>
+    <div class="et-row">
+      <div class="et-icon">3</div>
+      <div>
+        <p style="margin: 0 0 4px; font-size: 13px;">What I'll change in my design to fix it.</p>
+        <div class="et-input" contenteditable="true" data-placeholder="Type your response here"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">
+    <span>Xeno-Lab Field Workbook</span>
+    <span>Lesson 02</span>
+  </div>
+</section>
+
+<!-- =========================================================
+     LESSON 3
+     ========================================================= -->
+<section class="page" id="lesson-3">
+  <div class="lesson-marker">
+    <span class="num">03</span>
+    <span>Transmission Three · 100 minutes</span>
+  </div>
+  <p class="eyebrow">▌ Lesson 3 ▌ Build &amp; refine</p>
+  <h2>From sketch to specimen.</h2>
+
+  <div class="panel panel--objective">
+    <h3 style="color:var(--glow); margin-top:6px;">Today's objective</h3>
+    <p style="font-size: 17px; color: var(--ink); font-style: italic;">I can build my alien in CAD using precise dimensions, alignment and workplane techniques.</p>
+  </div>
+
+  <div class="section-rule"><span>▌ Success criteria ▌</span></div>
+
+  <div class="three-col">
+    <div class="tier-card must">
+      <span class="tier-label">Must</span>
+      <p><span class="tick"></span>My alien is built in CAD with the body, head and at least one limb in place.</p>
+    </div>
+    <div class="tier-card should">
+      <span class="tier-label">Should</span>
+      <p><span class="tick"></span>I have used Align and the workplane to position parts. All parts are within the 5–12 limit.</p>
+    </div>
+    <div class="tier-card could">
+      <span class="tier-label">Could</span>
+      <p><span class="tick"></span>I have refined a part after testing — the final version is better than the first attempt.</p>
+    </div>
+  </div>
+
+  <div class="section-rule"><span>▌ Technique Reference ▌</span></div>
+
+  <div class="two-col">
+    <div class="panel">
+      <h4>Align</h4>
+      <p>Select two or more shapes, then choose how to align them on each axis: left, centre, right (X); front, centre, back (Y); bottom, middle, top (Z).</p>
+      <p class="c-mute font-mono" style="font-size: 12px; margin: 0;">Tip · Hold Shift to multi-select before clicking Align.</p>
+    </div>
+    <div class="panel">
+      <h4>Workplane</h4>
+      <p>Drag the workplane onto the face of a shape to make that face the new "ground". This is how you stack and attach things at angles.</p>
+      <p class="c-mute font-mono" style="font-size: 12px; margin: 0;">Tip · Reset the workplane (W) before saving to avoid confusion.</p>
+    </div>
+    <div class="panel">
+      <h4>Mirror</h4>
+      <p>Duplicate a shape and flip it across an axis. Use this for symmetrical eyes, arms, or wings — design one, mirror the other.</p>
+    </div>
+    <div class="panel">
+      <h4>Duplicate</h4>
+      <p>Ctrl+D copies a shape and remembers the last move you made. Press it again and the move repeats. Useful for evenly spaced spikes or rings.</p>
+    </div>
+  </div>
+
+  <div class="section-rule"><span>▌ Build Log ▌</span></div>
+
+  <p>Tick each step as you complete it on your alien in CAD.</p>
+
+  <ul class="check-list">
+    <li>Created the body — main torso shape positioned on the workplane.</li>
+    <li>Added the head and aligned it centrally with the body.</li>
+    <li>Built one limb, then mirrored or duplicated for the other side.</li>
+    <li>Added eyes and at least one Hole (mouth, eye socket, nostril, etc.).</li>
+    <li>Added the distinctive feature noted on the specimen card.</li>
+    <li>Used Align on the major body axis.</li>
+    <li>Checked total dimensions against the 80 × 80 × 80 mm bounding box.</li>
+    <li>Grouped all final parts into a single object.</li>
+    <li>Saved with a clear file name (e.g. <code>YourName_Alien_v1</code>).</li>
+  </ul>
+
+  <div class="section-rule"><span>▌ Iteration Log ▌</span></div>
+
+  <p>Pick one part of your alien that didn't work the first time. Record what you changed and why.</p>
+
+  <div class="two-col">
+    <div>
+      <h4>Version 1</h4>
+      <div class="sketch-box short" data-label="Sketch v1" contenteditable="true" data-placeholder="Type notes here, or paste a screenshot/image if your browser supports it"></div>
+      <span class="write-field--label">What went wrong</span>
+      <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+    </div>
+    <div>
+      <h4>Version 2</h4>
+      <div class="sketch-box short" data-label="Sketch v2" contenteditable="true" data-placeholder="Type notes here, or paste a screenshot/image if your browser supports it"></div>
+      <span class="write-field--label">What I changed</span>
+      <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+    </div>
+  </div>
+
+  <div class="section-rule"><span>▌ Mid-Build Peer Check ▌</span></div>
+
+  <p>Swap screens with a partner. Answer for <em>their</em> design.</p>
+
+  <div class="specimen-card">
+    <div class="row"><span class="k">Partner's name</span><span class="v" contenteditable="true" data-placeholder="Type here"></span></div>
+    <div class="row"><span class="k">Their part count</span><span class="v" contenteditable="true" data-placeholder="Type here"><span class="dim-field" contenteditable="true" data-placeholder=""></span> / 12</span></div>
+    <div class="row"><span class="k">Within brief?</span><span class="v" contenteditable="true" data-placeholder="Type here">&nbsp; YES &nbsp;/&nbsp; NO</span></div>
+  </div>
+
+  <div class="peer">
+    <div>
+      <h4 class="c-glow"><span class="icon">★</span> Two things working well</h4>
+      <div class="write-field lines-4" style="margin: 8px 0 0;" contenteditable="true" data-placeholder="Type your response here"></div>
+    </div>
+    <div>
+      <h4 class="c-warn"><span class="icon">✎</span> One thing to refine</h4>
+      <div class="write-field lines-4" style="margin: 8px 0 0;" contenteditable="true" data-placeholder="Type your response here"></div>
+    </div>
+  </div>
+
+  <div class="section-rule"><span>▌ Exit Ticket ▌</span></div>
+
+  <div class="exit-ticket">
+    <h3>L3 · Exit Ticket</h3>
+    <div class="et-row">
+      <div class="et-icon">1</div>
+      <div>
+        <p style="margin: 0 0 4px; font-size: 13px;">My biggest CAD win this lesson.</p>
+        <div class="et-input" contenteditable="true" data-placeholder="Type your response here"></div>
+      </div>
+    </div>
+    <div class="et-row">
+      <div class="et-icon">2</div>
+      <div>
+        <p style="margin: 0 0 4px; font-size: 13px;">My current part count and how I'll get it within the 5–12 range if needed.</p>
+        <div class="et-input" contenteditable="true" data-placeholder="Type your response here"></div>
+      </div>
+    </div>
+    <div class="et-row">
+      <div class="et-icon">3</div>
+      <div>
+        <p style="margin: 0 0 4px; font-size: 13px;">What I need to finish before Lesson 4.</p>
+        <div class="et-input" contenteditable="true" data-placeholder="Type your response here"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">
+    <span>Xeno-Lab Field Workbook</span>
+    <span>Lesson 03</span>
+  </div>
+</section>
+
+<!-- =========================================================
+     LESSON 4
+     ========================================================= -->
+<section class="page" id="lesson-4">
+  <div class="lesson-marker">
+    <span class="num">04</span>
+    <span>Transmission Four · 100 minutes</span>
+  </div>
+  <p class="eyebrow">▌ Lesson 4 ▌ Export &amp; print</p>
+  <h2>Specimen ready for transport.</h2>
+
+  <div class="panel panel--objective">
+    <h3 style="color:var(--glow); margin-top:6px;">Today's objective</h3>
+    <p style="font-size: 17px; color: var(--ink); font-style: italic;">I can export my alien as an STL, preview it in a slicer, and reflect on my design process.</p>
+  </div>
+
+  <div class="section-rule"><span>▌ Pre-Flight Checks ▌</span></div>
+
+  <p>Before you export, work through every item.</p>
+
+  <ul class="check-list">
+    <li>All parts grouped into a single solid.</li>
+    <li>Part count between 5 and 12 (inclusive). Count: <span class="dim-field" contenteditable="true" data-placeholder=""></span></li>
+    <li>Bounding box ≤ 80 × 80 × 80 mm. Confirmed: <span class="dim-field" contenteditable="true" data-placeholder=""></span> × <span class="dim-field" contenteditable="true" data-placeholder=""></span> × <span class="dim-field" contenteditable="true" data-placeholder=""></span></li>
+    <li>At least one Hole operation used.</li>
+    <li>Sits flat on the build plate — no floating parts.</li>
+    <li>No overhangs &gt; 45° (or you've added supports built into the model).</li>
+    <li>Workplane reset to default.</li>
+    <li>File saved with name: <code><span class="dim-field" style="min-width:160px;" contenteditable="true" data-placeholder=""></span></code></li>
+  </ul>
+
+  <div class="section-rule"><span>▌ Export · STL ▌</span></div>
+
+  <ol class="steps">
+    <li><div class="step-body">
+      <strong>Select your grouped model.</strong>
+      <span class="c-mute" style="font-size:13px;">Make sure nothing else is selected.</span>
+    </div></li>
+    <li><div class="step-body">
+      <strong>Choose Export → .STL.</strong>
+      <span class="c-mute" style="font-size:13px;">In Tinkercad: top-right corner, "Export" button, then ".STL" under "Include".</span>
+    </div></li>
+    <li><div class="step-body">
+      <strong>Save the file.</strong>
+      <span class="c-mute" style="font-size:13px;">Use the file name you wrote on the pre-flight checklist.</span>
+    </div></li>
+    <li><div class="step-body">
+      <strong>Upload to the class submission folder.</strong>
+      <span class="c-mute" style="font-size:13px;">Confirm with your teacher before closing the file.</span>
+    </div></li>
+  </ol>
+
+  <div class="section-rule"><span>▌ Slicer Preview Notes ▌</span></div>
+
+  <p>Load your STL into the class slicer. Record what you see.</p>
+
+  <div class="specimen-card">
+    <div class="row"><span class="k">Estimated print time</span><span class="v" contenteditable="true" data-placeholder="Type here"><span class="dim-field" contenteditable="true" data-placeholder=""></span> h <span class="dim-field" contenteditable="true" data-placeholder=""></span> min</span></div>
+    <div class="row"><span class="k">Filament used</span><span class="v" contenteditable="true" data-placeholder="Type here"><span class="dim-field" contenteditable="true" data-placeholder=""></span> g</span></div>
+    <div class="row"><span class="k">Layer height</span><span class="v" contenteditable="true" data-placeholder="Type here"><span class="dim-field" contenteditable="true" data-placeholder=""></span> mm</span></div>
+    <div class="row"><span class="k">Support material?</span><span class="v" contenteditable="true" data-placeholder="Type here">&nbsp; YES &nbsp;/&nbsp; NO</span></div>
+    <div class="row"><span class="k">Warnings shown</span><span class="v" contenteditable="true" data-placeholder="Type here"></span></div>
+  </div>
+
+  <h4>Things I noticed in the preview that I didn't notice in CAD</h4>
+  <div class="write-field lines-5" contenteditable="true" data-placeholder="Type your response here"></div>
+
+  <div class="section-rule"><span>▌ Final Peer Feedback ▌</span></div>
+
+  <p>Show your alien to two classmates. Record their feedback.</p>
+
+  <div class="peer">
+    <div>
+      <h4 class="c-cyan">Reviewer 1 · Name</h4>
+      <div class="write-field lines-3" style="margin-top: 6px;" contenteditable="true" data-placeholder="Type your response here"></div>
+      <h4 class="c-glow" style="margin-top: 14px;"><span class="icon">★</span> Strongest design choice</h4>
+      <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+      <h4 class="c-warn"><span class="icon">✎</span> Suggestion</h4>
+      <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+    </div>
+    <div>
+      <h4 class="c-cyan">Reviewer 2 · Name</h4>
+      <div class="write-field lines-3" style="margin-top: 6px;" contenteditable="true" data-placeholder="Type your response here"></div>
+      <h4 class="c-glow" style="margin-top: 14px;"><span class="icon">★</span> Strongest design choice</h4>
+      <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+      <h4 class="c-warn"><span class="icon">✎</span> Suggestion</h4>
+      <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+    </div>
+  </div>
+
+  <div class="section-rule"><span>▌ Self-Evaluation ▌</span></div>
+
+  <p>Mark where you sit on the rubric (refer to the brief page) for each criterion. Be honest — this is for your reflection, not your final grade.</p>
+
+  <table class="rubric">
+    <thead>
+      <tr>
+        <th>Criterion</th>
+        <th>A</th><th>B</th><th>C</th><th>D</th>
+        <th>Evidence</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Design thinking</td>
+        <td>☐</td><td>☐</td><td>☐</td><td>☐</td>
+        <td><span class="dim-field" style="min-width: 200px;" contenteditable="true" data-placeholder=""></span></td>
+      </tr>
+      <tr>
+        <td>CAD technique</td>
+        <td>☐</td><td>☐</td><td>☐</td><td>☐</td>
+        <td><span class="dim-field" style="min-width: 200px;" contenteditable="true" data-placeholder=""></span></td>
+      </tr>
+      <tr>
+        <td>Print readiness</td>
+        <td>☐</td><td>☐</td><td>☐</td><td>☐</td>
+        <td><span class="dim-field" style="min-width: 200px;" contenteditable="true" data-placeholder=""></span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-rule"><span>▌ Unit Reflection ▌</span></div>
+
+  <h4>The biggest thing I learnt in this unit</h4>
+  <div class="write-field lines-4" contenteditable="true" data-placeholder="Type your response here"></div>
+
+  <h4>One CAD technique I'll use again outside this unit</h4>
+  <div class="write-field lines-3" contenteditable="true" data-placeholder="Type your response here"></div>
+
+  <h4>If I did this project again, I would…</h4>
+  <div class="write-field lines-5" contenteditable="true" data-placeholder="Type your response here"></div>
+
+  <div class="section-rule"><span>▌ Final Submission Ticket ▌</span></div>
+
+  <div class="exit-ticket">
+    <h3>Specimen Submission · L4</h3>
+    <p style="font-family:var(--font-mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--paper-line); margin-bottom: 12px;">Hand to your teacher with your STL submitted.</p>
+    <div class="et-row">
+      <div class="et-icon">α</div>
+      <div>
+        <p style="margin: 0 0 4px; font-size: 13px;">Specimen name &amp; final part count.</p>
+        <div class="et-input" contenteditable="true" data-placeholder="Type your response here"></div>
+      </div>
+    </div>
+    <div class="et-row">
+      <div class="et-icon">β</div>
+      <div>
+        <p style="margin: 0 0 4px; font-size: 13px;">STL file name submitted.</p>
+        <div class="et-input" contenteditable="true" data-placeholder="Type your response here"></div>
+      </div>
+    </div>
+    <div class="et-row">
+      <div class="et-icon">γ</div>
+      <div>
+        <p style="margin: 0 0 4px; font-size: 13px;">One sentence describing this creature to someone who hasn't seen it.</p>
+        <div class="et-input" contenteditable="true" data-placeholder="Type your response here"></div>
+      </div>
+    </div>
+    <p style="margin-top: 18px; text-align: right;">
+      <span class="stamp">Mission Complete</span>
+    </p>
+  </div>
+
+  <div class="page-foot">
+    <span>Xeno-Lab Field Workbook</span>
+    <span>Lesson 04</span>
+  </div>
+</section>
+
+<!-- =========================================================
+     GLOSSARY
+     ========================================================= -->
+<section class="page" id="glossary">
+  <p class="eyebrow">▌ Reference 02 ▌ Vocabulary</p>
+  <h2>Glossary.</h2>
+  <p class="c-mute" style="max-width:640px;">Keep this open beside you while you work. Cross-check any term you forget.</p>
+
+  <dl class="glossary" style="margin-top: 24px;">
+    <dt>Bounding box</dt>
+    <dd>The smallest 3D box that completely contains your model. Used to check overall size.</dd>
+
+    <dt>CAD</dt>
+    <dd>Computer-Aided Design — software for creating accurate 2D or 3D models of physical objects.</dd>
+
+    <dt>FDM</dt>
+    <dd>Fused Deposition Modelling — the most common 3D printing method in schools. Builds objects layer-by-layer from melted plastic filament.</dd>
+
+    <dt>Group</dt>
+    <dd>Combine multiple shapes into a single object. Solids merge; Holes are subtracted.</dd>
+
+    <dt>Hole</dt>
+    <dd>A shape marked as "Hole" subtracts its volume from any Solid it is grouped with.</dd>
+
+    <dt>Mirror</dt>
+    <dd>Duplicate a shape and flip it across an axis to create symmetry.</dd>
+
+    <dt>Overhang</dt>
+    <dd>A surface that leans outward from the layer below. Past about 45°, it will sag without support.</dd>
+
+    <dt>Primitive</dt>
+    <dd>A basic 3D shape — box, cylinder, sphere, cone, torus — used as a building block.</dd>
+
+    <dt>Slicer</dt>
+    <dd>Software that converts an STL into thin horizontal layers and prepares instructions for the 3D printer.</dd>
+
+    <dt>STL</dt>
+    <dd>A file format that describes a 3D model's surface as a mesh of triangles. The standard format sent to 3D printers.</dd>
+
+    <dt>Support</dt>
+    <dd>Temporary printed scaffolding used to hold up overhangs. Removed after printing. For our brief: not allowed.</dd>
+
+    <dt>Tolerance</dt>
+    <dd>The small gap (usually 0.2 mm) needed between parts so they fit together after printing.</dd>
+
+    <dt>Wall thickness</dt>
+    <dd>How thick the outer surface of your model is. Below ~1.5 mm, walls become fragile.</dd>
+
+    <dt>Workplane</dt>
+    <dd>The "ground" your shapes sit on. You can move the workplane onto any face to stack shapes at different angles.</dd>
+  </dl>
+
+  <hr class="divider">
+
+  <p class="c-mute font-mono" style="font-size: 12px; text-align: center;">▌ End of transmission ▌</p>
+
+  <div class="page-foot">
+    <span>Xeno-Lab Field Workbook</span>
+    <span>Reference · Glossary</span>
+  </div>
+</section>
+
+
+<script>
+(function(){
+  const storageKey = "xenology_lab_workbook_student_answers_v2";
+
+  function editableElements(){
+    return Array.from(document.querySelectorAll('[contenteditable="true"], input.workbook-checkbox'));
+  }
+
+  function assignIds(){
+    editableElements().forEach((element, index) => {
+      if(!element.dataset.workbookId){
+        element.dataset.workbookId = "field_" + String(index).padStart(3, "0");
+      }
+    });
+  }
+
+  function addChecklistInputs(){
+    document.querySelectorAll('ul.check-list li').forEach((item, index) => {
+      if(item.querySelector(':scope > input.workbook-checkbox')) return;
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.className = 'workbook-checkbox';
+      checkbox.setAttribute('aria-label', 'Checklist item complete');
+      item.prepend(checkbox);
+    });
+
+    document.querySelectorAll('.tick').forEach((tick, index) => {
+      if(tick.previousElementSibling && tick.previousElementSibling.classList.contains('workbook-checkbox')) return;
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.className = 'workbook-checkbox';
+      checkbox.setAttribute('aria-label', 'Success criteria complete');
+      tick.before(checkbox);
+    });
+  }
+
+  function saveProgress(){
+    assignIds();
+    const data = {};
+    editableElements().forEach(element => {
+      if(element.matches('input.workbook-checkbox')){
+        data[element.dataset.workbookId] = {type: 'checkbox', value: element.checked};
+      } else {
+        data[element.dataset.workbookId] = {type: 'html', value: element.innerHTML};
+      }
+    });
+    localStorage.setItem(storageKey, JSON.stringify(data));
+  }
+
+  function loadProgress(){
+    assignIds();
+    const raw = localStorage.getItem(storageKey);
+    if(!raw) return;
+    try{
+      const data = JSON.parse(raw);
+      editableElements().forEach(element => {
+        const saved = data[element.dataset.workbookId];
+        if(!saved) return;
+        if(saved.type === 'checkbox') element.checked = Boolean(saved.value);
+        if(saved.type === 'html') element.innerHTML = saved.value;
+      });
+    } catch(error){
+      console.warn('Could not load saved workbook progress.', error);
+    }
+  }
+
+  function clearProgress(){
+    const confirmed = confirm('Clear saved answers from this browser? This will not delete a PDF you have already exported.');
+    if(!confirmed) return;
+    localStorage.removeItem(storageKey);
+    editableElements().forEach(element => {
+      if(element.matches('input.workbook-checkbox')) element.checked = false;
+      else element.innerHTML = '';
+    });
+  }
+
+  function exportPdf(){
+    saveProgress();
+    window.print();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    addChecklistInputs();
+    assignIds();
+    loadProgress();
+
+    document.getElementById('exportPdfButton')?.addEventListener('click', exportPdf);
+    document.getElementById('saveWorkbookButton')?.addEventListener('click', () => {
+      saveProgress();
+      alert('Progress saved in this browser.');
+    });
+    document.getElementById('clearWorkbookButton')?.addEventListener('click', clearProgress);
+
+    document.addEventListener('input', event => {
+      if(event.target.closest('[contenteditable="true"]') || event.target.matches('input.workbook-checkbox')){
+        saveProgress();
+      }
+    });
+    document.addEventListener('change', event => {
+      if(event.target.matches('input.workbook-checkbox')) saveProgress();
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

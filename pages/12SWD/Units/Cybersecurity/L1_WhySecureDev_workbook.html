@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L1 — Why Secure Software Development Matters | Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dark-bg:#0D1117; --light-bg:#FFFFFF;
+  --blue:#4361EE; --green:#10B981; --amber:#F59E0B; --purple:#8B5CF6; --red:#EF4444;
+  --bg:#0D1117; --panel:#161B22; --panel-2:#1C2331; --border:#2A3241;
+  --text:#E6EDF3; --text-muted:#8B98A9; --input-bg:#0D1117;
+  --font-head:'DM Serif Display', serif; --font-body:'DM Sans', sans-serif;
+  --font-read:'Atkinson Hyperlegible', sans-serif; --font-mono:'DM Mono', monospace;
+}
+html.light-mode{
+  --bg:#FFFFFF; --panel:#F7F8FC; --panel-2:#EEF1F7; --border:#DDE3ED;
+  --text:#1F2328; --text-muted:#57606A; --input-bg:#FFFFFF;
+}
+*{box-sizing:border-box;}
+body{margin:0; background:var(--bg); color:var(--text); font-family:var(--font-body); transition:background .2s,color .2s;}
+a{color:var(--blue);}
+.wrap{max-width:920px; margin:0 auto; padding:0 20px 80px;}
+
+/* ---------- sticky progress bar ---------- */
+.topbar{position:sticky; top:0; z-index:50; background:var(--panel); border-bottom:1px solid var(--border); backdrop-filter:blur(6px);}
+.topbar-inner{max-width:920px; margin:0 auto; padding:10px 20px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+.progress-track{flex:1 1 200px; height:10px; background:var(--panel-2); border-radius:6px; overflow:hidden; border:1px solid var(--border); min-width:140px;}
+.progress-fill{height:100%; width:0%; background:linear-gradient(90deg,var(--blue),var(--green)); transition:width .3s;}
+.progress-label{font-family:var(--font-mono); font-size:12px; color:var(--text-muted); white-space:nowrap;}
+.topbar-btn{font-family:var(--font-body); font-size:13px; font-weight:600; padding:7px 14px; border-radius:8px; border:1px solid var(--border); background:var(--panel-2); color:var(--text); cursor:pointer;}
+.topbar-btn:hover{border-color:var(--blue);}
+.topbar-btn.primary{background:var(--blue); border-color:var(--blue); color:#fff;}
+.topbar-status{font-size:12px; color:var(--text-muted); font-family:var(--font-mono);}
+
+/* ---------- cover ---------- */
+.cover{padding:44px 0 28px; border-bottom:1px solid var(--border); margin-bottom:32px;}
+.eyebrow{font-family:var(--font-mono); font-size:12px; letter-spacing:1.5px; color:var(--blue); text-transform:uppercase; margin-bottom:10px;}
+.cover h1{font-family:var(--font-head); font-size:38px; margin:0 0 10px; line-height:1.15;}
+.cover .sub{color:var(--text-muted); font-size:16px; margin-bottom:24px; max-width:640px;}
+.info-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+.info-field label{display:block; font-size:11px; text-transform:uppercase; letter-spacing:0.6px; color:var(--text-muted); margin-bottom:5px; font-family:var(--font-mono);}
+.info-field input{width:100%; padding:9px 10px; background:var(--input-bg); border:1px solid var(--border); border-radius:6px; color:var(--text); font-family:var(--font-body); font-size:14px;}
+
+/* ---------- section band ---------- */
+.section{margin-bottom:40px;}
+.section-band{display:flex; align-items:center; gap:14px; margin-bottom:16px;}
+.sn{width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:15px; flex-shrink:0;}
+.slbl{font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted);}
+.stit{font-family:var(--font-head); font-size:22px; margin:2px 0 0;}
+.badge{margin-left:auto; font-size:11px; font-weight:700; padding:5px 11px; border-radius:20px; color:#fff; white-space:nowrap;}
+
+.reading{font-family:var(--font-read); color:var(--text-muted); font-size:15px; margin:0 0 18px 48px;}
+
+/* ---------- callouts ---------- */
+.callout{border-radius:10px; padding:16px 18px; margin:0 0 18px 48px; font-family:var(--font-read); font-size:15px; line-height:1.55; border:1px solid;}
+.callout-info{background:rgba(67,97,238,.08); border-color:var(--blue);}
+.callout-tip{background:rgba(16,185,129,.08); border-color:var(--green);}
+.callout-note{background:rgba(245,158,11,.08); border-color:var(--amber);}
+.callout-extend{background:rgba(139,92,246,.08); border-color:var(--purple);}
+.callout-title{font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:6px; font-family:var(--font-body);}
+
+/* ---------- task blocks ---------- */
+.task-block{margin:0 0 20px 48px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:10px;}
+.task-label{font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; color:var(--text-muted); margin-bottom:10px;}
+.question{font-family:var(--font-read); font-size:16px; margin:0 0 12px; line-height:1.5;}
+.field-label{display:block; font-size:12.5px; color:var(--text-muted); margin-bottom:6px; font-family:var(--font-body);}
+textarea, select{width:100%; padding:11px 12px; background:var(--input-bg); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:var(--font-read); font-size:15px; resize:vertical;}
+textarea:focus, select:focus, input:focus{outline:2px solid var(--blue); outline-offset:1px;}
+.pair{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:10px;}
+.classify-row{display:flex; align-items:center; gap:12px; padding:9px 0; border-bottom:1px dashed var(--border);}
+.classify-row:last-child{border-bottom:none;}
+.classify-row .stmt{flex:1; font-family:var(--font-read); font-size:14.5px;}
+.classify-row select{width:150px; flex-shrink:0;}
+
+.tier-tag{display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:20px; margin-bottom:10px;}
+.tier-foundation{background:rgba(16,185,129,.12); color:var(--green);}
+.tier-developing{background:rgba(245,158,11,.12); color:var(--amber);}
+.tier-extending{background:rgba(139,92,246,.12); color:var(--purple);}
+
+/* ---------- success criteria checklist ---------- */
+.criteria-card{margin:0 0 12px 48px; padding:14px 18px; border-radius:10px; border:1px solid var(--border); background:var(--panel); display:flex; gap:12px; align-items:flex-start;}
+.criteria-card input[type=checkbox]{margin-top:3px; width:18px; height:18px; flex-shrink:0; accent-color:var(--blue);}
+.criteria-card .ct{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:4px;}
+.criteria-card p{margin:0; font-family:var(--font-read); font-size:14.5px; line-height:1.5;}
+
+/* ---------- exit ticket ---------- */
+.exit-ticket{margin:0 0 16px 48px; padding:18px 20px; background:rgba(239,68,68,.06); border:1px solid var(--red); border-radius:10px;}
+
+/* ---------- misc ---------- */
+.section-submit{margin:0 0 8px 48px; display:flex; align-items:center; gap:12px;}
+.btn{font-family:var(--font-body); font-size:13.5px; font-weight:700; padding:9px 18px; border-radius:8px; border:none; cursor:pointer;}
+.btn.primary{background:var(--blue); color:#fff;}
+.btn.primary:hover{background:#3651d4;}
+.hint{font-size:12.5px; color:var(--text-muted); font-family:var(--font-mono);}
+.next-lesson{margin-top:48px; padding:20px 24px; border:1px dashed var(--border); border-radius:10px; text-align:center; color:var(--text-muted); font-size:14px;}
+.next-lesson a{font-weight:600;}
+.site-link{margin:0 0 18px 48px; font-size:13.5px;}
+footer.credits{text-align:center; color:var(--text-muted); font-size:12px; margin-top:32px; font-family:var(--font-mono);}
+@media (max-width:640px){
+  .info-grid{grid-template-columns:1fr 1fr;}
+  .pair{grid-template-columns:1fr;}
+  .reading,.callout,.task-block,.criteria-card,.exit-ticket,.section-submit,.site-link{margin-left:0;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="progress-label" id="progress-pct">0% complete</span>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <span class="topbar-status" id="save-status">Not saved yet</span>
+    <button class="topbar-btn" id="btn-load">Load</button>
+    <button class="topbar-btn" id="btn-save">Save</button>
+    <button class="topbar-btn" id="btn-export">Export / Print</button>
+    <button class="topbar-btn" id="btn-theme">☀ / 🌙</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="cover">
+    <div class="eyebrow">VCE Software Development · Unit 4 · Area of Study 2 · Victorian Curriculum</div>
+    <h1>Lesson 1 — Why Secure Software<br>Development Matters</h1>
+    <p class="sub">Organisational goals and objectives, and the security trade-offs of developing software in-house versus externally.</p>
+    <div class="info-grid">
+      <div class="info-field"><label for="f-name">Name</label><input type="text" id="f-name" placeholder="Your name"></div>
+      <div class="info-field"><label for="f-class">Class</label><input type="text" id="f-class" placeholder="e.g. 12SDA"></div>
+      <div class="info-field"><label for="f-date">Date</label><input type="text" id="f-date" placeholder="YYYY-MM-DD"></div>
+      <div class="info-field"><label for="f-teacher">Teacher</label><input type="text" id="f-teacher" placeholder="Teacher name"></div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 1: Objective & Success Criteria ============ -->
+  <section class="section" id="sec-1">
+    <div class="section-band">
+      <div class="sn" style="background:var(--blue)">1</div>
+      <div><div class="slbl">Learning Objective</div><div class="stit">Where you're headed today</div></div>
+    </div>
+    <p class="reading">To explain how organisational goals and objectives shape software development decisions, and evaluate the security trade-offs of developing software in-house versus externally.</p>
+
+    <div class="criteria-card">
+      <input type="checkbox" class="track-field" id="sc-foundation">
+      <div><div class="ct" style="color:var(--green)">🟢 Foundation</div>
+      <p>I can define mission statement, organisational goal, and objective, and give one example of each. I can list one advantage and one disadvantage of developing software externally.</p></div>
+    </div>
+    <div class="criteria-card">
+      <input type="checkbox" class="track-field" id="sc-developing">
+      <div><div class="ct" style="color:var(--amber)">🟡 Developing</div>
+      <p>I can explain how a specific organisational goal might influence a decision to develop software in-house or externally, and connect a security-related advantage or disadvantage to a real consequence.</p></div>
+    </div>
+    <div class="criteria-card">
+      <input type="checkbox" class="track-field" id="sc-extending">
+      <div><div class="ct" style="color:var(--purple)">🟣 Extending</div>
+      <p>I can evaluate, for a given organisation, whether in-house or external development better serves its goals and security needs — with justification drawing on multiple factors.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 2: Explicit Explanation (copy prompts) ============ -->
+  <section class="section" id="sec-2">
+    <div class="section-band">
+      <div class="sn" style="background:var(--blue)">2</div>
+      <div><div class="slbl">Explicit Explanation</div><div class="stit">Notes from the lesson</div></div>
+    </div>
+    <p class="site-link">📖 Full notes on this topic: <a href="U4_CyberSecuritySoftwareDev_site.html#y12-sd-u4-l1-why-secure-dev" target="_blank">See the unit site, Lesson 1 →</a></p>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — from mission to objectives (Slide 4)</div>
+      <p>Write the chain your teacher builds on the board, in your own words: strategic plan → mission statement → goal → objective. Include the school example used in class.</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="l1-t1">Your notes</label>
+      <textarea id="l1-t1" class="track-field" rows="4" placeholder="Write this in your own words — don't copy the slide word-for-word."></textarea>
+    </div>
+
+    <div class="callout callout-info">
+      <div class="callout-title">Worked example — goal or objective? (Slide 5)</div>
+      <p>A hospital's mission is "to deliver safe, timely patient care." One statement described a broad, ongoing aim. The other was specific, measurable and time-bound.</p>
+    </div>
+    <div class="task-block">
+      <div class="task-label">🤔 Your reasoning</div>
+      <p class="question">Which statement was the goal, and which was the objective? What made the difference?</p>
+      <textarea id="l1-t2" class="track-field" rows="3" placeholder="What made one of them measurable and time-bound, and the other broad and ongoing?"></textarea>
+    </div>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — DevSecOps in one sentence (Slide 6)</div>
+      <p>In your own words, explain why "security is built in, not bolted on" — what does this mean for when security checks happen during software development?</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="l1-t3">Your notes</label>
+      <textarea id="l1-t3" class="track-field" rows="3" placeholder="Think about the stages: plan, code, build, test, release, deploy, operate, monitor. Where does security fit in?"></textarea>
+    </div>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — external development: advantages & disadvantages (Slide 7)</div>
+      <p>Copy the full two-column list from the slide into the table below before moving on — you'll need this for Section 3.</p>
+    </div>
+    <div class="task-block">
+      <div class="pair">
+        <div>
+          <label class="field-label" for="l1-adv">Advantages of external development</label>
+          <textarea id="l1-adv" class="track-field" rows="6" placeholder="List each advantage from the slide, one per line."></textarea>
+        </div>
+        <div>
+          <label class="field-label" for="l1-dis">Disadvantages of external development</label>
+          <textarea id="l1-dis" class="track-field" rows="6" placeholder="List each disadvantage from the slide, one per line."></textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 3: Application of Learning ============ -->
+  <section class="section" id="sec-3">
+    <div class="section-band">
+      <div class="sn" style="background:var(--green)">3</div>
+      <div><div class="slbl">Application of Learning</div><div class="stit">Your turn</div></div>
+      <span class="badge" style="background:var(--green)">On devices</span>
+    </div>
+
+    <!-- Foundation -->
+    <div class="task-block">
+      <span class="tier-tag tier-foundation">🟢 Foundation</span>
+      <p class="question">Define each term in your own words (one to two sentences each — don't just copy the slide).</p>
+      <label class="field-label" for="f-mission">Mission statement</label>
+      <textarea id="f-mission" class="track-field" rows="2" placeholder="What question does a mission statement answer about an organisation?"></textarea>
+      <label class="field-label" for="f-goal" style="margin-top:10px;">Organisational goal</label>
+      <textarea id="f-goal" class="track-field" rows="2" placeholder="How broad or specific is a goal, compared to an objective?"></textarea>
+      <label class="field-label" for="f-objective" style="margin-top:10px;">Objective</label>
+      <textarea id="f-objective" class="track-field" rows="2" placeholder="What quality must an objective have that a goal doesn't need?"></textarea>
+    </div>
+
+    <div class="task-block">
+      <span class="tier-tag tier-foundation">🟢 Foundation</span>
+      <p class="question">Classify each statement below as a Goal or an Objective.</p>
+      <div class="classify-row">
+        <span class="stmt">1. "Become the region's most trusted online retailer within 5 years."</span>
+        <select class="track-field" id="cl-1"><option value="">Choose...</option><option>Goal</option><option>Objective</option></select>
+      </div>
+      <div class="classify-row">
+        <span class="stmt">2. "Reduce checkout cart abandonment by 15% by the end of this financial year."</span>
+        <select class="track-field" id="cl-2"><option value="">Choose...</option><option>Goal</option><option>Objective</option></select>
+      </div>
+      <div class="classify-row">
+        <span class="stmt">3. "Migrate all customer records to the new database by 30 June."</span>
+        <select class="track-field" id="cl-3"><option value="">Choose...</option><option>Goal</option><option>Objective</option></select>
+      </div>
+      <div class="classify-row">
+        <span class="stmt">4. "Improve overall student wellbeing across the school."</span>
+        <select class="track-field" id="cl-4"><option value="">Choose...</option><option>Goal</option><option>Objective</option></select>
+      </div>
+    </div>
+
+    <!-- Developing -->
+    <div class="task-block">
+      <span class="tier-tag tier-developing">🟡 Developing</span>
+      <p class="question"><strong>Organisation profile — GreenLeaf Logistics:</strong> a mid-sized freight company whose mission is "to move goods reliably while minimising our environmental footprint." They've had recent complaints about drivers receiving incorrect delivery addresses from their current booking system.</p>
+      <label class="field-label" for="d-goal">One organisational goal you'd infer for GreenLeaf</label>
+      <textarea id="d-goal" class="track-field" rows="2" placeholder="What broad, ongoing aim connects to their mission and the complaint they're getting?"></textarea>
+      <label class="field-label" for="d-objective" style="margin-top:10px;">One measurable objective that supports that goal</label>
+      <textarea id="d-objective" class="track-field" rows="2" placeholder="What specific, time-bound target would show progress toward the goal?"></textarea>
+      <label class="field-label" for="d-software" style="margin-top:10px;">One way software could support this objective</label>
+      <textarea id="d-software" class="track-field" rows="2" placeholder="What would the software actually need to do differently?"></textarea>
+      <label class="field-label" for="d-choice" style="margin-top:10px;">In-house or external? Your recommendation and one reason</label>
+      <textarea id="d-choice" class="track-field" rows="3" placeholder="Pick a side, and justify it using one advantage or disadvantage from Section 2 — don't just restate the definition."></textarea>
+    </div>
+
+    <!-- Extending -->
+    <div class="task-block">
+      <span class="tier-tag tier-extending">🟣 Extending</span>
+      <p class="question">Compare two contrasting organisations: <strong>a small fintech start-up</strong> building a new payments app, and <strong>a public hospital</strong> replacing its patient-records system. For each, recommend in-house or external development, and justify your recommendation with reference to at least two specific advantages or disadvantages from Section 2 — not just a general statement.</p>
+      <label class="field-label" for="e-fintech">Fintech start-up — recommendation and justification</label>
+      <textarea id="e-fintech" class="track-field" rows="4" placeholder="Which two advantages/disadvantages are most relevant to a small start-up specifically, and why?"></textarea>
+      <label class="field-label" for="e-hospital" style="margin-top:10px;">Public hospital — recommendation and justification</label>
+      <textarea id="e-hospital" class="track-field" rows="4" placeholder="Which two advantages/disadvantages are most relevant given the sensitivity of patient data?"></textarea>
+      <label class="field-label" for="e-compare" style="margin-top:10px;">Why might the two organisations reach different answers?</label>
+      <textarea id="e-compare" class="track-field" rows="3" placeholder="What's different about their goals, data, or risk tolerance that changes the recommendation?"></textarea>
+    </div>
+
+    <div class="section-submit">
+      <button class="btn primary" data-submit-section>Mark Section 3 complete</button>
+      <span class="hint" data-submit-status></span>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 4: Responsive Teaching ============ -->
+  <section class="section" id="sec-4">
+    <div class="section-band">
+      <div class="sn" style="background:var(--purple)">4</div>
+      <div><div class="slbl">Responsive Teaching</div><div class="stit">Check your understanding</div></div>
+    </div>
+    <div class="task-block">
+      <div class="task-label">💬 Recap</div>
+      <p class="question">Pick one disadvantage of external development. Explain it in your own words, and name one way an organisation could reduce that specific risk.</p>
+      <textarea id="rt-1" class="track-field" rows="4" placeholder="Don't copy your Section 2 notes — rephrase it, and add a mitigation idea of your own."></textarea>
+    </div>
+    <div class="criteria-card">
+      <input type="checkbox" class="track-field" id="rt-checklist">
+      <div><div class="ct">Outcome 2 checklist</div>
+      <p>I can define organisational goals/objectives and list advantages and disadvantages of external development.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 5: Exit Ticket ============ -->
+  <section class="section" id="sec-5">
+    <div class="section-band">
+      <div class="sn" style="background:var(--red)">5</div>
+      <div><div class="slbl">Next Steps</div><div class="stit">Exit ticket</div></div>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket — complete individually and silently</div>
+      <label class="field-label" for="et-1">1. In your own words: what's the difference between an organisational goal and an objective?</label>
+      <textarea id="et-1" class="track-field" rows="3"></textarea>
+      <label class="field-label" for="et-2" style="margin-top:10px;">2. Name one advantage and one disadvantage of developing software externally.</label>
+      <textarea id="et-2" class="track-field" rows="3"></textarea>
+      <label class="field-label" for="et-3" style="margin-top:10px;">3. Self-rate: which success-criteria tier did you reach today?</label>
+      <select id="et-3" class="track-field">
+        <option value="">Choose...</option>
+        <option>🟢 Foundation</option>
+        <option>🟡 Developing</option>
+        <option>🟣 Extending</option>
+      </select>
+    </div>
+    <div class="section-submit">
+      <button class="btn primary" id="btn-submit-workbook">Submit workbook</button>
+      <span class="hint" id="submit-status"></span>
+    </div>
+
+    <div class="next-lesson">
+      Next lesson: <a href="L2_VulnerabilitiesRisksI_workbook.html">L2 — Vulnerabilities &amp; Risks I</a><br>
+      Homework: find one recent news article about a company's software security incident. Bring the organisation's name and what happened.
+    </div>
+  </section>
+
+</div>
+
+<footer class="credits">EduPortal · VCE Software Development · Unit 4 · Area of Study 2 · y12-sd-u4-l1-why-secure-dev</footer>
+
+<script>
+(function(){
+  const LESSON_ID = 'y12-sd-u4-l1-why-secure-dev';
+  const UNIT_ID = 'y12-sd-u4';
+
+  const DataService = {
+    studentId() {
+      return JSON.parse(localStorage.getItem('eduportal_session') || '{}').id || 'current_student';
+    },
+    _key() { return `eduportal_workbook_${this.studentId()}_${LESSON_ID}`; },
+    _progressKey() { return `eduportal_progress_${this.studentId()}_${LESSON_ID}`; },
+    collect() {
+      const data = {};
+      document.querySelectorAll('.track-field').forEach(el => {
+        if (el.type === 'checkbox') data[el.id] = el.checked;
+        else data[el.id] = el.value;
+      });
+      return data;
+    },
+    apply(data) {
+      if (!data) return;
+      Object.keys(data).forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.type === 'checkbox') el.checked = !!data[id];
+        else el.value = data[id];
+      });
+    },
+    save() {
+      // POST /api/workbooks/{studentId}/{lessonId} — currently localStorage key eduportal_workbook_{studentId}_{lessonId}
+      const payload = { lessonId: LESSON_ID, unitId: UNIT_ID, savedAt: new Date().toISOString(), fields: this.collect() };
+      localStorage.setItem(this._key(), JSON.stringify(payload));
+      return payload;
+    },
+    load() {
+      // GET /api/workbooks/{studentId}/{lessonId} — currently localStorage key eduportal_workbook_{studentId}_{lessonId}
+      const raw = localStorage.getItem(this._key());
+      if (!raw) return null;
+      try { return JSON.parse(raw); } catch (e) { return null; }
+    },
+    autoSave: debounce(function () { DataService.save(); updateSaveStatus('Auto-saved ' + nowTime()); }, 1500),
+    autoLoad() {
+      const data = this.load();
+      if (data && data.fields) { this.apply(data.fields); updateSaveStatus('Loaded from last save'); }
+    },
+    submit() {
+      // POST /api/workbooks/{studentId}/{lessonId}/submit
+      this.save();
+      this._syncProgress('submitted');
+    },
+    _syncProgress(status) {
+      // Writes to eduportal_progress_{studentId}_{lessonId}. Status: 'in-progress' | 'submitted' | 'marked'
+      localStorage.setItem(this._progressKey(), JSON.stringify({ lessonId: LESSON_ID, status, updatedAt: new Date().toISOString() }));
+    }
+  };
+
+  function debounce(fn, wait) {
+    let t;
+    return function (...args) { clearTimeout(t); t = setTimeout(() => fn.apply(this, args), wait); };
+  }
+  function nowTime() { return new Date().toISOString().slice(11, 16); }
+  function updateSaveStatus(text) { document.getElementById('save-status').textContent = text; }
+
+  function updateProgress() {
+    const fields = document.querySelectorAll('.track-field');
+    let filled = 0;
+    fields.forEach(el => {
+      if (el.type === 'checkbox') { if (el.checked) filled++; }
+      else if (el.value && el.value.trim().length > 0) filled++;
+    });
+    const pct = fields.length ? Math.round((filled / fields.length) * 100) : 0;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-pct').textContent = pct + '% complete';
+  }
+
+  let hasStartedProgress = false;
+  document.querySelectorAll('.track-field').forEach(el => {
+    const evt = (el.tagName === 'SELECT' || el.type === 'checkbox') ? 'change' : 'input';
+    el.addEventListener(evt, () => {
+      if (!hasStartedProgress) { DataService._syncProgress('in-progress'); hasStartedProgress = true; }
+      updateProgress();
+      DataService.autoSave();
+    });
+  });
+
+  document.querySelectorAll('[data-submit-section]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      DataService.save();
+      const statusEl = btn.parentElement.querySelector('[data-submit-status]');
+      if (statusEl) statusEl.textContent = 'Saved ' + nowTime();
+      updateProgress();
+    });
+  });
+
+  document.getElementById('btn-submit-workbook').addEventListener('click', () => {
+    DataService.submit();
+    document.getElementById('submit-status').textContent = 'Workbook submitted ' + nowTime();
+  });
+
+  document.getElementById('btn-save').addEventListener('click', () => {
+    DataService.save();
+    updateSaveStatus('Saved ' + nowTime());
+  });
+  document.getElementById('btn-load').addEventListener('click', () => {
+    DataService.autoLoad();
+    updateProgress();
+  });
+  document.getElementById('btn-export').addEventListener('click', () => window.print());
+
+  document.getElementById('btn-theme').addEventListener('click', () => {
+    document.documentElement.classList.toggle('light-mode');
+    localStorage.setItem('eduportal_theme_pref', document.documentElement.classList.contains('light-mode') ? 'light' : 'dark');
+  });
+  const savedTheme = localStorage.getItem('eduportal_theme_pref');
+  if (savedTheme === 'light') document.documentElement.classList.add('light-mode');
+
+  // initial load
+  DataService.autoLoad();
+  updateProgress();
+})();
+</script>
+</body>
+</html>

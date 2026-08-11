@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1: Digital Citizen — Workbook · EduPortal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#EDEEF2; --ink2:#B4B8C4; --ink3:#7A7F8E;
+  --bg:#0D1117; --bg2:#151B23; --bg3:#1C232E; --bg4:#262E3B;
+  --border:rgba(237,238,242,.10); --border2:rgba(237,238,242,.18);
+  --white:#FFFFFF;
+  --blue:#4361EE; --blue-bg:rgba(67,97,238,.14);
+  --green:#10B981; --green-bg:rgba(16,185,129,.14);
+  --amber:#F59E0B; --amber-bg:rgba(245,158,11,.14);
+  --purple:#8B5CF6; --purple-bg:rgba(139,92,246,.14);
+  --red:#EF4444; --red-bg:rgba(239,68,68,.14);
+  --font-display:'DM Serif Display',serif;
+  --font-body:'Atkinson Hyperlegible',sans-serif;
+  --font-ui:'DM Sans',sans-serif;
+  --font-mono:'DM Mono',monospace;
+  --r:14px; --rsm:9px; --rpill:999px;
+}
+[data-theme="light"]{
+  --ink:#14171F; --ink2:#454B5A; --ink3:#767C8C;
+  --bg:#FFFFFF; --bg2:#F7F8FA; --bg3:#EEF0F4; --bg4:#E3E6ED;
+  --border:rgba(20,23,31,.10); --border2:rgba(20,23,31,.18);
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--ink);font-size:17px;line-height:1.7;padding-bottom:64px;transition:background .2s,color .2s;}
+.wrap{max-width:900px;margin:0 auto;padding:0 24px;}
+h1,h2,h3{font-family:var(--font-display);font-weight:400;letter-spacing:-.01em;color:var(--ink);}
+.eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);}
+a{color:var(--blue);}
+code{font-family:var(--font-mono);font-size:.9em;}
+
+/* Top bar */
+.topbar{position:sticky;top:0;z-index:60;background:var(--bg2);border-bottom:1px solid var(--border);}
+.topbar-inner{max-width:900px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.topbar .doctype{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);padding:5px 10px;border:1px solid var(--border2);border-radius:var(--rpill);}
+.topbar .spacer{flex:1;}
+.progress-wrap{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;color:var(--ink3);}
+.progress-track{width:110px;height:8px;border-radius:var(--rpill);background:var(--bg4);overflow:hidden;}
+.progress-fill{height:100%;background:var(--blue);width:0%;transition:width .3s;}
+.btn{font-family:var(--font-ui);font-size:13.5px;font-weight:600;padding:9px 16px;min-height:44px;border-radius:var(--rsm);border:1px solid var(--border2);background:var(--bg3);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.btn:hover{background:var(--bg4);}
+.btn-primary{background:var(--blue);border-color:var(--blue);color:#fff;}
+.btn-primary:hover{opacity:.92;background:var(--blue);}
+.btn-icon{width:44px;height:44px;padding:0;justify-content:center;}
+
+/* Cover */
+.cover{background:var(--bg2);border-bottom:1px solid var(--border);padding:44px 0 34px;}
+.cover .wrap{display:flex;flex-direction:column;gap:12px;}
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.chip{font-family:var(--font-mono);font-size:10.5px;font-weight:700;padding:4px 11px;border-radius:var(--rpill);letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--border2);color:var(--ink2);}
+.chip-blue{background:var(--blue-bg);color:var(--blue);border-color:rgba(91,124,255,.3);}
+.cover h1{font-size:2rem;margin-top:4px;}
+.cover .sub{color:var(--ink2);max-width:640px;}
+.student-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px;}
+.student-field{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rsm);padding:9px 12px;}
+.student-field label{display:block;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:3px;}
+.student-field input{border:none;background:transparent;color:var(--ink);font-family:var(--font-ui);font-size:13.5px;width:100%;outline:none;}
+@media(max-width:640px){.student-grid{grid-template-columns:1fr 1fr;}}
+
+/* Section band */
+.sband{display:flex;align-items:center;gap:13px;padding:10px 0;border-bottom:1px solid var(--border);margin:44px 0 18px;}
+.sband .sn{width:32px;height:32px;border-radius:50%;background:var(--bg4);color:var(--ink);font-family:var(--font-mono);font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--border2);}
+.sband .slbl{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);}
+.sband .stit{font-size:22px;font-family:var(--font-display);}
+.sband .badge{margin-left:auto;font-family:var(--font-mono);font-size:10px;font-weight:700;padding:4px 10px;border-radius:var(--rpill);text-transform:uppercase;letter-spacing:.06em;}
+
+p{margin-bottom:14px;color:var(--ink2);}
+ul.plain{margin:0 0 16px 22px;color:var(--ink2);} ul.plain li{margin-bottom:7px;}
+strong{color:var(--ink);}
+
+/* Callouts */
+.callout{border-radius:var(--rsm);padding:15px 18px;margin:16px 0;font-size:15.5px;line-height:1.65;border:1px solid var(--border2);background:var(--bg3);}
+.callout-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:6px;font-weight:700;display:flex;align-items:center;gap:6px;}
+.callout-info{background:var(--blue-bg);} .callout-info .callout-label{color:var(--blue);}
+.callout-tip{background:var(--green-bg);} .callout-tip .callout-label{color:var(--green);}
+.callout-note{background:var(--amber-bg);} .callout-note .callout-label{color:var(--amber);}
+.callout-extend{background:var(--purple-bg);} .callout-extend .callout-label{color:var(--purple);}
+.callout-copy{background:var(--amber-bg);border:1px dashed var(--amber);} .callout-copy .callout-label{color:var(--amber);}
+
+/* Tier tags */
+.tier{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:var(--rpill);text-transform:uppercase;letter-spacing:.04em;}
+.tier-foundation{background:var(--green-bg);color:var(--green);}
+.tier-developing{background:var(--amber-bg);color:var(--amber);}
+.tier-extending{background:var(--purple-bg);color:var(--purple);}
+.tier-exit{background:var(--red-bg);color:var(--red);}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:22px 24px;margin:16px 0;}
+.card-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+@media(max-width:720px){.card-row{grid-template-columns:1fr;}}
+.tier-card{border-radius:var(--rsm);padding:15px;border:1px solid var(--border2);}
+.tier-card.foundation{background:var(--green-bg);} .tier-card.developing{background:var(--amber-bg);} .tier-card.extending{background:var(--purple-bg);}
+.tier-card h4{font-family:var(--font-ui);font-size:13px;font-weight:700;margin-bottom:6px;color:var(--ink);}
+
+table{width:100%;border-collapse:collapse;margin:14px 0 20px;font-size:14.5px;}
+th{background:var(--bg3);color:var(--ink2);font-family:var(--font-mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;text-align:left;padding:9px 12px;border:1px solid var(--border);}
+td{padding:10px 12px;border:1px solid var(--border);color:var(--ink2);vertical-align:top;}
+
+/* Workbook form elements */
+.field{margin:14px 0;}
+.field label{display:block;font-family:var(--font-ui);font-weight:600;font-size:15px;color:var(--ink);margin-bottom:8px;}
+.field .qhint{font-size:13px;color:var(--ink3);margin-bottom:8px;}
+textarea,.field input[type=text]{width:100%;font-family:var(--font-body);font-size:15.5px;padding:12px 14px;border-radius:var(--rsm);border:1px solid var(--border2);background:var(--bg3);color:var(--ink);min-height:44px;outline:none;resize:vertical;}
+textarea:focus,.field input[type=text]:focus{border-color:var(--blue);}
+.checklist{display:flex;flex-direction:column;gap:10px;margin:12px 0;}
+.checklist label{display:flex;align-items:flex-start;gap:10px;font-size:15.5px;color:var(--ink2);min-height:44px;cursor:pointer;}
+.checklist input[type=checkbox]{width:22px;height:22px;flex-shrink:0;margin-top:2px;accent-color:var(--blue);}
+.radio-row{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0;}
+.radio-row label{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rpill);padding:8px 14px;min-height:44px;cursor:pointer;font-size:14px;}
+.radio-row input{accent-color:var(--blue);width:18px;height:18px;}
+
+.exit-ticket{border:1px solid var(--red);background:var(--red-bg);border-radius:var(--r);padding:24px;margin:18px 0;}
+.exit-ticket .callout-label{color:var(--red);}
+
+footer{text-align:center;color:var(--ink3);font-family:var(--font-mono);font-size:11px;padding:44px 0 10px;}
+.save-toast{position:fixed;bottom:20px;right:20px;background:var(--bg2);border:1px solid var(--border2);color:var(--ink);font-family:var(--font-ui);font-size:13px;padding:10px 16px;border-radius:var(--rsm);opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none;z-index:80;}
+.save-toast.show{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="topbar-inner">
+  <span class="doctype">Workbook</span>
+  <span class="eyebrow">y7-dt-u1-l1-digital-citizen</span>
+  <div class="spacer"></div>
+  <div class="progress-wrap"><span id="progressLabel">0%</span><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
+  <button class="btn" id="loadBtn">↺ Load</button>
+  <button class="btn" id="saveBtn">💾 Save</button>
+  <button class="btn" id="exportBtn">🖨 Export</button>
+  <button class="btn btn-icon" id="themeToggle" title="Toggle light/dark" aria-label="Toggle light and dark mode">◐</button>
+</div></div>
+<div class="save-toast" id="saveToast">Saved</div>
+
+<div class="cover">
+  <div class="wrap">
+    <div class="chip-row">
+      <span class="chip chip-blue">EduPortal · Victorian Curriculum</span>
+      <span class="chip">Year 7 Digital Technology</span>
+      <span class="chip">Unit 1 · Digital Citizenship</span>
+    </div>
+    <h1>Lesson 1: Digital Citizen — Workbook</h1>
+    <p class="sub">What does it mean to be safe, responsible and effective online — and why does it matter beyond just you?</p>
+    <div class="student-grid">
+      <div class="student-field"><label>Name</label><input type="text" id="studentName"></div>
+      <div class="student-field"><label>Class</label><input type="text" id="studentClass"></div>
+      <div class="student-field"><label>Date</label><input type="text" id="studentDate" placeholder="YYYY-MM-DD"></div>
+      <div class="student-field"><label>Teacher</label><input type="text" id="studentTeacher"></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="sband"><div class="sn">🎯</div><div><div class="slbl">Stage 1</div><div class="stit">Learning Objective</div></div></div>
+  <div class="card">
+    <p style="font-size:17px;color:var(--ink);"><strong>To be able to...</strong> understand what it means to be a safe, responsible digital citizen, and describe appropriate online behaviour.</p>
+    <div class="qhint" style="margin-top:10px;">See the <a href="U1_DigitalCitizenship_site.html#y7-dt-u1-l1-digital-citizen">unit site</a> for full notes on this topic →</div>
+  </div>
+
+  
+        <div class="sband"><div class="sn">1</div><div><div class="slbl">Task 1</div><div class="stit">Rights and responsibilities brainstorm</div></div></div>
+        <p class="qhint">With a partner, brainstorm as many digital rights and responsibilities as you can before writing your best ones below.</p>
+        <div class="field" data-field="l1_rights">
+      <label for="l1_rights"><span class="tier tier-foundation">Foundation</span> Two digital rights you have online</label>
+      <div class="qhint">What should you be able to expect when you're online?</div>
+      <textarea id="l1_rights" rows="3" placeholder="Write your own ideas — don't copy the site."></textarea>
+    </div><div class="field" data-field="l1_responsibilities">
+      <label for="l1_responsibilities"><span class="tier tier-foundation">Foundation</span> Two digital responsibilities you have online</label>
+      <div class="qhint">What do you owe to other people when you're online?</div>
+      <textarea id="l1_responsibilities" rows="3" placeholder="Write your own ideas here."></textarea>
+    </div>
+        
+        <div class="sband"><div class="sn">2</div><div><div class="slbl">Task 2</div><div class="stit">Interland activity</div></div><span class="badge" style="background:var(--blue-bg);color:var(--blue);">On devices</span></div>
+        <p class="qhint">Play through at least one Interland world at beinternetawesome.withgoogle.com, then answer below.</p>
+        <div class="field" data-field="l1_interland_world">
+      <label>Which Interland world did you play?</label>
+      <div class="qhint">Choose the one you spent the most time on.</div>
+      <div class="radio-row"><label><input type="radio" name="l1_interland_world" value="Kind Kingdom"> Kind Kingdom</label>
+<label><input type="radio" name="l1_interland_world" value="Reality River"> Reality River</label>
+<label><input type="radio" name="l1_interland_world" value="Mindful Mountain"> Mindful Mountain</label>
+<label><input type="radio" name="l1_interland_world" value="Tower of Treasure"> Tower of Treasure</label></div>
+    </div><div class="field" data-field="l1_interland_learn">
+      <label for="l1_interland_learn"><span class="tier tier-developing">Developing</span> What is one thing that world was trying to teach you?</label>
+      <div class="qhint">Describe the skill or habit, not just the game mechanics.</div>
+      <textarea id="l1_interland_learn" rows="3" placeholder="What was the world testing you on?"></textarea>
+    </div><div class="field" data-field="l1_interland_hard">
+      <label for="l1_interland_hard"><span class="tier tier-extending">Extending</span> What was the hardest part, and why?</label>
+      <div class="qhint">Think about a moment where you got something wrong or had to think carefully.</div>
+      <textarea id="l1_interland_hard" rows="3" placeholder="Describe a specific moment."></textarea>
+    </div>
+        
+        <div class="sband"><div class="sn">3</div><div><div class="slbl">Task 3</div><div class="stit">Scenario check</div></div></div>
+        <p class="qhint">Your teacher will show a scenario on the board. Decide what the appropriate response would be.</p>
+        <div class="field" data-field="l1_scenario">
+      <label for="l1_scenario"><span class="tier tier-developing">Developing</span> What would a responsible digital citizen do in that scenario?</label>
+      <div class="qhint">Refer back to the rights and responsibilities table from the unit site.</div>
+      <textarea id="l1_scenario" rows="3" placeholder="Explain what you would do and why."></textarea>
+    </div>
+        
+
+  <div class="sband"><div class="sn">↺</div><div><div class="slbl">Stage 4</div><div class="stit">Reflection</div></div></div>
+  <div class="callout callout-info"><div class="callout-label">Think back</div>Think about one online decision you made this week — big or small.</div>
+  <div class="field" data-field="l1_reflection">
+      <label for="l1_reflection">Describe that decision and whether it reflected good digital citizenship</label>
+      <div class="qhint">Be honest — this isn't marked on whether the decision was "good," just on your thinking.</div>
+      <textarea id="l1_reflection" rows="3" placeholder="What happened, and what would you do differently (if anything)?"></textarea>
+    </div>
+
+  <div class="sband"><div class="sn">🚪</div><div><div class="slbl">Stage 5</div><div class="stit">Exit Ticket</div></div><span class="badge" style="background:var(--red-bg);color:var(--red);">Complete before you leave</span></div>
+  <div class="exit-ticket">
+    <div class="callout-label">🚪 Exit Ticket</div>
+    <div class="field" data-field="l1_exit_define">
+      <label for="l1_exit_define">In one sentence, what is a digital citizen?</label>
+      <div class="qhint">Write this from memory — no looking back at the notes.</div>
+      <input type="text" id="l1_exit_define" placeholder="Your own words, one sentence.">
+    </div><div class="field" data-field="l1_exit_confidence">
+      <label>How confident do you feel about today's learning objective?</label>
+      <div class="qhint"></div>
+      <div class="radio-row"><label><input type="radio" name="l1_exit_confidence" value="Not yet"> Not yet</label>
+<label><input type="radio" name="l1_exit_confidence" value="Getting there"> Getting there</label>
+<label><input type="radio" name="l1_exit_confidence" value="Confident"> Confident</label></div>
+    </div>
+    <button class="btn btn-primary" id="submitBtn" style="margin-top:8px;">Submit Exit Ticket</button>
+    <div class="qhint" id="submitStatus" style="margin-top:8px;"></div>
+  </div>
+
+</div>
+
+<footer>EduPortal · Year 7 Digital Technology · Unit 1 — Digital Citizenship · y7-dt-u1-l1-digital-citizen</footer>
+
+<script>
+
+const LESSON_ID = 'y7-dt-u1-l1-digital-citizen';
+
+const DataService = {
+  session(){
+    return this._readJSON('eduportal_session');
+  },
+  studentId(){
+    const s = this.session();
+    return (s && s.id) ? s.id : 'demo_student';
+  },
+  _readJSON(key){
+    try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; }
+    catch(e) { return null; }
+  },
+  progressKey(){ return `eduportal_progress_${this.studentId()}_${LESSON_ID}`; },
+  workbookKey(){ return `eduportal_workbook_${this.studentId()}_${LESSON_ID}`; },
+  getProgress(){ return this._readJSON(this.progressKey()); },
+  load(){ return this._readJSON(this.workbookKey()) || {}; },
+  save(data){
+    localStorage.setItem(this.workbookKey(), JSON.stringify(data));
+  },
+  _syncProgress(status){
+    // status must be one of: 'in-progress' | 'submitted' | 'marked'
+    const key = this.progressKey();
+    const existing = this._readJSON(key) || {};
+    const payload = Object.assign({}, existing, { status, updated: new Date().toISOString().slice(0,10) });
+    localStorage.setItem(key, JSON.stringify(payload));
+  },
+};
+
+
+const root = document.documentElement;
+document.getElementById('themeToggle').addEventListener('click', () => {
+  root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+
+const toast = document.getElementById('saveToast');
+function flashToast(msg){
+  toast.textContent = msg; toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 1400);
+}
+
+function collectData(){
+  const data = { meta: {}, fields: {}, checks: {}, radios: {} };
+  ['studentName','studentClass','studentDate','studentTeacher'].forEach(id => {
+    data.meta[id] = document.getElementById(id).value;
+  });
+  document.querySelectorAll('textarea, input[type=text]:not(.student-field input)').forEach(el => {
+    if (['studentName','studentClass','studentDate','studentTeacher'].includes(el.id)) return;
+    if (el.id) data.fields[el.id] = el.value;
+  });
+  document.querySelectorAll('input[type=checkbox]').forEach(el => {
+    data.checks[el.dataset.check] = el.checked;
+  });
+  document.querySelectorAll('input[type=radio]:checked').forEach(el => {
+    data.radios[el.name] = el.value;
+  });
+  return data;
+}
+
+function applyData(data){
+  if (!data) return;
+  if (data.meta) Object.keys(data.meta).forEach(id => { const el = document.getElementById(id); if (el) el.value = data.meta[id]; });
+  if (data.fields) Object.keys(data.fields).forEach(id => { const el = document.getElementById(id); if (el) el.value = data.fields[id]; });
+  if (data.checks) Object.keys(data.checks).forEach(key => {
+    const el = document.querySelector(`[data-check="${key}"]`); if (el) el.checked = data.checks[key];
+  });
+  if (data.radios) Object.keys(data.radios).forEach(name => {
+    const el = document.querySelector(`input[name="${name}"][value="${data.radios[name]}"]`); if (el) el.checked = true;
+  });
+  updateProgress();
+}
+
+function updateProgress(){
+  const textEls = Array.from(document.querySelectorAll('.field textarea, .field input[type=text]'));
+  const filled = textEls.filter(el => el.value.trim().length > 0).length;
+  const pct = textEls.length ? Math.round((filled / textEls.length) * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = pct + '%';
+  return pct;
+}
+
+let saveTimer = null;
+let hasStartedProgress = false;
+function autoSave(){
+  DataService.save(collectData());
+  if (!hasStartedProgress) {
+    DataService._syncProgress('in-progress');
+    hasStartedProgress = true;
+  }
+  updateProgress();
+}
+function debouncedSave(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(autoSave, 500);
+}
+
+document.querySelectorAll('textarea, input[type=text], input[type=checkbox], input[type=radio]').forEach(el => {
+  el.addEventListener('input', debouncedSave);
+  el.addEventListener('change', debouncedSave);
+});
+
+document.getElementById('saveBtn').addEventListener('click', () => { autoSave(); flashToast('Saved'); });
+document.getElementById('loadBtn').addEventListener('click', () => { applyData(DataService.load()); flashToast('Loaded'); });
+document.getElementById('exportBtn').addEventListener('click', () => window.print());
+
+document.getElementById('submitBtn').addEventListener('click', () => {
+  autoSave();
+  DataService._syncProgress('submitted');
+  document.getElementById('submitStatus').textContent = 'Submitted — your teacher will mark this outside the workbook.';
+});
+
+// Auto-load on page open
+window.addEventListener('DOMContentLoaded', () => {
+  applyData(DataService.load());
+  const existing = DataService.getProgress();
+  if (existing && existing.status === 'submitted') {
+    document.getElementById('submitStatus').textContent = 'Already submitted on ' + existing.updated + '.';
+  }
+});
+</script>
+
+</body>
+</html>

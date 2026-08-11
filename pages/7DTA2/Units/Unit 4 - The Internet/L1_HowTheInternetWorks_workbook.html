@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workbook — How the Internet Works | Year 7 DT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12100E;--ink2:#2C2A28;--ink3:#6B6762;--cream:#F7F3EC;--cream2:#EDE8DF;
+    --white:#FFFFFF;--border:#D8D3CA;--border2:#C4BFB6;
+    --pine:#1B5E47;--amber:#B8620A;--indigo:#2B3A8C;--crimson:#8C1F28;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink2);line-height:1.6;}
+  .mono{font-family:'DM Mono',monospace;}
+
+  .progress-bar{position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:14px;padding:10px 20px;flex-wrap:wrap;}
+  .progress-bar .label{font-family:'DM Mono',monospace;font-size:12px;color:var(--ink3);}
+  .progress-track{flex:1;min-width:110px;height:8px;background:var(--cream2);border-radius:4px;overflow:hidden;}
+  .progress-fill{height:100%;width:0;background:var(--pine);transition:width .4s;}
+  .pbtn{font-family:'DM Mono',monospace;font-size:12px;border:1px solid var(--border2);background:var(--white);
+    color:var(--ink2);padding:6px 12px;border-radius:6px;cursor:pointer;}
+  .pbtn:hover{background:var(--cream2);}
+  .pbtn.save{background:var(--pine);color:#fff;border-color:var(--pine);}
+  .pbtn.submit{background:var(--crimson);color:#fff;border-color:var(--crimson);}
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px 90px;}
+
+  .cover{background:var(--ink);color:var(--white);border-radius:0 0 18px 18px;padding:40px 36px 32px;margin-bottom:30px;}
+  .cover .eyebrow{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:2px;color:#B7AE9F;text-transform:uppercase;}
+  .cover h1{font-family:'DM Serif Display',serif;font-size:40px;line-height:1.05;margin:12px 0 6px;}
+  .cover .sub{color:#D8D3CA;font-size:16px;}
+  .cover .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:24px;}
+  .field span{display:block;font-family:'DM Mono',monospace;font-size:11px;color:#8C857A;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+  .field input{width:100%;background:#1E1B18;border:1px solid #36322C;border-radius:7px;color:#fff;
+    padding:8px 10px;font-family:'DM Sans';font-size:14px;}
+
+  section{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:28px 30px;margin-bottom:24px;}
+  .section-band{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+  .num{width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--white);
+    display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:18px;flex-shrink:0;}
+  .section-label{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:1.5px;color:var(--ink3);text-transform:uppercase;}
+  h2{font-family:'DM Serif Display',serif;font-size:24px;color:var(--ink);line-height:1.15;}
+  .ref{margin-left:auto;font-family:'DM Mono',monospace;font-size:11px;color:var(--indigo);background:#EEF0F8;
+    padding:5px 10px;border-radius:14px;}
+  .q{margin:18px 0;padding-top:16px;border-top:1px dashed var(--border);}
+  .q:first-of-type{border-top:none;padding-top:0;}
+  .q .qtext{font-weight:600;color:var(--ink);margin-bottom:8px;}
+  .q .qtext .qn{font-family:'DM Mono',monospace;color:var(--ink3);margin-right:6px;}
+
+  textarea,input.txt{width:100%;border:1px solid var(--border2);border-radius:8px;padding:10px 12px;
+    font-family:'DM Sans';font-size:14.5px;color:var(--ink2);background:var(--cream);resize:vertical;}
+  textarea{min-height:64px;}
+  input.txt{max-width:260px;}
+
+  .tier-tag{display:inline-block;font-family:'DM Mono',monospace;font-size:11px;color:var(--white);
+    padding:4px 11px;border-radius:20px;margin-bottom:10px;letter-spacing:.5px;}
+  .t-found{background:var(--pine);}.t-dev{background:var(--amber);}.t-ext{background:var(--indigo);}
+  .tier-note{font-size:13px;color:var(--ink3);font-style:italic;margin-bottom:14px;}
+
+  /* MCQ / matching auto-mark */
+  .opts{display:flex;flex-direction:column;gap:7px;margin-top:6px;}
+  .opt{display:flex;align-items:center;gap:9px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;
+    cursor:pointer;background:var(--cream);font-size:14.5px;}
+  .opt:hover{border-color:var(--border2);}
+  .opt input{accent-color:var(--indigo);}
+  .opt.correct{background:#EAF0EC;border-color:var(--pine);}
+  .opt.wrong{background:#F6ECEC;border-color:var(--crimson);}
+  select.match{border:1px solid var(--border2);border-radius:7px;padding:7px 9px;font-family:'DM Sans';font-size:14px;background:var(--white);min-width:200px;}
+  select.match.correct{border-color:var(--pine);background:#EAF0EC;}
+  select.match.wrong{border-color:var(--crimson);background:#F6ECEC;}
+  .match-row{display:flex;align-items:center;gap:12px;margin:8px 0;flex-wrap:wrap;}
+  .match-row .label{flex:1;min-width:160px;font-weight:600;color:var(--ink);}
+
+  .checkbtn{font-family:'DM Mono',monospace;font-size:12px;background:var(--indigo);color:#fff;border:none;
+    padding:8px 16px;border-radius:7px;cursor:pointer;margin-top:12px;}
+  .feedback{margin-top:10px;font-size:13.5px;font-family:'DM Mono',monospace;}
+  .feedback.ok{color:var(--pine);}.feedback.partial{color:var(--amber);}
+
+  .callout{border-radius:10px;padding:14px 16px;margin:14px 0;font-size:14px;}
+  .callout-tip{background:#EAF0EC;border:1px solid var(--pine);}
+  .callout-tip b{color:var(--pine);}
+  .callout-note{background:#FBF1E6;border:1px solid var(--amber);}
+  .callout-note b{color:var(--amber);}
+
+  .blank{display:inline-block;border-bottom:2px solid var(--border2);min-width:120px;}
+
+  /* teacher panel */
+  .teacher{border:2px solid var(--crimson);border-radius:14px;padding:24px 28px;margin-top:30px;background:#FCF7F7;}
+  .teacher h3{font-family:'DM Serif Display',serif;color:var(--crimson);font-size:20px;margin-bottom:6px;}
+  .teacher .tlabel{font-family:'DM Mono',monospace;font-size:11px;color:var(--crimson);letter-spacing:1px;text-transform:uppercase;}
+  .teacher textarea{background:#fff;border-color:#E0C4C4;}
+  .teacher .markrow{display:flex;align-items:center;gap:10px;margin-top:12px;}
+  .teacher input.mark{max-width:80px;}
+  footer{text-align:center;font-family:'DM Mono',monospace;font-size:12px;color:var(--ink3);margin-top:24px;}
+  .savestate{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3);}
+</style>
+</head>
+<body>
+
+<div class="progress-bar">
+  <span class="label">COMPLETION</span>
+  <div class="progress-track"><div class="progress-fill" id="pfill"></div></div>
+  <span class="label" id="ppct">0%</span>
+  <button class="pbtn save" onclick="DataService.save(true)">Save</button>
+  <button class="pbtn" onclick="DataService.load(true)">Load</button>
+  <button class="pbtn" onclick="window.print()">Export</button>
+  <button class="pbtn submit" onclick="DataService.submit()">Submit</button>
+  <span class="savestate" id="savestate"></span>
+</div>
+
+<div class="cover">
+  <div class="eyebrow">Year 7 Digital Technologies · Workbook</div>
+  <h1>How the Internet Works</h1>
+  <div class="sub">Lesson 1 of 3 — complete the sections below. Pick the tier that challenges you; you can do more than one.</div>
+  <div class="meta">
+    <div class="field"><span>Name</span><input data-f="name" type="text" placeholder="Your name"></div>
+    <div class="field"><span>Class</span><input data-f="class" type="text" placeholder="e.g. 7C"></div>
+    <div class="field"><span>Date</span><input data-f="date" type="text" placeholder="dd/mm/yyyy"></div>
+    <div class="field"><span>Teacher</span><input data-f="teacher" type="text" value="Mr Smith"></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- SECTION 1: WARM-UP CAPTURE -->
+  <section>
+    <div class="section-band"><div class="num">1</div><span class="section-label">Warm-Up</span><span class="ref">Slide 2</span></div>
+    <h2>Internet or not?</h2>
+    <p style="margin-bottom:10px">After the class activity, write your own first attempt at the big question. Don't look at your notes yet — this is just your starting idea.</p>
+    <div class="q">
+      <div class="qtext"><span class="qn">1.1</span>In your own words, what do you think the internet is?</div>
+      <textarea data-f="q_warmup" placeholder="Write your first idea — you'll improve it later in the lesson."></textarea>
+    </div>
+  </section>
+
+  <!-- SECTION 2: DEFINITION (copy + apply) -->
+  <section>
+    <div class="section-band"><div class="num">2</div><span class="section-label">What is the internet?</span><span class="ref">Slide 4 · Website §2</span></div>
+    <h2>The big idea</h2>
+    <div class="callout callout-note"><b>📋 From the board</b> Record the two key ideas from Slide 4 in your own words (see the website if you need the notes).</div>
+    <div class="q">
+      <div class="qtext"><span class="qn">2.1</span>Complete the key phrase: the internet is a "network of ______".</div>
+      <input class="txt" data-f="q_netofnet" type="text" placeholder="one word">
+    </div>
+    <div class="q">
+      <div class="qtext"><span class="qn">2.2</span>True or false: the Internet and the World Wide Web are the same thing. Choose, then explain why.</div>
+      <div class="opts" data-mcq="q_webtf" data-answer="false">
+        <label class="opt"><input type="radio" name="q_webtf" value="true"> True</label>
+        <label class="opt"><input type="radio" name="q_webtf" value="false"> False</label>
+      </div>
+      <button class="checkbtn" onclick="checkMCQ('q_webtf')">Check answer</button>
+      <div class="feedback" id="fb_q_webtf"></div>
+      <div style="margin-top:10px" class="qtext"><span class="qn">2.3</span>Explain your choice in one sentence.</div>
+      <textarea data-f="q_webexplain" placeholder="What is the Web compared to the whole internet?"></textarea>
+    </div>
+  </section>
+
+  <!-- SECTION 3: PARTS OF A NETWORK (matching - auto mark) -->
+  <section>
+    <div class="section-band"><div class="num">3</div><span class="section-label">Parts of a network</span><span class="ref">Slides 7–8 · Website §4</span></div>
+    <h2>Match the part to its job</h2>
+    <span class="tier-tag t-found">Foundation</span>
+    <div class="tier-note">Everyone completes this. Use the drop-downs to match each network part to what it does.</div>
+
+    <div id="matchParts">
+      <div class="match-row"><span class="label">Stores websites and sends data when asked</span>
+        <select class="match" data-match="m1" data-answer="Server"><option value="">— choose —</option><option>Device</option><option>Server</option><option>Router</option><option>Modem</option><option>Switch</option><option>ISP</option></select></div>
+      <div class="match-row"><span class="label">The company you pay for internet access</span>
+        <select class="match" data-match="m2" data-answer="ISP"><option value="">— choose —</option><option>Device</option><option>Server</option><option>Router</option><option>Modem</option><option>Switch</option><option>ISP</option></select></div>
+      <div class="match-row"><span class="label">Directs data to the right device — the "traffic controller"</span>
+        <select class="match" data-match="m3" data-answer="Router"><option value="">— choose —</option><option>Device</option><option>Server</option><option>Router</option><option>Modem</option><option>Switch</option><option>ISP</option></select></div>
+      <div class="match-row"><span class="label">What a person uses to ask for data (laptop, phone)</span>
+        <select class="match" data-match="m4" data-answer="Device"><option value="">— choose —</option><option>Device</option><option>Server</option><option>Router</option><option>Modem</option><option>Switch</option><option>ISP</option></select></div>
+      <div class="match-row"><span class="label">Joins several devices together inside one local network</span>
+        <select class="match" data-match="m5" data-answer="Switch"><option value="">— choose —</option><option>Device</option><option>Server</option><option>Router</option><option>Modem</option><option>Switch</option><option>ISP</option></select></div>
+      <div class="match-row"><span class="label">Connects your home network to the internet via your ISP</span>
+        <select class="match" data-match="m6" data-answer="Modem"><option value="">— choose —</option><option>Device</option><option>Server</option><option>Router</option><option>Modem</option><option>Switch</option><option>ISP</option></select></div>
+    </div>
+    <button class="checkbtn" onclick="checkMatch('matchParts','fb_match')">Check answers</button>
+    <div class="feedback" id="fb_match"></div>
+
+    <div class="q">
+      <span class="tier-tag t-dev">Developing</span>
+      <div class="tier-note">Explain in your own words — don't copy the table.</div>
+      <div class="qtext"><span class="qn">3.1</span>A friend types a website address and it appears. Describe the journey of that request, naming at least three network parts it passes through.</div>
+      <textarea data-f="q_journey" placeholder="Trace the path from the device outward — which parts are involved, and in what order?"></textarea>
+    </div>
+  </section>
+
+  <!-- SECTION 4: TYPES OF NETWORK (scenario sort - auto mark) -->
+  <section>
+    <div class="section-band"><div class="num">4</div><span class="section-label">Types of network</span><span class="ref">Slide 9 · Website §5</span></div>
+    <h2>PAN, LAN, WLAN or WAN?</h2>
+    <span class="tier-tag t-dev">Developing</span>
+    <div class="tier-note">Read each scenario and choose the network type. Remember: LAN vs WLAN is only about wired vs wireless.</div>
+    <div id="matchNets">
+      <div class="match-row"><span class="label">Bluetooth earbuds connected to one phone</span>
+        <select class="match" data-match="n1" data-answer="PAN"><option value="">— choose —</option><option>PAN</option><option>LAN</option><option>WLAN</option><option>WAN</option></select></div>
+      <div class="match-row"><span class="label">Desktop PCs cabled together in a computer lab</span>
+        <select class="match" data-match="n2" data-answer="LAN"><option value="">— choose —</option><option>PAN</option><option>LAN</option><option>WLAN</option><option>WAN</option></select></div>
+      <div class="match-row"><span class="label">Laptops connecting to the school Wi-Fi</span>
+        <select class="match" data-match="n3" data-answer="WLAN"><option value="">— choose —</option><option>PAN</option><option>LAN</option><option>WLAN</option><option>WAN</option></select></div>
+      <div class="match-row"><span class="label">The entire internet, linking networks worldwide</span>
+        <select class="match" data-match="n4" data-answer="WAN"><option value="">— choose —</option><option>PAN</option><option>LAN</option><option>WLAN</option><option>WAN</option></select></div>
+      <div class="match-row"><span class="label">A smartwatch paired to your phone over a short distance</span>
+        <select class="match" data-match="n5" data-answer="PAN"><option value="">— choose —</option><option>PAN</option><option>LAN</option><option>WLAN</option><option>WAN</option></select></div>
+    </div>
+    <button class="checkbtn" onclick="checkMatch('matchNets','fb_nets')">Check answers</button>
+    <div class="feedback" id="fb_nets"></div>
+
+    <div class="q">
+      <div class="qtext"><span class="qn">4.1</span>Give one example of each network type from your <i>own</i> life (not the ones above).</div>
+      <textarea data-f="q_ownexamples" placeholder="PAN: ...\nLAN or WLAN: ...\nWAN: ..."></textarea>
+    </div>
+  </section>
+
+  <!-- SECTION 5: TRANSMISSION (apply) -->
+  <section>
+    <div class="section-band"><div class="num">5</div><span class="section-label">How data travels</span><span class="ref">Slide 10 · Website §6</span></div>
+    <h2>Wired vs wireless</h2>
+    <div class="q">
+      <div class="qtext"><span class="qn">5.1</span>Which transmission type sends data as pulses of light through thin glass?</div>
+      <div class="opts" data-mcq="q_fibre" data-answer="fibre">
+        <label class="opt"><input type="radio" name="q_fibre" value="ethernet"> Ethernet (copper)</label>
+        <label class="opt"><input type="radio" name="q_fibre" value="fibre"> Fibre optic</label>
+        <label class="opt"><input type="radio" name="q_fibre" value="wifi"> Wi-Fi</label>
+        <label class="opt"><input type="radio" name="q_fibre" value="bluetooth"> Bluetooth</label>
+      </div>
+      <button class="checkbtn" onclick="checkMCQ('q_fibre')">Check answer</button>
+      <div class="feedback" id="fb_q_fibre"></div>
+    </div>
+    <div class="q">
+      <div class="qtext"><span class="qn">5.2</span>Give <b>one strength of wired</b> and <b>one strength of wireless</b>.</div>
+      <textarea data-f="q_strengths" placeholder="Wired strength: ...\nWireless strength: ..."></textarea>
+    </div>
+  </section>
+
+  <!-- SECTION 6: EXTENDING -->
+  <section>
+    <div class="section-band"><div class="num">6</div><span class="section-label">Apply it</span><span class="ref">Slide 12</span></div>
+    <h2>Design a network for a small cafe</h2>
+    <span class="tier-tag t-ext">Extending</span>
+    <div class="tier-note">A small cafe has: a till computer, the owner's laptop, customer Wi-Fi, and a Bluetooth receipt printer. Plan the network and justify your choices.</div>
+    <div class="q">
+      <div class="qtext"><span class="qn">6.1</span>For each device, would you connect it <b>wired</b> or <b>wireless</b>? Write your choice and a reason for each.</div>
+      <textarea data-f="q_cafe_choices" style="min-height:110px" placeholder="Till computer — choice + reason:\nOwner's laptop — choice + reason:\nCustomer Wi-Fi — choice + reason:\nReceipt printer — choice + reason:"></textarea>
+    </div>
+    <div class="q">
+      <div class="qtext"><span class="qn">6.2</span>What network parts will the cafe need (e.g. to share one internet connection across all devices)? Name them and say why.</div>
+      <textarea data-f="q_cafe_parts" placeholder="Think about what shares the connection and what directs the data."></textarea>
+    </div>
+    <div class="callout callout-tip"><b>To reach Extending</b> A full answer doesn't just <i>state</i> a choice — it <i>justifies</i> it using ideas like movement, distance, speed and reliability.</div>
+  </section>
+
+  <!-- SECTION 7: EXIT TICKET -->
+  <section>
+    <div class="section-band"><div class="num">7</div><span class="section-label">Exit Ticket</span><span class="ref">Slide 14</span></div>
+    <h2>Before you go</h2>
+    <div class="q">
+      <div class="qtext"><span class="qn">7.1</span>Write your own one-sentence definition of the internet — <b>from memory</b>, no looking back.</div>
+      <textarea data-f="q_exit_def" placeholder="From memory — no notes."></textarea>
+    </div>
+    <div class="q">
+      <div class="qtext"><span class="qn">7.2</span>Give a real example of a PAN, a LAN or WLAN, and a WAN.</div>
+      <textarea data-f="q_exit_examples" placeholder="PAN:\nLAN/WLAN:\nWAN:"></textarea>
+    </div>
+    <div class="q">
+      <div class="qtext"><span class="qn">7.3</span>Self-rate against today's success criteria. Tick the highest you can honestly say.</div>
+      <div class="opts" data-mcq="q_selfrate" data-answer="">
+        <label class="opt"><input type="radio" name="q_selfrate" value="found"> 🟢 Foundation — I can say what the internet is and name the parts of a network.</label>
+        <label class="opt"><input type="radio" name="q_selfrate" value="dev"> 🟡 Developing — I can also compare PAN/LAN/WLAN/WAN and explain each part's job.</label>
+        <label class="opt"><input type="radio" name="q_selfrate" value="ext"> 🔵 Extending — I can also explain wired vs wireless and justify a connection choice.</label>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEACHER PANEL -->
+  <div class="teacher">
+    <span class="tlabel">Teacher use only</span>
+    <h3>Marking &amp; feedback</h3>
+    <p style="font-size:13.5px;color:var(--ink3)">Auto-marked sections (matching + MCQ) score automatically below. Written responses are for teacher judgement against the success criteria.</p>
+    <div class="markrow"><span class="label" style="font-weight:600">Auto-mark total:</span><span class="mono" id="autoscore">—</span></div>
+    <div style="margin-top:14px"><span class="tlabel">Criteria achieved</span>
+      <div class="opts" style="margin-top:6px">
+        <label class="opt"><input type="checkbox" data-f="t_found"> Foundation met</label>
+        <label class="opt"><input type="checkbox" data-f="t_dev"> Developing met</label>
+        <label class="opt"><input type="checkbox" data-f="t_ext"> Extending met</label>
+      </div>
+    </div>
+    <div style="margin-top:14px"><span class="tlabel">Feedback to student</span>
+      <textarea data-f="t_feedback" placeholder="Teacher comments..."></textarea>
+    </div>
+  </div>
+
+  <footer>How the Internet Works · Lesson 1 of 3 · Year 7 Digital Technologies · Mr Smith</footer>
+</div>
+
+<script>
+  const LESSON_ID = 'y7-dt-u3-l1-how-internet-works';
+  const STORAGE_KEY = 'wb_' + LESSON_ID;
+  const websiteUrl = 'L1_HowTheInternetWorks_site.html';
+  const slidesUrl = '#';
+
+  const DataService = {
+    studentId(){ return localStorage.getItem('eduportal_currentStudent') || 'current_student'; },
+    _key(){ return STORAGE_KEY + '_' + this.studentId(); },
+    collect(){
+      const d = {};
+      document.querySelectorAll('[data-f]').forEach(el=>{
+        if(el.type==='checkbox') d[el.dataset.f]=el.checked;
+        else d[el.dataset.f]=el.value;
+      });
+      document.querySelectorAll('[data-mcq]').forEach(g=>{
+        const sel=document.querySelector(`input[name="${g.dataset.mcq}"]:checked`);
+        d['mcq_'+g.dataset.mcq]=sel?sel.value:'';
+      });
+      document.querySelectorAll('select.match').forEach(s=>{ d['match_'+s.dataset.match]=s.value; });
+      return d;
+    },
+    apply(d){
+      if(!d) return;
+      document.querySelectorAll('[data-f]').forEach(el=>{
+        if(d[el.dataset.f]===undefined) return;
+        if(el.type==='checkbox') el.checked=d[el.dataset.f];
+        else el.value=d[el.dataset.f];
+      });
+      document.querySelectorAll('[data-mcq]').forEach(g=>{
+        const v=d['mcq_'+g.dataset.mcq];
+        if(v){ const r=document.querySelector(`input[name="${g.dataset.mcq}"][value="${v}"]`); if(r)r.checked=true; }
+      });
+      document.querySelectorAll('select.match').forEach(s=>{
+        const v=d['match_'+s.dataset.match]; if(v!==undefined) s.value=v;
+      });
+    },
+    save(manual){
+      try{
+        localStorage.setItem(this._key(), JSON.stringify({data:this.collect(), t:Date.now()}));
+        if(manual) flash('Saved ✓');
+      }catch(e){ if(manual) flash('Save failed'); }
+    },
+    load(manual){
+      try{
+        const raw=localStorage.getItem(this._key());
+        if(raw){ this.apply(JSON.parse(raw).data); if(manual) flash('Loaded ✓'); updateProgress(); }
+        else if(manual) flash('Nothing saved yet');
+      }catch(e){ if(manual) flash('Load failed'); }
+    },
+    autoSave(){ clearTimeout(this._t); this._t=setTimeout(()=>{ this.save(false); flash('Auto-saved'); }, 800); },
+    autoLoad(){ this.load(false); },
+    submit(){
+      this.save(false);
+      this._syncProgress('done', autoScore().pct);
+      flash('Submitted ✓ — your teacher can now see your work');
+    },
+    _syncProgress(status, score){
+      try{
+        const sid=this.studentId();
+        localStorage.setItem(`eduportal_progress_${sid}_${LESSON_ID}`, JSON.stringify({status, score, t:Date.now()}));
+      }catch(e){}
+    }
+  };
+
+  function flash(msg){ const s=document.getElementById('savestate'); s.textContent=msg; setTimeout(()=>{ if(s.textContent===msg) s.textContent=''; }, 2500); }
+
+  // ---- auto-marking ----
+  function checkMCQ(name){
+    const g=document.querySelector(`[data-mcq="${name}"]`);
+    const ans=g.dataset.answer;
+    const sel=document.querySelector(`input[name="${name}"]:checked`);
+    const fb=document.getElementById('fb_'+name);
+    g.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));
+    if(!sel){ fb.textContent='Choose an option first.'; fb.className='feedback partial'; return; }
+    const lbl=sel.closest('.opt');
+    if(sel.value===ans){ lbl.classList.add('correct'); fb.textContent='Correct ✓'; fb.className='feedback ok'; }
+    else { lbl.classList.add('wrong'); fb.textContent='Not quite — check your notes and try again.'; fb.className='feedback partial'; }
+    DataService.save(false);
+  }
+  function checkMatch(containerId, fbId){
+    const c=document.getElementById(containerId);
+    let right=0,total=0;
+    c.querySelectorAll('select.match').forEach(s=>{
+      total++; s.classList.remove('correct','wrong');
+      if(s.value===''){ return; }
+      if(s.value===s.dataset.answer){ s.classList.add('correct'); right++; }
+      else s.classList.add('wrong');
+    });
+    const fb=document.getElementById(fbId);
+    fb.textContent=`${right} / ${total} correct`;
+    fb.className='feedback '+(right===total?'ok':'partial');
+    DataService.save(false);
+  }
+  function autoScore(){
+    let right=0,total=0;
+    document.querySelectorAll('select.match').forEach(s=>{ total++; if(s.value===s.dataset.answer) right++; });
+    document.querySelectorAll('[data-mcq]').forEach(g=>{
+      if(g.dataset.answer===''){ return; } // self-rate excluded
+      total++;
+      const sel=document.querySelector(`input[name="${g.dataset.mcq}"]:checked`);
+      if(sel && sel.value===g.dataset.answer) right++;
+    });
+    const pct = total? Math.round(right/total*100):0;
+    return {right,total,pct};
+  }
+
+  // ---- progress (fraction of fields filled) ----
+  function updateProgress(){
+    const fields=[...document.querySelectorAll('[data-f]')].filter(el=>!el.dataset.f.startsWith('t_') && el.dataset.f!=='teacher');
+    let filled=0;
+    fields.forEach(el=>{ if(el.type==='checkbox'){ if(el.checked) filled++; } else if(el.value.trim()) filled++; });
+    const mcqM=[...document.querySelectorAll('[data-mcq]')].filter(g=>document.querySelector(`input[name="${g.dataset.mcq}"]:checked`)).length;
+    const matchM=[...document.querySelectorAll('select.match')].filter(s=>s.value!=='').length;
+    const totalItems=fields.length + document.querySelectorAll('[data-mcq]').length + document.querySelectorAll('select.match').length;
+    const done=filled+mcqM+matchM;
+    const p=totalItems?Math.min(100,Math.round(done/totalItems*100)):0;
+    document.getElementById('pfill').style.width=p+'%';
+    document.getElementById('ppct').textContent=p+'%';
+    const as=autoScore();
+    document.getElementById('autoscore').textContent = as.total? `${as.right} / ${as.total}  (${as.pct}%)` : '—';
+  }
+
+  // ---- wiring ----
+  let firstEntry=true;
+  function onChange(){
+    if(firstEntry){ DataService._syncProgress('in-progress', null); firstEntry=false; }
+    updateProgress(); DataService.autoSave();
+  }
+  document.addEventListener('input', onChange);
+  document.addEventListener('change', onChange);
+  window.addEventListener('load', ()=>{ DataService.autoLoad(); updateProgress(); });
+</script>
+</body>
+</html>

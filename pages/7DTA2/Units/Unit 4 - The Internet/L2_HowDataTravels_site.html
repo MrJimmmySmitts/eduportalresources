@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 2 — How Data Travels | Year 7 Digital Technologies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#12100E;--ink2:#2C2A28;--ink3:#6B6762;--cream:#F7F3EC;--cream2:#EDE8DF;--white:#FFFFFF;--border:#D8D3CA;--border2:#C4BFB6;--pine:#1B5E47;--amber:#B8620A;--indigo:#2B3A8C;--crimson:#8C1F28;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink2);line-height:1.65;}
+  .mono{font-family:'DM Mono',monospace;}
+  .progress-bar{position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:10px 22px;flex-wrap:wrap;}
+  .progress-bar .label{font-family:'DM Mono',monospace;font-size:12px;color:var(--ink3);}
+  .progress-track{flex:1;min-width:120px;height:8px;background:var(--cream2);border-radius:4px;overflow:hidden;}
+  .progress-fill{height:100%;width:0;background:var(--pine);transition:width .4s;}
+  .pbtn{font-family:'DM Mono',monospace;font-size:12px;border:1px solid var(--border2);background:var(--white);color:var(--ink2);padding:6px 12px;border-radius:6px;cursor:pointer;}
+  .pbtn:hover{background:var(--cream2);}
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px 80px;}
+  .cover{background:var(--ink);color:var(--white);border-radius:0 0 18px 18px;padding:46px 40px 38px;margin-bottom:34px;}
+  .cover .eyebrow{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:2px;color:#B7AE9F;text-transform:uppercase;}
+  .cover h1{font-family:'DM Serif Display',serif;font-size:46px;line-height:1.05;margin:14px 0 8px;}
+  .cover .sub{color:#D8D3CA;font-size:17px;}
+  .cover .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:26px;border-top:1px solid #36322C;padding-top:20px;}
+  .cover .meta div span{display:block;font-family:'DM Mono',monospace;font-size:11px;color:#8C857A;text-transform:uppercase;letter-spacing:1px;}
+  .cover .meta div b{font-size:15px;color:var(--white);font-weight:500;}
+  .links a{display:inline-block;margin-right:10px;margin-top:16px;font-family:'DM Mono',monospace;font-size:13px;color:var(--ink);background:#E8E2D6;padding:8px 14px;border-radius:8px;text-decoration:none;}
+  section{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:30px 32px;margin-bottom:26px;}
+  .section-band{display:flex;align-items:center;gap:14px;margin-bottom:8px;}
+  .num{width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--white);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:18px;flex-shrink:0;}
+  .section-label{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:1.5px;color:var(--ink3);text-transform:uppercase;}
+  h2{font-family:'DM Serif Display',serif;font-size:27px;color:var(--ink);line-height:1.15;margin:2px 0 16px;}
+  h3{font-family:'DM Serif Display',serif;font-size:20px;color:var(--ink);margin:22px 0 10px;}
+  p{margin-bottom:12px;}
+  .badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:11px;padding:4px 10px;border-radius:20px;background:var(--cream2);color:var(--ink3);text-transform:uppercase;letter-spacing:1px;}
+  .callout{border-radius:10px;padding:16px 18px;margin:16px 0;font-size:15px;}
+  .callout b{display:block;font-family:'DM Sans';font-weight:700;margin-bottom:4px;}
+  .callout-info{background:#EEF0F8;border:1px solid var(--indigo);}.callout-info b{color:var(--indigo);}
+  .callout-tip{background:#EAF0EC;border:1px solid var(--pine);}.callout-tip b{color:var(--pine);}
+  .callout-note{background:#FBF1E6;border:1px solid var(--amber);}.callout-note b{color:var(--amber);}
+  .callout-extend{background:#F6ECEC;border:1px solid var(--crimson);}.callout-extend b{color:var(--crimson);}
+  .copy-banner{display:flex;align-items:center;gap:10px;background:var(--amber);color:var(--white);border-radius:8px;padding:8px 14px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin:18px 0 10px;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;}
+  th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;}
+  th{background:var(--cream2);font-weight:700;color:var(--ink);}
+  td.term{font-weight:700;color:var(--ink);white-space:nowrap;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:640px){.grid2{grid-template-columns:1fr;}}
+  .mini{background:var(--cream);border:1px solid var(--border);border-radius:10px;padding:16px;}
+  .mini h4{font-family:'DM Sans';font-size:16px;color:var(--ink);margin-bottom:6px;}
+  .packet{display:flex;gap:6px;margin:16px 0;flex-wrap:wrap;}
+  .pseg{flex:1;min-width:150px;border-radius:8px;padding:12px 14px;color:#fff;}
+  .pseg b{display:block;font-family:'DM Serif Display',serif;font-size:16px;margin-bottom:4px;}
+  .pseg span{font-size:13px;opacity:.95;}
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:14px 0;}
+  .flow .node{background:var(--cream2);border:1px solid var(--border2);border-radius:8px;padding:8px 12px;font-size:13.5px;font-weight:600;color:var(--ink);}
+  .flow .arr{color:var(--amber);font-weight:700;}
+  footer{text-align:center;font-family:'DM Mono',monospace;font-size:12px;color:var(--ink3);margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="progress-bar">
+  <span class="label">READING PROGRESS</span>
+  <div class="progress-track"><div class="progress-fill" id="pfill"></div></div>
+  <span class="label" id="ppct">0%</span>
+  <button class="pbtn" onclick="window.print()">Export / Print</button>
+</div>
+
+<div class="cover">
+  <div class="eyebrow">Year 7 Digital Technologies · Unit: The Internet</div>
+  <h1>How Data Travels</h1>
+  <div class="sub">Lesson 2 of 3 — Packets, routing &amp; putting it all back together</div>
+  <div class="links">
+    <a href="#" id="slidesLink">▶ Lesson slides</a>
+    <a href="#" id="wbLink">✎ Open the workbook</a>
+  </div>
+  <div class="meta">
+    <div><span>Subject</span><b>Digital Technologies</b></div>
+    <div><span>Year level</span><b>Year 7</b></div>
+    <div><span>Lesson</span><b>2 of 3</b></div>
+    <div><span>Teacher</span><b>Mr Smith</b></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section id="s1">
+    <div class="section-band"><div class="num">1</div><span class="section-label">Objective</span><span class="badge">Read first</span></div>
+    <h2>What we're learning</h2>
+    <div class="callout callout-info"><b>Learning objective</b>To be able to explain how data is broken into packets, sent across the internet, and put back together at the other end.</div>
+    <p><b>Success criteria</b> — aim for Foundation, then push further:</p>
+    <table>
+      <tr><td class="term">Foundation</td><td>I can explain what a packet is and why data is broken into small pieces.</td></tr>
+      <tr><td class="term">Developing</td><td>I can describe the parts of a packet and how packets can take different routes to the same place.</td></tr>
+      <tr><td class="term">Extending</td><td>I can explain how packets are reassembled, what happens if one is lost, and why this makes the internet reliable.</td></tr>
+    </table>
+    <div class="callout callout-tip"><b>Recall from Lesson 1</b>A request travels: your device → router + modem → ISP → the internet → the website's server. Today we look at the <i>data itself</i> as it makes that journey.</div>
+  </section>
+
+  <section id="s2">
+    <div class="section-band"><div class="num">2</div><span class="section-label">Learning</span><span class="badge">Core notes</span></div>
+    <h2>What is a packet?</h2>
+    <p>When you send anything over the internet — a message, photo or video — it is <b>not</b> sent as one big lump. It is broken into many small pieces called <b>packets</b>. Each packet is numbered, sent separately, and joined back together at the other end.</p>
+    <div class="copy-banner">📋 Copy this into your workbook — Section 2</div>
+    <div class="callout callout-tip"><b>Why break data into packets?</b>Small pieces travel faster, can take different paths, and if one piece is lost only <i>that</i> piece is re-sent — not the whole file.</div>
+    <h3>The jigsaw-by-post analogy</h3>
+    <table>
+      <tr><th>Posting a jigsaw…</th><th>…on the internet</th></tr>
+      <tr><td class="term">Many small envelopes</td><td>Many small packets</td></tr>
+      <tr><td class="term">A number on each envelope</td><td>A sequence number in each packet</td></tr>
+      <tr><td class="term">Your friend rebuilds the picture</td><td>The device reassembles the data</td></tr>
+    </table>
+  </section>
+
+  <section id="s3">
+    <div class="section-band"><div class="num">3</div><span class="section-label">Learning</span><span class="badge">Core notes</span></div>
+    <h2>What's inside a packet?</h2>
+    <div class="copy-banner">📋 Label these in your workbook — Section 3</div>
+    <div class="packet">
+      <div class="pseg" style="background:var(--indigo)"><b>Header</b><span>Where it's going (the destination address) and the packet's number in the sequence.</span></div>
+      <div class="pseg" style="background:var(--pine)"><b>Payload</b><span>The actual piece of data — part of your message, photo or video.</span></div>
+      <div class="pseg" style="background:var(--amber)"><b>Footer</b><span>A simple check so the other end can tell if the packet arrived undamaged.</span></div>
+    </div>
+    <p>On the envelope: the <b>header</b> is the address and envelope number, the <b>payload</b> is the puzzle pieces inside, and the <b>footer</b> is a quick "did everything arrive in one piece?" check.</p>
+  </section>
+
+  <section id="s4">
+    <div class="section-band"><div class="num">4</div><span class="section-label">Learning</span><span class="badge">Core notes</span></div>
+    <h2>Finding a route</h2>
+    <p>Packets from the same message don't all follow the same road. At each step, a <b>router</b> reads the packet's destination and sends it on by the best path available at that moment — like a signpost at every junction. If one path is busy or broken, packets simply take another.</p>
+    <div class="copy-banner">📋 Copy this into your workbook — Section 4</div>
+    <div class="flow">
+      <span class="node">Packet leaves device</span><span class="arr">→</span>
+      <span class="node">Router chooses best path</span><span class="arr">→</span>
+      <span class="node">Next router…</span><span class="arr">→</span>
+      <span class="node">Arrives at destination</span>
+    </div>
+    <div class="callout callout-note"><b>Key idea</b>Two packets from the same photo can arrive by <i>different routes</i> — whichever was fastest at the time.</div>
+  </section>
+
+  <section id="s5">
+    <div class="section-band"><div class="num">5</div><span class="section-label">Learning</span><span class="badge">Light touch</span></div>
+    <h2>How do packets know where to go?</h2>
+    <p>Every device on the internet has its own <b>address</b>, called an <b>IP address</b>. It works like a home address on a letter: the packet's header carries the destination address, and routers use it to pass the packet along until it reaches the right device.</p>
+    <div class="callout callout-tip"><b>The postal picture, complete</b>Your address (so a reply can come back) · their address (in the header) · the postal network (routers passing the envelope from junction to junction).</div>
+  </section>
+
+  <section id="s6">
+    <div class="section-band"><div class="num">6</div><span class="section-label">Learning</span><span class="badge">Core notes</span></div>
+    <h2>Putting it back together</h2>
+    <div class="copy-banner">📋 Copy these steps into your workbook — Section 5</div>
+    <div class="grid2">
+      <div class="mini"><h4>1. Arrive out of order</h4>Packets reach the destination at different times and in a jumbled order.</div>
+      <div class="mini"><h4>2. Reorder by number</h4>The header numbers let the device put them back in the right sequence.</div>
+      <div class="mini"><h4>3. Re-send if missing</h4>If a packet didn't arrive, just that one is requested again.</div>
+      <div class="mini" style="background:#EAF0EC;border-color:var(--pine)"><h4 style="color:var(--pine)">Why it's reliable</h4>Small, numbered, independent pieces that can each take any route and be re-sent mean no single failure stops your message.</div>
+    </div>
+    <div class="callout callout-extend"><b>Extending challenge</b>Explain the full journey of a photo from one phone to another, using the words <i>packet</i>, <i>route</i> and <i>reassemble</i>. What happens if one packet is lost on the way?</div>
+  </section>
+
+  <footer>How Data Travels · Lesson 2 of 3 · Year 7 Digital Technologies · Mr Smith</footer>
+</div>
+<script>
+  const LESSON_ID='y7-dt-u3-l2-how-data-travels';
+  const STORAGE_KEY='wb_'+LESSON_ID;
+  const slidesUrl='#';
+  const workbookUrl='L2_HowDataTravels_workbook.html';
+  const DataService={
+    studentId(){return localStorage.getItem('eduportal_currentStudent')||'current_student';},
+    save(){},load(){return null;},autoSave(){},autoLoad(){},submit(){},
+    _syncProgress(status,score){try{const sid=this.studentId();localStorage.setItem(`eduportal_progress_${sid}_${LESSON_ID}`,JSON.stringify({status,score,t:Date.now()}));}catch(e){}}
+  };
+  document.getElementById('slidesLink').href=slidesUrl;
+  document.getElementById('wbLink').href=workbookUrl;
+  const fill=document.getElementById('pfill'),pct=document.getElementById('ppct');
+  function up(){const h=document.documentElement;const s=h.scrollTop/(h.scrollHeight-h.clientHeight);const p=Math.min(100,Math.round(s*100));fill.style.width=p+'%';pct.textContent=p+'%';}
+  window.addEventListener('scroll',up);window.addEventListener('load',up);
+</script>
+</body>
+</html>

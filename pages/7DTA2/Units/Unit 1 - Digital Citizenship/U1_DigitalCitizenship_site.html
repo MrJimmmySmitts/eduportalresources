@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 1: Digital Citizenship — Reference · EduPortal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#EDEEF2; --ink2:#B4B8C4; --ink3:#7A7F8E;
+  --bg:#0D1117; --bg2:#151B23; --bg3:#1C232E; --bg4:#262E3B;
+  --border:rgba(237,238,242,.10); --border2:rgba(237,238,242,.18);
+  --white:#FFFFFF;
+  --blue:#4361EE; --blue-bg:rgba(67,97,238,.14);
+  --green:#10B981; --green-bg:rgba(16,185,129,.14);
+  --amber:#F59E0B; --amber-bg:rgba(245,158,11,.14);
+  --purple:#8B5CF6; --purple-bg:rgba(139,92,246,.14);
+  --red:#EF4444; --red-bg:rgba(239,68,68,.14);
+  --font-display:'DM Serif Display',serif;
+  --font-body:'Atkinson Hyperlegible',sans-serif;
+  --font-ui:'DM Sans',sans-serif;
+  --font-mono:'DM Mono',monospace;
+  --r:14px; --rsm:9px; --rpill:999px;
+}
+[data-theme="light"]{
+  --ink:#14171F; --ink2:#454B5A; --ink3:#767C8C;
+  --bg:#FFFFFF; --bg2:#F7F8FA; --bg3:#EEF0F4; --bg4:#E3E6ED;
+  --border:rgba(20,23,31,.10); --border2:rgba(20,23,31,.18);
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--ink);font-size:17px;line-height:1.7;padding-bottom:64px;transition:background .2s,color .2s;}
+.wrap{max-width:900px;margin:0 auto;padding:0 24px;}
+h1,h2,h3{font-family:var(--font-display);font-weight:400;letter-spacing:-.01em;color:var(--ink);}
+.eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);}
+a{color:var(--blue);}
+code{font-family:var(--font-mono);font-size:.9em;}
+
+/* Top bar */
+.topbar{position:sticky;top:0;z-index:60;background:var(--bg2);border-bottom:1px solid var(--border);}
+.topbar-inner{max-width:900px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.topbar .doctype{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);padding:5px 10px;border:1px solid var(--border2);border-radius:var(--rpill);}
+.topbar .spacer{flex:1;}
+.progress-wrap{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;color:var(--ink3);}
+.progress-track{width:110px;height:8px;border-radius:var(--rpill);background:var(--bg4);overflow:hidden;}
+.progress-fill{height:100%;background:var(--blue);width:0%;transition:width .3s;}
+.btn{font-family:var(--font-ui);font-size:13.5px;font-weight:600;padding:9px 16px;min-height:44px;border-radius:var(--rsm);border:1px solid var(--border2);background:var(--bg3);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.btn:hover{background:var(--bg4);}
+.btn-primary{background:var(--blue);border-color:var(--blue);color:#fff;}
+.btn-primary:hover{opacity:.92;background:var(--blue);}
+.btn-icon{width:44px;height:44px;padding:0;justify-content:center;}
+
+/* Cover */
+.cover{background:var(--bg2);border-bottom:1px solid var(--border);padding:44px 0 34px;}
+.cover .wrap{display:flex;flex-direction:column;gap:12px;}
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.chip{font-family:var(--font-mono);font-size:10.5px;font-weight:700;padding:4px 11px;border-radius:var(--rpill);letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--border2);color:var(--ink2);}
+.chip-blue{background:var(--blue-bg);color:var(--blue);border-color:rgba(91,124,255,.3);}
+.cover h1{font-size:2rem;margin-top:4px;}
+.cover .sub{color:var(--ink2);max-width:640px;}
+.student-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px;}
+.student-field{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rsm);padding:9px 12px;}
+.student-field label{display:block;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:3px;}
+.student-field input{border:none;background:transparent;color:var(--ink);font-family:var(--font-ui);font-size:13.5px;width:100%;outline:none;}
+@media(max-width:640px){.student-grid{grid-template-columns:1fr 1fr;}}
+
+/* Section band */
+.sband{display:flex;align-items:center;gap:13px;padding:10px 0;border-bottom:1px solid var(--border);margin:44px 0 18px;}
+.sband .sn{width:32px;height:32px;border-radius:50%;background:var(--bg4);color:var(--ink);font-family:var(--font-mono);font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--border2);}
+.sband .slbl{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);}
+.sband .stit{font-size:22px;font-family:var(--font-display);}
+.sband .badge{margin-left:auto;font-family:var(--font-mono);font-size:10px;font-weight:700;padding:4px 10px;border-radius:var(--rpill);text-transform:uppercase;letter-spacing:.06em;}
+
+p{margin-bottom:14px;color:var(--ink2);}
+ul.plain{margin:0 0 16px 22px;color:var(--ink2);} ul.plain li{margin-bottom:7px;}
+strong{color:var(--ink);}
+
+/* Callouts */
+.callout{border-radius:var(--rsm);padding:15px 18px;margin:16px 0;font-size:15.5px;line-height:1.65;border:1px solid var(--border2);background:var(--bg3);}
+.callout-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:6px;font-weight:700;display:flex;align-items:center;gap:6px;}
+.callout-info{background:var(--blue-bg);} .callout-info .callout-label{color:var(--blue);}
+.callout-tip{background:var(--green-bg);} .callout-tip .callout-label{color:var(--green);}
+.callout-note{background:var(--amber-bg);} .callout-note .callout-label{color:var(--amber);}
+.callout-extend{background:var(--purple-bg);} .callout-extend .callout-label{color:var(--purple);}
+.callout-copy{background:var(--amber-bg);border:1px dashed var(--amber);} .callout-copy .callout-label{color:var(--amber);}
+
+/* Tier tags */
+.tier{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:var(--rpill);text-transform:uppercase;letter-spacing:.04em;}
+.tier-foundation{background:var(--green-bg);color:var(--green);}
+.tier-developing{background:var(--amber-bg);color:var(--amber);}
+.tier-extending{background:var(--purple-bg);color:var(--purple);}
+.tier-exit{background:var(--red-bg);color:var(--red);}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:22px 24px;margin:16px 0;}
+.card-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+@media(max-width:720px){.card-row{grid-template-columns:1fr;}}
+.tier-card{border-radius:var(--rsm);padding:15px;border:1px solid var(--border2);}
+.tier-card.foundation{background:var(--green-bg);} .tier-card.developing{background:var(--amber-bg);} .tier-card.extending{background:var(--purple-bg);}
+.tier-card h4{font-family:var(--font-ui);font-size:13px;font-weight:700;margin-bottom:6px;color:var(--ink);}
+
+table{width:100%;border-collapse:collapse;margin:14px 0 20px;font-size:14.5px;}
+th{background:var(--bg3);color:var(--ink2);font-family:var(--font-mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;text-align:left;padding:9px 12px;border:1px solid var(--border);}
+td{padding:10px 12px;border:1px solid var(--border);color:var(--ink2);vertical-align:top;}
+
+/* Workbook form elements */
+.field{margin:14px 0;}
+.field label{display:block;font-family:var(--font-ui);font-weight:600;font-size:15px;color:var(--ink);margin-bottom:8px;}
+.field .qhint{font-size:13px;color:var(--ink3);margin-bottom:8px;}
+textarea,.field input[type=text]{width:100%;font-family:var(--font-body);font-size:15.5px;padding:12px 14px;border-radius:var(--rsm);border:1px solid var(--border2);background:var(--bg3);color:var(--ink);min-height:44px;outline:none;resize:vertical;}
+textarea:focus,.field input[type=text]:focus{border-color:var(--blue);}
+.checklist{display:flex;flex-direction:column;gap:10px;margin:12px 0;}
+.checklist label{display:flex;align-items:flex-start;gap:10px;font-size:15.5px;color:var(--ink2);min-height:44px;cursor:pointer;}
+.checklist input[type=checkbox]{width:22px;height:22px;flex-shrink:0;margin-top:2px;accent-color:var(--blue);}
+.radio-row{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0;}
+.radio-row label{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rpill);padding:8px 14px;min-height:44px;cursor:pointer;font-size:14px;}
+.radio-row input{accent-color:var(--blue);width:18px;height:18px;}
+
+.exit-ticket{border:1px solid var(--red);background:var(--red-bg);border-radius:var(--r);padding:24px;margin:18px 0;}
+.exit-ticket .callout-label{color:var(--red);}
+
+footer{text-align:center;color:var(--ink3);font-family:var(--font-mono);font-size:11px;padding:44px 0 10px;}
+.save-toast{position:fixed;bottom:20px;right:20px;background:var(--bg2);border:1px solid var(--border2);color:var(--ink);font-family:var(--font-ui);font-size:13px;padding:10px 16px;border-radius:var(--rsm);opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none;z-index:80;}
+.save-toast.show{opacity:1;transform:translateY(0);}
+
+
+.unit-nav{position:sticky;top:63px;z-index:55;background:var(--bg);border-bottom:1px solid var(--border);}
+.unit-nav-inner{max-width:900px;margin:0 auto;padding:8px 24px;display:flex;gap:6px;overflow-x:auto;}
+.unit-nav a{font-family:var(--font-mono);font-size:11.5px;color:var(--ink3);text-decoration:none;padding:6px 12px;border-radius:var(--rpill);white-space:nowrap;border:1px solid transparent;}
+.unit-nav a:hover{color:var(--ink);border-color:var(--border2);}
+
+.lesson-divider{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:8px;}
+.lesson-num{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);border:1px solid rgba(91,124,255,.35);background:var(--blue-bg);padding:4px 10px;border-radius:var(--rpill);}
+.lesson-divider h2{font-size:1.7rem;flex:1;min-width:200px;}
+.lesson-rule{border:none;border-top:1px solid var(--border);margin:52px 0;}
+section{scroll-margin-top:130px;}
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="topbar-inner">
+  <span class="doctype">Unit Reference Site</span>
+  <span class="eyebrow">y7-dt-u1</span>
+  <div class="spacer"></div>
+  <button class="btn btn-icon" id="themeToggle" title="Toggle light/dark" aria-label="Toggle light and dark mode">◐</button>
+</div></div>
+<div class="unit-nav"><div class="unit-nav-inner"><a href="#y7-dt-u1-l1-digital-citizen">L1 · Digital Citizen</a><a href="#y7-dt-u1-l2-critical-thinking">L2 · Critical Thinking</a><a href="#y7-dt-u1-l3-managing-digital-schoolwork">L3 · Managing Digital Schoolwork</a></div></div>
+
+<div class="cover">
+  <div class="wrap">
+    <div class="chip-row">
+      <span class="chip chip-blue">EduPortal · Victorian Curriculum</span>
+      <span class="chip">Year 7 Digital Technology</span>
+      <span class="chip">y7-dt-u1</span>
+    </div>
+    <h1>Unit 1: Digital Citizenship</h1>
+    <p class="sub">Being safe, responsible, and effective online — and organising the digital tools you'll use all year.</p>
+    <p class="eyebrow">This reference site is shared across all lessons in this unit — no separate site per lesson.</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+        <section id="y7-dt-u1-l1-digital-citizen">
+        <div class="lesson-divider">
+          <span class="lesson-num">Lesson 1</span>
+          <h2>Lesson 1: Digital Citizen</h2>
+          <a class="btn btn-primary" href="L1_DigitalCitizen_workbook.html">📓 Open Workbook</a>
+        </div>
+        <p class="sub" style="max-width:680px;">What does it mean to be safe, responsible and effective online — and why does it matter beyond just you?</p>
+        <p class="eyebrow">y7-dt-u1-l1-digital-citizen</p>
+
+        <div class="card" style="margin-top:18px;">
+          <p style="font-size:17px;color:var(--ink);"><strong>To be able to...</strong> understand what it means to be a safe, responsible digital citizen, and describe appropriate online behaviour.</p>
+          <h3 style="font-size:14px;font-family:var(--font-ui);text-transform:uppercase;letter-spacing:.04em;margin:18px 0 10px;color:var(--ink3);">Success Criteria</h3>
+          <div class="card-row">
+      <div class="tier-card foundation"><h4><span class="tier tier-foundation">Foundation</span></h4><p style="margin:0;color:var(--ink2);font-size:14.5px;">List two rights and two responsibilities you have when you're online.</p></div>
+      <div class="tier-card developing"><h4><span class="tier tier-developing">Developing</span></h4><p style="margin:0;color:var(--ink2);font-size:14.5px;">Describe what appropriate online behaviour looks like in a given scenario.</p></div>
+      <div class="tier-card extending"><h4><span class="tier tier-extending">Extending</span></h4><p style="margin:0;color:var(--ink2);font-size:14.5px;">Explain why digital citizenship matters for the wider online community, not just for yourself.</p></div>
+    </div>
+        </div>
+
+        
+            <div class="sband"><div class="sn">1</div><div><div class="slbl">Section 1</div><div class="stit">What is a digital citizen?</div></div></div>
+            <p>A <strong>digital citizen</strong> is anyone who uses digital technology — the internet, apps, games, social platforms — to engage with the world. Just like being a citizen of a country comes with rights and responsibilities, being a digital citizen does too.</p>
+            <table><thead><tr><th>Digital Rights</th><th>Digital Responsibilities</th></tr></thead>
+            <tbody>
+              <tr><td>To feel safe and respected online</td><td>To treat others with respect online</td></tr>
+              <tr><td>To have your personal information protected</td><td>To protect your own and others' personal information</td></tr>
+              <tr><td>To access age-appropriate content and support</td><td>To think critically before sharing or believing what you see</td></tr>
+              <tr><td>To report unsafe or unkind behaviour</td><td>To speak up when you see unsafe or unkind behaviour</td></tr>
+            </tbody></table>
+            
+            <div class="sband"><div class="sn">2</div><div><div class="slbl">Section 2</div><div class="stit">Your digital footprint</div></div></div>
+            <p>Everything you do online — posts, comments, likes, searches, photos — leaves a trace called your <strong>digital footprint</strong>. Some of it you create on purpose (an active footprint), and some is collected without you actively choosing it, like location data or browsing history (a passive footprint).</p>
+            <div class="callout callout-info"><div class="callout-label">Key idea</div>Digital footprints can be very hard to fully delete. Before you post, share, or comment, it's worth asking: would I be okay with a future employer, teacher, or family member seeing this in five years?</div>
+            
+            <div class="sband"><div class="sn">3</div><div><div class="slbl">Section 3</div><div class="stit">Being Internet Awesome</div></div></div>
+            <p>Google's <strong>Be Internet Awesome</strong> programme uses a game called <a href="https://beinternetawesome.withgoogle.com/en_us/interland" target="_blank" rel="noopener">Interland</a> to teach the core habits of good digital citizenship, organised around four themes:</p>
+            <ul class="plain">
+              <li><strong>Be Internet Smart</strong> — share with care</li>
+              <li><strong>Be Internet Alert</strong> — don't fall for fake information or scams</li>
+              <li><strong>Be Internet Strong</strong> — secure your accounts</li>
+              <li><strong>Be Internet Kind</strong> — treat others the way you want to be treated</li>
+            </ul>
+            
+
+        <div class="sband"><div class="sn">📋</div><div><div class="slbl">For your workbook</div><div class="stit">What to copy down</div></div></div>
+        <div class="callout callout-note"><div class="callout-label">📋 Copy this into your workbook</div>Definition: A digital citizen is someone who uses digital technology responsibly, safely, and respectfully to engage with others and access information.</div><div class="callout callout-note"><div class="callout-label">📋 Copy this into your workbook</div>The four Be Internet Awesome themes: Smart, Alert, Strong, Kind.</div>
+
+        <div class="callout callout-info"><div class="callout-label">Coming up</div>Next lesson we look at how to tell whether an online source is trustworthy — using two famously tricky (and completely fake) websites.</div>
+        </section>
+        <hr class="lesson-rule">
+        
+        <section id="y7-dt-u1-l2-critical-thinking">
+        <div class="lesson-divider">
+          <span class="lesson-num">Lesson 2</span>
+          <h2>Lesson 2: Critical Thinking</h2>
+          <a class="btn btn-primary" href="L2_CriticalThinking_workbook.html">📓 Open Workbook</a>
+        </div>
+        <p class="sub" style="max-width:680px;">Not everything on the internet is true — including some very convincing, very fake websites.</p>
+        <p class="eyebrow">y7-dt-u1-l2-critical-thinking</p>
+
+        <div class="card" style="margin-top:18px;">
+          <p style="font-size:17px;color:var(--ink);"><strong>To be able to...</strong> critically evaluate the credibility of online sources, and identify signs of a trustworthy or untrustworthy site.</p>
+          <h3 style="font-size:14px;font-family:var(--font-ui);text-transform:uppercase;letter-spacing:.04em;margin:18px 0 10px;color:var(--ink3);">Success Criteria</h3>
+          <div class="card-row">
+      <div class="tier-card foundation"><h4><span class="tier tier-foundation">Foundation</span></h4><p style="margin:0;color:var(--ink2);font-size:14.5px;">Identify two signs that a website might not be trustworthy.</p></div>
+      <div class="tier-card developing"><h4><span class="tier tier-developing">Developing</span></h4><p style="margin:0;color:var(--ink2);font-size:14.5px;">Use a checklist to assess the credibility of a website.</p></div>
+      <div class="tier-card extending"><h4><span class="tier tier-extending">Extending</span></h4><p style="margin:0;color:var(--ink2);font-size:14.5px;">Justify your credibility verdict using specific evidence from the site (author, domain, sources cited).</p></div>
+    </div>
+        </div>
+
+        
+            <div class="sband"><div class="sn">1</div><div><div class="slbl">Section 1</div><div class="stit">Why credibility matters</div></div></div>
+            <p>Anyone can publish a website — there's no test you have to pass first. That means the internet contains brilliant, accurate information sitting right next to confident-sounding nonsense. Being a good digital citizen means being able to tell the difference before you believe or share something.</p>
+            
+            <div class="sband"><div class="sn">2</div><div><div class="slbl">Section 2</div><div class="stit">A credibility checklist</div></div></div>
+            <p>When you land on a website, ask these questions:</p>
+            <table><thead><tr><th>Check</th><th>What to look for</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Author</strong></td><td>Is a real person or organisation named? Do they have relevant expertise?</td></tr>
+              <tr><td><strong>Domain</strong></td><td>Is it .gov, .edu, or a known organisation — or an unfamiliar .com/.org?</td></tr>
+              <tr><td><strong>Purpose</strong></td><td>Is the site trying to inform you, or sell you something, or make a joke?</td></tr>
+              <tr><td><strong>Evidence</strong></td><td>Does it link to sources, studies, or data — or just make claims?</td></tr>
+              <tr><td><strong>Currency</strong></td><td>Is the content dated, and is it recent enough to be reliable?</td></tr>
+              <tr><td><strong>Cross-check</strong></td><td>Do other trustworthy sites say the same thing?</td></tr>
+            </tbody></table>
+            
+            <div class="sband"><div class="sn">3</div><div><div class="slbl">Section 3</div><div class="stit">Famous fakes: DHMO.org and the Pacific Northwest Tree Octopus</div></div></div>
+            <p><strong>DHMO.org</strong> presents a long list of alarming "facts" about a chemical called Dihydrogen Monoxide — component of acid rain, found in tumours, causes corrosion... DHMO is, in fact, just water (H₂O), described using scary but technically true language.</p>
+            <p>The <strong>Pacific Northwest Tree Octopus</strong> site (zapatopi.net) describes an endangered octopus that supposedly lives in trees in Washington State, complete with photos and a fake conservation call to action. It is entirely fictional — a famous hoax used worldwide to test students' web literacy.</p>
+            <div class="callout callout-note"><div class="callout-label">Why these sites exist</div>Both were built deliberately, by researchers and educators, to study and teach media literacy. Studies have found that a large majority of students who visit these sites without training rate them as "believable."</div>
+            
+
+        <div class="sband"><div class="sn">📋</div><div><div class="slbl">For your workbook</div><div class="stit">What to copy down</div></div></div>
+        <div class="callout callout-note"><div class="callout-label">📋 Copy this into your workbook</div>The six-point credibility checklist: Author, Domain, Purpose, Evidence, Currency, Cross-check.</div><div class="callout callout-note"><div class="callout-label">📋 Copy this into your workbook</div>DHMO.org and the Tree Octopus site are both real, well-known hoax websites used to teach web literacy — not real threats or real animals.</div>
+
+        <div class="callout callout-info"><div class="callout-label">Coming up</div>Next lesson moves from evaluating other people's content to organising your own — setting up folders, logins, and habits for managing digital schoolwork all year.</div>
+        </section>
+        <hr class="lesson-rule">
+        
+        <section id="y7-dt-u1-l3-managing-digital-schoolwork">
+        <div class="lesson-divider">
+          <span class="lesson-num">Lesson 3</span>
+          <h2>Lesson 3: Managing Digital Schoolwork</h2>
+          <a class="btn btn-primary" href="L3_ManagingDigitalSchoolwork_workbook.html">📓 Open Workbook</a>
+        </div>
+        <p class="sub" style="max-width:680px;">A messy digital desktop costs you time all year — and a laptop crash with no backup can cost you everything. Today you build a system that survives both.</p>
+        <p class="eyebrow">y7-dt-u1-l3-managing-digital-schoolwork</p>
+
+        <div class="card" style="margin-top:18px;">
+          <p style="font-size:17px;color:var(--ink);"><strong>To be able to...</strong> organise and manage digital files and tools effectively, including logging in, organising folders, and creating shortcuts.</p>
+          <h3 style="font-size:14px;font-family:var(--font-ui);text-transform:uppercase;letter-spacing:.04em;margin:18px 0 10px;color:var(--ink3);">Success Criteria</h3>
+          <div class="card-row">
+      <div class="tier-card foundation"><h4><span class="tier tier-foundation">Foundation</span></h4><p style="margin:0;color:var(--ink2);font-size:14.5px;">Log in to your school accounts without help, and know where your files are stored.</p></div>
+      <div class="tier-card developing"><h4><span class="tier tier-developing">Developing</span></h4><p style="margin:0;color:var(--ink2);font-size:14.5px;">Create a clear folder structure, rename a file using a consistent naming convention, and confirm your work is backed up to the cloud.</p></div>
+      <div class="tier-card extending"><h4><span class="tier tier-extending">Extending</span></h4><p style="margin:0;color:var(--ink2);font-size:14.5px;">Set up a filing and backup system that lets you find, or recover, any piece of work in under 30 seconds, and explain the logic behind it.</p></div>
+    </div>
+        </div>
+
+        
+            <div class="sband"><div class="sn">1</div><div><div class="slbl">Section 1</div><div class="stit">Why file organisation matters</div></div></div>
+            <p>By the end of Year 7 you'll have created hundreds of digital files across every subject. A system you set up in week 1 — or don't — determines whether you can find last term's work in ten seconds or ten minutes.</p>
+            
+            <div class="sband"><div class="sn">2</div><div><div class="slbl">Section 2</div><div class="stit">Folder structure</div></div></div>
+            <p>A simple, reliable structure for school files:</p>
+            <ul class="plain">
+              <li><strong>Top level:</strong> one folder per subject (e.g. <code>Digital Technology</code>, <code>Maths</code>, <code>Science</code>)</li>
+              <li><strong>Inside each subject:</strong> one folder per unit or term (e.g. <code>Unit 1 - Digital Citizenship</code>)</li>
+              <li><strong>Avoid:</strong> saving everything loose in "My Drive" or "Downloads" with no folders at all</li>
+            </ul>
+            
+            <div class="sband"><div class="sn">3</div><div><div class="slbl">Section 3</div><div class="stit">Naming conventions</div></div></div>
+            <p>A good file name tells you what's inside without opening it. A reliable pattern:</p>
+            <p style="text-align:center;"><code>Subject_Topic_ShortDescription</code></p>
+            <table><thead><tr><th>❌ Unclear</th><th>✅ Clear</th></tr></thead>
+            <tbody>
+              <tr><td><code>Document1.docx</code></td><td><code>DT_U1_CredibilityChecklist.docx</code></td></tr>
+              <tr><td><code>final final v2 ACTUAL.docx</code></td><td><code>DT_U1_ExitTicket_L2.docx</code></td></tr>
+            </tbody></table>
+            <div class="callout callout-tip"><div class="callout-label">Practical tip</div>Consistent naming also makes files sort alphabetically in a useful order — put the subject and unit first, the specific task last.</div>
+            
+            <div class="sband"><div class="sn">4</div><div><div class="slbl">Section 4</div><div class="stit">Bookmarks and shortcuts</div></div></div>
+            <p>Bookmark the pages you use every lesson — your school portal, EduPortal, your Drive/OneDrive home — into a dedicated bookmarks folder in your browser, so you're never more than one click away from your work.</p>
+            
+            <div class="sband"><div class="sn">5</div><div><div class="slbl">Section 5</div><div class="stit">Why this isn't just about being tidy</div></div></div>
+            <p>A folder system only protects you if a copy of your work also exists somewhere your laptop crashing, a lost USB, or a wiped Chromebook can't reach. A tidy desktop that lives on one device is still one bad day away from disappearing.</p>
+            <div class="callout callout-info"><div class="callout-label">Key idea</div>Being a responsible digital citizen isn't only about how you treat others online — it's also about taking responsibility for your own data.</div>
+            
+            <div class="sband"><div class="sn">6</div><div><div class="slbl">Section 6</div><div class="stit">Cloud sync, in plain terms</div></div></div>
+            <p>Your school Google Drive or OneDrive saves a copy of your files online automatically, as long as you're connected to the internet — this happens whether you notice it or not. Working entirely from Downloads, Desktop, or a USB stick with no cloud connection means one device failure can cost you everything in that folder.</p>
+            <table><thead><tr><th>Sync icon</th><th>What it means</th></tr></thead>
+            <tbody>
+              <tr><td>Tick or cloud</td><td>Backed up — safe</td></tr>
+              <tr><td>Spinning arrow</td><td>Still uploading — wait before closing the laptop</td></tr>
+              <tr><td>Red mark or "!"</td><td>Failed — check it, don't ignore it</td></tr>
+            </tbody></table>
+            
+            <div class="sband"><div class="sn">7</div><div><div class="slbl">Section 7</div><div class="stit">Taking a screenshot</div></div></div>
+            <p>You'll use a screenshot to show your teacher your folder structure. The shortcut depends on your device:</p>
+            <table><thead><tr><th>Device</th><th>Shortcut</th></tr></thead>
+            <tbody>
+              <tr><td>Windows</td><td><code>Windows key + Shift + S</code>, then select the area</td></tr>
+              <tr><td>Mac</td><td><code>Cmd + Shift + 4</code>, then select the area</td></tr>
+              <tr><td>Chromebook</td><td><code>Ctrl + Show windows</code> (the rectangle key), then select the area</td></tr>
+            </tbody></table>
+            
+
+        <div class="sband"><div class="sn">📋</div><div><div class="slbl">For your workbook</div><div class="stit">What to copy down</div></div></div>
+        <div class="callout callout-note"><div class="callout-label">📋 Copy this into your workbook</div>Folder structure pattern: Subject → Unit/Term → individual files.</div><div class="callout callout-note"><div class="callout-label">📋 Copy this into your workbook</div>File naming pattern: Subject_Topic_ShortDescription (e.g. DT_U1_ExitTicket_L2).</div><div class="callout callout-note"><div class="callout-label">📋 Copy this into your workbook</div>Sync icon meanings: tick/cloud = backed up, spinning arrow = still uploading, red mark or "!" = failed.</div>
+
+        <div class="callout callout-info"><div class="callout-label">Coming up</div>That completes Unit 1: Digital Citizenship. Next up is Unit 2 — Game Programming, where you'll start designing and coding your own game in MakeCode Arcade.</div>
+        </section>
+        <hr class="lesson-rule">
+        
+</div>
+
+<footer>EduPortal · Year 7 Digital Technology · Unit 1: Digital Citizenship · y7-dt-u1</footer>
+
+<script>
+// This unit reference site is read-only and tracks no progress — it has no DataService layer.
+// Progress is tracked exclusively by each lesson's workbook.
+const root = document.documentElement;
+document.getElementById('themeToggle').addEventListener('click', () => {
+  root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generating Game Ideas — Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dark-bg:#0D1117; --light-bg:#FFFFFF;
+    --blue:#4361EE; --green:#10B981; --amber:#F59E0B; --purple:#8B5CF6; --red:#EF4444;
+    --bg: var(--dark-bg); --panel:#161B22; --panel-2:#1C2330; --border:#2A3140;
+    --text:#E6E8EE; --text-dim:#9BA3B4; --input-bg:#0D1117;
+  }
+  [data-theme="light"]{
+    --bg: var(--light-bg); --panel:#F7F8FC; --panel-2:#F0F2F8; --border:#DCE0EA;
+    --text:#1A1A2E; --text-dim:#5A5A6E; --input-bg:#FFFFFF;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; transition:background .2s,color .2s;}
+  h1,h2,h3{font-family:'DM Serif Display',serif; font-weight:400; margin:0;}
+  .mono{font-family:'DM Mono',monospace;}
+  .read{font-family:'Atkinson Hyperlegible',sans-serif;}
+  a{color:var(--blue);}
+
+  #progressbar{
+    position:sticky; top:0; z-index:50; background:var(--panel); border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:16px; padding:10px 20px; flex-wrap:wrap;
+  }
+  #progressbar .track{flex:1; min-width:140px; height:8px; background:var(--panel-2); border-radius:4px; overflow:hidden;}
+  #progressbar .fill{height:100%; background:var(--blue); width:0%; transition:width .3s;}
+  #progressbar .pct{font-family:'DM Mono',monospace; font-size:13px; color:var(--text-dim); min-width:40px;}
+  .btn{
+    font-family:'DM Mono',monospace; font-size:12px; border:1px solid var(--border); background:var(--panel-2);
+    color:var(--text); padding:7px 12px; border-radius:6px; cursor:pointer;
+  }
+  .btn:hover{border-color:var(--blue);}
+  .btn.primary{background:var(--blue); color:#fff; border-color:var(--blue);}
+  .btn.exit{background:var(--red); color:#fff; border-color:var(--red);}
+
+  .wrap{max-width:920px; margin:0 auto; padding:0 20px 80px;}
+
+  .cover{padding:40px 0 24px; border-bottom:1px solid var(--border); margin-bottom:32px;}
+  .eyebrow{font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.08em; color:var(--blue); margin-bottom:10px;}
+  .cover h1{font-size:34px; margin-bottom:6px;}
+  .cover .sub{color:var(--text-dim); font-size:15px; margin-bottom:20px;}
+  .infogrid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:18px;}
+  .infogrid label{display:block; font-family:'DM Mono',monospace; font-size:11px; color:var(--text-dim); margin-bottom:4px;}
+  .infogrid input{width:100%; background:var(--input-bg); border:1px solid var(--border); border-radius:6px; padding:8px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px;}
+
+  .section-band{display:flex; align-items:center; gap:12px; margin:44px 0 18px;}
+  .num-circle{width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'DM Mono',monospace; font-weight:700; font-size:14px; color:#fff; flex-shrink:0;}
+  .section-band h2{font-size:22px;}
+  .section-label{font-family:'DM Mono',monospace; font-size:11px; color:var(--text-dim); text-transform:uppercase;}
+  .badge{margin-left:auto; font-family:'DM Mono',monospace; font-size:11px; padding:4px 10px; border-radius:12px; border:1px solid var(--border); color:var(--text-dim);}
+
+  .card{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:20px; margin-bottom:16px;}
+
+  .callout{border-radius:10px; padding:16px 18px; margin-bottom:20px; border:1px solid; font-family:'Atkinson Hyperlegible',sans-serif; font-size:15px; line-height:1.5;}
+  .callout-info{background:rgba(67,97,238,.08); border-color:var(--blue);}
+  .callout-tip{background:rgba(16,185,129,.08); border-color:var(--green);}
+  .callout-note{background:rgba(245,158,11,.08); border-color:var(--amber);}
+  .callout-extend{background:rgba(139,92,246,.08); border-color:var(--purple);}
+  .callout b{display:block; font-family:'DM Mono',monospace; font-size:11px; text-transform:uppercase; margin-bottom:6px; letter-spacing:.04em;}
+
+  .tier{display:inline-flex; align-items:center; gap:6px; font-family:'DM Mono',monospace; font-size:12px; font-weight:700; padding:4px 10px; border-radius:12px; margin-bottom:10px;}
+  .tier.foundation{background:rgba(16,185,129,.12); color:var(--green);}
+  .tier.developing{background:rgba(245,158,11,.12); color:var(--amber);}
+  .tier.extending{background:rgba(139,92,246,.12); color:var(--purple);}
+
+  textarea, input[type=text]{
+    width:100%; background:var(--input-bg); border:1px solid var(--border); border-radius:8px;
+    padding:10px 12px; color:var(--text); font-family:'Atkinson Hyperlegible',sans-serif; font-size:14.5px; resize:vertical;
+  }
+  textarea:focus, input:focus{outline:2px solid var(--blue); outline-offset:1px;}
+  label.q{display:block; font-family:'DM Sans',sans-serif; font-weight:600; font-size:14.5px; margin-bottom:6px; margin-top:14px;}
+
+  select{
+    background:var(--input-bg); border:1px solid var(--border); border-radius:6px; color:var(--text);
+    padding:7px 10px; font-family:'DM Sans',sans-serif; font-size:13.5px; width:100%;
+  }
+
+  /* Word wheel widget */
+  .wheel-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:6px;}
+  .wheel-card{border:1.5px solid var(--border); border-radius:10px; padding:16px; text-align:center; background:var(--panel-2);}
+  .wheel-card .wheel-label{font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.05em; margin-bottom:10px; font-weight:700;}
+  .wheel-result{font-family:'DM Serif Display',serif; font-size:20px; min-height:56px; display:flex; align-items:center; justify-content:center; border-radius:8px; background:var(--input-bg); border:1px solid var(--border); margin-bottom:10px; padding:8px; text-align:center;}
+  .wheel-spin{width:100%; font-size:13px; padding:9px; border-radius:6px; border:none; cursor:pointer; font-family:'DM Mono',monospace; font-weight:700; color:#fff;}
+  .spin-all-wrap{text-align:center; margin-top:16px;}
+  .spin-all{padding:12px 28px; font-size:13px; border-radius:8px; border:none; background:var(--blue); color:#fff; font-family:'DM Mono',monospace; font-weight:700; cursor:pointer;}
+  .spin-all:hover{opacity:.9;}
+  .wheel-spin:hover{opacity:.85;}
+  @keyframes spinFlicker{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+  .spinning{animation:spinFlicker .12s linear infinite;}
+
+  .element-row{display:grid; grid-template-columns:170px 1fr; gap:14px; align-items:start; padding:12px 0; border-bottom:1px solid var(--border);}
+  .element-row:last-child{border-bottom:none;}
+  .element-row .el-label{display:flex; align-items:center; gap:8px; font-weight:700; padding-top:8px;}
+  .dot{width:10px; height:10px; border-radius:50%; flex-shrink:0;}
+
+  .checklist label{display:flex; gap:10px; align-items:flex-start; font-size:14px; margin:8px 0; cursor:pointer;}
+  .checklist input{margin-top:3px;}
+
+  .site-link{display:inline-flex; align-items:center; gap:6px; font-family:'DM Mono',monospace; font-size:12.5px; padding:8px 14px; border:1px solid var(--blue); border-radius:6px; color:var(--blue); text-decoration:none; margin:6px 0 4px;}
+  .site-link:hover{background:rgba(67,97,238,.1);}
+
+  .footer-note{color:var(--text-dim); font-size:12.5px; text-align:center; margin-top:50px; font-family:'DM Mono',monospace;}
+
+  @media (max-width:640px){ .wheel-grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body data-theme="dark">
+
+<div id="progressbar">
+  <span class="mono" style="font-size:12px; color:var(--text-dim);">PROGRESS</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+  <span class="pct" id="progressPct">0%</span>
+  <button class="btn" onclick="DataService.save(true)">Save</button>
+  <button class="btn" onclick="DataService.autoLoad(true)">Load</button>
+  <button class="btn" onclick="window.print()">Export</button>
+  <button class="btn" id="themeToggle" onclick="toggleTheme()">☾ Light mode</button>
+</div>
+
+<div class="wrap">
+
+  <div class="cover">
+    <div class="eyebrow">VICTORIAN CURRICULUM 2.0 · DIGITAL TECHNOLOGIES · YEAR 10</div>
+    <h1>Generating Game Ideas</h1>
+    <div class="sub">Game Programming — Unit 1, Lesson 3 · Student Workbook</div>
+    <div class="infogrid">
+      <div><label>Name</label><input type="text" id="s_name" placeholder="Your name"></div>
+      <div><label>Class</label><input type="text" id="s_class" placeholder="e.g. 10DIT2"></div>
+      <div><label>Date</label><input type="text" id="s_date" placeholder="YYYY-MM-DD"></div>
+      <div><label>Teacher</label><input type="text" id="s_teacher" value="Mr Smith" readonly></div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: LO & SC -->
+  <div class="section-band">
+    <div class="num-circle" style="background:var(--blue);">1</div>
+    <div><div class="section-label">Stage 1</div><h2>Learning Objective &amp; Success Criteria</h2></div>
+    <div class="badge">Self-check</div>
+  </div>
+
+  <div class="callout callout-info">
+    <b>Today's objective</b>
+    To generate an original game idea using structured ideation techniques, and define it using the seven elements.
+  </div>
+
+  <div class="card">
+    <div class="checklist">
+      <label><input type="checkbox" class="sc-check" data-key="sc_foundation"><span><span class="tier foundation">🟢 Foundation</span><br>I can use one ideation technique to generate a game concept and define at least 5 elements.</span></label>
+      <label><input type="checkbox" class="sc-check" data-key="sc_developing"><span><span class="tier developing">🟡 Developing</span><br>I can use a technique to generate a concept and define all 7 elements clearly.</span></label>
+      <label><input type="checkbox" class="sc-check" data-key="sc_extending"><span><span class="tier extending">🟣 Extending</span><br>I can generate multiple concepts, select the strongest, and justify why.</span></label>
+    </div>
+    <p style="color:var(--text-dim); font-size:12.5px; margin-top:12px; margin-bottom:0;">Tick these off honestly as you complete each level of today's task — you'll revisit this at the exit ticket.</p>
+  </div>
+
+  <a class="site-link" href="U1_GameProgramming_site.html#l3-generating-game-ideas" target="_blank">See the unit site for full notes on this topic →</a>
+
+  <!-- SECTION 2: Idea Generator -->
+  <div class="section-band">
+    <div class="num-circle" style="background:var(--green);">2</div>
+    <div><div class="section-label">Stage 3</div><h2>Idea Generator</h2></div>
+    <div class="badge">Main task</div>
+  </div>
+
+  <div class="callout callout-tip">
+    <b>Task</b>
+    Use one or more ideation techniques below to generate a game concept. Re-spin as many times as you like before committing — that's a legitimate strategy.
+  </div>
+
+  <div class="card">
+    <h3 style="font-size:18px; margin-bottom:4px;">🎡 Word Wheel</h3>
+    <p class="read" style="color:var(--text-dim); font-size:13px; margin-top:0;">Spin each wheel (or spin all three at once) to force a random combination.</p>
+    <div class="wheel-grid">
+      <div class="wheel-card">
+        <div class="wheel-label" style="color:var(--blue);">THEME</div>
+        <div class="wheel-result" id="res_theme">—</div>
+        <button class="wheel-spin" style="background:var(--blue);" onclick="spinWheel('theme')">🎲 Spin</button>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-label" style="color:var(--green);">SETTING</div>
+        <div class="wheel-result" id="res_setting">—</div>
+        <button class="wheel-spin" style="background:var(--green);" onclick="spinWheel('setting')">🎲 Spin</button>
+      </div>
+      <div class="wheel-card">
+        <div class="wheel-label" style="color:var(--purple);">MECHANIC</div>
+        <div class="wheel-result" id="res_mechanic">—</div>
+        <button class="wheel-spin" style="background:var(--purple);" onclick="spinWheel('mechanic')">🎲 Spin</button>
+      </div>
+    </div>
+    <div class="spin-all-wrap"><button class="spin-all" onclick="spinAll()">🎲 Spin All Three</button></div>
+  </div>
+
+  <div class="card">
+    <h3 style="font-size:16px; margin-bottom:4px;">🧩 Other techniques you can use instead (or as well)</h3>
+    <label class="q">Mash-Up: combine one element from two games you know well</label>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <input type="text" class="autosave" data-key="mashup_game1" placeholder="Game 1">
+      <input type="text" class="autosave" data-key="mashup_game2" placeholder="Game 2">
+    </div>
+    <textarea rows="2" class="autosave" data-key="mashup_combo" placeholder="What do you take from each, and what does combining them create?" style="margin-top:8px;"></textarea>
+
+    <label class="q">"What If" Constraint: pick or write a constraint that forces a new mechanic</label>
+    <select class="autosave" data-key="whatif_choice">
+      <option value="">— choose a prompt, or write your own below —</option>
+      <option>What if the player couldn't see more than one metre ahead?</option>
+      <option>What if every action was permanent — no undo, no retry?</option>
+      <option>What if two players had to share one controller, one input each?</option>
+      <option>What if the game got easier the longer you played badly?</option>
+      <option value="custom">Write my own below</option>
+    </select>
+    <textarea rows="2" class="autosave" data-key="whatif_response" placeholder="What new mechanic does your constraint force?" style="margin-top:8px;"></textarea>
+  </div>
+
+  <div class="card">
+    <label class="q" style="margin-top:0;">Which technique(s) did you actually use for your final idea?</label>
+    <div class="checklist">
+      <label><input type="checkbox" class="autosave-check" data-key="tech_wordwheel"> Word Wheel</label>
+      <label><input type="checkbox" class="autosave-check" data-key="tech_mashup"> Mash-Up Method</label>
+      <label><input type="checkbox" class="autosave-check" data-key="tech_whatif"> "What If" Constraint</label>
+      <label><input type="checkbox" class="autosave-check" data-key="tech_other"> Something else</label>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q" style="margin-top:0;">Game title</label>
+    <input type="text" class="autosave" data-key="concept_title" placeholder="Give your concept a working title">
+    <label class="q">One-sentence pitch</label>
+    <textarea rows="2" class="autosave" data-key="concept_pitch" placeholder="Sum up your idea in one sentence — this is what you'll say in the 30-second pitch."></textarea>
+  </div>
+
+  <div class="card">
+    <span class="tier foundation">🟢 Foundation</span> — fill in at least 5 of the 7 rows below.<br>
+    <span class="tier developing" style="margin-top:6px;">🟡 Developing</span> — fill in all 7.
+
+    <div style="margin-top:14px;">
+      <div class="element-row"><div class="el-label"><span class="dot" style="background:var(--blue);"></span>Objective</div><textarea rows="2" class="autosave" data-key="el_objective" placeholder="What is the player trying to achieve?"></textarea></div>
+      <div class="element-row"><div class="el-label"><span class="dot" style="background:var(--green);"></span>Rules</div><textarea rows="2" class="autosave" data-key="el_rules" placeholder="What can and can't the player do?"></textarea></div>
+      <div class="element-row"><div class="el-label"><span class="dot" style="background:var(--amber);"></span>Mechanics</div><textarea rows="2" class="autosave" data-key="el_mechanics" placeholder="List the player's main actions — the verbs."></textarea></div>
+      <div class="element-row"><div class="el-label"><span class="dot" style="background:var(--red);"></span>Challenge</div><textarea rows="2" class="autosave" data-key="el_challenge" placeholder="What makes reaching the objective hard?"></textarea></div>
+      <div class="element-row"><div class="el-label"><span class="dot" style="background:var(--purple);"></span>Narrative</div><textarea rows="2" class="autosave" data-key="el_narrative" placeholder="Is there a story or theme? If not, say so."></textarea></div>
+      <div class="element-row"><div class="el-label"><span class="dot" style="background:#028090;"></span>Aesthetics</div><textarea rows="2" class="autosave" data-key="el_aesthetics" placeholder="Describe the art style and/or sound."></textarea></div>
+      <div class="element-row"><div class="el-label"><span class="dot" style="background:#990011;"></span>Feedback</div><textarea rows="2" class="autosave" data-key="el_feedback" placeholder="How would the game tell the player how they're doing?"></textarea></div>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:var(--purple);">
+    <span class="tier extending">🟣 Extending</span>
+    <label class="q" style="margin-top:10px;">Describe one alternative concept you generated but didn't choose.</label>
+    <textarea rows="2" class="autosave" data-key="ext_alt_concept" placeholder="A second idea from a re-spin or another technique."></textarea>
+    <label class="q">Why did you choose your final idea over this alternative?</label>
+    <textarea rows="3" class="autosave" data-key="ext_justification" placeholder="What made the final idea stronger — be specific about an element, not just 'I liked it more'."></textarea>
+  </div>
+
+  <!-- SECTION 3: Reflect -->
+  <div class="section-band">
+    <div class="num-circle" style="background:var(--purple);">3</div>
+    <div><div class="section-label">Stage 4</div><h2>Share Back &amp; Reflect</h2></div>
+    <div class="badge">Discussion</div>
+  </div>
+
+  <div class="card">
+    <label class="q">Which ideation technique got you unstuck fastest?</label>
+    <textarea rows="2" class="autosave" data-key="reflect_technique" placeholder="Word wheel, mash-up, what-if, or something else — and why."></textarea>
+
+    <label class="q">Did your idea change after you tried to explain it out loud to your partner?</label>
+    <textarea rows="3" class="autosave" data-key="reflect_pitch_change" placeholder="What changed, or what became clearer?"></textarea>
+  </div>
+
+  <!-- SECTION 4: Exit ticket -->
+  <div class="section-band">
+    <div class="num-circle" style="background:var(--red);">4</div>
+    <div><div class="section-label">Stage 5</div><h2>Exit Ticket</h2></div>
+    <div class="badge" style="border-color:var(--red); color:var(--red);">Complete before you leave</div>
+  </div>
+
+  <div class="card" style="border-color:var(--red);">
+    <label class="q">1. Name the ideation technique you used today.</label>
+    <textarea rows="2" class="autosave" data-key="exit_technique" placeholder="Which technique(s)?"></textarea>
+
+    <label class="q">2. In one sentence, pitch the game idea you developed.</label>
+    <textarea rows="2" class="autosave" data-key="exit_pitch" placeholder="Your one-sentence pitch."></textarea>
+
+    <label class="q">3. Rate your confidence against today's success criteria.</label>
+    <div class="checklist" style="margin-top:8px;">
+      <label><input type="radio" name="confidence" class="autosave-radio" value="foundation"><span><span class="tier foundation">🟢</span> Foundation — I can generate an idea and define 5+ elements</span></label>
+      <label><input type="radio" name="confidence" class="autosave-radio" value="developing"><span><span class="tier developing">🟡</span> Developing — I can define all 7 elements clearly</span></label>
+      <label><input type="radio" name="confidence" class="autosave-radio" value="extending"><span><span class="tier extending">🟣</span> Extending — I can compare concepts and justify my choice</span></label>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:20px;">
+    <button class="btn exit" style="padding:12px 26px; font-size:13px;" onclick="submitWorkbook()">Submit Workbook</button>
+  </div>
+
+  <div class="footer-note">
+    Game Programming · Year 10 Digital Technologies · Lesson 3 of Unit 1<br>
+    See the <a href="U1_GameProgramming_site.html#l3-generating-game-ideas" target="_blank">unit reference site</a> for full notes on this lesson.
+  </div>
+
+</div>
+
+<script>
+const LESSON_ID = 'l3-generating-game-ideas';
+
+const WHEELS = {
+  theme: ['Underwater', 'Space', 'Horror', 'Farming', 'Mythology', 'Cyberpunk', 'Post-Apocalyptic', 'Fantasy'],
+  setting: ['Abandoned city', 'Floating islands', 'School', 'Desert', 'Space station', 'Ocean depths', 'Small town', 'Ancient temple'],
+  mechanic: ['Stealth', 'Racing', 'Building', 'Puzzle-solving', 'Platforming', 'Trading', 'Survival', 'Rhythm'],
+};
+
+function spinWheel(key, silent) {
+  const el = document.getElementById('res_' + key);
+  el.classList.add('spinning');
+  const list = WHEELS[key];
+  let ticks = 0;
+  const maxTicks = 10;
+  const interval = setInterval(() => {
+    el.textContent = list[Math.floor(Math.random() * list.length)];
+    ticks++;
+    if (ticks >= maxTicks) {
+      clearInterval(interval);
+      el.classList.remove('spinning');
+      const finalVal = list[Math.floor(Math.random() * list.length)];
+      el.textContent = finalVal;
+      el.dataset.value = finalVal;
+      if (!silent) DataService.autoSave();
+    }
+  }, 60);
+}
+
+function spinAll() {
+  ['theme', 'setting', 'mechanic'].forEach(k => spinWheel(k, true));
+  setTimeout(() => DataService.autoSave(), 700);
+}
+
+const DataService = {
+  getStudentId() {
+    return JSON.parse(localStorage.getItem('eduportal_session') || '{}').id || 'current_student';
+  },
+  _collect() {
+    const data = {};
+    document.querySelectorAll('.autosave').forEach(el => { data[el.dataset.key] = el.value; });
+    document.querySelectorAll('.autosave-radio:checked').forEach(el => { data[el.name] = el.value; });
+    document.querySelectorAll('.autosave-check').forEach(el => { data[el.dataset.key] = el.checked; });
+    document.querySelectorAll('.sc-check').forEach(el => { data[el.dataset.key] = el.checked; });
+    ['theme', 'setting', 'mechanic'].forEach(k => {
+      const el = document.getElementById('res_' + k);
+      data['wheel_' + k] = el.dataset.value || '';
+    });
+    data['s_name'] = document.getElementById('s_name').value;
+    data['s_class'] = document.getElementById('s_class').value;
+    data['s_date'] = document.getElementById('s_date').value;
+    return data;
+  },
+  save(manual) {
+    const studentId = this.getStudentId();
+    const payload = this._collect();
+    try {
+      localStorage.setItem(`eduportal_workbook_${studentId}_${LESSON_ID}`, JSON.stringify(payload));
+      if (manual) flashButton('Saved ✓');
+    } catch (e) { console.error('Save failed', e); }
+  },
+  load() {
+    const studentId = this.getStudentId();
+    try {
+      const raw = localStorage.getItem(`eduportal_workbook_${studentId}_${LESSON_ID}`);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      document.querySelectorAll('.autosave').forEach(el => { if (data[el.dataset.key] !== undefined) el.value = data[el.dataset.key]; });
+      document.querySelectorAll('.autosave-radio').forEach(el => { if (data[el.name] === el.value) el.checked = true; });
+      document.querySelectorAll('.autosave-check').forEach(el => { if (data[el.dataset.key]) el.checked = true; });
+      document.querySelectorAll('.sc-check').forEach(el => { if (data[el.dataset.key]) el.checked = true; });
+      ['theme', 'setting', 'mechanic'].forEach(k => {
+        const el = document.getElementById('res_' + k);
+        if (data['wheel_' + k]) { el.textContent = data['wheel_' + k]; el.dataset.value = data['wheel_' + k]; }
+      });
+      if (data.s_name) document.getElementById('s_name').value = data.s_name;
+      if (data.s_class) document.getElementById('s_class').value = data.s_class;
+      if (data.s_date) document.getElementById('s_date').value = data.s_date;
+    } catch (e) { console.error('Load failed', e); }
+  },
+  autoLoad(manual) {
+    this.load();
+    updateProgress();
+    if (manual) flashButton('Loaded ✓');
+  },
+  autoSave: (() => {
+    let t;
+    return function() { clearTimeout(t); t = setTimeout(() => { DataService.save(false); updateProgress(); }, 500); };
+  })(),
+  submit() {
+    this.save(false);
+    this._syncProgress('submitted');
+    alert('Workbook submitted. Your teacher can now see your progress.');
+  },
+  _syncProgress(status) {
+    const studentId = this.getStudentId();
+    localStorage.setItem(`eduportal_progress_${studentId}_${LESSON_ID}`, status);
+  }
+};
+
+function flashButton(msg) {
+  const pct = document.getElementById('progressPct');
+  const old = pct.textContent;
+  pct.textContent = msg;
+  setTimeout(() => { pct.textContent = old; }, 1200);
+}
+
+function submitWorkbook() { DataService.submit(); }
+
+function updateProgress() {
+  const fields = document.querySelectorAll('.autosave');
+  let filled = 0;
+  fields.forEach(el => { if (el.value && el.value.trim().length > 0) filled++; });
+  const radios = document.querySelectorAll('input[name="confidence"]');
+  const radioFilled = Array.from(radios).some(r => r.checked) ? 1 : 0;
+  const total = fields.length + 1;
+  const pct = Math.round(((filled + radioFilled) / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  if (pct > 0) DataService._syncProgress('in-progress');
+}
+
+function toggleTheme() {
+  const body = document.body;
+  const isDark = body.getAttribute('data-theme') === 'dark';
+  body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeToggle').textContent = isDark ? '☀ Dark mode' : '☾ Light mode';
+}
+
+document.querySelectorAll('.autosave, .autosave-radio, .autosave-check').forEach(el => {
+  el.addEventListener('input', () => DataService.autoSave());
+  el.addEventListener('change', () => DataService.autoSave());
+});
+document.querySelectorAll('.sc-check').forEach(el => {
+  el.addEventListener('change', () => { DataService.save(false); updateProgress(); });
+});
+
+DataService.autoLoad(false);
+if (!document.getElementById('s_date').value) {
+  document.getElementById('s_date').placeholder = new Date().toISOString().slice(0,10);
+}
+</script>
+</body>
+</html>

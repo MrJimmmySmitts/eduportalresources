@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en-AU" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Algebra Revision — Workbook · Year 7 Mathematics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#4361EE; --green:#10B981; --amber:#F59E0B; --purple:#8B5CF6; --red:#EF4444;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --read:'Atkinson Hyperlegible',system-ui,sans-serif;
+  --mono:'DM Mono',ui-monospace,monospace;
+}
+html[data-theme="dark"]{
+  --bg:#0D1117; --surface:#161B22; --surface2:#1C2230; --line:#2A3140;
+  --ink:#E6EDF3; --ink2:#9BA7B4; --ink3:#6E7A88; --field:#0B0F15; --shadow:rgba(0,0,0,.45);
+}
+html[data-theme="light"]{
+  --bg:#FFFFFF; --surface:#F6F8FA; --surface2:#EEF1F5; --line:#D8DEE6;
+  --ink:#111820; --ink2:#4A5563; --ink3:#6E7A88; --field:#FFFFFF; --shadow:rgba(16,24,40,.10);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:96px}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--read); font-size:18px; line-height:1.6;
+  -webkit-text-size-adjust:100%;
+}
+a{color:var(--blue)}
+code{font-family:var(--mono); font-size:.95em; background:var(--surface2);
+     padding:1px 6px; border-radius:5px; border:1px solid var(--line); white-space:nowrap}
+
+/* ── Skip link ───────────────────────────────────────────── */
+.skip{position:absolute;left:-9999px;top:0;background:var(--blue);color:#fff;padding:10px 16px;z-index:200}
+.skip:focus{left:8px;top:8px}
+
+/* ── Top bar ─────────────────────────────────────────────── */
+.topbar{
+  position:sticky; top:0; z-index:60; background:var(--surface);
+  border-bottom:1px solid var(--line); box-shadow:0 2px 10px var(--shadow);
+}
+.tb-in{max-width:1440px; margin:0 auto; padding:10px 16px;
+       display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.tb-brand{font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+          text-transform:uppercase; color:var(--ink3); white-space:nowrap}
+.tb-metrics{display:flex; gap:10px; align-items:center; flex:1 1 320px; min-width:280px}
+.metric{flex:1 1 0; min-width:130px; background:var(--surface2); border:1px solid var(--line);
+        border-radius:10px; padding:6px 10px}
+.metric-top{display:flex; justify-content:space-between; align-items:baseline; gap:8px}
+.metric-lbl{font-family:var(--mono); font-size:10px; letter-spacing:.12em;
+            text-transform:uppercase; color:var(--ink3)}
+.metric-val{font-family:var(--sans); font-weight:700; font-size:15px; color:var(--ink)}
+.bar{height:7px; border-radius:99px; background:var(--line); overflow:hidden; margin-top:5px}
+.bar>i{display:block; height:100%; width:0%; border-radius:99px; transition:width .35s ease}
+#progFill{background:var(--blue)}
+#scoreFill{background:var(--green)}
+.tb-actions{display:flex; gap:6px; flex-wrap:wrap}
+.btn{font-family:var(--sans); font-weight:500; font-size:13px; cursor:pointer;
+     background:var(--surface2); color:var(--ink); border:1px solid var(--line);
+     border-radius:8px; padding:8px 12px; min-height:38px; transition:.15s}
+.btn:hover{border-color:var(--blue); color:var(--blue)}
+.btn:focus-visible{outline:3px solid var(--blue); outline-offset:2px}
+.btn.primary{background:var(--blue); border-color:var(--blue); color:#fff}
+.btn.primary:hover{filter:brightness(1.12); color:#fff}
+.statusline{width:100%; font-family:var(--mono); font-size:11px; color:var(--ink3);
+            padding:0 16px 8px; max-width:1440px; margin:0 auto}
+
+/* ── Shell layout ────────────────────────────────────────── */
+.shell{max-width:1440px; margin:0 auto; display:grid;
+       grid-template-columns:288px minmax(0,1fr); gap:26px; padding:22px 16px 80px}
+
+/* ── Left rail ───────────────────────────────────────────── */
+.rail{position:sticky; top:112px; align-self:start; max-height:calc(100vh - 132px);
+      overflow-y:auto; background:var(--surface); border:1px solid var(--line);
+      border-radius:14px; padding:12px}
+.rail-h{font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+        color:var(--ink3); padding:4px 8px 10px}
+.nav-sec{margin-bottom:3px}
+.nav-top{display:flex; align-items:center; gap:8px; width:100%; text-align:left; cursor:pointer;
+         background:transparent; border:1px solid transparent; border-radius:9px;
+         padding:9px 10px; color:var(--ink); font-family:var(--sans); font-size:14px; font-weight:500}
+.nav-top:hover{background:var(--surface2)}
+.nav-top:focus-visible{outline:3px solid var(--blue); outline-offset:1px}
+.nav-sec.open>.nav-top{background:var(--surface2); border-color:var(--line)}
+.nav-sec.active>.nav-top{color:var(--blue)}
+.nav-n{font-family:var(--mono); font-size:11px; width:20px; height:20px; flex:0 0 20px;
+       border-radius:6px; background:var(--line); color:var(--ink2);
+       display:grid; place-items:center}
+.nav-sec.active .nav-n{background:var(--blue); color:#fff}
+.nav-t{flex:1 1 auto; line-height:1.3}
+.nav-chev{flex:0 0 auto; font-size:10px; color:var(--ink3); transition:transform .2s}
+.nav-sec.open .nav-chev{transform:rotate(90deg)}
+.nav-sub{display:none; padding:2px 0 6px 30px}
+.nav-sec.open .nav-sub{display:block}
+.nav-link{display:flex; align-items:center; gap:7px; padding:6px 8px; border-radius:7px;
+          font-family:var(--sans); font-size:13px; color:var(--ink2); text-decoration:none}
+.nav-link:hover{background:var(--surface2); color:var(--ink)}
+.nav-done{margin-left:auto; font-family:var(--mono); font-size:10px; color:var(--ink3)}
+.dot{width:8px; height:8px; border-radius:50%; flex:0 0 8px}
+.dot.F{background:var(--green)} .dot.D{background:var(--amber)}
+.dot.E{background:var(--purple)} .dot.X{background:var(--red)}
+.rail-legend{border-top:1px solid var(--line); margin-top:10px; padding:10px 8px 2px;
+             font-family:var(--mono); font-size:10.5px; color:var(--ink3); line-height:1.9}
+
+/* ── Cover ───────────────────────────────────────────────── */
+.cover{background:var(--surface); border:1px solid var(--line); border-radius:16px;
+       padding:26px 28px; margin-bottom:26px}
+.eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+         color:var(--blue); margin-bottom:8px}
+.cover h1{font-family:var(--serif); font-size:40px; line-height:1.12; margin:0 0 6px; font-weight:400}
+.cover .sub{color:var(--ink2); font-size:17px; margin:0 0 20px; max-width:64ch}
+.idgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px}
+.fld label{display:block; font-family:var(--mono); font-size:10px; letter-spacing:.12em;
+           text-transform:uppercase; color:var(--ink3); margin-bottom:5px}
+.fld input{width:100%; background:var(--field); color:var(--ink); border:1px solid var(--line);
+           border-radius:8px; padding:9px 11px; font-family:var(--read); font-size:15px; min-height:42px}
+.fld input:focus{outline:none; border-color:var(--blue); box-shadow:0 0 0 3px rgba(67,97,238,.22)}
+
+/* ── Sections ────────────────────────────────────────────── */
+.section{background:var(--surface); border:1px solid var(--line); border-radius:16px;
+         padding:0 0 22px; margin-bottom:26px; overflow:hidden}
+.section.exit{border-color:var(--red)}
+.band{display:flex; align-items:center; gap:14px; padding:18px 24px;
+      border-bottom:1px solid var(--line); background:var(--surface2); flex-wrap:wrap}
+.band-n{width:38px; height:38px; flex:0 0 38px; border-radius:50%; background:var(--blue); color:#fff;
+        display:grid; place-items:center; font-family:var(--sans); font-weight:700; font-size:17px}
+.section.exit .band-n{background:var(--red)}
+.band-txt{flex:1 1 240px; min-width:0}
+.band-lbl{font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+          color:var(--ink3)}
+.band-title{font-family:var(--serif); font-size:26px; line-height:1.2}
+.badge{font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+       border:1px solid var(--line); border-radius:99px; padding:5px 11px; color:var(--ink2);
+       background:var(--bg); white-space:nowrap}
+.sec-score{font-family:var(--mono); font-size:12px; color:var(--ink2); white-space:nowrap}
+
+/* ── Help panel ──────────────────────────────────────────── */
+.helpwrap{padding:16px 24px 0}
+.help-btn{display:inline-flex; align-items:center; gap:9px; cursor:pointer;
+          background:rgba(67,97,238,.10); border:1px solid var(--blue); color:var(--blue);
+          border-radius:10px; padding:10px 15px; font-family:var(--sans); font-weight:700; font-size:14px;
+          min-height:42px}
+.help-btn:hover{background:rgba(67,97,238,.18)}
+.help-btn:focus-visible{outline:3px solid var(--blue); outline-offset:2px}
+.help-ico{width:21px; height:21px; flex:0 0 21px; border-radius:50%; background:var(--blue); color:#fff;
+          display:grid; place-items:center; font-family:var(--sans); font-weight:700; font-size:13px}
+.helprow{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.site-link{font-family:var(--sans); font-size:13.5px; text-decoration:none; color:var(--blue);
+           border:1px solid var(--line); border-radius:8px; padding:10px 13px; min-height:42px;
+           display:inline-flex; align-items:center}
+.site-link:hover{border-color:var(--blue); background:rgba(67,97,238,.08)}
+.slide-ref{font-family:var(--mono); font-size:11.5px; color:var(--ink3)}
+.help-body{display:none; margin-top:12px; border:1px solid var(--blue); border-radius:12px;
+           background:var(--bg); padding:18px 20px}
+.help-body.open{display:block}
+.help-body h4{font-family:var(--sans); font-size:15px; margin:0 0 10px; color:var(--blue);
+              text-transform:uppercase; letter-spacing:.08em}
+.help-body p{margin:0 0 12px}
+.hex{background:var(--surface2); border:1px solid var(--line); border-left:none;
+     border-radius:10px; padding:14px 16px; margin:12px 0; font-size:16.5px}
+.hsteps{margin:8px 0 0; padding-left:22px} .hsteps li{margin-bottom:7px}
+.hlist{margin:8px 0 0; padding-left:22px} .hlist li{margin-bottom:7px}
+.htab{width:100%; border-collapse:collapse; margin:10px 0; font-size:16px}
+.htab th,.htab td{border:1px solid var(--line); padding:8px 11px; text-align:left}
+.htab th{background:var(--surface2); font-family:var(--sans); font-size:13px;
+         text-transform:uppercase; letter-spacing:.06em; color:var(--ink2)}
+.hwork{font-family:var(--mono); font-size:16px; line-height:2; margin-top:8px}
+.hann{font-family:var(--sans); font-size:13px; color:var(--amber); padding-left:16px}
+.hflow{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:10px 0;
+       font-family:var(--mono); font-size:15px}
+.hflow.rev .harr{color:var(--green)}
+.hnode{border:2px solid var(--line); border-radius:8px; padding:5px 13px; background:var(--surface2)}
+.hnode.ok{border-color:var(--green); color:var(--green); font-weight:700}
+.harr{color:var(--ink3); font-size:13px}
+.hcols{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px}
+.hcolh{font-family:var(--sans); font-weight:700; font-size:14px; color:var(--blue);
+       text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px}
+
+/* ── Tier groups ─────────────────────────────────────────── */
+.group{margin:22px 24px 0; border:1px solid var(--line); border-radius:13px; overflow:hidden}
+.group-h{display:flex; align-items:center; gap:11px; padding:12px 16px; background:var(--surface2);
+         flex-wrap:wrap}
+.tier-pill{font-family:var(--sans); font-weight:700; font-size:12.5px; letter-spacing:.05em;
+           border-radius:99px; padding:5px 12px; white-space:nowrap}
+.tier-F{background:rgba(16,185,129,.16); color:var(--green); border:1px solid var(--green)}
+.tier-D{background:rgba(245,158,11,.16); color:var(--amber); border:1px solid var(--amber)}
+.tier-E{background:rgba(139,92,246,.16); color:var(--purple); border:1px solid var(--purple)}
+.tier-X{background:rgba(239,68,68,.16); color:var(--red); border:1px solid var(--red)}
+.group-t{font-family:var(--sans); font-weight:500; font-size:15px; flex:1 1 auto}
+.group-meta{font-family:var(--mono); font-size:11px; color:var(--ink3); white-space:nowrap}
+
+/* ── Question rows ───────────────────────────────────────── */
+.q{border-top:1px solid var(--line); padding:14px 16px;
+   display:grid; grid-template-columns:34px minmax(0,1fr); gap:12px; align-items:start}
+.q:first-child{border-top:none}
+.qn{font-family:var(--mono); font-size:13px; color:var(--ink3); padding-top:9px}
+.qmain{min-width:0}
+.qtext{margin-bottom:9px}
+.qmarks{font-family:var(--mono); font-size:11px; color:var(--ink3); margin-left:8px; white-space:nowrap}
+.qrow{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.ans{background:var(--field); color:var(--ink); border:1px solid var(--line); border-radius:8px;
+     padding:9px 12px; font-family:var(--mono); font-size:16px; min-height:44px; width:172px; max-width:100%}
+.ans:focus{outline:none; border-color:var(--blue); box-shadow:0 0 0 3px rgba(67,97,238,.22)}
+.opts{display:grid; gap:7px; margin-bottom:9px}
+.opt{display:flex; align-items:flex-start; gap:10px; padding:9px 12px; border:1px solid var(--line);
+     border-radius:9px; cursor:pointer; background:var(--field); min-height:44px}
+.opt:hover{border-color:var(--blue)}
+.opt input{margin-top:5px; accent-color:var(--blue); width:17px; height:17px; flex:0 0 17px}
+.ta{width:100%; background:var(--field); color:var(--ink); border:1px solid var(--line);
+    border-radius:9px; padding:11px 13px; font-family:var(--read); font-size:16px; resize:vertical;
+    min-height:88px}
+.ta:focus{outline:none; border-color:var(--blue); box-shadow:0 0 0 3px rgba(67,97,238,.22)}
+.check{font-family:var(--sans); font-weight:700; font-size:13px; cursor:pointer;
+       background:var(--blue); color:#fff; border:none; border-radius:8px; padding:10px 16px; min-height:44px}
+.check:hover{filter:brightness(1.12)}
+.check:focus-visible{outline:3px solid var(--ink); outline-offset:2px}
+.check[disabled]{opacity:.45; cursor:default; filter:none}
+.hint-btn{font-family:var(--sans); font-size:12.5px; cursor:pointer; background:transparent;
+          border:1px dashed var(--line); color:var(--ink2); border-radius:8px; padding:9px 13px; min-height:44px}
+.hint-btn:hover{border-color:var(--amber); color:var(--amber)}
+.hint-txt{display:none; margin-top:9px; font-size:15.5px; color:var(--amber);
+          border-left:3px solid var(--amber); padding:7px 0 7px 12px}
+.hint-txt.open{display:block}
+.fb{margin-top:9px; font-family:var(--sans); font-size:14px; font-weight:500; display:none}
+.fb.show{display:block}
+.fb.right{color:var(--green)} .fb.wrong{color:var(--red)} .fb.late{color:var(--amber)}
+.q.right .ans,.q.right .opt{border-color:var(--green)}
+.q.wrong .ans{border-color:var(--red)}
+.q.open-only .qn{color:var(--blue)}
+
+/* ── Submit ──────────────────────────────────────────────── */
+.submitwrap{margin:26px 24px 0; text-align:right}
+.summary{margin:26px 24px 0; border:1px solid var(--line); border-radius:13px; padding:18px 20px;
+         background:var(--surface2)}
+.summary h3{font-family:var(--serif); font-size:22px; margin:0 0 12px; font-weight:400}
+.sumgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px}
+.sumcell{background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:11px 13px}
+.sumcell b{display:block; font-family:var(--sans); font-size:22px}
+.sumcell span{font-family:var(--mono); font-size:10px; letter-spacing:.11em;
+              text-transform:uppercase; color:var(--ink3)}
+
+@media (max-width:920px){
+  .shell{grid-template-columns:1fr; padding:16px 12px 60px}
+  .rail{position:static; max-height:none}
+  .cover h1{font-size:31px}
+  .q{grid-template-columns:1fr} .qn{padding-top:0}
+}
+@media print{
+  .topbar,.rail,.check,.hint-btn,.help-btn,.submitwrap,.skip{display:none!important}
+  .shell{grid-template-columns:1fr} body{background:#fff; color:#000}
+  .help-body{display:block!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to workbook</a>
+
+<header class="topbar">
+  <div class="tb-in">
+    <div class="tb-brand">Year 7 Mathematics · Algebra · Revision</div>
+    <div class="tb-metrics">
+      <div class="metric">
+        <div class="metric-top"><span class="metric-lbl">Progress</span><span class="metric-val" id="progVal">0%</span></div>
+        <div class="bar"><i id="progFill"></i></div>
+      </div>
+      <div class="metric">
+        <div class="metric-top"><span class="metric-lbl">Score</span><span class="metric-val" id="scoreVal">0 / 0</span></div>
+        <div class="bar"><i id="scoreFill"></i></div>
+      </div>
+    </div>
+    <div class="tb-actions">
+      <a class="btn" href="U1_Algebra_site.html#y7-ma-u1-l1-algebra-revision">Unit notes</a>
+      <button class="btn" id="themeBtn" type="button">Light</button>
+      <button class="btn" id="saveBtn" type="button">Save</button>
+      <button class="btn" id="loadBtn" type="button">Load</button>
+      <button class="btn" id="printBtn" type="button">Export</button>
+      <button class="btn primary" id="submitBtn" type="button">Submit</button>
+    </div>
+  </div>
+  <div class="statusline" id="statusBar" role="status" aria-live="polite">Ready — your work saves automatically as you type.</div>
+</header>
+
+<div class="shell">
+  <nav class="rail" id="rail" aria-label="Workbook sections">
+    <div class="rail-h">Sections</div>
+    <div id="navList"></div>
+    <div class="rail-legend">
+      🟢 Foundation · start here<br>
+      🟡 Developing · year-level<br>
+      🟣 Extending · challenge<br>
+      🔴 Exit ticket · assessed
+    </div>
+  </nav>
+
+  <main id="main">
+    <div class="cover">
+      <div class="eyebrow">Unit Revision · Double Period · 100 minutes</div>
+      <h1>Algebra Revision</h1>
+      <p class="sub">Patterns, substitution, vocabulary, and solving one- and two-step equations
+      using both the balance method and the flowchart method. Every question is marked instantly —
+      but marks are only awarded for a <b>correct first attempt</b>, so think before you check.</p>
+      <div class="idgrid">
+        <div class="fld"><label for="sName">Name</label><input id="sName" type="text" autocomplete="name"></div>
+        <div class="fld"><label for="sClass">Class</label><input id="sClass" type="text"></div>
+        <div class="fld"><label for="sDate">Date</label><input id="sDate" type="text" placeholder="YYYY-MM-DD" inputmode="numeric"></div>
+        <div class="fld"><label for="sTeacher">Teacher</label><input id="sTeacher" type="text"></div>
+      </div>
+    </div>
+
+    <div id="sections"></div>
+
+    <div class="summary" id="summaryBox">
+      <h3>Where you are up to</h3>
+      <div class="sumgrid" id="sumGrid"></div>
+    </div>
+    <div class="submitwrap">
+      <button class="btn primary" id="submitBtn2" type="button" style="padding:12px 26px;font-size:15px">Submit workbook</button>
+    </div>
+  </main>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   QUESTION BANK — Y7 Algebra Revision (double period)
+   Types: 'num'  numeric answer (tolerant of decimals / equivalent forms)
+          'txt'  short algebraic answer (normalised before comparison)
+          'mc'   multiple choice (index of correct option)
+          'open' written response — NOT auto-marked, no score awarded
+   marks: Foundation 1 · Developing 1 · Extending 2
+   ══════════════════════════════════════════════════════════════════════════ */
+const BANK = [
+{
+  id: 'vocab', slide: 'Slide 5', num: '1', label: 'Section 1', title: 'The Language of Algebra',
+  badge: 'Vocabulary', vcaa: 'VC2M7A02',
+  help: {
+    title: 'Help — what the words mean',
+    body: `
+      <p>Every algebra question is written in a code. If you know the words, you can read the code.</p>
+      <table class="htab">
+        <tr><th>Word</th><th>What it means</th></tr>
+        <tr><td><b>Pronumeral</b> (variable)</td><td>A letter standing in for a number we don't know yet.</td></tr>
+        <tr><td><b>Coefficient</b></td><td>The number multiplying a pronumeral.</td></tr>
+        <tr><td><b>Constant</b></td><td>A term that is just a number — no letter attached.</td></tr>
+        <tr><td><b>Term</b></td><td>A chunk separated by <b>+</b> or <b>−</b> signs.</td></tr>
+        <tr><td><b>Expression</b></td><td>Terms joined by operations. <u>No equals sign.</u></td></tr>
+        <tr><td><b>Equation</b></td><td>Two expressions joined by an equals sign.</td></tr>
+        <tr><td><b>Like terms</b></td><td>Terms with <i>exactly</i> the same letter(s) and power.</td></tr>
+      </table>
+      <div class="hex"><b>Example:</b> In <code>6x + 4y − 9</code> there are <b>3 terms</b>.
+      The coefficient of <code>x</code> is <b>6</b>, the coefficient of <code>y</code> is <b>4</b>,
+      and <b>−9</b> is the constant. Because there is no equals sign, this is an
+      <b>expression</b>, not an equation.</div>
+      <div class="hex"><b>Watch out:</b> <code>x</code> on its own has a coefficient of <b>1</b>,
+      and <code>−x</code> has a coefficient of <b>−1</b>. The 1 is invisible but it is there.</div>`
+  },
+  groups: [
+    { tier:'F', title:'Foundation — reading the code', items:[
+      {id:'v1', type:'mc', prompt:'In the term <code>7x</code>, which part is the <b>coefficient</b>?',
+       options:['7','x','+','There isn\'t one'], answer:0, marks:1},
+      {id:'v2', type:'mc', prompt:'A letter used to stand for an unknown number is called a…',
+       options:['constant','pronumeral','coefficient','solution'], answer:1, marks:1},
+      {id:'v3', type:'mc', prompt:'Is <code>3x + 5 = 11</code> an expression or an equation?',
+       options:['Expression','Equation'], answer:1, marks:1},
+      {id:'v4', type:'mc', prompt:'Is <code>4y − 9</code> an expression or an equation?',
+       options:['Expression','Equation'], answer:0, marks:1},
+      {id:'v5', type:'num', prompt:'How many <b>terms</b> are in <code>5a + 3b − 2</code>?', answer:3, marks:1},
+      {id:'v6', type:'num', prompt:'What is the coefficient of <code>m</code> in <code>8m</code>?', answer:8, marks:1},
+      {id:'v7', type:'num', prompt:'What is the <b>constant term</b> in <code>6x + 7</code>?', answer:7, marks:1},
+      {id:'v8', type:'txt', prompt:'Write <code>x + x + x</code> more simply.', answer:['3x'], marks:1},
+      {id:'v9', type:'mc', prompt:'Which pair are <b>like terms</b>?',
+       options:['3x and 5x','3x and 3y','2x and 2x²','4 and 4y'], answer:0, marks:1},
+      {id:'v10', type:'mc', prompt:'The <b>solution</b> of an equation is…',
+       options:['the biggest number in it','the value of the pronumeral that makes it true','the answer to the left-hand side','the number of terms'], answer:1, marks:1}
+    ]},
+    { tier:'D', title:'Developing — coefficients and collecting', items:[
+      {id:'v11', type:'num', prompt:'What is the coefficient of <code>x</code> in <code>x + 9</code>?', answer:1, marks:1,
+       hint:'The coefficient is written in front — but sometimes it isn\'t written at all. What is <code>x</code> the same as?'},
+      {id:'v12', type:'num', prompt:'How many terms are in <code>4x² + 3x − 7 + y</code>?', answer:4, marks:1},
+      {id:'v13', type:'txt', prompt:'Simplify <code>5a + 3a</code>', answer:['8a'], marks:1},
+      {id:'v14', type:'txt', prompt:'Simplify <code>7b − 2b + 4</code>', answer:['5b+4','4+5b'], marks:1},
+      {id:'v15', type:'mc', prompt:'Which of these is <b>NOT</b> a like term with <code>6mn</code>?',
+       options:['3mn','−mn','6m','nm'], answer:2, marks:1},
+      {id:'v16', type:'num', prompt:'What is the coefficient of <code>y</code> in <code>−4y</code>?', answer:-4, marks:1},
+      {id:'v17', type:'txt', prompt:'Write “<i>p divided by 6</i>” in algebra.', answer:['p/6'], marks:1,
+       hint:'Algebra almost never uses the ÷ sign. What does it use instead?'},
+      {id:'v18', type:'txt', prompt:'Write “<i>double n, then add 5</i>” in algebra.', answer:['2n+5','5+2n'], marks:1},
+      {id:'v19', type:'mc', prompt:'In <code>3x + 2 = 14</code>, what is on the <b>left-hand side (LHS)</b>?',
+       options:['14','3x + 2','x','3x'], answer:1, marks:1},
+      {id:'v20', type:'txt', prompt:'Simplify <code>4x + 3y + 2x</code>', answer:['6x+3y','3y+6x'], marks:1,
+       hint:'Only terms with the same letter can be joined. Which two of these three match?'}
+    ]},
+    { tier:'E', title:'Extending — signs, brackets and error-spotting', items:[
+      {id:'v21', type:'txt', prompt:'Simplify <code>5x + 2 − 3x + 7</code>', answer:['2x+9','9+2x'], marks:2},
+      {id:'v22', type:'txt', prompt:'Expand <code>3(x + 4)</code>', answer:['3x+12','12+3x'], marks:2,
+       hint:'The 3 outside is multiplying the <i>whole</i> bracket. How many things are inside it?'},
+      {id:'v23', type:'num', prompt:'What is the coefficient of <code>x</code> in <code>9 − x</code>?', answer:-1, marks:2,
+       hint:'The sign in front of a term belongs to that term. What sign is in front of the x?'},
+      {id:'v24', type:'txt', prompt:'Simplify <code>2a + 3b − 5a + b</code>', answer:['-3a+4b','4b-3a'], marks:2},
+      {id:'v25', type:'mc', prompt:'A student wrote <code>3x + 2x = 5x²</code>. What did they do wrong?',
+       options:['They should have got 6x','They multiplied the coefficients instead of adding them','They added the coefficients correctly but wrongly changed x into x²','Nothing — it is correct'], answer:2, marks:2},
+      {id:'v26', type:'txt', prompt:'Write “<i>the sum of k and 7, all multiplied by 3</i>” in algebra.',
+       answer:['3(k+7)','(k+7)3','3(7+k)'], marks:2,
+       hint:'“All multiplied by” tells you something has to be held together first. What symbol does that job?'}
+    ]}
+  ]
+},
+
+{
+  id: 'patterns', slide: 'Slides 6–7', num: '2', label: 'Section 2', title: 'Patterns & Rules',
+  badge: 'Sequences', vcaa: 'VC2M7A05',
+  help: {
+    title: 'Help — finding the rule for a pattern',
+    body: `
+      <p>A pattern that goes up (or down) by the <b>same amount every time</b> has a rule of the
+      form <code>rule = (common difference) × n + (starting adjustment)</code>, where
+      <code>n</code> is the <b>term number</b> (position), not the term itself.</p>
+      <div class="hex"><b>Worked example — find the rule for 5, 8, 11, 14, …</b>
+        <ol class="hsteps">
+          <li><b>Find the common difference.</b> 8 − 5 = 3. That 3 is the coefficient of <code>n</code>,
+              so the rule starts as <code>3n</code>.</li>
+          <li><b>Test <code>3n</code> against term 1.</b> 3 × 1 = 3, but the real term is 5.</li>
+          <li><b>Adjust.</b> 3 is 2 short of 5, so add 2. Rule = <code>3n + 2</code>.</li>
+          <li><b>Check on a different term.</b> Term 4: 3 × 4 + 2 = 14 ✔</li>
+        </ol>
+      </div>
+      <div class="hex"><b>Using the rule:</b> once you have it, the 50th term needs no counting —
+      substitute <code>n = 50</code>. And to find <i>which</i> term equals a value, set the rule
+      equal to it and solve: <code>3n + 2 = 47</code> → <code>n = 15</code>, so it's the 15th term.</div>
+      <div class="hex"><b>Decreasing patterns</b> have a <b>negative</b> common difference:
+      20, 17, 14, … goes down by 3, so the rule is <code>−3n + 23</code> (also written <code>23 − 3n</code>).</div>`
+  },
+  groups: [
+    { tier:'F', title:'Foundation — continuing patterns', items:[
+      {id:'p1', type:'num', prompt:'Write the next term: <code>4, 7, 10, 13, __</code>', answer:16, marks:1},
+      {id:'p2', type:'num', prompt:'Write the next term: <code>5, 10, 15, 20, __</code>', answer:25, marks:1},
+      {id:'p3', type:'num', prompt:'Write the next term: <code>2, 9, 16, 23, __</code>', answer:30, marks:1},
+      {id:'p4', type:'num', prompt:'What is the <b>common difference</b> of <code>3, 8, 13, 18, …</code>?', answer:5, marks:1},
+      {id:'p5', type:'num', prompt:'Write the next term: <code>20, 17, 14, __</code>', answer:11, marks:1},
+      {id:'p6', type:'num', prompt:'A pattern starts at 6 and the rule is “add 4 each time”. What is the <b>4th term</b>?', answer:18, marks:1,
+       hint:'The 1st term is 6 — that is before any adding has happened. How many times do you add?'},
+      {id:'p7', type:'num', prompt:'A matchstick pattern uses <code>3, 5, 7, 9, …</code> matches. How many for the <b>next</b> shape?', answer:11, marks:1},
+      {id:'p8', type:'num', prompt:'In <code>1, 4, 7, 10, …</code>, which <b>term number</b> is 19?', answer:7, marks:1},
+      {id:'p9', type:'num', prompt:'Using the rule <code>2n</code>, what is the 6th term?', answer:12, marks:1},
+      {id:'p10', type:'num', prompt:'Using the rule <code>n + 5</code>, what is the 9th term?', answer:14, marks:1}
+    ]},
+    { tier:'D', title:'Developing — writing and using rules', items:[
+      {id:'p11', type:'txt', prompt:'Write the rule for <code>5, 8, 11, 14, …</code>', answer:['3n+2','2+3n'], marks:1},
+      {id:'p12', type:'txt', prompt:'Write the rule for <code>4, 9, 14, 19, …</code>', answer:['5n-1'], marks:1},
+      {id:'p13', type:'txt', prompt:'Write the rule for <code>7, 9, 11, 13, …</code>', answer:['2n+5','5+2n'], marks:1},
+      {id:'p14', type:'num', prompt:'Find the 10th term of the rule <code>3n + 1</code>.', answer:31, marks:1},
+      {id:'p15', type:'num', prompt:'Find the 20th term of <code>5, 8, 11, …</code>', answer:62, marks:1,
+       hint:'Counting to the 20th term by hand will take all lesson. Find the rule first.'},
+      {id:'p16', type:'txt', prompt:'Write the rule for <code>6, 12, 18, 24, …</code>', answer:['6n'], marks:1},
+      {id:'p17', type:'txt', prompt:'A matchstick pattern uses <code>4, 7, 10, 13, …</code> matches. Write the rule.',
+       answer:['3n+1','1+3n'], marks:1},
+      {id:'p18', type:'num', prompt:'For the rule <code>2n + 3</code>, which term number equals <b>33</b>?', answer:15, marks:1},
+      {id:'p19', type:'txt', prompt:'Write the rule for <code>100, 95, 90, 85, …</code>',
+       answer:['-5n+105','105-5n'], marks:1,
+       hint:'This pattern goes down. What does that do to the sign of the common difference?'},
+      {id:'p20', type:'num', prompt:'For the rule <code>4n − 3</code>, find the 12th term.', answer:45, marks:1}
+    ]},
+    { tier:'E', title:'Extending — beyond straight-line patterns', items:[
+      {id:'p21', type:'txt', prompt:'Write the rule for <code>1, 4, 9, 16, 25, …</code>',
+       answer:['n^2','n²','nxn','n*n'], marks:2,
+       hint:'Try finding the common difference. It doesn\'t work — so this is a different <i>kind</i> of pattern. What is special about these numbers?'},
+      {id:'p22', type:'num', prompt:'Write the next term: <code>1, 3, 6, 10, __</code>', answer:15, marks:2,
+       hint:'The differences are not constant, but the differences themselves make a pattern. Look at them.'},
+      {id:'p23', type:'num', prompt:'For the rule <code>4n − 1</code>, which term number equals <b>99</b>?', answer:25, marks:2},
+      {id:'p24', type:'txt', prompt:'Write the rule for <code>2, 5, 10, 17, 26, …</code>',
+       answer:['n^2+1','n²+1','1+n^2','1+n²'], marks:2,
+       hint:'Compare each term to the square numbers 1, 4, 9, 16, 25.'},
+      {id:'p25', type:'num', prompt:'Pattern A has rule <code>3n + 1</code>. Pattern B has rule <code>5n − 3</code>. At which term number are they <b>equal</b>?', answer:2, marks:2,
+       hint:'“Equal” means you can put one rule equal to the other. That gives you an equation to solve.'},
+      {id:'p26', type:'num', prompt:'A pattern has rule <code>7n − 4</code>. Explain by calculation whether <b>50</b> is in this pattern — enter the term number if it is, or enter <code>0</code> if it is not.', answer:0, marks:2,
+       hint:'Set the rule equal to 50 and solve. What must a term <i>number</i> always be?'}
+    ]}
+  ]
+},
+
+{
+  id: 'sub', slide: 'Slide 8', num: '3', label: 'Section 3', title: 'Substitution',
+  badge: 'Evaluating', vcaa: 'VC2M7A01',
+  help: {
+    title: 'Help — substituting values into expressions',
+    body: `
+      <p><b>Substitution</b> means swapping each pronumeral for the number you've been given,
+      then evaluating using the order of operations (BIDMAS).</p>
+      <div class="hex"><b>Worked example — find <code>3x + 4</code> when <code>x = 5</code></b>
+        <ol class="hsteps">
+          <li>Rewrite with the number in place of the letter, putting the hidden × back in:
+              <code>3 × 5 + 4</code></li>
+          <li>Multiplication before addition: <code>15 + 4</code></li>
+          <li><code>= 19</code></li>
+        </ol>
+      </div>
+      <div class="hex"><b>The three things that catch people out:</b>
+        <ul class="hlist">
+          <li><code>3x</code> means <code>3 × x</code> — never <code>3</code> next to <code>5</code> making 35.</li>
+          <li><code>x²</code> means <code>x × x</code>, not <code>x × 2</code>. So if <code>x = 4</code>, <code>x² = 16</code>, not 8.</li>
+          <li>Brackets and fraction lines are done <i>first</i>, all the way across:
+              <code>(a + b) ÷ 2</code> with <code>a = 7, b = 9</code> is <code>16 ÷ 2 = 8</code>.</li>
+        </ul>
+      </div>`
+  },
+  groups: [
+    { tier:'F', title:'Foundation — one pronumeral', items:[
+      {id:'s1', type:'num', prompt:'Find <code>3x</code> when <code>x = 4</code>', answer:12, marks:1},
+      {id:'s2', type:'num', prompt:'Find <code>x + 7</code> when <code>x = 9</code>', answer:16, marks:1},
+      {id:'s3', type:'num', prompt:'Find <code>2a + 1</code> when <code>a = 3</code>', answer:7, marks:1},
+      {id:'s4', type:'num', prompt:'Find <code>10 − b</code> when <code>b = 4</code>', answer:6, marks:1},
+      {id:'s5', type:'num', prompt:'Find <code>5m</code> when <code>m = 6</code>', answer:30, marks:1},
+      {id:'s6', type:'num', prompt:'Find <code>p ÷ 2</code> when <code>p = 14</code>', answer:7, marks:1},
+      {id:'s7', type:'num', prompt:'Find <code>4y − 3</code> when <code>y = 5</code>', answer:17, marks:1},
+      {id:'s8', type:'num', prompt:'Find <code>2(n + 3)</code> when <code>n = 4</code>', answer:14, marks:1,
+       hint:'Deal with everything inside the brackets before you touch the 2.'},
+      {id:'s9', type:'num', prompt:'Find <code>8 + 3k</code> when <code>k = 2</code>', answer:14, marks:1},
+      {id:'s10', type:'num', prompt:'Find <code>t − 6</code> when <code>t = 6</code>', answer:0, marks:1}
+    ]},
+    { tier:'D', title:'Developing — two pronumerals and formulas', items:[
+      {id:'s11', type:'num', prompt:'Find <code>3x + 2y</code> when <code>x = 4</code> and <code>y = 5</code>', answer:22, marks:1},
+      {id:'s12', type:'num', prompt:'Find <code>5a − 2b</code> when <code>a = 6</code> and <code>b = 7</code>', answer:16, marks:1},
+      {id:'s13', type:'num', prompt:'Find <code>x² + 1</code> when <code>x = 4</code>', answer:17, marks:1,
+       hint:'Read the small 2 carefully. Does it tell you to multiply by 2, or to do something else?'},
+      {id:'s14', type:'num', prompt:'Find <code>(a + b) ÷ 2</code> when <code>a = 7</code> and <code>b = 9</code>', answer:8, marks:1},
+      {id:'s15', type:'num', prompt:'The area of a rectangle is <code>A = lw</code>. Find <code>A</code> when <code>l = 8</code> and <code>w = 3</code>.', answer:24, marks:1},
+      {id:'s16', type:'num', prompt:'The perimeter of a rectangle is <code>P = 2(l + w)</code>. Find <code>P</code> when <code>l = 9</code> and <code>w = 4</code>.', answer:26, marks:1},
+      {id:'s17', type:'num', prompt:'Find <code>3x − 7</code> when <code>x = 2</code>', answer:-1, marks:1},
+      {id:'s18', type:'num', prompt:'Find <code>2m + 3n</code> when <code>m = 5</code> and <code>n = 0</code>', answer:10, marks:1},
+      {id:'s19', type:'num', prompt:'Find <code>4(x − 1)</code> when <code>x = 7</code>', answer:24, marks:1},
+      {id:'s20', type:'num', prompt:'Find <code>10 − 2c</code> when <code>c = 5</code>', answer:0, marks:1}
+    ]},
+    { tier:'E', title:'Extending — negatives, powers and real formulas', items:[
+      {id:'s21', type:'num', prompt:'Find <code>4x − x²</code> when <code>x = 3</code>', answer:3, marks:2},
+      {id:'s22', type:'num', prompt:'Find <code>(3x + 1) ÷ 2</code> when <code>x = 5</code>', answer:8, marks:2},
+      {id:'s23', type:'num', prompt:'Find <code>2a²</code> when <code>a = 4</code>', answer:32, marks:2,
+       hint:'Which happens first — the squaring, or the doubling? BIDMAS decides, not left-to-right.'},
+      {id:'s24', type:'num', prompt:'Temperature converts with <code>C = 5(F − 32) ÷ 9</code>. Find <code>C</code> when <code>F = 68</code>.', answer:20, marks:2},
+      {id:'s25', type:'num', prompt:'Find <code>3x + 2y</code> when <code>x = −2</code> and <code>y = 4</code>', answer:2, marks:2},
+      {id:'s26', type:'num', prompt:'Find <code>ab − c</code> when <code>a = 3</code>, <code>b = −4</code> and <code>c = 5</code>', answer:-17, marks:2},
+      {id:'s27', type:'num', prompt:'Speed is <code>v = u + at</code>. Find <code>v</code> when <code>u = 5</code>, <code>a = 3</code>, <code>t = 4</code>.', answer:17, marks:2},
+      {id:'s28', type:'num', prompt:'Find <code>x² − 3x</code> when <code>x = −2</code>', answer:10, marks:2,
+       hint:'A negative number squared — what sign does that give? And subtracting a negative?'}
+    ]}
+  ]
+},
+
+{
+  id: 'onestep', slide: 'Slides 9–10', num: '4', label: 'Section 4', title: 'One-Step Equations',
+  badge: 'Balance & Flowchart', vcaa: 'VC2M7A03',
+  help: {
+    title: 'Help — the two methods, side by side',
+    body: `
+      <p>A one-step equation has had <b>one thing</b> done to the pronumeral. To solve it you
+      <b>undo</b> that one thing. Both methods below do exactly that — pick whichever you find
+      clearer, but be able to use one of them fluently.</p>
+      <div class="hex"><b>Method 1 — Balance.</b> An equation is a set of scales. Whatever you do to
+      one side, you must do to the other, or it tips.
+        <div class="hwork">
+          <div>x + 6 = 13</div>
+          <div class="hann">− 6 from both sides</div>
+          <div>x + 6 − 6 = 13 − 6</div>
+          <div><b>x = 7</b></div>
+        </div>
+      </div>
+      <div class="hex"><b>Method 2 — Flowchart.</b> Draw what happened to <code>x</code> going forwards,
+      then walk back through it doing the opposite.
+        <div class="hflow">
+          <span class="hnode">x</span><span class="harr">— +6 →</span><span class="hnode">13</span>
+        </div>
+        <div class="hflow rev">
+          <span class="hnode ok">7</span><span class="harr">← −6 —</span><span class="hnode">13</span>
+        </div>
+        <div class="hann">Going back, every operation flips to its inverse.</div>
+      </div>
+      <table class="htab">
+        <tr><th>Operation</th><th>Its inverse</th></tr>
+        <tr><td>+ (add)</td><td>− (subtract)</td></tr>
+        <tr><td>− (subtract)</td><td>+ (add)</td></tr>
+        <tr><td>× (multiply)</td><td>÷ (divide)</td></tr>
+        <tr><td>÷ (divide)</td><td>× (multiply)</td></tr>
+      </table>
+      <div class="hex"><b>Always check.</b> Substitute your answer back in:
+      <code>7 + 6 = 13</code> ✔ If it doesn't work, the answer is wrong — and you found it yourself.</div>`
+  },
+  groups: [
+    { tier:'F', title:'Foundation — solve for x', items:[
+      {id:'o1', type:'num', prompt:'<code>x + 6 = 13</code>', answer:7, marks:1},
+      {id:'o2', type:'num', prompt:'<code>x − 4 = 9</code>', answer:13, marks:1},
+      {id:'o3', type:'num', prompt:'<code>5x = 35</code>', answer:7, marks:1},
+      {id:'o4', type:'num', prompt:'<code>x ÷ 3 = 6</code>', answer:18, marks:1},
+      {id:'o5', type:'num', prompt:'<code>x + 11 = 20</code>', answer:9, marks:1},
+      {id:'o6', type:'num', prompt:'<code>7x = 42</code>', answer:6, marks:1},
+      {id:'o7', type:'num', prompt:'<code>x − 8 = 2</code>', answer:10, marks:1},
+      {id:'o8', type:'num', prompt:'<code>x ÷ 5 = 4</code>', answer:20, marks:1},
+      {id:'o9', type:'num', prompt:'<code>4x = 28</code>', answer:7, marks:1},
+      {id:'o10', type:'num', prompt:'<code>x ÷ 2 = 9</code>', answer:18, marks:1},
+      {id:'o11', type:'mc', prompt:'To solve <code>x + 8 = 15</code> using the balance method, what do you do to <b>both</b> sides?',
+       options:['Add 8','Subtract 8','Multiply by 8','Divide by 8'], answer:1, marks:1},
+      {id:'o12', type:'mc', prompt:'On a flowchart, the inverse of <code>× 6</code> is…',
+       options:['× 6','÷ 6','+ 6','− 6'], answer:1, marks:1}
+    ]},
+    { tier:'D', title:'Developing — mixed forms', items:[
+      {id:'o13', type:'num', prompt:'<code>9 = x + 2</code>', answer:7, marks:1,
+       hint:'The x is on the right this time. Does that change what you have to undo?'},
+      {id:'o14', type:'num', prompt:'<code>3x = 48</code>', answer:16, marks:1},
+      {id:'o15', type:'num', prompt:'<code>x − 15 = 15</code>', answer:30, marks:1},
+      {id:'o16', type:'num', prompt:'<code>x ÷ 7 = 8</code>', answer:56, marks:1},
+      {id:'o17', type:'num', prompt:'<code>12x = 60</code>', answer:5, marks:1},
+      {id:'o18', type:'num', prompt:'<code>20 = 4x</code>', answer:5, marks:1},
+      {id:'o19', type:'num', prompt:'<code>x + 2.5 = 6</code>', answer:3.5, marks:1},
+      {id:'o20', type:'num', prompt:'<code>x − 3 = −5</code>', answer:-2, marks:1},
+      {id:'o21', type:'mc', prompt:'The inverse of <code>÷ 5</code> is…',
+       options:['÷ 5','× 5','+ 5','− 5'], answer:1, marks:1},
+      {id:'o22', type:'num', prompt:'I think of a number and add 12. The answer is 30. What was my number?', answer:18, marks:1},
+      {id:'o23', type:'num', prompt:'<code>x + 40 = 40</code>', answer:0, marks:1},
+      {id:'o24', type:'mc', prompt:'Sam solved <code>x − 5 = 12</code> and got <code>x = 7</code>. What went wrong?',
+       options:['They subtracted 5 instead of adding 5','They added 5 instead of subtracting 5','Nothing — it is correct','They should have divided by 5'], answer:0, marks:1,
+       hint:'Substitute 7 back into the original equation. Does it balance? Then work out which operation they used.'}
+    ]},
+    { tier:'E', title:'Extending — negatives and non-whole answers', items:[
+      {id:'o25', type:'num', prompt:'<code>−x = 7</code>', answer:-7, marks:2,
+       hint:'−x means −1 × x. What single operation has been done to x?'},
+      {id:'o26', type:'num', prompt:'<code>x ÷ 4 = 2.5</code>', answer:10, marks:2},
+      {id:'o27', type:'num', prompt:'<code>6x = 15</code>', answer:2.5, marks:2,
+       hint:'Nothing says the solution has to be a whole number. Divide anyway.'},
+      {id:'o28', type:'num', prompt:'<code>2x = 9</code>', answer:4.5, marks:2},
+      {id:'o29', type:'num', prompt:'<code>x + 3.4 = 1.2</code>', answer:-2.2, marks:2},
+      {id:'o30', type:'num', prompt:'<code>−4x = 20</code>', answer:-5, marks:2},
+      {id:'o31', type:'num', prompt:'A number is divided by 8 and the result is 0.5. What is the number?', answer:4, marks:2}
+    ]}
+  ]
+},
+
+{
+  id: 'twostep', slide: 'Slides 12–13', num: '5', label: 'Section 5', title: 'Two-Step Equations',
+  badge: 'Balance & Flowchart', vcaa: 'VC2M7A03',
+  help: {
+    title: 'Help — undoing two operations, in the right order',
+    body: `
+      <p>A two-step equation has had <b>two</b> things done to the pronumeral. The rule that makes
+      this easy: <b>undo in the reverse order</b> — last thing done is the first thing undone.</p>
+      <div class="hex"><b>Worked example — solve <code>3x + 5 = 20</code></b>
+        <div class="hcols">
+          <div>
+            <div class="hcolh">Balance method</div>
+            <div class="hwork">
+              <div>3x + 5 = 20</div>
+              <div class="hann">− 5 from both sides</div>
+              <div>3x = 15</div>
+              <div class="hann">÷ 3 on both sides</div>
+              <div><b>x = 5</b></div>
+            </div>
+          </div>
+          <div>
+            <div class="hcolh">Flowchart method</div>
+            <div class="hflow">
+              <span class="hnode">x</span><span class="harr">— ×3 →</span><span class="hnode">3x</span><span class="harr">— +5 →</span><span class="hnode">20</span>
+            </div>
+            <div class="hflow rev">
+              <span class="hnode ok">5</span><span class="harr">← ÷3 —</span><span class="hnode">15</span><span class="harr">← −5 —</span><span class="hnode">20</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hex"><b>Why undo the +5 first?</b> Going forwards, <code>x</code> was multiplied
+      <i>then</i> added to. Walking back out, you meet the addition first. Undoing the ×3 first
+      would mean dividing the 5 as well — a very common mistake.</div>
+      <div class="hex"><b>Brackets are different.</b> In <code>2(x + 3) = 16</code> the bracket was
+      built <i>first</i>, so the ×2 is the last thing done and the first thing undone:
+      divide both sides by 2 to get <code>x + 3 = 8</code>, then subtract 3.
+      (You may also expand to <code>2x + 6 = 16</code> first — both are correct.)</div>
+      <div class="hex"><b>Always check by substituting:</b> <code>3 × 5 + 5 = 20</code> ✔</div>`
+  },
+  groups: [
+    { tier:'F', title:'Foundation — × then +', items:[
+      {id:'t1', type:'num', prompt:'<code>2x + 3 = 11</code>', answer:4, marks:1},
+      {id:'t2', type:'num', prompt:'<code>3x + 1 = 16</code>', answer:5, marks:1},
+      {id:'t3', type:'num', prompt:'<code>4x − 2 = 10</code>', answer:3, marks:1},
+      {id:'t4', type:'num', prompt:'<code>5x + 5 = 25</code>', answer:4, marks:1},
+      {id:'t5', type:'num', prompt:'<code>2x − 7 = 9</code>', answer:8, marks:1},
+      {id:'t6', type:'num', prompt:'<code>3x + 4 = 19</code>', answer:5, marks:1},
+      {id:'t7', type:'num', prompt:'<code>10x − 6 = 24</code>', answer:3, marks:1},
+      {id:'t8', type:'num', prompt:'<code>x ÷ 2 + 3 = 7</code>', answer:8, marks:1},
+      {id:'t9', type:'num', prompt:'<code>6x + 2 = 20</code>', answer:3, marks:1},
+      {id:'t10', type:'mc', prompt:'For <code>4x + 9 = 25</code>, which step comes <b>first</b>?',
+       options:['Divide both sides by 4','Subtract 9 from both sides','Add 9 to both sides','Multiply both sides by 4'], answer:1, marks:1},
+      {id:'t11', type:'mc', prompt:'On the flowchart <code>x → ×5 → +2 → 17</code>, the <b>backwards</b> flowchart starts with…',
+       options:['÷5','×5','−2','+2'], answer:2, marks:1}
+    ]},
+    { tier:'D', title:'Developing — division, brackets and negatives', items:[
+      {id:'t12', type:'num', prompt:'<code>x ÷ 3 − 2 = 4</code>', answer:18, marks:1},
+      {id:'t13', type:'num', prompt:'<code>2(x + 3) = 16</code>', answer:5, marks:1,
+       hint:'Two valid routes here: divide both sides by 2 first, or expand the bracket first. Pick one and commit.'},
+      {id:'t14', type:'num', prompt:'<code>3(x − 2) = 15</code>', answer:7, marks:1},
+      {id:'t15', type:'num', prompt:'<code>7x + 9 = 51</code>', answer:6, marks:1},
+      {id:'t16', type:'num', prompt:'<code>4x − 11 = 17</code>', answer:7, marks:1},
+      {id:'t17', type:'num', prompt:'<code>(x + 5) ÷ 2 = 6</code>', answer:7, marks:1},
+      {id:'t18', type:'num', prompt:'<code>5x + 8 = 8</code>', answer:0, marks:1},
+      {id:'t19', type:'num', prompt:'<code>6x − 13 = 29</code>', answer:7, marks:1},
+      {id:'t20', type:'num', prompt:'<code>2x + 15 = 9</code>', answer:-3, marks:1},
+      {id:'t21', type:'num', prompt:'<code>x ÷ 4 + 7 = 10</code>', answer:12, marks:1},
+      {id:'t22', type:'num', prompt:'I think of a number, multiply it by 6 and subtract 5. The answer is 31. What was my number?', answer:6, marks:1},
+      {id:'t23', type:'mc', prompt:'Jo solved <code>3x + 6 = 18</code> by dividing everything by 3 first, getting <code>x + 6 = 6</code>, so <code>x = 0</code>. What is the error?',
+       options:['You cannot divide first, ever','She divided the 3x and the 18 but forgot to divide the 6','She should have subtracted 3','Nothing — x = 0 is correct'], answer:1, marks:1,
+       hint:'Check her answer by substituting. Then look at every term on the left — did each one get divided?'}
+    ]},
+    { tier:'E', title:'Extending — harder forms and both sides', items:[
+      {id:'t24', type:'num', prompt:'<code>4(x − 3) = 2</code>', answer:3.5, marks:2},
+      {id:'t25', type:'num', prompt:'<code>(2x + 1) ÷ 3 = 5</code>', answer:7, marks:2},
+      {id:'t26', type:'num', prompt:'<code>2(3x + 1) = 26</code>', answer:4, marks:2},
+      {id:'t27', type:'num', prompt:'<code>−3x + 2 = −10</code>', answer:4, marks:2},
+      {id:'t28', type:'num', prompt:'<code>3x + 7 = x + 19</code>', answer:6, marks:2,
+       hint:'There is an x on both sides. Before you can undo anything, you need all the x terms together on one side. What could you subtract from both sides?'},
+      {id:'t29', type:'num', prompt:'<code>5x − 4 = 2x + 11</code>', answer:5, marks:2},
+      {id:'t30', type:'num', prompt:'A rectangle has perimeter 30 cm and <code>P = 2(x + 4)</code>. Find <code>x</code>.', answer:11, marks:2},
+      {id:'t31', type:'num', prompt:'<code>8 − 2x = 14</code>', answer:-3, marks:2,
+       hint:'Careful: the x term is being subtracted. What is the coefficient of x here, including its sign?'},
+      {id:'t32', type:'num', prompt:'<code>5(x + 2) = 3(x + 6)</code>', answer:4, marks:2}
+    ]}
+  ]
+},
+
+{
+  id: 'mixed', slide: 'Slide 14', num: '6', label: 'Section 6', title: 'Mixed Review & Word Problems',
+  badge: 'Applying', vcaa: 'VC2M7A01–A05',
+  help: {
+    title: 'Help — turning words into an equation',
+    body: `
+      <p>Word problems are only hard because the equation is hidden. Build it in three moves.</p>
+      <div class="hex"><b>Worked example.</b> <i>Maya buys 4 identical pens and a $3 notebook. She
+      spends $19 altogether. How much is one pen?</i>
+        <ol class="hsteps">
+          <li><b>Name the unknown.</b> Let <code>p</code> = the cost of one pen, in dollars.</li>
+          <li><b>Build the expression.</b> 4 pens cost <code>4p</code>; add the notebook: <code>4p + 3</code>.</li>
+          <li><b>Set it equal to what you know, then solve.</b>
+              <code>4p + 3 = 19</code> → <code>4p = 16</code> → <code>p = 4</code>.</li>
+          <li><b>Answer in words, with units.</b> One pen costs $4. Check: 4 × 4 + 3 = 19 ✔</li>
+        </ol>
+      </div>
+      <div class="hex"><b>Translation table</b>
+        <table class="htab">
+          <tr><th>Words</th><th>Algebra</th></tr>
+          <tr><td>sum of / more than / increased by</td><td>+</td></tr>
+          <tr><td>difference / less than / decreased by</td><td>−</td></tr>
+          <tr><td>product of / times / double / triple</td><td>×</td></tr>
+          <tr><td>quotient / shared between / half of</td><td>÷</td></tr>
+          <tr><td>is / gives / results in / altogether</td><td>=</td></tr>
+        </table>
+      </div>
+      <div class="hex"><b>Order trap:</b> “<i>5 less than n</i>” is <code>n − 5</code>, not <code>5 − n</code>.
+      Read it as “start with n, take 5 away”.</div>`
+  },
+  groups: [
+    { tier:'F', title:'Foundation — translate and solve', items:[
+      {id:'m1', type:'txt', prompt:'Write “<i>7 more than n</i>” in algebra.', answer:['n+7','7+n'], marks:1},
+      {id:'m2', type:'txt', prompt:'Write “<i>5 less than n</i>” in algebra.', answer:['n-5'], marks:1,
+       hint:'Read it as an instruction: what do you start with, and what happens to it?'},
+      {id:'m3', type:'txt', prompt:'Write “<i>three times a number k</i>” in algebra.', answer:['3k','k3'], marks:1},
+      {id:'m4', type:'num', prompt:'I think of a number and take away 9. The answer is 4. What was my number?', answer:13, marks:1},
+      {id:'m5', type:'num', prompt:'A taxi charges $5 plus $2 per km. Using <code>C = 2k + 5</code>, what is the cost for 6 km?', answer:17, marks:1},
+      {id:'m6', type:'num', prompt:'Three identical books cost $27. How much is one book, in dollars?', answer:9, marks:1},
+      {id:'m7', type:'txt', prompt:'Write an expression for the perimeter of a square with side <code>s</code>.',
+       answer:['4s','s4','s+s+s+s'], marks:1}
+    ]},
+    { tier:'D', title:'Developing — build the equation yourself', items:[
+      {id:'m8', type:'num', prompt:'Maya buys 4 pens at <code>$x</code> each plus a $3 notebook, spending $19. Find <code>x</code>.', answer:4, marks:1},
+      {id:'m9', type:'num', prompt:'Three more than twice a number is 17. What is the number?', answer:7, marks:1},
+      {id:'m10', type:'num', prompt:'A taxi charges $5 plus $2 per km. A trip cost $23. How many km was it?', answer:9, marks:1},
+      {id:'m11', type:'num', prompt:'A rectangle is 4 cm longer than it is wide. Its perimeter is 28 cm. How wide is it, in cm?', answer:5, marks:1,
+       hint:'Let w be the width. Write the length in terms of w, then write the perimeter in terms of w.'},
+      {id:'m12', type:'num', prompt:'Ben has <code>n</code> cards. Kim has 3 times as many. Together they have 40. How many does Ben have?', answer:10, marks:1},
+      {id:'m13', type:'num', prompt:'A pattern of tiles follows <code>4n + 2</code>. Which shape number uses <b>42</b> tiles?', answer:10, marks:1},
+      {id:'m14', type:'num', prompt:'Find <code>2(a + b) − 3</code> when <code>a = 5</code> and <code>b = 2</code>.', answer:11, marks:1},
+      {id:'m15', type:'mc', prompt:'Which equation matches “<i>a number halved, then increased by 4, gives 10</i>”?',
+       options:['2x + 4 = 10','x ÷ 2 + 4 = 10','(x + 4) ÷ 2 = 10','x ÷ 4 + 2 = 10'], answer:1, marks:1}
+    ]},
+    { tier:'E', title:'Extending — multi-step and reasoning', items:[
+      {id:'m16', type:'num', prompt:'A phone plan costs $15 per month plus $0.20 per text. A bill was $27. How many texts were sent?', answer:60, marks:2},
+      {id:'m17', type:'num', prompt:'The sum of three consecutive whole numbers is 48. What is the <b>smallest</b> of them?', answer:15, marks:2,
+       hint:'If the first is n, what are the other two in terms of n? Add all three before you solve.'},
+      {id:'m18', type:'num', prompt:'Gym A charges $40 join-up plus $5 a visit. Gym B charges $10 a visit with no join-up. After how many visits do they cost the same?', answer:8, marks:2,
+       hint:'Write a cost expression for each gym, then set them equal to each other.'},
+      {id:'m19', type:'num', prompt:'A number is doubled, then 7 is subtracted. The result is the same as the number plus 2. What is the number?', answer:9, marks:2},
+      {id:'m20', type:'num', prompt:'A triangle has sides <code>x</code>, <code>x + 2</code> and <code>2x − 1</code>. Its perimeter is 25 cm. Find <code>x</code>.', answer:6, marks:2},
+      {id:'m21', type:'open', prompt:'Explain, in your own words, why you must do the <b>same thing to both sides</b> of an equation. Use the word “balance”.',
+       placeholder:'Write this as if you were explaining it to someone who missed the lesson.', marks:0},
+      {id:'m22', type:'open', prompt:'Which do you find more reliable — the balance method or the flowchart method? Give one specific reason, and name one type of equation where your preferred method is harder to use.',
+       placeholder:'State your choice, your reason, and the case where it struggles.', marks:0}
+    ]}
+  ]
+},
+
+{
+  id: 'exit', slide: 'Slide 17', num: '7', label: 'Section 7', title: 'Exit Ticket',
+  badge: 'Assessed', exit: true, vcaa: 'VC2M7A01–A05',
+  help: {
+    title: 'Help — how to use this section',
+    body: `
+      <p>This section is a check on what you can do <b>without help</b>. Close the other help
+      panels, put your notes away, and answer from memory.</p>
+      <div class="hex">If you get one wrong, that topic is exactly what to put on your
+      <b>bound reference</b> before the test — a wrong answer here is useful information, not a
+      problem.</div>`
+  },
+  groups: [
+    { tier:'X', title:'Answer from memory — no notes', items:[
+      {id:'x1', type:'num', prompt:'How many terms are in <code>3x − 5y + 8</code>?', answer:3, marks:1},
+      {id:'x2', type:'num', prompt:'Find <code>5x − 2</code> when <code>x = 6</code>.', answer:28, marks:1},
+      {id:'x3', type:'txt', prompt:'Write the rule for the pattern <code>3, 7, 11, 15, …</code>',
+       answer:['4n-1'], marks:2},
+      {id:'x4', type:'num', prompt:'Solve <code>x + 9 = 21</code>', answer:12, marks:1},
+      {id:'x5', type:'num', prompt:'Solve <code>4x − 5 = 23</code>', answer:7, marks:2},
+      {id:'x6', type:'num', prompt:'Solve <code>2(x + 5) = 18</code>', answer:4, marks:2},
+      {id:'x7', type:'open', prompt:'Write down the <b>one</b> topic from today you most need to revise before the test, and what you will do about it.',
+       placeholder:'Name the topic, and state a specific action — not “practise more”.', marks:0}
+    ]}
+  ]
+}
+];
+
+/* ══════════════════════════════════════════════════════════════════════════
+   EDUPORTAL WORKBOOK ENGINE — Y7 Algebra Revision
+   Storage is localStorage today; every persistence call is routed through
+   DataService so the bodies can be swapped for fetch() with no other edits.
+   ══════════════════════════════════════════════════════════════════════════ */
+'use strict';
+
+var LESSON_ID = 'y7-ma-u1-l1-algebra-revision';
+var UNIT_ID   = 'y7-ma-u1';
+var UNIT_SITE = 'U1_Algebra_site.html';
+
+/* ── state ─────────────────────────────────────────────────────────────── */
+var STATE = { fields:{}, q:{} };   // q[id] = {val, attempts, earned, solved}
+var INDEX = {};                    // id -> question object
+var ORDER = [];                    // question ids in document order
+
+/* ── DataService ───────────────────────────────────────────────────────── */
+var DataService = {
+  studentId: function () {
+    try {
+      var s = JSON.parse(localStorage.getItem('eduportal_session') || '{}');
+      return s.id || 'current_student';
+    } catch (e) { return 'current_student'; }
+  },
+  _wbKey:   function () { return 'eduportal_workbook_' + this.studentId() + '_' + LESSON_ID; },
+  _progKey: function () { return 'eduportal_progress_' + this.studentId() + '_' + LESSON_ID; },
+
+  save: function (quiet) {
+    /* API target: POST /api/v1/workbooks/{studentId}/{lessonId} */
+    try {
+      localStorage.setItem(this._wbKey(), JSON.stringify({
+        lessonId: LESSON_ID, unitId: UNIT_ID,
+        fields: STATE.fields, questions: STATE.q,
+        totals: computeTotals(),
+        updatedAt: new Date().toISOString()
+      }));
+      this._syncProgress('in-progress');
+      if (!quiet) setStatus('Saved ' + new Date().toISOString().slice(0, 10) + ' — all work stored.');
+      return true;
+    } catch (e) { setStatus('Could not save — storage unavailable.'); return false; }
+  },
+
+  load: function (announce) {
+    /* API target: GET /api/v1/workbooks/{studentId}/{lessonId} */
+    try {
+      var raw = localStorage.getItem(this._wbKey());
+      if (!raw) { if (announce) setStatus('No saved work found for this workbook yet.'); return false; }
+      var d = JSON.parse(raw);
+      STATE.fields = d.fields || {};
+      STATE.q      = d.q || d.questions || {};
+      applyState();
+      if (announce) setStatus('Loaded your saved work.');
+      return true;
+    } catch (e) { setStatus('Could not load saved work.'); return false; }
+  },
+
+  autoSave: (function () {
+    var t = null;
+    return function () { clearTimeout(t); t = setTimeout(function () { DataService.save(true); }, 1500); };
+  })(),
+
+  submit: function () {
+    /* API target: POST /api/v1/workbooks/{studentId}/{lessonId}/submit */
+    var tot = computeTotals();
+    var unanswered = tot.items - tot.resolved;
+    var msg = 'Submit your workbook to your teacher?\n\n' +
+              'Score: ' + tot.earned + ' / ' + tot.possible + ' marks\n' +
+              'Questions completed: ' + tot.resolved + ' / ' + tot.items +
+              (unanswered > 0 ? '\n\n' + unanswered + ' question(s) are still unanswered.' : '') +
+              '\n\nYou can keep working after submitting, but your teacher sees this snapshot.';
+    if (!window.confirm(msg)) return;
+    this.save(true);
+    var subId = 'sub_' + LESSON_ID + '_' + this.studentId();
+    try {
+      localStorage.setItem('eduportal_submission_' + subId, JSON.stringify({
+        submissionId: subId, lessonId: LESSON_ID, unitId: UNIT_ID,
+        studentId: this.studentId(),
+        student: STATE.fields.sName || '', className: STATE.fields.sClass || '',
+        autoScore: tot.earned, autoMax: tot.possible,
+        autoPercent: tot.possible ? Math.round(tot.earned / tot.possible * 100) : 0,
+        itemsResolved: tot.resolved, itemsTotal: tot.items,
+        perSection: tot.sections,
+        responses: STATE.q, fields: STATE.fields,
+        submittedAt: new Date().toISOString()
+      }));
+      this._syncProgress('submitted', subId);
+    } catch (e) { /* storage full — progress sync still attempted below */ }
+    setStatus('Submitted. Your teacher can now review this workbook.');
+    window.alert('Submitted.\n\nAuto-marked score: ' + tot.earned + ' / ' + tot.possible +
+                 ' marks.\n\nWritten-response questions are marked by your teacher separately.');
+  },
+
+  _syncProgress: function (status, submissionId) {
+    /* Valid statuses: 'in-progress' | 'submitted' | 'marked' */
+    var tot = computeTotals();
+    try {
+      localStorage.setItem(this._progKey(), JSON.stringify({
+        status: status,
+        score: tot.possible ? Math.round(tot.earned / tot.possible * 100) : null,
+        submissionId: submissionId || null,
+        updatedAt: new Date().toISOString()
+      }));
+    } catch (e) { /* non-fatal */ }
+  }
+};
+
+/* ── answer normalisation ──────────────────────────────────────────────── */
+function normText (s) {
+  return String(s)
+    .toLowerCase()
+    .replace(/\u2212|\u2013|\u2014/g, '-')   // unicode minus / dashes
+    .replace(/\u00d7/g, '*')                  // ×
+    .replace(/\u00f7/g, '/')                  // ÷
+    .replace(/\u00b2/g, '^2')                 // ²
+    .replace(/\s+/g, '')
+    .replace(/^[a-z]=/, '')                   // strip a leading "x="
+    .replace(/\*/g, '');                      // 3*x -> 3x
+}
+
+function toNumber (s) {
+  var t = normText(s).replace(/[$,]/g, '');
+  if (t === '') return null;
+  var frac = t.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
+  if (frac) { var d = parseFloat(frac[2]); return d === 0 ? null : parseFloat(frac[1]) / d; }
+  if (!/^-?\d*\.?\d+$/.test(t)) return null;
+  var n = parseFloat(t);
+  return isNaN(n) ? null : n;
+}
+
+function isCorrect (q, raw) {
+  if (q.type === 'mc') return String(raw) !== '' && Number(raw) === q.answer;
+  if (q.type === 'num') {
+    var n = toNumber(raw);
+    return n !== null && Math.abs(n - q.answer) < 1e-9;
+  }
+  if (q.type === 'txt') {
+    var v = normText(raw);
+    if (v === '') return false;
+    return q.answer.some(function (a) { return normText(a) === v; });
+  }
+  return false;
+}
+
+/* ── rendering ─────────────────────────────────────────────────────────── */
+var TIER_NAME = { F: '🟢 Foundation', D: '🟡 Developing', E: '🟣 Extending', X: '🔴 Exit ticket' };
+
+function esc (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+function build () {
+  var secHost = document.getElementById('sections');
+  var navHost = document.getElementById('navList');
+  var secHTML = '', navHTML = '';
+
+  BANK.forEach(function (sec) {
+    /* ── nav entry (two levels: section → tier group) ── */
+    navHTML += '<div class="nav-sec" data-sec="' + sec.id + '">' +
+      '<button class="nav-top" type="button" data-toggle="' + sec.id + '">' +
+        '<span class="nav-n">' + sec.num + '</span>' +
+        '<span class="nav-t">' + esc(sec.title) + '</span>' +
+        '<span class="nav-chev">▶</span>' +
+      '</button><div class="nav-sub">';
+    sec.groups.forEach(function (g) {
+      navHTML += '<a class="nav-link" href="#' + sec.id + '-' + g.tier + '">' +
+        '<span class="dot ' + g.tier + '"></span>' +
+        '<span>' + TIER_NAME[g.tier].replace(/^\S+\s/, '') + '</span>' +
+        '<span class="nav-done" id="nd-' + sec.id + '-' + g.tier + '">0/' + g.items.length + '</span></a>';
+    });
+    navHTML += '</div></div>';
+
+    /* ── section ── */
+    secHTML += '<section class="section' + (sec.exit ? ' exit' : '') + '" id="' + sec.id + '">' +
+      '<div class="band">' +
+        '<div class="band-n">' + sec.num + '</div>' +
+        '<div class="band-txt"><div class="band-lbl">' + esc(sec.label) + '</div>' +
+        '<div class="band-title">' + esc(sec.title) + '</div></div>' +
+        '<div class="badge">' + esc(sec.badge) + '</div>' +
+        '<div class="sec-score" id="ss-' + sec.id + '">0 / 0 marks</div>' +
+      '</div>' +
+      '<div class="helpwrap">' +
+        '<div class="helprow">' +
+          '<button class="help-btn" type="button" data-help="' + sec.id + '" aria-expanded="false" aria-controls="help-' + sec.id + '">' +
+            '<span class="help-ico">?</span> Help — show me how</button>' +
+          '<a class="site-link" href="' + UNIT_SITE + '#' + LESSON_ID + '">Full notes on the unit site →</a>' +
+          '<span class="slide-ref">Your teacher will show ' + esc(sec.slide) + '</span>' +
+        '</div>' +
+        '<div class="help-body" id="help-' + sec.id + '"><h4>' + esc(sec.help.title) + '</h4>' + sec.help.body + '</div>' +
+      '</div>';
+
+    sec.groups.forEach(function (g) {
+      var pts = g.items.reduce(function (a, i) { return a + (i.marks || 0); }, 0);
+      secHTML += '<div class="group" id="' + sec.id + '-' + g.tier + '">' +
+        '<div class="group-h"><span class="tier-pill tier-' + g.tier + '">' + TIER_NAME[g.tier] + '</span>' +
+        '<span class="group-t">' + esc(g.title) + '</span>' +
+        '<span class="group-meta">' + g.items.length + ' questions · ' + pts + ' marks</span></div>';
+
+      g.items.forEach(function (q, i) {
+        INDEX[q.id] = q; ORDER.push(q.id);
+        q._sec = sec.id; q._tier = g.tier;
+        secHTML += renderQ(q, i + 1);
+      });
+      secHTML += '</div>';
+    });
+    secHTML += '</section>';
+  });
+
+  secHost.innerHTML = secHTML;
+  navHost.innerHTML = navHTML;
+}
+
+function renderQ (q, n) {
+  var body = '';
+  if (q.type === 'mc') {
+    body += '<div class="opts">';
+    q.options.forEach(function (o, i) {
+      body += '<label class="opt"><input type="radio" name="' + q.id + '" value="' + i + '" data-q="' + q.id + '">' +
+              '<span>' + o + '</span></label>';
+    });
+    body += '</div>';
+  } else if (q.type === 'open') {
+    body += '<textarea class="ta" id="in-' + q.id + '" data-q="' + q.id + '" rows="3" placeholder="' +
+            esc(q.placeholder || '') + '"></textarea>';
+  } else {
+    body += '<div class="qrow"><label class="sr" for="in-' + q.id + '" style="position:absolute;left:-9999px">Answer for question ' + n + '</label>' +
+            '<input class="ans" id="in-' + q.id + '" data-q="' + q.id + '" type="text" ' +
+            'inputmode="' + (q.type === 'num' ? 'text' : 'text') + '" autocomplete="off" spellcheck="false" ' +
+            'placeholder="' + (q.type === 'num' ? 'your answer' : 'e.g. 2n + 5') + '"></div>';
+  }
+
+  var controls = '';
+  if (q.type !== 'open') {
+    controls = '<div class="qrow" style="margin-top:10px">' +
+      '<button class="check" type="button" data-check="' + q.id + '">Check</button>' +
+      (q.hint ? '<button class="hint-btn" type="button" data-hint="' + q.id + '">Need a nudge?</button>' : '') +
+      '</div>' +
+      (q.hint ? '<div class="hint-txt" id="hint-' + q.id + '">' + q.hint + '</div>' : '') +
+      '<div class="fb" id="fb-' + q.id + '"></div>';
+  } else {
+    controls = '<div class="fb show" style="color:var(--ink3);font-family:var(--mono);font-size:11.5px">' +
+               'Written response — marked by your teacher, not auto-marked.</div>';
+  }
+
+  return '<div class="q' + (q.type === 'open' ? ' open-only' : '') + '" id="q-' + q.id + '">' +
+    '<div class="qn">' + n + '.</div>' +
+    '<div class="qmain"><div class="qtext">' + q.prompt +
+      (q.marks ? '<span class="qmarks">[' + q.marks + ' mark' + (q.marks > 1 ? 's' : '') + ']</span>' : '') +
+    '</div>' + body + controls + '</div></div>';
+}
+
+/* ── marking ───────────────────────────────────────────────────────────── */
+function st (id) {
+  if (!STATE.q[id]) STATE.q[id] = { val: '', attempts: 0, earned: 0, solved: false };
+  return STATE.q[id];
+}
+
+function readValue (q) {
+  if (q.type === 'mc') {
+    var sel = document.querySelector('input[name="' + q.id + '"]:checked');
+    return sel ? sel.value : '';
+  }
+  var el = document.getElementById('in-' + q.id);
+  return el ? el.value : '';
+}
+
+function checkQ (id) {
+  var q = INDEX[id], s = st(id);
+  if (s.solved) return;
+  var raw = readValue(q);
+  if (String(raw).trim() === '') {
+    paint(id, 'empty', 'Write an answer first, then press Check.');
+    return;
+  }
+  s.val = raw;
+  var ok = isCorrect(q, raw);
+  var row = document.getElementById('q-' + id);
+
+  if (ok) {
+    var first = (s.attempts === 0);
+    s.solved = true;
+    s.earned = first ? (q.marks || 0) : 0;
+    s.attempts += 1;
+    row.classList.remove('wrong'); row.classList.add('right');
+    setDisabled(q, true);
+    paint(id, first ? 'right' : 'late',
+      first ? 'Correct — ' + s.earned + ' mark' + (s.earned > 1 ? 's' : '') + ' awarded.'
+            : 'Correct now — but no marks, because this was not your first attempt. ' +
+              'Make sure you know why the earlier answer was wrong.');
+  } else {
+    s.attempts += 1;
+    s.earned = 0;
+    row.classList.remove('right'); row.classList.add('wrong');
+    paint(id, 'wrong',
+      s.attempts === 1
+        ? 'Not right — and because the first attempt was wrong, this question is now worth 0 marks. Keep going until you get it: understanding it still matters more than the mark.'
+        : 'Still not right (attempt ' + s.attempts + '). Try the Help panel at the top of this section, or ask your teacher.');
+  }
+  refresh();
+  DataService.autoSave();
+}
+
+function paint (id, kind, msg) {
+  var fb = document.getElementById('fb-' + id);
+  if (!fb) return;
+  fb.className = 'fb show ' + (kind === 'right' ? 'right' : kind === 'late' ? 'late' : kind === 'wrong' ? 'wrong' : '');
+  fb.textContent = msg;
+}
+
+function setDisabled (q, on) {
+  var btn = document.querySelector('[data-check="' + q.id + '"]');
+  if (btn) { btn.disabled = on; btn.textContent = on ? 'Locked in' : 'Check'; }
+  if (q.type === 'mc') {
+    document.querySelectorAll('input[name="' + q.id + '"]').forEach(function (r) { r.disabled = on; });
+  } else {
+    var el = document.getElementById('in-' + q.id);
+    if (el) el.readOnly = on;
+  }
+}
+
+/* ── totals ────────────────────────────────────────────────────────────── */
+function computeTotals () {
+  var t = { earned: 0, possible: 0, items: 0, resolved: 0, sections: {} };
+  BANK.forEach(function (sec) {
+    var se = 0, sp = 0, sr = 0, si = 0;
+    sec.groups.forEach(function (g) {
+      g.items.forEach(function (q) {
+        var s = STATE.q[q.id] || {};
+        si += 1;
+        if (q.type === 'open') {
+          if (String(s.val || '').trim().length > 0) { sr += 1; }
+        } else {
+          sp += (q.marks || 0);
+          se += (s.earned || 0);
+          if (s.solved) sr += 1;
+        }
+      });
+    });
+    t.sections[sec.id] = { earned: se, possible: sp, resolved: sr, items: si, title: sec.title };
+    t.earned += se; t.possible += sp; t.resolved += sr; t.items += si;
+  });
+  return t;
+}
+
+function refresh () {
+  var t = computeTotals();
+  var pPct = t.items ? Math.round(t.resolved / t.items * 100) : 0;
+  var sPct = t.possible ? Math.round(t.earned / t.possible * 100) : 0;
+  document.getElementById('progVal').textContent = pPct + '%';
+  document.getElementById('progFill').style.width = pPct + '%';
+  document.getElementById('scoreVal').textContent = t.earned + ' / ' + t.possible;
+  document.getElementById('scoreFill').style.width = sPct + '%';
+
+  BANK.forEach(function (sec) {
+    var s = t.sections[sec.id];
+    var el = document.getElementById('ss-' + sec.id);
+    if (el) el.textContent = s.earned + ' / ' + s.possible + ' marks · ' + s.resolved + '/' + s.items + ' done';
+    var anyOpen = false;
+    sec.groups.forEach(function (g) {
+      var done = g.items.filter(function (q) {
+        var qs = STATE.q[q.id] || {};
+        return q.type === 'open' ? String(qs.val || '').trim().length > 0 : !!qs.solved;
+      }).length;
+      var nd = document.getElementById('nd-' + sec.id + '-' + g.tier);
+      if (nd) nd.textContent = done + '/' + g.items.length;
+      if (done > 0 && done < g.items.length) anyOpen = true;
+    });
+    var navSec = document.querySelector('.nav-sec[data-sec="' + sec.id + '"]');
+    if (navSec) navSec.classList.toggle('active', s.resolved > 0);
+    void anyOpen;
+  });
+
+  var grid = document.getElementById('sumGrid'), html = '';
+  BANK.forEach(function (sec) {
+    var s = t.sections[sec.id];
+    html += '<div class="sumcell"><span>' + esc(sec.title) + '</span><b>' + s.earned + ' / ' + s.possible + '</b>' +
+            '<span>' + s.resolved + ' of ' + s.items + ' answered</span></div>';
+  });
+  html += '<div class="sumcell" style="border-color:var(--blue)"><span>Total</span><b>' + t.earned + ' / ' + t.possible +
+          '</b><span>' + (t.possible ? Math.round(t.earned / t.possible * 100) : 0) + '% of available marks</span></div>';
+  grid.innerHTML = html;
+}
+
+/* ── restore ───────────────────────────────────────────────────────────── */
+function applyState () {
+  Object.keys(STATE.fields).forEach(function (k) {
+    var el = document.getElementById(k);
+    if (el) el.value = STATE.fields[k];
+  });
+  ORDER.forEach(function (id) {
+    var q = INDEX[id], s = STATE.q[id];
+    if (!s) return;
+    if (q.type === 'mc') {
+      var r = document.querySelector('input[name="' + id + '"][value="' + s.val + '"]');
+      if (r) r.checked = true;
+    } else {
+      var el = document.getElementById('in-' + id);
+      if (el) el.value = s.val || '';
+    }
+    var row = document.getElementById('q-' + id);
+    if (s.solved) {
+      row.classList.add('right'); setDisabled(q, true);
+      paint(id, s.earned > 0 ? 'right' : 'late',
+        s.earned > 0 ? 'Correct — ' + s.earned + ' mark' + (s.earned > 1 ? 's' : '') + ' awarded.'
+                     : 'Correct, but no marks — this was not your first attempt.');
+    } else if (s.attempts > 0) {
+      row.classList.add('wrong');
+      paint(id, 'wrong', 'Not right yet (attempt ' + s.attempts + '). This question is now worth 0 marks, but keep working at it.');
+    }
+  });
+  refresh();
+}
+
+function setStatus (m) { document.getElementById('statusBar').textContent = m; }
+
+/* ── wiring ────────────────────────────────────────────────────────────── */
+function wire () {
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest ? e.target.closest('[data-check],[data-hint],[data-help],[data-toggle]') : null;
+    if (!el) return;
+    if (el.hasAttribute('data-check')) { checkQ(el.getAttribute('data-check')); }
+    else if (el.hasAttribute('data-hint')) {
+      var h = document.getElementById('hint-' + el.getAttribute('data-hint'));
+      h.classList.toggle('open');
+      el.textContent = h.classList.contains('open') ? 'Hide nudge' : 'Need a nudge?';
+    }
+    else if (el.hasAttribute('data-help')) {
+      var b = document.getElementById('help-' + el.getAttribute('data-help'));
+      var open = b.classList.toggle('open');
+      el.setAttribute('aria-expanded', open ? 'true' : 'false');
+      el.innerHTML = '<span class="help-ico">' + (open ? '\u2715' : '?') + '</span> ' +
+                     (open ? 'Hide help' : 'Help — show me how');
+    }
+    else if (el.hasAttribute('data-toggle')) {
+      el.parentNode.classList.toggle('open');
+    }
+  });
+
+  document.addEventListener('input', function (e) {
+    var t = e.target;
+    if (t.matches('#sName,#sClass,#sDate,#sTeacher')) {
+      STATE.fields[t.id] = t.value; DataService.autoSave(); return;
+    }
+    var qid = t.getAttribute && t.getAttribute('data-q');
+    if (qid) {
+      st(qid).val = t.value;
+      if (INDEX[qid].type === 'open') { refresh(); }
+      DataService.autoSave();
+    }
+  });
+
+  document.addEventListener('change', function (e) {
+    var qid = e.target.getAttribute && e.target.getAttribute('data-q');
+    if (qid && INDEX[qid] && INDEX[qid].type === 'mc') { st(qid).val = e.target.value; DataService.autoSave(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    var qid = e.target.getAttribute && e.target.getAttribute('data-q');
+    if (qid && INDEX[qid] && INDEX[qid].type !== 'open') { e.preventDefault(); checkQ(qid); }
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', function () { DataService.save(false); });
+  document.getElementById('loadBtn').addEventListener('click', function () { DataService.load(true); });
+  document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
+  document.getElementById('submitBtn').addEventListener('click', function () { DataService.submit(); });
+  document.getElementById('submitBtn2').addEventListener('click', function () { DataService.submit(); });
+
+  document.getElementById('themeBtn').addEventListener('click', function () {
+    var h = document.documentElement;
+    var next = h.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    h.setAttribute('data-theme', next);
+    this.textContent = next === 'dark' ? 'Light' : 'Dark';
+  });
+}
+
+/* ── boot ──────────────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function () {
+  build();
+  wire();
+  DataService.load(false);
+  var d = document.getElementById('sDate');
+  if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
+  STATE.fields.sDate = d.value;
+  document.querySelector('.nav-sec').classList.add('open');
+  refresh();
+  DataService._syncProgress('in-progress');
+});
+</script>
+</body>
+</html>

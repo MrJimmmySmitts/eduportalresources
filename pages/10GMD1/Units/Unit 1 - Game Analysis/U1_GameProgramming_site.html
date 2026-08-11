@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Programming — Unit 1 Reference Site</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dark-bg:#0D1117; --light-bg:#FFFFFF;
+    --blue:#4361EE; --green:#10B981; --amber:#F59E0B; --purple:#8B5CF6; --red:#EF4444;
+    --bg: var(--dark-bg); --panel:#161B22; --panel-2:#1C2330; --border:#2A3140;
+    --text:#E6E8EE; --text-dim:#9BA3B4;
+  }
+  [data-theme="light"]{
+    --bg: var(--light-bg); --panel:#F7F8FC; --panel-2:#F0F2F8; --border:#DCE0EA;
+    --text:#1A1A2E; --text-dim:#5A5A6E;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; transition:background .2s,color .2s;}
+  h1,h2,h3{font-family:'DM Serif Display',serif; font-weight:400; margin:0;}
+  .mono{font-family:'DM Mono',monospace;}
+  .read{font-family:'Atkinson Hyperlegible',sans-serif; line-height:1.65;}
+  a{color:var(--blue);}
+
+  #topbar{
+    position:sticky; top:0; z-index:50; background:var(--panel); border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:16px; padding:10px 20px; flex-wrap:wrap;
+  }
+  #topbar .title{font-family:'DM Mono',monospace; font-size:12px; color:var(--text-dim); flex:1;}
+  #topbar nav a{font-family:'DM Mono',monospace; font-size:12px; color:var(--text-dim); text-decoration:none; margin-right:16px; padding:4px 8px; border-radius:5px;}
+  #topbar nav a:hover{color:var(--blue); background:var(--panel-2);}
+  .btn{
+    font-family:'DM Mono',monospace; font-size:12px; border:1px solid var(--border); background:var(--panel-2);
+    color:var(--text); padding:7px 12px; border-radius:6px; cursor:pointer;
+  }
+  .btn:hover{border-color:var(--blue);}
+
+  .wrap{max-width:920px; margin:0 auto; padding:0 20px 100px;}
+
+  .cover{padding:48px 0 28px; border-bottom:1px solid var(--border); margin-bottom:20px;}
+  .eyebrow{font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.08em; color:var(--blue); margin-bottom:10px;}
+  .cover h1{font-size:36px; margin-bottom:8px;}
+  .cover .sub{color:var(--text-dim); font-size:15px;}
+
+  .lesson-nav{display:flex; gap:10px; margin:24px 0 8px; flex-wrap:wrap;}
+  .lesson-nav a{flex:1; min-width:220px; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:14px 16px; text-decoration:none; color:var(--text);}
+  .lesson-nav a:hover{border-color:var(--blue);}
+  .lesson-nav .ln-num{font-family:'DM Mono',monospace; font-size:11px; color:var(--text-dim);}
+  .lesson-nav .ln-title{font-family:'DM Serif Display',serif; font-size:17px; margin-top:2px;}
+
+  .section-band{display:flex; align-items:center; gap:12px; margin:60px 0 22px; scroll-margin-top:70px;}
+  .num-circle{width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'DM Mono',monospace; font-weight:700; font-size:15px; color:#fff; flex-shrink:0;}
+  .section-band h2{font-size:26px;}
+  .section-label{font-family:'DM Mono',monospace; font-size:11px; color:var(--text-dim); text-transform:uppercase;}
+
+  .card{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:22px; margin-bottom:18px;}
+  h3.sub-h{font-size:19px; margin-bottom:10px; font-family:'DM Serif Display',serif;}
+
+  .callout{border-radius:10px; padding:16px 18px; margin-bottom:20px; border:1px solid; font-family:'Atkinson Hyperlegible',sans-serif; font-size:15px; line-height:1.6;}
+  .callout-info{background:rgba(67,97,238,.08); border-color:var(--blue);}
+  .callout-tip{background:rgba(16,185,129,.08); border-color:var(--green);}
+  .callout-note{background:rgba(245,158,11,.08); border-color:var(--amber);}
+  .callout-extend{background:rgba(139,92,246,.08); border-color:var(--purple);}
+  .callout b{display:block; font-family:'DM Mono',monospace; font-size:11px; text-transform:uppercase; margin-bottom:6px; letter-spacing:.04em;}
+
+  .copy-banner{font-family:'DM Mono',monospace; font-size:11px; color:var(--amber); border:1px dashed var(--amber); border-radius:6px; padding:6px 10px; display:inline-block; margin-bottom:10px;}
+
+  table{width:100%; border-collapse:collapse; margin:10px 0 6px;}
+  th,td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--border); font-size:14px; vertical-align:top;}
+  th{font-family:'DM Mono',monospace; font-size:11px; text-transform:uppercase; color:var(--text-dim); background:var(--panel-2);}
+  td.el-cell{font-weight:700; white-space:nowrap;}
+
+  .elgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0;}
+  .eldef{border:1px solid var(--border); border-radius:8px; padding:14px; background:var(--panel-2);}
+  .eldef .dot{width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:8px;}
+  .eldef .el-name{font-weight:700; font-size:15px;}
+  .eldef p{margin:6px 0 0; font-size:13.5px; color:var(--text-dim);}
+
+  .pair-row{display:grid; grid-template-columns:140px 1fr auto 1fr; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-size:14px;}
+  .pair-row:last-child{border-bottom:none;}
+  .pair-row .genre{font-family:'DM Mono',monospace; font-size:11px; color:var(--blue); font-weight:700;}
+  .pair-row .vs{color:var(--text-dim); font-style:italic; font-size:12px; text-align:center;}
+
+  .wheel-box{display:inline-block; border:1px solid var(--border); border-radius:6px; padding:4px 10px; margin:3px 4px 3px 0; font-family:'DM Mono',monospace; font-size:12px; background:var(--panel-2);}
+
+  .frame-box{border:1.5px solid var(--blue); border-radius:10px; padding:16px 18px; background:rgba(67,97,238,.06); font-size:17px; margin:14px 0;}
+  .frame-box .fw{font-weight:700;}
+
+  .site-link{display:inline-flex; align-items:center; gap:6px; font-family:'DM Mono',monospace; font-size:12.5px; padding:9px 16px; border:1px solid var(--green); border-radius:6px; color:var(--green); text-decoration:none; margin:12px 0 4px;}
+  .site-link:hover{background:rgba(16,185,129,.1);}
+
+  .footer-note{color:var(--text-dim); font-size:12.5px; text-align:center; margin-top:60px; font-family:'DM Mono',monospace;}
+</style>
+</head>
+<body data-theme="dark">
+
+<div id="topbar">
+  <span class="title">GAME PROGRAMMING · UNIT 1 REFERENCE SITE</span>
+  <nav>
+    <a href="#l1-elements-of-a-game">L1</a>
+    <a href="#l2-analysing-games">L2</a>
+    <a href="#l3-generating-game-ideas">L3</a>
+  </nav>
+  <button class="btn" id="themeToggle" onclick="toggleTheme()">☾ Light mode</button>
+</div>
+
+<div class="wrap">
+
+  <div class="cover">
+    <div class="eyebrow">VICTORIAN CURRICULUM 2.0 · DIGITAL TECHNOLOGIES · YEAR 10</div>
+    <h1>Game Programming</h1>
+    <div class="sub">Unit 1 Reference Site — Analyse → Design → Build. Full notes for every lesson, kept up to date across the semester.</div>
+  </div>
+
+  <div class="lesson-nav">
+    <a href="#l1-elements-of-a-game"><div class="ln-num">LESSON 1</div><div class="ln-title">The Elements of a Game</div></a>
+    <a href="#l2-analysing-games"><div class="ln-num">LESSON 2</div><div class="ln-title">Analysing Games</div></a>
+    <a href="#l3-generating-game-ideas"><div class="ln-num">LESSON 3</div><div class="ln-title">Generating Game Ideas</div></a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- LESSON 1                                                     -->
+  <!-- ============================================================ -->
+  <section id="l1-elements-of-a-game">
+    <div class="section-band">
+      <div class="num-circle" style="background:var(--blue);">1</div>
+      <div><div class="section-label">Lesson 1</div><h2>The Elements of a Game</h2></div>
+    </div>
+
+    <div class="callout callout-info">
+      <b>Working definition</b>
+      <span class="copy-banner">📋 COPY THIS</span><br>
+      A game is a system in which players engage in an artificial conflict, defined by rules, that results in a measurable outcome. <span style="color:var(--text-dim); font-size:12px;">(adapted from game designer Jesse Schell)</span>
+    </div>
+
+    <div class="card">
+      <h3 class="sub-h">Seven elements every game is built from</h3>
+      <div class="elgrid">
+        <div class="eldef"><span class="dot" style="background:var(--blue);"></span><span class="el-name">Objective</span><p>The clear goal the player is working toward — what does "winning" or "success" look like? Can be fixed (Chess) or open/player-defined (Minecraft).</p></div>
+        <div class="eldef"><span class="dot" style="background:var(--green);"></span><span class="el-name">Rules</span><p>The boundaries of the game — what actions are allowed, forbidden, or required. Rules apply equally to every player; that's what makes a game fair.</p></div>
+        <div class="eldef"><span class="dot" style="background:var(--amber);"></span><span class="el-name">Mechanics</span><p>The specific actions the player can perform — the verbs of the game. Usually a handful of verbs, combined in many ways.</p></div>
+        <div class="eldef"><span class="dot" style="background:var(--red);"></span><span class="el-name">Challenge</span><p>The obstacles, difficulty, or opposition that stand between the player and the objective. Without challenge, the objective feels meaningless.</p></div>
+        <div class="eldef"><span class="dot" style="background:var(--purple);"></span><span class="el-name">Narrative</span><p>The story, characters, or theme that gives context and meaning to play. Optional, not mandatory — puzzle/arcade genres often skip it.</p></div>
+        <div class="eldef"><span class="dot" style="background:#028090;"></span><span class="el-name">Aesthetics</span><p>The look and sound of the game — art style, colour, animation, music, sound effects. Shapes mood before a player reads a word.</p></div>
+        <div class="eldef"><span class="dot" style="background:#990011;"></span><span class="el-name">Feedback</span><p>How the game communicates to the player — score counters, sound cues, animations, health bars. Tells players the result of their action immediately.</p></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="sub-h">Worked example: Among Us</h3>
+      <table>
+        <tr><th>Element</th><th>How Among Us handles it</th></tr>
+        <tr><td class="el-cell">Objective</td><td>Crewmates: complete tasks or vote out impostors. Impostors: eliminate crew unnoticed.</td></tr>
+        <tr><td class="el-cell">Rules</td><td>Impostors can fake tasks; only the impostor can eliminate; voting is majority-based.</td></tr>
+        <tr><td class="el-cell">Mechanics</td><td>Move, complete task, call meeting, vote, sabotage, vent (impostor only).</td></tr>
+        <tr><td class="el-cell">Challenge</td><td>Crew must spot suspicious behaviour with limited information; impostor must deceive.</td></tr>
+        <tr><td class="el-cell">Narrative</td><td>A spaceship crew hunting a hidden threat — light sci-fi theme.</td></tr>
+        <tr><td class="el-cell">Aesthetics</td><td>Simple, colourful, cartoon-style avatars keep the tone light despite the tense premise.</td></tr>
+        <tr><td class="el-cell">Feedback</td><td>Task progress bar, emergency meeting alarm, coloured vote results, ejection animation.</td></tr>
+      </table>
+    </div>
+
+    <a class="site-link" href="L1_Workbook_-_Elements_of_a_Game.html" target="_blank">Open the Lesson 1 workbook →</a>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- LESSON 2                                                     -->
+  <!-- ============================================================ -->
+  <section id="l2-analysing-games">
+    <div class="section-band">
+      <div class="num-circle" style="background:var(--green);">2</div>
+      <div><div class="section-label">Lesson 2</div><h2>Analysing Games</h2></div>
+    </div>
+
+    <div class="callout callout-tip">
+      <b>From describing to critiquing</b>
+      Naming an element (Lesson 1) is not the same as judging it. A critique makes a call about an element and backs it up with evidence and effect on the player — it doesn't just describe what's there.
+    </div>
+
+    <div class="card">
+      <h3 class="sub-h">Why compare CONTRASTING games?</h3>
+      <span class="copy-banner">📋 COPY THIS</span>
+      <p class="read">A contrasting pair shares a genre or purpose but makes different design choices — comparing them shows how each choice changes the player's experience. Comparing two unrelated games gives shallow, obvious answers; comparing two games in the same genre forces a much sharper comparison, because most elements start out similar and the differences are the interesting part.</p>
+      <h3 class="sub-h" style="margin-top:18px;">Good contrasting pairs</h3>
+      <div class="pair-row"><span class="genre">Platformers</span><span>Super Mario Bros.</span><span class="vs">vs</span><span>Celeste</span></div>
+      <div class="pair-row"><span class="genre">Battle Royale</span><span>Fortnite</span><span class="vs">vs</span><span>PUBG</span></div>
+      <div class="pair-row"><span class="genre">Puzzle</span><span>Tetris</span><span class="vs">vs</span><span>Dr. Mario</span></div>
+      <div class="pair-row"><span class="genre">Racing</span><span>Mario Kart</span><span class="vs">vs</span><span>Forza Horizon</span></div>
+    </div>
+
+    <div class="card">
+      <h3 class="sub-h">The critique sentence frame</h3>
+      <span class="copy-banner">📋 COPY THIS</span>
+      <div class="frame-box">[Game A]'s <span class="fw" style="color:var(--blue);">[element]</span> works better than [Game B]'s because <span class="fw" style="color:var(--green);">[evidence]</span>, which means <span class="fw" style="color:var(--purple);">[effect on the player]</span>.</div>
+      <p class="read" style="margin-top:0; font-style:italic; color:var(--text-dim);">Worked line: "Celeste's challenge works better than Super Mario Bros.' because it offers an optional assist mode, which means players of very different skill levels can still reach the same objective."</p>
+    </div>
+
+    <div class="card">
+      <h3 class="sub-h">Worked example: Super Mario Bros. vs. Celeste</h3>
+      <table>
+        <tr><th>Element</th><th>Super Mario Bros.</th><th>Celeste</th></tr>
+        <tr><td class="el-cell">Objective</td><td>Reach the flag at the end of each level.</td><td>Reach the top of the mountain, level by level.</td></tr>
+        <tr><td class="el-cell">Rules</td><td>One hit from most enemies ends the attempt.</td><td>Unlimited retries — death has almost no cost.</td></tr>
+        <tr><td class="el-cell">Mechanics</td><td>Run, jump, stomp — simple, fixed toolkit.</td><td>Run, jump, climb, air-dash — dash adds precision options.</td></tr>
+        <tr><td class="el-cell">Challenge</td><td>Fixed difficulty — no way to ease a hard section.</td><td>Optional Assist Mode adjusts speed/invincibility.</td></tr>
+        <tr><td class="el-cell">Narrative</td><td>Rescue the princess — minimal, functional.</td><td>A story about anxiety and self-doubt woven through levels.</td></tr>
+        <tr><td class="el-cell">Aesthetics</td><td>Bright, blocky, iconic 8-bit sprites.</td><td>Pixel art with a muted, moody colour palette.</td></tr>
+        <tr><td class="el-cell">Feedback</td><td>Coin sound, life counter, simple death jingle.</td><td>Death counter per screen — reframes failure as progress.</td></tr>
+      </table>
+      <div class="frame-box" style="margin-bottom:0;">Celeste's Challenge works better for a wider range of players than Super Mario Bros.' because it offers an optional Assist Mode, which means players who'd otherwise quit can still experience the full narrative.</div>
+    </div>
+
+    <a class="site-link" href="L2_Workbook_-_Analysing_Games.html" target="_blank">Open the Lesson 2 workbook →</a>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- LESSON 3                                                     -->
+  <!-- ============================================================ -->
+  <section id="l3-generating-game-ideas">
+    <div class="section-band">
+      <div class="num-circle" style="background:var(--purple);">3</div>
+      <div><div class="section-label">Lesson 3</div><h2>Generating Game Ideas</h2></div>
+    </div>
+
+    <div class="callout callout-extend">
+      <b>Ideation</b>
+      <span class="copy-banner">📋 COPY THIS</span><br>
+      Ideation is the process of deliberately generating ideas using a technique or constraint — instead of waiting for inspiration to strike. The "blank page problem" makes unlimited choice paralysing; structured techniques force new, unexpected combinations.
+    </div>
+
+    <div class="card">
+      <h3 class="sub-h">Method 1: Word Wheels</h3>
+      <p class="read">Spin three separate wheels — Theme, Setting, and Mechanic — and force the results together into one concept. Two students spinning the exact same three results can still design completely different games: the wheel gives raw ingredients, not the finished design.</p>
+      <p style="margin:10px 0 4px;"><span class="wheel-box" style="border-color:var(--blue); color:var(--blue);">THEME</span>Underwater · Space · Horror · Farming · Mythology · Cyberpunk · Post-Apocalyptic · Fantasy</p>
+      <p style="margin:10px 0 4px;"><span class="wheel-box" style="border-color:var(--green); color:var(--green);">SETTING</span>Abandoned city · Floating islands · School · Desert · Space station · Ocean depths · Small town · Ancient temple</p>
+      <p style="margin:10px 0 4px;"><span class="wheel-box" style="border-color:var(--purple); color:var(--purple);">MECHANIC</span>Stealth · Racing · Building · Puzzle-solving · Platforming · Trading · Survival · Rhythm</p>
+    </div>
+
+    <div class="card">
+      <h3 class="sub-h">Method 2: The Mash-Up Method</h3>
+      <p class="read">Take two existing games you know well and combine one element from each into something new. Push for combining actual mechanics, not just visuals — a surface-level mashup ("it looks like X but is Y") is weaker than one that fuses how the games actually play.</p>
+      <table>
+        <tr><th>Game A</th><th>Game B</th><th>Result</th></tr>
+        <tr><td>Chess</td><td>Battle Royale</td><td>A shrinking board where pieces are eliminated as the arena shrinks.</td></tr>
+        <tr><td>Minecraft</td><td>Rhythm games</td><td>Building blocks in time with a beat — mistakes break your structure.</td></tr>
+        <tr><td>Among Us</td><td>Racing games</td><td>A hidden saboteur is secretly slowing down one racer's car.</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3 class="sub-h">Method 3: "What If" Constraints</h3>
+      <p class="read">Take something players normally take for granted and remove or flip it. The constraint forces new mechanics to solve the problem it creates — e.g. "no undo" pushes toward permadeath mechanics and careful-decision gameplay.</p>
+      <ul class="read">
+        <li>What if the player couldn't see more than one metre ahead?</li>
+        <li>What if every action was permanent — no undo, no retry?</li>
+        <li>What if two players had to share one controller, one input each?</li>
+        <li>What if the game got easier the longer you played badly?</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3 class="sub-h">Worked example: spinning the wheels</h3>
+      <p style="margin:0 0 6px;"><span class="wheel-box" style="border-color:var(--blue); color:var(--blue);">THEME: Space</span><span class="wheel-box" style="border-color:var(--green); color:var(--green);">SETTING: Farm</span><span class="wheel-box" style="border-color:var(--purple); color:var(--purple);">MECHANIC: Racing</span></p>
+      <p class="read" style="font-style:italic;">→ Concept: "Orbit Harvest" — rival space-farmers race hover-tractors around a shared asteroid field to reach fertile plots first.</p>
+      <table>
+        <tr><th>Element</th><th>Orbit Harvest</th></tr>
+        <tr><td class="el-cell">Objective</td><td>Reach and claim the most fertile plots before rivals.</td></tr>
+        <tr><td class="el-cell">Mechanics</td><td>Boost, drift, scan for fertile plots, plant.</td></tr>
+        <tr><td class="el-cell">Challenge</td><td>Limited fuel forces risky shortcuts through asteroid debris.</td></tr>
+        <tr><td class="el-cell">Feedback</td><td>Fuel gauge, claimed-plot counter, rival position radar.</td></tr>
+      </table>
+      <p class="read" style="color:var(--text-dim); font-size:13px;">Notice: only a handful of new details had to be invented once the three wheel results were combined.</p>
+    </div>
+
+    <a class="site-link" href="L3_Workbook_-_Generating_Game_Ideas.html" target="_blank">Open the Lesson 3 workbook →</a>
+  </section>
+
+  <div class="footer-note">
+    Game Programming · Year 10 Digital Technologies · Unit 1 · Mr Smith<br>
+    This site is read-only — it does not track your progress. Your workbook does that.
+  </div>
+
+</div>
+
+<script>
+function toggleTheme() {
+  const body = document.body;
+  const isDark = body.getAttribute('data-theme') === 'dark';
+  body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeToggle').textContent = isDark ? '☀ Dark mode' : '☾ Light mode';
+}
+</script>
+</body>
+</html>

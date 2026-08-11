@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 2 Reference Site — AoS1 Innovative Solutions · Y11 Applied Computing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark-bg: #0D1117; --light-bg: #FFFFFF;
+    --surface: #161B22; --surface2: #1F2530;
+    --border: #30363D;
+    --text: #E6EDF3; --text-dim: #9BA3AF;
+    --blue: #4361EE; --green: #10B981; --amber: #F59E0B; --purple: #8B5CF6; --red: #EF4444;
+    --blue-lt: rgba(67,97,238,0.12); --green-lt: rgba(16,185,129,0.12);
+    --amber-lt: rgba(245,158,11,0.12); --purple-lt: rgba(139,92,246,0.12); --red-lt: rgba(239,68,68,0.12);
+  }
+  body.light {
+    --dark-bg: #FFFFFF; --surface: #F6F8FA; --surface2: #EDF0F3;
+    --border: #D0D7DE; --text: #0D1117; --text-dim: #57606A;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--dark-bg); color: var(--text); font-family: 'DM Sans', sans-serif; line-height: 1.65; transition: background .2s, color .2s; }
+
+  #topbar { position: sticky; top: 0; z-index: 100; background: var(--surface); display: flex; align-items: center; gap: 1rem; padding: 0.6rem 1.5rem; border-bottom: 2px solid var(--blue); }
+  #topbar .site-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--blue); letter-spacing: 0.08em; white-space: nowrap; }
+  #topbar .links { display: flex; gap: 0.6rem; margin-left: auto; }
+  #topbar .links a, #topbar .links button { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-dim); text-decoration: none; padding: 0.22rem 0.65rem; border: 1px solid var(--border); border-radius: 4px; background: transparent; cursor: pointer; }
+  #topbar .links a:hover, #topbar .links button:hover { color: var(--text); border-color: var(--text-dim); }
+
+  .cover { background: var(--surface); padding: 3rem 2rem 2.5rem; border-bottom: 1px solid var(--border); }
+  .cover .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .cover .subject { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--blue); margin-bottom: 1rem; }
+  .cover h1 { font-family: 'DM Serif Display', serif; font-size: 2.4rem; color: var(--text); line-height: 1.15; margin-bottom: 0.75rem; }
+  .cover .lo { font-size: 1rem; color: var(--text-dim); max-width: 72ch; font-family: 'Atkinson Hyperlegible', sans-serif; }
+  .cover .meta { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.25rem; }
+  .cover .tag { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text); background: var(--surface2); padding: 0.2rem 0.65rem; border-radius: 4px; border: 1px solid var(--border); }
+  .cover .tag.blue { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+  main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 2.5rem; }
+  .toc h2 { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.75rem; }
+  .toc ol { padding-left: 1.4rem; }
+  .toc li { margin-bottom: 0.3rem; }
+  .toc a { color: var(--blue); text-decoration: none; font-size: 0.9rem; }
+  .toc a:hover { text-decoration: underline; }
+
+  .section-band { display: flex; align-items: center; gap: 0.75rem; margin: 2.5rem 0 1.25rem; }
+  .section-num { width: 2rem; height: 2rem; background: var(--blue); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+  .section-meta { display: flex; flex-direction: column; }
+  .section-mono { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-dim); letter-spacing: 0.06em; text-transform: uppercase; }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 1.45rem; color: var(--text); }
+
+  h3 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--text); margin: 1.5rem 0 0.5rem; }
+  h4 { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); margin: 1.1rem 0 0.3rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  p { margin-bottom: 0.85rem; color: var(--text-dim); font-size: 0.95rem; font-family: 'Atkinson Hyperlegible', sans-serif; }
+  ul, ol { padding-left: 1.4rem; margin-bottom: 0.85rem; }
+  li { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 0.3rem; font-family: 'Atkinson Hyperlegible', sans-serif; }
+
+  .formula { background: var(--surface2); color: var(--amber); font-family: 'DM Mono', monospace; font-size: 0.85rem; padding: 1rem 1.25rem; border-radius: 8px; margin: 1rem 0; line-height: 1.8; border: 1px solid var(--border); }
+  .formula span { color: var(--text); }
+
+  .callout { border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; border: 1px solid var(--border); }
+  .callout-info { background: var(--blue-lt); border-left: 3px solid var(--blue); }
+  .callout-tip  { background: var(--green-lt); border-left: 3px solid var(--green); }
+  .callout-note { background: var(--amber-lt); border-left: 3px solid var(--amber); }
+  .callout-extend { background: var(--purple-lt); border-left: 3px solid var(--purple); }
+  .callout-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; margin-bottom: 0.4rem; }
+  .callout-info .callout-label { color: var(--blue); }
+  .callout-tip .callout-label  { color: var(--green); }
+  .callout-note .callout-label { color: var(--amber); }
+  .callout-extend .callout-label { color: var(--purple); }
+  .callout p, .callout li { font-size: 0.9rem; color: var(--text); }
+
+  .tier { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'DM Mono', monospace; font-size: 0.7rem; font-weight: 500; padding: 0.18rem 0.6rem; border-radius: 4px; margin-right: 0.4rem; }
+  .tier-f { background: var(--green-lt); color: var(--green); border: 1px solid var(--green); }
+  .tier-d { background: var(--amber-lt); color: var(--amber); border: 1px solid var(--amber); }
+  .tier-e { background: var(--purple-lt); color: var(--purple); border: 1px solid var(--purple); }
+
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.88rem; }
+  th { background: var(--surface2); color: var(--text); padding: 0.6rem 0.85rem; text-align: left; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.82rem; border-bottom: 2px solid var(--border); }
+  th.blue { background: var(--blue); color: #fff; }
+  td { padding: 0.55rem 0.85rem; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text-dim); }
+  tr:nth-child(even) td { background: var(--surface); }
+  .row-label { font-weight: 600; color: var(--text); font-size: 0.82rem; white-space: nowrap; }
+
+  .example-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 0.75rem 0; }
+  .ex-bad, .ex-good { border-radius: 7px; padding: 0.75rem 1rem; font-size: 0.88rem; border: 1px solid var(--border); }
+  .ex-bad  { background: var(--red-lt); border-color: var(--red); }
+  .ex-good { background: var(--green-lt); border-color: var(--green); }
+  .ex-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; font-weight: 500; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .ex-bad .ex-label { color: var(--red); }
+  .ex-good .ex-label { color: var(--green); }
+
+  .gantt-demo { display: grid; grid-template-columns: 110px repeat(9, 1fr); gap: 2px; margin: 1rem 0; font-family: 'DM Mono', monospace; font-size: 0.68rem; }
+  .gantt-demo .g-head { background: var(--surface2); color: var(--text-dim); padding: 0.3rem 0.4rem; text-align: center; }
+  .gantt-demo .g-label { background: var(--surface2); color: var(--text); padding: 0.4rem 0.5rem; font-weight: 600; }
+  .gantt-demo .g-cell { background: var(--surface); min-height: 1.6rem; position: relative; }
+  .gantt-demo .g-bar { position: absolute; top: 2px; bottom: 2px; background: var(--blue); border-radius: 4px; }
+  .gantt-demo .g-bar.wait { background: var(--text-dim); opacity: 0.5; }
+  .gantt-demo .g-bar.crit { background: var(--red); }
+
+  .char-card { display: flex; gap: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.3rem; margin: 1rem 0; }
+  .char-card .char-icon { width: 2.4rem; height: 2.4rem; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: #fff; }
+  .char-card h4 { margin-top: 0; }
+
+  .wb-link { display: inline-block; margin-top: 0.5rem; font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--blue); text-decoration: none; border: 1px solid var(--blue); border-radius: 6px; padding: 0.5rem 1rem; }
+  .wb-link:hover { background: var(--blue); color: #fff; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  @media (max-width: 700px) {
+    .example-pair { grid-template-columns: 1fr; }
+    .gantt-demo { grid-template-columns: 70px repeat(9, 1fr); font-size: 0.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <span class="site-label">y11-ac-u2 · REFERENCE SITE (read-only)</span>
+  <div class="links">
+    <button onclick="document.body.classList.toggle('light')">Toggle theme</button>
+    <a href="L6_ProjectPlanning_workbook.html">L6 Workbook ↗</a>
+    <a href="L7_DesignToolsTechniques_workbook.html">L7 Workbook ↗</a>
+  </div>
+</div>
+
+<div class="cover">
+  <p class="eyebrow">Unit 2 Reference Site</p>
+  <p class="subject">Year 11 Applied Computing — Unit 2 · AoS1 Innovative Solutions</p>
+  <h1>Unit 2 Reference Site</h1>
+  <p class="lo">Permanent curriculum reference for every Area of Study 1 lesson in this unit. Each lesson has its own section below — jump to a lesson, or open its workbook to complete the linked activities.</p>
+  <div class="meta">
+    <span class="tag blue">2 lessons so far</span>
+    <span class="tag">Updated through Lesson 7</span>
+  </div>
+</div>
+
+<main>
+
+  <div class="toc">
+    <h2>Lessons in this unit</h2>
+    <ol>
+      <li><a href="#l6">Lesson 6 — Project Planning &amp; Gantt Charts (D4.2)</a></li>
+      <li><a href="#l7">Lesson 7 — Design Tools &amp; Techniques I (D5.1)</a></li>
+    </ol>
+  </div>
+
+  <!-- ================================================================ -->
+  <!-- LESSON 6 -->
+  <!-- ================================================================ -->
+  <section id="l6">
+
+  <div class="section-band" style="margin-top:0;">
+    <div class="section-num" style="background:var(--blue); border-radius:8px; width:auto; height:auto; padding:0.4rem 0.9rem;">L6</div>
+    <div class="section-meta">
+      <span class="section-mono">D4.2 · Group Milestone 1</span>
+      <span class="section-title" style="font-size:1.7rem;">Project Planning &amp; Gantt Charts</span>
+    </div>
+  </div>
+  <p class="lo" style="margin: 0.5rem 0 1.5rem;">Learning Objective: To be able to construct a project plan (Gantt chart) that breaks a solution into tasks, sequences them with dependencies, identifies the critical path, and assigns individual accountability — and to finalise a problem statement ready for teacher sign-off.</p>
+
+  <div class="toc">
+    <h2>On this page</h2>
+    <ol>
+      <li><a href="#s1">Why Project Plans Matter</a></li>
+      <li><a href="#s2">From Specification to Task List</a></li>
+      <li><a href="#s3">Estimating Time Allocation</a></li>
+      <li><a href="#s4">Dependencies &amp; Sequencing</a></li>
+      <li><a href="#s5">The Critical Path</a></li>
+      <li><a href="#s6">Milestones &amp; Monitoring</a></li>
+      <li><a href="#s7">Task Delegation &amp; Accountability</a></li>
+      <li><a href="#s8">Project Plan Checklist — Recap</a></li>
+    </ol>
+  </div>
+
+  <!-- SECTION 1 -->
+  <section id="s1">
+    <div class="section-band">
+      <div class="section-num">1</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D4.2</span>
+        <span class="section-title">Why Project Plans Matter</span>
+      </div>
+    </div>
+
+    <p>A good idea and a good specification don't automatically turn into a finished solution — a group also needs a shared plan for <strong>who</strong> is doing <strong>what</strong>, <strong>when</strong>, and in <strong>what order</strong>. Without one, groups typically discover coordination problems only when it's too late to fix them.</p>
+
+    <div class="callout callout-info">
+      <p class="callout-label">Three checkpoints across your project</p>
+      <p>Your project has three group milestones built in: this one (problem statement + project plan), a preferred design milestone, and a build-substantially-complete milestone before testing begins. Each one exists so that a group's coordination gets checked before moving into a phase that depends on the previous one being genuinely finished.</p>
+    </div>
+
+    <p>Today you'll turn last lesson's specification into a task list, sequence it into a Gantt chart, and make sure every task has a named owner — the plan your group will actually work from for the rest of the project.</p>
+  </section>
+
+  <hr>
+
+  <!-- SECTION 2 -->
+  <section id="s2">
+    <div class="section-band">
+      <div class="section-num">2</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D4.2</span>
+        <span class="section-title">From Specification to Task List</span>
+      </div>
+    </div>
+
+    <p>Your functional requirements from Lesson 5 describe <em>what</em> the solution must do. A task list breaks the <em>work of building it</em> into discrete, assignable pieces — including work that isn't a functional requirement itself, like testing, documentation, and design.</p>
+
+    <div class="example-pair">
+      <div class="ex-bad">
+        <p class="ex-label">Too vague to schedule</p>
+        <p style="margin-bottom:0;">"Build the app."</p>
+      </div>
+      <div class="ex-good">
+        <p class="ex-label">Schedulable task</p>
+        <p style="margin-bottom:0;">"Build the check-in notification screen and connect it to the reminder trigger."</p>
+      </div>
+    </div>
+
+    <div class="callout callout-tip">
+      <p class="callout-label">Don't forget the non-building tasks</p>
+      <p>A realistic task list usually includes more than just "build feature X" items — for example: finalising the design, sourcing or learning a new tool, building each major feature, integrating features together, user testing, expert review, and preparing the final submission.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- SECTION 3 -->
+  <section id="s3">
+    <div class="section-band">
+      <div class="section-num">3</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D4.2</span>
+        <span class="section-title">Estimating Time Allocation</span>
+      </div>
+    </div>
+
+    <p>Because your doubles run on a fixed fortnightly rhythm for the rest of the term, the most useful unit for time allocation isn't hours — it's <strong>which week(s)</strong> a task will happen in. Look at how much runway is actually left before each upcoming checkpoint, and size tasks to fit realistically within it.</p>
+
+    <table>
+      <tr><th class="blue">Upcoming checkpoint</th><th class="blue">What's expected by then</th></tr>
+      <tr><td class="row-label">Preferred design milestone</td><td>Design ideas explored and a preferred design confirmed, with evaluation criteria set.</td></tr>
+      <tr><td class="row-label">Development begins</td><td>Tools and techniques chosen; the build phase starts.</td></tr>
+      <tr><td class="row-label">Mid-build check-in</td><td>Gantt chart revisited — task status updated, at-risk dependencies flagged.</td></tr>
+      <tr><td class="row-label">Build-complete milestone</td><td>Proof of concept, prototype, or product substantially finished, ready for testing.</td></tr>
+    </table>
+
+    <div class="callout callout-note">
+      <p class="callout-label">Estimate honestly, not optimistically</p>
+      <p>It's common to underestimate integration and testing time. If every task on your list is "1 week", that's usually a sign the estimate hasn't accounted for things going wrong — build in a little slack on your riskiest tasks.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- SECTION 4 -->
+  <section id="s4">
+    <div class="section-band">
+      <div class="section-num">4</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D4.2</span>
+        <span class="section-title">Dependencies &amp; Sequencing</span>
+      </div>
+    </div>
+
+    <p>Some tasks can only start once another task finishes — that's a <strong>dependency</strong>. Other tasks don't rely on each other at all, and can run <strong>in parallel</strong>. Spotting the difference is what turns a simple list into an actual schedule.</p>
+
+    <div class="callout callout-info">
+      <p class="callout-label">A familiar example — making breakfast</p>
+      <p>Toast takes 3 minutes and tea takes 4 minutes to steep — but boiling the kettle doesn't depend on the toaster, so they can run at the same time. Buttering the toast, however, depends on the toast finishing first. The total time isn't the sum of every step — it's determined by the longest chain of steps that <em>do</em> depend on each other.</p>
+    </div>
+
+    <table>
+      <tr><th class="blue">Dependent (sequential)</th><th class="blue">Independent (parallel)</th></tr>
+      <tr><td>"Connect the notification feature to the database" can't start until the database schema is built.</td><td>"Design the app's colour scheme" and "research a notification library" can happen at the same time.</td></tr>
+      <tr><td>User testing can't start until a working build exists.</td><td>Two group members building two different, unconnected features.</td></tr>
+    </table>
+  </section>
+
+  <hr>
+
+  <!-- SECTION 5 -->
+  <section id="s5">
+    <div class="section-band">
+      <div class="section-num">5</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D4.2</span>
+        <span class="section-title">The Critical Path</span>
+      </div>
+    </div>
+
+    <p>The <strong>critical path</strong> is the longest chain of dependent tasks running from the start of the project to the end. It's called "critical" because a delay anywhere on that chain delays the whole project — a delay on a task that <em>isn't</em> on the critical path usually doesn't, as long as it finishes before whatever depends on it needs it.</p>
+
+    <div class="gantt-demo">
+      <div class="g-head"></div>
+      <div class="g-head">Wk1</div><div class="g-head">Wk2</div><div class="g-head">Wk3</div><div class="g-head">Wk4</div><div class="g-head">Wk5</div><div class="g-head">Wk6</div><div class="g-head">Wk7</div><div class="g-head">Wk8</div><div class="g-head">Wk9</div>
+      <div class="g-label">Design</div>
+      <div class="g-cell" style="grid-column: span 2;"><div class="g-bar crit" style="left:2%; right:2%;"></div></div>
+      <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+      <div class="g-label">Colour scheme</div>
+      <div class="g-cell"><div class="g-bar" style="left:2%; right:2%;"></div></div>
+      <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+      <div class="g-label">Build core</div>
+      <div class="g-cell"></div><div class="g-cell"></div>
+      <div class="g-cell" style="grid-column: span 3;"><div class="g-bar crit" style="left:2%; right:2%;"></div></div>
+      <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+      <div class="g-label">Testing</div>
+      <div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div><div class="g-cell"></div>
+      <div class="g-cell" style="grid-column: span 2;"><div class="g-bar crit" style="left:2%; right:2%;"></div></div>
+      <div class="g-cell"></div><div class="g-cell"></div>
+    </div>
+    <p style="font-size:0.8rem; color:var(--text-dim); margin-top:-0.5rem;">Red bars = the critical path (Design → Build core → Testing). The colour scheme task runs in parallel and has slack — it could slip by a week without affecting the finish date.</p>
+
+    <div class="callout callout-tip">
+      <p class="callout-label">Finding your critical path</p>
+      <p>Trace forward from your first task through every dependency chain to your last task. Add up the durations along each possible chain. The chain with the longest total is your critical path.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- SECTION 6 -->
+  <section id="s6">
+    <div class="section-band">
+      <div class="section-num">6</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D4.2</span>
+        <span class="section-title">Milestones &amp; Monitoring</span>
+      </div>
+    </div>
+
+    <p>A Gantt chart isn't a document you write once and file away — it's revisited at defined points so a group can catch drift early rather than discovering it near a deadline. Your class will formally revisit this Gantt chart at the mid-build check-in and again at the start of Term 4.</p>
+
+    <div class="callout callout-note">
+      <p class="callout-label">What "monitoring" actually looks like</p>
+      <p>At each check-in, update task status against the plan (done / in progress / not started), and flag anything at risk of missing its date — ideally with a reason and what the group intends to do about it, not just a red flag on its own.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- SECTION 7 -->
+  <section id="s7">
+    <div class="section-band">
+      <div class="section-num">7</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D4.2</span>
+        <span class="section-title">Task Delegation &amp; Accountability</span>
+      </div>
+    </div>
+
+    <p>"The group" is not an owner. Every task on a real project plan needs a named person (or people) responsible for it — otherwise tasks quietly become no one's job until it's too late.</p>
+
+    <div class="example-pair">
+      <div class="ex-bad">
+        <p class="ex-label">No real accountability</p>
+        <p style="margin-bottom:0;">Task: "Build the notification feature." Owner: (blank / "everyone").</p>
+      </div>
+      <div class="ex-good">
+        <p class="ex-label">Clear accountability</p>
+        <p style="margin-bottom:0;">Task: "Build the notification feature." Owner: named group member, with a second member as backup for testing.</p>
+      </div>
+    </div>
+
+    <p>This is also the point to be honest about skill gaps — if a task depends on a tool or technique nobody in the group currently knows, that's worth surfacing now, not discovering mid-build.</p>
+  </section>
+
+  <hr>
+
+  <!-- SECTION 8 -->
+  <section id="s8">
+    <div class="section-band">
+      <div class="section-num">8</div>
+      <div class="section-meta">
+        <span class="section-mono">Recap</span>
+        <span class="section-title">Project Plan Checklist</span>
+      </div>
+    </div>
+
+    <table>
+      <tr><th class="blue">Part</th><th class="blue">Ask yourself</th></tr>
+      <tr><td class="row-label">Task list</td><td>Have I broken the specification into specific, schedulable tasks — not just "build the app"?</td></tr>
+      <tr><td class="row-label">Time allocation</td><td>Does each task have a realistic estimate, checked against the weeks actually available?</td></tr>
+      <tr><td class="row-label">Dependencies</td><td>Have I marked which tasks must wait for another to finish, and which can run in parallel?</td></tr>
+      <tr><td class="row-label">Critical path</td><td>Have I traced the longest dependency chain and identified it clearly?</td></tr>
+      <tr><td class="row-label">Ownership</td><td>Does every task have a named person responsible, not just "the group"?</td></tr>
+    </table>
+
+    <div class="callout callout-extend">
+      <p class="callout-label">Looking ahead</p>
+      <p>This project plan is what your group will actually work from — and revisit — for the rest of Area of Study 1. Keep it somewhere every member can check it.</p>
+    </div>
+
+    <p>Open the workbook to build your task list, Gantt chart, and finalise your problem statement.</p>
+    <a class="wb-link" href="L6_ProjectPlanning_workbook.html">Open the Workbook →</a>
+  </section>
+
+  </section><!-- /#l6 -->
+
+  <hr style="border-top: 2px solid var(--blue); margin: 3rem 0;">
+
+  <!-- ================================================================ -->
+  <!-- LESSON 7 -->
+  <!-- ================================================================ -->
+  <section id="l7">
+
+  <div class="section-band" style="margin-top:0;">
+    <div class="section-num" style="background:var(--blue); border-radius:8px; width:auto; height:auto; padding:0.4rem 0.9rem;">L7</div>
+    <div class="section-meta">
+      <span class="section-mono">D5.1 · Design Tools &amp; Techniques I</span>
+      <span class="section-title" style="font-size:1.7rem;">Mock-ups &amp; Storyboards</span>
+    </div>
+  </div>
+  <p class="lo" style="margin: 0.5rem 0 1.5rem;">Learning Objective: To be able to produce a mock-up and a storyboard that communicate the visual layout and user interaction flow of your solution — and to know when each tool is the right one to use.</p>
+
+  <div class="toc">
+    <h2>On this page</h2>
+    <ol>
+      <li><a href="#l7-s1">Why Design Representations Matter</a></li>
+      <li><a href="#l7-s2">What Is a Mock-up?</a></li>
+      <li><a href="#l7-s3">What Is a Storyboard?</a></li>
+      <li><a href="#l7-s4">Choosing the Right Tool</a></li>
+      <li><a href="#l7-s5">Elements of an Effective Mock-up</a></li>
+      <li><a href="#l7-s6">Elements of an Effective Storyboard</a></li>
+      <li><a href="#l7-s7">Design Representations Checklist — Recap</a></li>
+    </ol>
+  </div>
+
+  <!-- L7 SECTION 1 -->
+  <section id="l7-s1">
+    <div class="section-band">
+      <div class="section-num">1</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D5.1</span>
+        <span class="section-title">Why Design Representations Matter</span>
+      </div>
+    </div>
+
+    <p>A task list and a Gantt chart tell your group <em>what</em> to build and <em>when</em> — but not yet what it will actually look like or feel like to use. Design representations close that gap before anyone starts building.</p>
+
+    <div class="callout callout-info">
+      <p class="callout-label">Three reasons this matters</p>
+      <p>A rough sketch is cheap to change, but a half-built feature is not — spotting a layout or flow problem now saves hours later. A visual reference also gives the whole group a shared picture, rather than several slightly different versions of "the same" idea. And today's work directly feeds the preferred-design milestone in Week 7.</p>
+    </div>
+
+    <p>Each milestone in this project exists so coordination is checked before moving into a phase that depends on the previous one being genuinely finished — today starts building toward the preferred-design milestone.</p>
+  </section>
+
+  <hr>
+
+  <!-- L7 SECTION 2 -->
+  <section id="l7-s2">
+    <div class="section-band">
+      <div class="section-num">2</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D5.1</span>
+        <span class="section-title">What Is a Mock-up?</span>
+      </div>
+    </div>
+
+    <p>A <strong>mock-up</strong> is a static representation of a screen or interface's layout — what's on it, and where. It shows structure and placement, not motion or sequence.</p>
+
+    <div class="example-pair">
+      <div class="ex-bad">
+        <p class="ex-label">Too vague to build from</p>
+        <p style="margin-bottom:0;">"It should have a button to check in, and show your reminders somewhere."</p>
+      </div>
+      <div class="ex-good">
+        <p class="ex-label">A mock-up</p>
+        <p style="margin-bottom:0;">A rough sketch: a labelled "Check In" button at the top, a list of reminders below it, and a streak counter at the bottom.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-tip">
+      <p class="callout-label">Rough is fine</p>
+      <p>A mock-up is a low-fidelity first draft, not a finished, polished design. What matters is that the layout and labels are clear enough for a teammate to understand without you explaining it out loud.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- L7 SECTION 3 -->
+  <section id="l7-s3">
+    <div class="section-band">
+      <div class="section-num">3</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D5.1</span>
+        <span class="section-title">What Is a Storyboard?</span>
+      </div>
+    </div>
+
+    <p>A <strong>storyboard</strong> is a sequence of panels showing how a user moves through your solution over time — what they see and do at each step, in order.</p>
+
+    <table>
+      <tr><th class="blue">Panel</th><th class="blue">What happens</th></tr>
+      <tr><td class="row-label">1</td><td>Phone buzzes at 7am with a packing reminder — the trigger.</td></tr>
+      <tr><td class="row-label">2</td><td>User taps the notification and sees today's checklist.</td></tr>
+      <tr><td class="row-label">3</td><td>User ticks off items as they're packed.</td></tr>
+      <tr><td class="row-label">4</td><td>User sees their streak update before leaving — the outcome.</td></tr>
+    </table>
+
+    <p>This is the same feature as the mock-up example above, but shown as a journey through time rather than a single layout — it captures the trigger, the sequence, and the outcome that a single mock-up can't.</p>
+  </section>
+
+  <hr>
+
+  <!-- L7 SECTION 4 -->
+  <section id="l7-s4">
+    <div class="section-band">
+      <div class="section-num">4</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D5.1</span>
+        <span class="section-title">Choosing the Right Tool</span>
+      </div>
+    </div>
+
+    <p>Most groups need both — they answer different questions.</p>
+
+    <table>
+      <tr><th class="blue">Mock-up</th><th class="blue">Storyboard</th></tr>
+      <tr><td>What does this screen look like, and where is everything?</td><td>How does a user move through this over time?</td></tr>
+      <tr><td>Best for app/interface screens, dashboards, physical device displays.</td><td>Best for multi-step processes, onboarding, notifications, physical interactions.</td></tr>
+      <tr><td>Shows layout, structure, labelled elements.</td><td>Shows sequence, triggers, user actions and reactions.</td></tr>
+    </table>
+
+    <div class="callout callout-info">
+      <p class="callout-label">No screen? No problem</p>
+      <p>A physical device without a screen still has an interaction worth storyboarding — a control panel, an LED display, a companion app, or simply the physical steps a user takes with the device.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- L7 SECTION 5 -->
+  <section id="l7-s5">
+    <div class="section-band">
+      <div class="section-num">5</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D5.1</span>
+        <span class="section-title">Elements of an Effective Mock-up</span>
+      </div>
+    </div>
+
+    <ul>
+      <li><strong>Clear regions</strong> — group related content into obvious blocks (header, main content, actions), even roughly.</li>
+      <li><strong>Labelled elements</strong> — every button, field, or key element gets a short label naming what it is or does.</li>
+      <li><strong>Realistic content</strong> — use content close to the real thing ("Pack helmet"), not placeholder text.</li>
+      <li><strong>One screen at a time</strong> — a mock-up shows one moment, not the whole app — that's what a storyboard is for.</li>
+    </ul>
+
+    <div class="callout callout-note">
+      <p class="callout-label">Maps to your workbook</p>
+      <p>Section 2 of your workbook asks you to label at least four elements in your mock-up with their purpose — these four points are exactly what you'll be checking for.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- L7 SECTION 6 -->
+  <section id="l7-s6">
+    <div class="section-band">
+      <div class="section-num">6</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D5.1</span>
+        <span class="section-title">Elements of an Effective Storyboard</span>
+      </div>
+    </div>
+
+    <ul>
+      <li><strong>A clear trigger</strong> — what starts the sequence? Name it in panel 1.</li>
+      <li><strong>One action per panel</strong> — each panel shows a single step, not the whole journey crammed together.</li>
+      <li><strong>The user's side, not just the screen</strong> — note what the user does, and where relevant, how they react.</li>
+      <li><strong>A real ending</strong> — show the sequence through to completion, not cut off mid-task.</li>
+    </ul>
+
+    <div class="callout callout-note">
+      <p class="callout-label">Maps to your workbook</p>
+      <p>Section 3 of your workbook asks for at least four panels covering a full interaction — trigger through to outcome.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- L7 SECTION 7 -->
+  <section id="l7-s7">
+    <div class="section-band">
+      <div class="section-num">7</div>
+      <div class="section-meta">
+        <span class="section-mono">Recap</span>
+        <span class="section-title">Design Representations Checklist</span>
+      </div>
+    </div>
+
+    <table>
+      <tr><th class="blue">Part</th><th class="blue">Ask yourself</th></tr>
+      <tr><td class="row-label">Mock-up layout</td><td>Does it group content into clear regions, not one undifferentiated block?</td></tr>
+      <tr><td class="row-label">Mock-up labels</td><td>Are at least four elements labelled with what they're for, not just what they are?</td></tr>
+      <tr><td class="row-label">Storyboard sequence</td><td>Does it have a clear trigger, one action per panel, and a real ending?</td></tr>
+      <tr><td class="row-label">Storyboard depth</td><td>Does it show what the user <em>does</em>, not just what's on screen?</td></tr>
+      <tr><td class="row-label">Reflection</td><td>Have I named an alternative I considered, and a genuine open question?</td></tr>
+    </table>
+
+    <div class="callout callout-extend">
+      <p class="callout-label">Looking ahead</p>
+      <p>These representations feed directly into ideation (Week 6) and the preferred-design milestone (Week 7) — keep them somewhere your whole group can see them.</p>
+    </div>
+
+    <p>Open the workbook to build your mock-up and storyboard.</p>
+    <a class="wb-link" href="L7_DesignToolsTechniques_workbook.html">Open the Workbook →</a>
+  </section>
+
+  </section><!-- /#l7 -->
+
+</main>
+</body>
+</html>

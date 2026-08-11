@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L2 — Pixel Art & Sprites | Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#12100E; --ink2:#2C2A28; --ink3:#6B6762;
+  --cream:#F7F3EC; --cream2:#EDE8DF; --white:#FFFFFF;
+  --border:#D8D3CA; --border2:#C4BFB6;
+  --pine:#1B5E47; --pine-bg:rgba(27,94,71,.09);
+  --amber:#B8620A; --amber-bg:rgba(184,98,10,.09);
+  --indigo:#2B3A8C; --indigo-bg:rgba(43,58,140,.09);
+  --crimson:#8C1F28; --crimson-bg:rgba(140,31,40,.09);
+  --sans:'DM Sans',sans-serif; --serif:'DM Serif Display',serif; --mono:'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--cream);color:var(--ink);font-size:15px;line-height:1.7;padding-bottom:80px;}
+.top-bar{position:sticky;top:0;z-index:100;background:var(--ink);border-bottom:1px solid #2C2A28;display:flex;align-items:center;gap:10px;padding:0 20px;height:44px;}
+.tb-progress{flex:1;height:4px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden;}
+.tb-fill{height:100%;background:var(--pine);border-radius:2px;transition:width .4s ease;}
+.tb-pct{font-family:var(--mono);font-size:11px;color:rgba(247,243,236,.5);min-width:36px;text-align:right;}
+.tb-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);color:rgba(247,243,236,.65);font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;padding:4px 11px;border-radius:3px;cursor:pointer;transition:all .15s;margin-left:4px;text-transform:uppercase;}
+.tb-btn:hover{background:rgba(255,255,255,.16);color:var(--cream);}
+.tb-btn.acc{background:rgba(27,94,71,.35);border-color:var(--pine);color:#6EE7B7;}
+.cover{background:var(--ink);color:var(--cream);padding:52px 40px 44px;}
+.cover-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:rgba(247,243,236,.38);text-transform:uppercase;margin-bottom:20px;}
+.cover-title{font-family:var(--serif);font-size:36px;line-height:1.1;margin-bottom:8px;}
+.cover-sub{font-size:14px;color:rgba(247,243,236,.5);margin-bottom:32px;}
+.cover-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;max-width:560px;}
+.cfield label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(247,243,236,.35);display:block;margin-bottom:4px;}
+.cfield input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:7px 10px;color:var(--cream);font-family:var(--sans);font-size:14px;outline:none;}
+.cfield input::placeholder{color:rgba(247,243,236,.25);}
+.cfield input:focus{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.09);}
+.pw{max-width:780px;margin:0 auto;padding:0 24px;}
+.wbs{margin-top:40px;}
+.sb{display:flex;align-items:center;gap:12px;padding:14px 0 12px;border-bottom:1px solid var(--border);margin-bottom:22px;}
+.sn{width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--cream);font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.si .slbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);}
+.si .stit{font-family:var(--serif);font-size:20px;color:var(--ink);line-height:1.15;}
+.sbadge{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:3px;letter-spacing:.04em;margin-left:auto;flex-shrink:0;}
+.b-obj  {background:var(--indigo-bg);color:var(--indigo);border:1px solid rgba(43,58,140,.2);}
+.b-expl {background:var(--amber-bg); color:var(--amber); border:1px solid rgba(184,98,10,.2);}
+.b-app  {background:var(--pine-bg);  color:var(--pine);  border:1px solid rgba(27,94,71,.2);}
+.b-resp {background:var(--indigo-bg);color:var(--indigo);border:1px solid rgba(43,58,140,.2);}
+.b-exit {background:var(--crimson-bg);color:var(--crimson);border:1px solid rgba(140,31,40,.2);}
+.rl{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);margin:20px 0 8px;}
+.field-label{font-size:14px;color:var(--ink2);margin-bottom:6px;display:block;font-weight:500;}
+.hint{font-size:12.5px;color:var(--ink3);font-style:italic;margin-top:4px;}
+p.body{font-size:14px;color:var(--ink2);margin-bottom:12px;line-height:1.65;}
+.ta{width:100%;border:1px solid var(--border);border-radius:5px;padding:10px 12px;font-family:var(--sans);font-size:14px;color:var(--ink);background:var(--white);resize:vertical;outline:none;transition:border-color .15s;line-height:1.6;}
+.ta:focus{border-color:var(--border2);}
+.rb{background:var(--white);border:1px solid var(--border);border-radius:6px;padding:14px 16px;margin-bottom:12px;}
+.callout{border-left:3px solid;border-radius:0 5px 5px 0;padding:12px 16px;margin:16px 0;font-size:13.5px;line-height:1.6;}
+.callout-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:5px;font-weight:500;}
+.callout-info  {border-color:var(--indigo); background:var(--indigo-bg);} .callout-info .callout-label{color:var(--indigo);}
+.callout-tip   {border-color:var(--pine);   background:var(--pine-bg);}   .callout-tip .callout-label{color:var(--pine);}
+.callout-note  {border-color:var(--amber);  background:var(--amber-bg);}  .callout-note .callout-label{color:var(--amber);}
+.callout-extend{border-color:var(--crimson);background:var(--crimson-bg);} .callout-extend .callout-label{color:var(--crimson);}
+.crit-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;}
+.crit{border:1.5px solid var(--border);border-radius:6px;padding:14px;cursor:pointer;transition:all .2s;user-select:none;}
+.crit.checked{border-width:2px;}
+.cf-found{border-color:rgba(27,94,71,.3);}  .cf-found.checked{background:var(--pine-bg);border-color:var(--pine);}
+.cf-devel{border-color:rgba(184,98,10,.3);} .cf-devel.checked{background:var(--amber-bg);border-color:var(--amber);}
+.cf-ext  {border-color:rgba(43,58,140,.3);} .cf-ext.checked  {background:var(--indigo-bg);border-color:var(--indigo);}
+.crit-tier{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
+.cf-found .crit-tier{color:var(--pine);}
+.cf-devel .crit-tier{color:var(--amber);}
+.cf-ext   .crit-tier{color:var(--indigo);}
+.crit p{font-size:12.5px;color:var(--ink2);line-height:1.5;}
+.crit input[type=checkbox]{display:none;}
+.mc-opts{display:flex;flex-direction:column;gap:6px;margin:10px 0;}
+.mc-opt{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border:1px solid var(--border);border-radius:5px;cursor:pointer;font-size:13.5px;color:var(--ink2);transition:all .15s;line-height:1.5;}
+.mc-opt:hover{background:var(--cream2);}
+.mc-opt input{margin-top:3px;flex-shrink:0;accent-color:var(--indigo);}
+.mc-opt.correct-ans{background:var(--pine-bg);border-color:var(--pine);color:var(--pine);}
+.mc-opt.wrong-ans  {background:var(--crimson-bg);border-color:var(--crimson);color:var(--crimson);opacity:.7;}
+.mc-result{font-family:var(--mono);font-size:11.5px;margin-top:6px;display:none;}
+.mc-result.show-c{display:block;color:var(--pine);}
+.mc-result.show-w{display:block;color:var(--crimson);}
+.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0;}
+.check-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:5px;background:var(--white);font-size:13.5px;color:var(--ink2);cursor:pointer;}
+.check-item input{accent-color:var(--pine);width:16px;height:16px;}
+.exit-wrap{background:var(--white);border:1px solid rgba(140,31,40,.3);border-radius:8px;overflow:hidden;margin-bottom:20px;}
+.exit-hdr{background:var(--crimson);color:#fff;padding:12px 18px;}
+.exit-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:2px;}
+.exit-title{font-size:14px;font-weight:600;}
+.exit-q{padding:14px 18px;border-bottom:1px solid var(--border);}
+.exit-q:last-child{border-bottom:none;}
+.exit-q label{font-size:13.5px;color:var(--ink2);display:block;margin-bottom:6px;font-weight:500;}
+.exit-area{width:100%;border:1px solid var(--border);border-radius:4px;padding:8px 10px;font-family:var(--sans);font-size:13.5px;resize:vertical;outline:none;background:var(--cream);color:var(--ink);}
+.marking-panel{margin-top:48px;border:2px solid var(--crimson);border-radius:8px;overflow:hidden;}
+.mp-hdr{background:var(--crimson);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;}
+.mp-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.7;margin-bottom:2px;}
+.mp-title{font-size:15px;font-weight:600;}
+.mp-body{padding:20px;}
+.score-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13.5px;color:var(--ink2);}
+.score-row:last-of-type{border-bottom:none;}
+.score-input{width:60px;border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-family:var(--mono);font-size:12px;text-align:center;color:var(--ink);background:var(--cream2);outline:none;}
+.score-total{display:flex;align-items:center;justify-content:space-between;padding:12px 0 8px;font-weight:600;font-size:14px;color:var(--ink);border-top:2px solid var(--border);margin-top:4px;}
+.auto-badge{font-family:var(--mono);font-size:9px;padding:1px 6px;border-radius:2px;background:var(--indigo-bg);color:var(--indigo);border:1px solid rgba(43,58,140,.2);margin-left:6px;letter-spacing:.04em;}
+.mp-fb{margin-top:14px;}
+.mp-fb label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:6px;}
+.mp-fb textarea{width:100%;border:1px solid var(--border);border-radius:4px;padding:9px 11px;font-family:var(--sans);font-size:13.5px;color:var(--ink);resize:vertical;outline:none;background:var(--cream2);}
+@media print{.top-bar{display:none;}body{background:#fff;padding-bottom:0;}textarea,.ta,.exit-area{background:#fafaf8!important;}.marking-panel{break-before:page;}}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="tb-progress"><div class="tb-fill" id="tbFill" style="width:0%"></div></div>
+  <span class="tb-pct" id="tbPct">0%</span>
+  <button class="tb-btn" onclick="DataService.save()">↑ Save</button>
+  <button class="tb-btn" onclick="DataService.load()">↓ Load</button>
+  <button class="tb-btn acc" onclick="window.print()">⎙ Export</button>
+</div>
+
+<div class="cover">
+  <div class="cover-eyebrow">Year 7 · Digital Technology · Unit 2 — Game Programming · Lesson 2</div>
+  <div class="cover-title">Pixel Art & Sprites</div>
+  <div class="cover-sub">Student Workbook — use the lesson website and slides for reference</div>
+  <div class="cover-fields">
+    <div class="cfield"><label>Student Name</label><input type="text" id="sname" placeholder="Your full name" oninput="updateProgress()"></div>
+    <div class="cfield"><label>Class</label><input type="text" id="sclass" placeholder="e.g. 7DT1" oninput="updateProgress()"></div>
+    <div class="cfield"><label>Date</label><input type="text" id="sdate" placeholder="dd / mm / yyyy" oninput="updateProgress()"></div>
+    <div class="cfield"><label>Teacher</label><input type="text" id="steacher" placeholder="e.g. Ms. Thompson" oninput="updateProgress()"></div>
+  </div>
+</div>
+
+<div class="pw">
+
+<div class="wbs" id="s1">
+  <div class="sb">
+    <div class="sn">1</div>
+    <div class="si"><div class="slbl">Learning Objective — Slide 3</div><div class="stit">What We're Learning Today</div></div>
+    <span class="sbadge b-obj">Objective</span>
+  </div>
+  <p class="body"><strong>Learning Objective:</strong> Understand how digital images are created using pixels, and create original sprite art for use in your game.</p>
+  <div class="rl">Success Criteria — click each one when you can demonstrate it</div>
+  <div class="crit-grid">
+    <div class="crit cf-found" onclick="toggleCrit(this,'sc1')">
+      <input type="checkbox" id="sc1">
+      <div class="crit-tier">🟢 Foundation</div>
+      <p>I can create a simple original sprite using a pixel art editor.</p>
+    </div>
+    <div class="crit cf-devel" onclick="toggleCrit(this,'sc2')">
+      <input type="checkbox" id="sc2">
+      <div class="crit-tier">🟡 Developing</div>
+      <p>I can create a small matching set of sprites with a consistent colour palette.</p>
+    </div>
+    <div class="crit cf-ext" onclick="toggleCrit(this,'sc3')">
+      <input type="checkbox" id="sc3">
+      <div class="crit-tier">🔵 Extending</div>
+      <p>I can design sprites with a 2-frame animation in mind.</p>
+    </div>
+  </div>
+</div>
+
+<div class="wbs" id="s2">
+  <div class="sb">
+    <div class="sn">2</div>
+    <div class="si"><div class="slbl">Explicit Explanation — Slide 4</div><div class="stit">How Pixels Work</div></div>
+    <span class="sbadge b-expl">Explanation</span>
+  </div>
+
+  <div class="rl">Multiple Choice — Slide 4</div>
+  <p class="body">A typical MakeCode Arcade sprite canvas is what size?</p>
+  <div class="mc-opts" id="mc_size">
+    <label class="mc-opt"><input type="radio" name="mc_size" value="a" onchange="recordMC('mc_size',this,MC_ANSWERS.mc_size)"> 128 × 128 pixels</label>
+    <label class="mc-opt"><input type="radio" name="mc_size" value="b" onchange="recordMC('mc_size',this,MC_ANSWERS.mc_size)"> 16 × 16 pixels</label>
+    <label class="mc-opt"><input type="radio" name="mc_size" value="c" onchange="recordMC('mc_size',this,MC_ANSWERS.mc_size)"> 1920 × 1080 pixels</label>
+    <label class="mc-opt"><input type="radio" name="mc_size" value="d" onchange="recordMC('mc_size',this,MC_ANSWERS.mc_size)"> There is no standard size</label>
+  </div>
+  <div class="mc-result" id="mc_size_result"></div>
+
+  <div class="rl">In your own words</div>
+  <div class="rb">
+    <span class="field-label">Why do you think small, bold shapes read better than fine detail at game resolution?</span>
+    <textarea class="ta" id="why_bold" rows="2" placeholder="Think about what happens to fine detail when an image is shrunk down." oninput="updateProgress()"></textarea>
+  </div>
+</div>
+
+<div class="wbs" id="s3">
+  <div class="sb">
+    <div class="sn">3</div>
+    <div class="si"><div class="slbl">Tool Walkthrough — Slide 5</div><div class="stit">Using Piskel</div></div>
+    <span class="sbadge b-app">Tool</span>
+  </div>
+  <div class="rl">Tool check — tick once you can find each one in Piskel</div>
+  <div class="check-grid">
+    <label class="check-item"><input type="checkbox" id="tool1" onclick="updateProgress()"> Canvas size setting</label>
+    <label class="check-item"><input type="checkbox" id="tool2" onclick="updateProgress()"> Pencil tool</label>
+    <label class="check-item"><input type="checkbox" id="tool3" onclick="updateProgress()"> Fill (bucket) tool</label>
+    <label class="check-item"><input type="checkbox" id="tool4" onclick="updateProgress()"> Colour palette</label>
+    <label class="check-item"><input type="checkbox" id="tool5" onclick="updateProgress()"> Eraser tool</label>
+    <label class="check-item"><input type="checkbox" id="tool6" onclick="updateProgress()"> Export → PNG</label>
+  </div>
+  <div class="rl">Your palette</div>
+  <div class="rb">
+    <span class="field-label">List the 3–5 colours you've chosen for your game, and why you chose them (mood, theme, contrast).</span>
+    <textarea class="ta" id="palette_choice" rows="2" placeholder="e.g. dark green + gold — fits a jungle/treasure theme and gives high contrast." oninput="updateProgress()"></textarea>
+  </div>
+</div>
+
+<div class="wbs" id="s4">
+  <div class="sb">
+    <div class="sn">4</div>
+    <div class="si"><div class="slbl">Design Principles — Slide 6</div><div class="stit">Designing Readable Sprites</div></div>
+    <span class="sbadge b-resp">Principles</span>
+  </div>
+  <div class="rl">Self-check</div>
+  <div class="rb">
+    <span class="field-label">Describe your player character's silhouette in one sentence, without mentioning colour.</span>
+    <textarea class="ta" id="silhouette_desc" rows="2" placeholder="If a friend read this sentence, could they guess the shape?" oninput="updateProgress()"></textarea>
+  </div>
+</div>
+
+<div class="wbs" id="s5">
+  <div class="sb">
+    <div class="sn">5</div>
+    <div class="si"><div class="slbl">Application of Learning</div><div class="stit">Your Sprite Set</div></div>
+    <span class="sbadge b-app">Task</span>
+  </div>
+  <div class="rl">Sprite checklist — tick once exported as PNG</div>
+  <div class="check-grid">
+    <label class="check-item"><input type="checkbox" id="spr1" onclick="updateProgress()"> Player character</label>
+    <label class="check-item"><input type="checkbox" id="spr2" onclick="updateProgress()"> Enemy / collectible</label>
+    <label class="check-item"><input type="checkbox" id="spr3" onclick="updateProgress()"> Background tile</label>
+    <label class="check-item"><input type="checkbox" id="spr4" onclick="updateProgress()"> (Extending) second animation frame</label>
+  </div>
+  <div class="rl">Reflection</div>
+  <div class="rb">
+    <span class="field-label">Which sprite are you most happy with, and what would you improve about one of the others if you had more time?</span>
+    <textarea class="ta" id="sprite_reflect" rows="3" placeholder="Be specific about what works and what you'd change." oninput="updateProgress()"></textarea>
+  </div>
+</div>
+
+<div class="wbs" id="s6">
+  <div class="sb">
+    <div class="sn">6</div>
+    <div class="si"><div class="slbl">Next Steps</div><div class="stit">Exit Ticket</div></div>
+    <span class="sbadge b-exit">Exit Ticket</span>
+  </div>
+  <div class="exit-wrap">
+    <div class="exit-hdr">
+      <div class="exit-lbl">Complete before you leave</div>
+      <div class="exit-title">Quick check — answer from today's lesson.</div>
+    </div>
+    <div class="exit-q">
+      <label><strong>1.</strong> What is a sprite?</label>
+      <textarea class="exit-area" id="et1" rows="2" placeholder="In your own words." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="exit-q">
+      <label><strong>2.</strong> Name two of the four sprite design principles from today.</label>
+      <textarea class="exit-area" id="et2" rows="2" placeholder="e.g. work small and bold, high contrast, limit your palette, silhouette first." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="exit-q">
+      <label><strong>3.</strong> Go back to Section 1 and tick the success criteria you've achieved. Which tier did you reach?</label>
+      <textarea class="exit-area" id="et3" rows="2" placeholder="I reached the ___ criterion because…" oninput="updateProgress()"></textarea>
+    </div>
+  </div>
+  <div style="margin-top:24px;text-align:right;">
+    <button class="tb-btn acc" style="padding:10px 24px;font-size:13px;" onclick="DataService.submit()">Submit workbook ✓</button>
+  </div>
+</div>
+
+<div class="marking-panel">
+  <div class="mp-hdr">
+    <div><div class="mp-lbl">Teacher Use Only — Do Not Complete</div><div class="mp-title">Workbook Marking & Feedback</div></div>
+  </div>
+  <div class="mp-body">
+    <div class="score-row"><span>S1 — Success criteria engagement</span><input class="score-input" type="text" placeholder="/2"></div>
+    <div class="score-row"><span>S2 — MC: sprite size <span class="auto-badge">AUTO</span> + reasoning</span><input class="score-input" type="text" placeholder="/3"></div>
+    <div class="score-row"><span>S3 — Tool checklist + palette choice</span><input class="score-input" type="text" placeholder="/3"></div>
+    <div class="score-row"><span>S4 — Silhouette description</span><input class="score-input" type="text" placeholder="/2"></div>
+    <div class="score-row"><span>S5 — Sprite set (4 assets) + reflection</span><input class="score-input" type="text" placeholder="/6"></div>
+    <div class="score-row"><span>S6 — Exit ticket (3 questions)</span><input class="score-input" type="text" placeholder="/3"></div>
+    <div class="score-total"><span>Total</span><span>/19</span></div>
+    <div class="mp-fb"><label>Feedback</label><textarea rows="3" placeholder="Personalised feedback for this student…"></textarea></div>
+    <div class="mp-fb" style="margin-top:10px;"><label>Next Steps</label><textarea rows="2" placeholder="To improve, this student should…"></textarea></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const LESSON_ID = 'y7-dt-u2-l2-pixel-art-sprites';
+
+const DataService = {
+  studentId() {
+    const raw = localStorage.getItem('eduportal_session');
+    if (raw) { try { return JSON.parse(raw).id || 'current_student'; } catch(e) {} }
+    return 'current_student';
+  },
+  save() {
+    try {
+      const key = `eduportal_workbook_${this.studentId()}_${LESSON_ID}`;
+      localStorage.setItem(key, JSON.stringify({ ...collectAll(), savedAt: new Date().toISOString() }));
+      this._syncProgress('in-progress', null);
+      showToast('✓ Progress saved');
+    } catch(e) { showToast('⚠ Could not save'); }
+  },
+  load() {
+    try {
+      const key = `eduportal_workbook_${this.studentId()}_${LESSON_ID}`;
+      const raw = localStorage.getItem(key);
+      if (!raw) { showToast('No saved progress found'); return; }
+      restoreAll(JSON.parse(raw));
+      updateProgress();
+      showToast('✓ Progress loaded');
+    } catch(e) { showToast('⚠ Could not load'); }
+  },
+  autoSave(d) {
+    try {
+      const key = `eduportal_workbook_${this.studentId()}_${LESSON_ID}`;
+      localStorage.setItem(key, JSON.stringify({ ...d, savedAt: new Date().toISOString() }));
+      this._syncProgress('in-progress', null);
+    } catch(e) {}
+  },
+  autoLoad() {
+    try {
+      const key = `eduportal_workbook_${this.studentId()}_${LESSON_ID}`;
+      const raw = localStorage.getItem(key);
+      if (raw) restoreAll(JSON.parse(raw));
+    } catch(e) {}
+  },
+  submit() {
+    try {
+      const studentId    = this.studentId();
+      const submissionId = `${studentId}_${LESSON_ID}_${Date.now()}`;
+      const payload = { id: submissionId, studentId, lessonId: LESSON_ID, ...collectAll(), submittedAt: new Date().toISOString(), status: 'submitted' };
+      localStorage.setItem(`eduportal_submission_${submissionId}`, JSON.stringify(payload));
+      this._syncProgress('submitted', null, submissionId);
+      showToast('✓ Submitted — thank you!');
+    } catch(e) { showToast('⚠ Submission failed — try again'); }
+  },
+  _syncProgress(status, score, submissionId = null) {
+    try {
+      localStorage.setItem(`eduportal_progress_${this.studentId()}_${LESSON_ID}`, JSON.stringify({ status, score, submissionId, updatedAt: new Date().toISOString() }));
+    } catch(e) {}
+  },
+};
+
+const MC_ANSWERS = { mc_size: 'b' };
+
+function collectAll() {
+  const d = {};
+  document.querySelectorAll('textarea[id], input[type=text][id]').forEach(el => { d[el.id] = el.value; });
+  document.querySelectorAll('input[type=checkbox][id]').forEach(el => { d[el.id] = el.checked; });
+  document.querySelectorAll('input[type=radio]:checked').forEach(el => { d['radio_' + el.name] = el.value; });
+  return d;
+}
+function restoreAll(d) {
+  if (!d) return;
+  Object.entries(d).forEach(([k, v]) => {
+    if (['savedAt','submittedAt','status','id','studentId','lessonId'].includes(k)) return;
+    if (k.startsWith('radio_')) {
+      const name = k.replace('radio_', '');
+      document.querySelectorAll(`input[name="${name}"]`).forEach(el => { el.checked = el.value === v; });
+      return;
+    }
+    const el = document.getElementById(k);
+    if (!el) return;
+    if (el.type === 'checkbox') el.checked = Boolean(v);
+    else el.value = v;
+  });
+  ['sc1','sc2','sc3'].forEach(id => {
+    const cb = document.getElementById(id);
+    if (cb && cb.checked) cb.closest('.crit')?.classList.add('checked');
+  });
+}
+function updateProgress() {
+  const texts  = document.querySelectorAll('textarea[id], input[type=text][id]');
+  const filled = [...texts].filter(el => el.value.trim().length > 1).length;
+  const cbs    = [...document.querySelectorAll('input[type=checkbox][id]')].filter(cb => cb.checked).length;
+  const cbTotal= document.querySelectorAll('input[type=checkbox][id]').length;
+  const rads   = ['mc_size'].filter(n => document.querySelector(`input[name="${n}"]:checked`)).length;
+  const total  = texts.length + 1 + cbTotal;
+  const done   = filled + cbs + rads;
+  const pct    = Math.min(100, Math.round(done / total * 100));
+  document.getElementById('tbFill').style.width = pct + '%';
+  document.getElementById('tbPct').textContent  = pct + '%';
+  clearTimeout(window._st);
+  window._st = setTimeout(() => DataService.autoSave(collectAll()), 1800);
+}
+function recordMC(groupId, radioEl, correct) {
+  const opts = document.querySelectorAll(`input[name="${groupId}"]`);
+  opts.forEach(r => r.parentElement.classList.remove('correct-ans','wrong-ans'));
+  const res = document.getElementById(groupId + '_result');
+  if (radioEl.value === correct) {
+    radioEl.parentElement.classList.add('correct-ans');
+    res.textContent = '✓ Correct'; res.className = 'mc-result show-c';
+  } else {
+    radioEl.parentElement.classList.add('wrong-ans');
+    res.textContent = '✗ Not quite — check Section 2 of the lesson website.'; res.className = 'mc-result show-w';
+  }
+  updateProgress();
+}
+function toggleCrit(card, cbId) {
+  const cb = document.getElementById(cbId);
+  cb.checked = !cb.checked;
+  card.classList.toggle('checked', cb.checked);
+  updateProgress();
+}
+function showToast(msg) {
+  let t = document.getElementById('_toast');
+  if (!t) {
+    t = document.createElement('div'); t.id = '_toast';
+    t.style.cssText = 'position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#12100E;color:#F7F3EC;border:1px solid #2C2A28;padding:8px 20px;border-radius:5px;font-size:12px;font-family:DM Mono,monospace;z-index:9999;transition:opacity .3s;white-space:nowrap;pointer-events:none;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg; t.style.opacity = '1';
+  clearTimeout(t._t); t._t = setTimeout(() => t.style.opacity = '0', 2600);
+}
+window.addEventListener('load', () => { DataService.autoLoad(); updateProgress(); });
+setInterval(() => DataService.autoSave(collectAll()), 60000);
+</script>
+</body>
+</html>

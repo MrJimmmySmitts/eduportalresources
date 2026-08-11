@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y7 Maths · D3 Workbook · Building Expressions on the Flow Diagram</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dark-bg:#0D1117; --panel:#161B22; --panel2:#1C222B; --border:#2B3340; --border2:#39424F;
+  --ink:#F3F5F8; --ink2:#C8CFD9; --ink3:#8A94A3;
+  --light-bg:#FFFFFF; --l-panel:#F5F6F9; --l-border:#E2E5EB; --l-ink:#1B1F27; --l-ink2:#4B5563; --l-ink3:#8A94A3;
+  --blue:#4361EE; --blue-bg:rgba(67,97,238,.14);
+  --green:#10B981; --green-bg:rgba(16,185,129,.13);
+  --amber:#F59E0B; --amber-bg:rgba(245,158,11,.14);
+  --purple:#8B5CF6; --purple-bg:rgba(139,92,246,.14);
+  --red:#EF4444; --red-bg:rgba(239,68,68,.14);
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --read:'Atkinson Hyperlegible',system-ui,sans-serif;
+  --mono:'DM Mono','Courier New',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--dark-bg);color:var(--ink);font-size:15.5px;line-height:1.7;padding-bottom:100px;transition:background .25s,color .25s;}
+body.light{background:var(--light-bg);color:var(--l-ink);}
+a{color:var(--blue);}
+.wrap{max-width:920px;margin:0 auto;padding:0 1.4rem;}
+
+/* TOP BAR */
+#topbar{position:sticky;top:0;z-index:50;background:rgba(13,17,23,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:.6rem 1.4rem;display:flex;align-items:center;gap:1rem;font-family:var(--mono);font-size:.78rem;}
+body.light #topbar{background:rgba(255,255,255,.92);border-bottom-color:var(--l-border);}
+#topbar .prog-label{color:var(--ink3);}
+body.light #topbar .prog-label{color:var(--l-ink3);}
+#progtrack{flex:1;max-width:260px;height:7px;border-radius:4px;background:var(--border);overflow:hidden;}
+body.light #progtrack{background:var(--l-border);}
+#progfill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--purple));transition:width .4s;}
+#topbar button, #topbar .toggle{font-family:var(--mono);font-size:.72rem;border:1px solid var(--border2);background:var(--panel);color:var(--ink2);padding:.4rem .7rem;border-radius:6px;cursor:pointer;}
+body.light #topbar button, body.light #topbar .toggle{background:var(--l-panel);border-color:var(--l-border);color:var(--l-ink2);}
+#topbar button:hover{border-color:var(--blue);color:var(--blue);}
+#savestatus{color:var(--green);font-size:.7rem;opacity:0;transition:opacity .3s;}
+
+/* COVER */
+.cover{padding:3rem 0 2rem;text-align:left;}
+.cover-eyebrow{font-family:var(--mono);font-size:.78rem;color:var(--blue);letter-spacing:.05em;margin-bottom:.6rem;}
+.cover h1{font-family:var(--serif);font-size:2.6rem;font-weight:400;margin-bottom:.4rem;}
+.cover-sub{color:var(--ink3);font-style:italic;margin-bottom:1.6rem;}
+body.light .cover-sub{color:var(--l-ink3);}
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-bottom:1.6rem;}
+.sgrid label{display:block;font-family:var(--mono);font-size:.68rem;color:var(--ink3);margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.04em;}
+body.light .sgrid label{color:var(--l-ink3);}
+.sgrid input{width:100%;background:var(--panel);border:1px solid var(--border);color:var(--ink);padding:.5rem .6rem;border-radius:6px;font-family:var(--sans);font-size:.85rem;}
+body.light .sgrid input{background:var(--l-panel);border-color:var(--l-border);color:var(--l-ink);}
+.res-links{display:flex;gap:.7rem;flex-wrap:wrap;}
+.res-links a{font-family:var(--mono);font-size:.78rem;border:1px solid var(--border2);padding:.5rem .9rem;border-radius:20px;text-decoration:none;color:var(--ink2);}
+body.light .res-links a{border-color:var(--l-border);color:var(--l-ink2);}
+.res-links a:hover{border-color:var(--blue);color:var(--blue);}
+
+/* SECTION BAND */
+.band{display:flex;align-items:center;gap:1rem;margin:3rem 0 1.1rem;}
+.bnum{width:2.3rem;height:2.3rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;color:#fff;flex-shrink:0;}
+.btag{font-family:var(--mono);font-size:.68rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;}
+body.light .btag{color:var(--l-ink3);}
+.btitle{font-family:var(--serif);font-size:1.5rem;}
+
+/* PANELS */
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.3rem 1.5rem;margin-bottom:1.1rem;}
+body.light .panel{background:var(--l-panel);border-color:var(--l-border);}
+.readbox{font-family:var(--read);color:var(--ink2);}
+body.light .readbox{color:var(--l-ink2);}
+
+/* TIER CARDS */
+.tier{border-radius:10px;padding:1.1rem 1.3rem;margin-bottom:1rem;border:1px solid var(--border);}
+.tier-f{background:var(--green-bg);border-color:rgba(16,185,129,.35);}
+.tier-d{background:var(--amber-bg);border-color:rgba(245,158,11,.35);}
+.tier-e{background:var(--purple-bg);border-color:rgba(139,92,246,.35);}
+.tier-label{font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.5rem;}
+.tier-f .tier-label{color:var(--green);}
+.tier-d .tier-label{color:var(--amber);}
+.tier-e .tier-label{color:var(--purple);}
+
+/* FORM ELEMENTS */
+.q{margin-bottom:1rem;}
+.q-label{font-size:.92rem;margin-bottom:.5rem;color:var(--ink);}
+body.light .q-label{color:var(--l-ink);}
+textarea, input[type=text]{width:100%;background:var(--panel2);border:1px solid var(--border2);color:var(--ink);padding:.65rem .8rem;border-radius:7px;font-family:var(--sans);font-size:.9rem;resize:vertical;}
+body.light textarea, body.light input[type=text]{background:#fff;border-color:var(--l-border);color:var(--l-ink);}
+textarea:focus, input[type=text]:focus{outline:none;border-color:var(--blue);}
+.mono-input{font-family:var(--mono);}
+
+.opt{display:flex;align-items:flex-start;gap:.6rem;padding:.55rem .7rem;border-radius:7px;cursor:pointer;border:1px solid transparent;}
+.opt:hover{background:rgba(255,255,255,.04);}
+body.light .opt:hover{background:rgba(0,0,0,.03);}
+.opt input{margin-top:.25rem;}
+
+/* CALLOUTS */
+.callout{border-radius:8px;padding:.85rem 1.1rem;margin:.9rem 0;font-size:.88rem;border-left:3px solid;}
+.callout-info{background:var(--blue-bg);border-color:var(--blue);}
+.callout-tip{background:var(--green-bg);border-color:var(--green);}
+.callout-note{background:var(--amber-bg);border-color:var(--amber);}
+.callout-extend{background:var(--purple-bg);border-color:var(--purple);}
+
+/* CUP + COUNTER MOTIF */
+.cupcounter{display:flex;align-items:center;gap:.6rem;margin:.5rem 0 1rem;}
+.cup-icon{width:34px;height:26px;background:#FBEBD0;border:2px solid #B8860B;border-radius:0 0 8px 8px;clip-path:polygon(15% 0,85% 0,100% 100%,0% 100%);}
+.counter{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.6rem;font-weight:700;color:#fff;}
+.counter.pos{background:var(--green);}
+.counter.neg{background:var(--red);}
+
+/* CHECK BUTTON */
+.checkbtn{font-family:var(--mono);font-size:.78rem;border:1px solid var(--blue);background:transparent;color:var(--blue);padding:.4rem .8rem;border-radius:6px;cursor:pointer;margin-top:.4rem;}
+.checkbtn:hover{background:var(--blue-bg);}
+.feedback{display:none;font-family:var(--mono);font-size:.8rem;margin-top:.5rem;padding:.5rem .7rem;border-radius:6px;}
+.feedback.show{display:block;}
+.feedback.correct{background:var(--green-bg);color:var(--green);}
+.feedback.incorrect{background:var(--red-bg);color:#FF8080;}
+
+/* SELF-ASSESS */
+.selfcheck{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.6rem;}
+.selfcheck label{display:flex;align-items:center;gap:.4rem;font-size:.85rem;background:var(--panel2);border:1px solid var(--border2);padding:.4rem .8rem;border-radius:20px;cursor:pointer;}
+body.light .selfcheck label{background:#fff;border-color:var(--l-border);}
+
+/* EXIT TICKET */
+.exit-panel{background:var(--red-bg);border:1px solid rgba(239,68,68,.4);}
+
+/* FOOTER / SUBMIT */
+.submit-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(13,17,23,.95);backdrop-filter:blur(8px);border-top:1px solid var(--border);padding:.9rem 1.4rem;display:flex;justify-content:center;gap:1rem;z-index:50;}
+body.light .submit-bar{background:rgba(255,255,255,.95);border-top-color:var(--l-border);}
+.btn-submit{font-family:var(--sans);font-weight:700;font-size:.9rem;background:var(--blue);color:#fff;border:none;padding:.75rem 2rem;border-radius:8px;cursor:pointer;}
+.btn-submit:hover{background:#3450D6;}
+.btn-submit:disabled{opacity:.5;cursor:default;}
+.submit-note{font-family:var(--mono);font-size:.72rem;color:var(--ink3);align-self:center;}
+body.light .submit-note{color:var(--l-ink3);}
+
+footer{text-align:center;padding:2rem 1rem;font-family:var(--mono);font-size:.7rem;color:var(--ink3);}
+body.light footer{color:var(--l-ink3);}
+
+@media(max-width:640px){ .sgrid{grid-template-columns:1fr 1fr;} .cover h1{font-size:1.9rem;} }
+
+/* FLOW DIAGRAM MOTIF */
+.flowrow{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:.6rem 0 1rem;}
+.flowbox{font-family:var(--mono);font-size:.85rem;background:var(--panel2);border:1px solid var(--border2);border-radius:7px;padding:.5rem .7rem;min-width:70px;text-align:center;}
+body.light .flowbox{background:#fff;border-color:var(--l-border);}
+.flowarrow{color:var(--ink3);font-size:1.1rem;}
+body.light .flowarrow{color:var(--l-ink3);}
+.flowop{font-family:var(--mono);font-weight:700;background:var(--blue-bg);color:var(--blue);border-radius:20px;padding:.5rem 1rem;}
+
+/* VOCAB TABLE */
+.vocabtable{width:100%;border-collapse:collapse;margin:.6rem 0 1rem;font-size:.85rem;}
+.vocabtable th{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink3);text-align:left;padding:.4rem .6rem;border-bottom:1px solid var(--border2);}
+body.light .vocabtable th{color:var(--l-ink3);border-color:var(--l-border);}
+.vocabtable td{padding:.5rem .6rem;border-bottom:1px solid var(--border);color:var(--ink2);}
+body.light .vocabtable td{border-color:var(--l-border);color:var(--l-ink2);}
+.vocabtable td.op{font-family:var(--mono);font-weight:700;color:var(--ink);}
+body.light .vocabtable td.op{color:var(--l-ink);}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <span class="prog-label">📝 WORKBOOK</span>
+  <div id="progtrack"><div id="progfill"></div></div>
+  <span id="progpct" class="prog-label">0%</span>
+  <span id="savestatus">Saved</span>
+  <button onclick="DataService.manualSave()">Save</button>
+  <button onclick="DataService.manualLoad()">Load</button>
+  <button onclick="window.print()">Export</button>
+  <button class="toggle" onclick="toggleTheme()">☀/☾</button>
+</div>
+
+<div class="wrap">
+
+  <div class="cover">
+    <div class="cover-eyebrow">YEAR 7 MATHEMATICS · ALGEBRAIC TECHNIQUES · DOUBLE 3</div>
+    <h1>Building Expressions on the Flow Diagram</h1>
+    <p class="cover-sub">Operation vocabulary · Flow diagrams · Word phrases → expressions</p>
+    <div class="sgrid">
+      <div><label>Name</label><input type="text" id="stu-name" placeholder="Your full name"></div>
+      <div><label>Class</label><input type="text" id="stu-class" placeholder="Class code"></div>
+      <div><label>Date</label><input type="text" id="stu-date" placeholder="YYYY-MM-DD"></div>
+      <div><label>Teacher</label><input type="text" id="stu-teacher" value="Mr Smith"></div>
+    </div>
+    <div class="res-links">
+      <a href="D3_BuildingExpressionsFlowchart.pptx">📊 Lesson Slides</a>
+      <a href="U1_AlgebraicTechniques_site.html#y7-maths-u1-d3-building-expressions-flowchart">📘 Unit Site — Double 3 notes</a>
+    </div>
+  </div>
+
+  <!-- SECTION 0: LO/SC -->
+  <div class="band"><div class="bnum" style="background:var(--blue)">0</div><div><div class="btag">Objective</div><div class="btitle">Learning Intention & Your Target</div></div></div>
+  <div class="panel readbox">
+    <p><b>Learning Intention:</b> To translate word phrases into algebraic expressions using a flow diagram, and to match operation vocabulary to +, −, ×, ÷.</p>
+  </div>
+  <div class="q">
+    <div class="q-label">Which tier are you aiming for today? (You can still attempt others — this is just your starting goal.)</div>
+    <div class="selfcheck">
+      <label><input type="radio" name="target-tier" value="F"> 🟢 Foundation</label>
+      <label><input type="radio" name="target-tier" value="D"> 🟡 Developing</label>
+      <label><input type="radio" name="target-tier" value="E"> 🟣 Extending</label>
+    </div>
+  </div>
+
+  <!-- SECTION 1: RECAP CHECK -->
+  <div class="band"><div class="bnum" style="background:var(--gray,#5B6472)">1</div><div><div class="btag">Recap</div><div class="btitle">Quick Check — Operation Words</div></div></div>
+  <div class="panel">
+    <p class="readbox" style="margin-bottom:.9rem;">Match each word to the operation it usually means.</p>
+
+    <div class="q">
+      <div class="q-label">1. "Product of"</div>
+      <label class="opt"><input type="radio" name="rc1" value="wrong">+</label>
+      <label class="opt"><input type="radio" name="rc1" value="correct">×</label>
+      <label class="opt"><input type="radio" name="rc1" value="wrong">÷</label>
+    </div>
+    <div class="q">
+      <div class="q-label">2. "Fewer than"</div>
+      <label class="opt"><input type="radio" name="rc2" value="wrong">+</label>
+      <label class="opt"><input type="radio" name="rc2" value="wrong">×</label>
+      <label class="opt"><input type="radio" name="rc2" value="correct">−</label>
+    </div>
+    <div class="q">
+      <div class="q-label">3. "Shared equally"</div>
+      <label class="opt"><input type="radio" name="rc3" value="wrong">−</label>
+      <label class="opt"><input type="radio" name="rc3" value="wrong">+</label>
+      <label class="opt"><input type="radio" name="rc3" value="correct">÷</label>
+    </div>
+    <button class="checkbtn" onclick="checkRecap()">Check my answers</button>
+    <div class="feedback" id="recap-feedback"></div>
+  </div>
+
+  <!-- SECTION 2: EXPLICIT TEACHING COPY -->
+  <div class="band"><div class="bnum" style="background:var(--blue)">2</div><div><div class="btag">Explicit Teaching</div><div class="btitle">The Flow Diagram & Vocabulary</div></div></div>
+  <div class="callout callout-info">Your teacher will show <b>Slides 4–5</b> — copy the flow diagram example and the vocabulary table into your notes before filling in below.</div>
+
+  <div class="panel">
+    <div class="q-label" style="margin-bottom:.5rem;">📋 Draw the paperclip pot flow diagram from the board (start → operation → result):</div>
+    <div class="flowrow">
+      <input type="text" class="mono-input flowbox" data-key="fd-start" placeholder="start" style="width:90px;">
+      <span class="flowarrow">→</span>
+      <input type="text" class="mono-input flowbox" data-key="fd-op" placeholder="operation" style="width:110px;">
+      <span class="flowarrow">→</span>
+      <input type="text" class="mono-input flowbox" data-key="fd-result" placeholder="result" style="width:110px;">
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="q-label" style="margin-bottom:.3rem;">📋 Copy the operation vocabulary table from Slide 5 — you'll use this all unit:</div>
+    <table class="vocabtable">
+      <tr><th>Operation</th><th>Words that mean this</th></tr>
+      <tr><td class="op">Addition (+)</td><td><input type="text" class="mono-input" data-key="vocab-add" placeholder="Write the words from the slide"></td></tr>
+      <tr><td class="op">Subtraction (−)</td><td><input type="text" class="mono-input" data-key="vocab-sub" placeholder="Write the words from the slide"></td></tr>
+      <tr><td class="op">Multiplication (×)</td><td><input type="text" class="mono-input" data-key="vocab-mul" placeholder="Write the words from the slide"></td></tr>
+      <tr><td class="op">Division (÷)</td><td><input type="text" class="mono-input" data-key="vocab-div" placeholder="Write the words from the slide"></td></tr>
+    </table>
+  </div>
+
+  <!-- SECTION 3: APPLICATION -->
+  <div class="band"><div class="bnum" style="background:var(--green)">3</div><div><div class="btag">Application of Learning</div><div class="btitle">Task 1 — Translate the Phrase</div></div></div>
+  <div class="callout callout-tip">🔓 <b>Laptop gate.</b> Each question uses a different letter for the unknown amount — read carefully before you write the expression.</div>
+  <div class="tier tier-f">
+    <div class="tier-label">🟢 Foundation</div>
+    <div class="q"><div class="q-label">1. There are <b>m</b> marbles in a jar. 5 more marbles are added.</div><input type="text" class="mono-input" data-key="t1-f1" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">2. Sam has <b>p</b> pencils. He gives away 3.</div><input type="text" class="mono-input" data-key="t1-f2" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">3. A number, <b>t</b>, has 6 added to it.</div><input type="text" class="mono-input" data-key="t1-f3" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">4. There are <b>k</b> stickers on a page. 4 are removed.</div><input type="text" class="mono-input" data-key="t1-f4" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">5. A rope is <b>w</b> metres long. It is cut shorter by 2 metres.</div><input type="text" class="mono-input" data-key="t1-f5" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">6. There are <b>c</b> coins in a jar. 10 more are added.</div><input type="text" class="mono-input" data-key="t1-f6" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">7. A number, <b>y</b>, has 7 taken away from it.</div><input type="text" class="mono-input" data-key="t1-f7" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">8. A recipe uses <b>f</b> cups of flour. 2 more cups are added.</div><input type="text" class="mono-input" data-key="t1-f8" placeholder="Write the expression"></div>
+  </div>
+  <div class="tier tier-d">
+    <div class="tier-label">🟡 Developing</div>
+    <div class="q"><div class="q-label">1. The product of <b>x</b> and 6.</div><input type="text" class="mono-input" data-key="t1-d1" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">2. <b>n</b> divided by 4.</div><input type="text" class="mono-input" data-key="t1-d2" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">3. 8 less than a number, <b>d</b>.</div><input type="text" class="mono-input" data-key="t1-d3" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">4. 5 subtracted from a number, <b>q</b>.</div><input type="text" class="mono-input" data-key="t1-d4" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">5. Half of a number, <b>r</b>.</div><input type="text" class="mono-input" data-key="t1-d5" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">6. The sum of a number, <b>b</b>, and 9.</div><input type="text" class="mono-input" data-key="t1-d6" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">7. <b>z</b> multiplied by 8.</div><input type="text" class="mono-input" data-key="t1-d7" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">8. A number, <b>h</b>, shared equally among 5 people.</div><input type="text" class="mono-input" data-key="t1-d8" placeholder="Write the expression"></div>
+  </div>
+  <div class="tier tier-e">
+    <div class="tier-label">🟣 Extending — two-step and reverse</div>
+    <div class="q"><div class="q-label">1. A number, <b>n</b>, is doubled, then 3 is added.</div><input type="text" class="mono-input" data-key="t1-e1" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">2. Twice a number, <b>p</b>, decreased by 4.</div><input type="text" class="mono-input" data-key="t1-e2" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">3. A number, <b>m</b>, has 2 added, then the result is tripled.</div><input type="text" class="mono-input" data-key="t1-e3" placeholder="Write the expression"></div>
+    <div class="q"><div class="q-label">4. Given the expression <span class="mono-input">4k + 7</span>, write a worded scenario that matches it.</div><textarea rows="2" data-key="t1-e4" placeholder="Describe a real situation this expression could represent"></textarea></div>
+    <div class="q"><div class="q-label">5. Given the expression <span class="mono-input">(t − 5) ÷ 2</span>, write a worded scenario that matches it.</div><textarea rows="2" data-key="t1-e5" placeholder="Describe a real situation this expression could represent"></textarea></div>
+  </div>
+
+  <div class="band"><div class="bnum" style="background:var(--green)">3</div><div><div class="btag">Application of Learning</div><div class="btitle">Task 2 — Complete the Flow Diagram</div></div></div>
+  <div class="callout callout-tip">Fill in whichever boxes are blank — sometimes that’s all three, sometimes it’s just one.</div>
+  <div class="tier tier-f">
+    <div class="tier-label">🟢 Foundation — fill in all three boxes</div>
+    <div class="q-label" style="margin-bottom:.15rem;">1. “7 added to a number, a.”</div>
+    <div class="flowrow" style="margin:.4rem 0 1rem;"><input type="text" class="mono-input flowbox" data-key="t2f1-start" placeholder="start" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2f1-op" placeholder="op" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2f1-result" placeholder="result" style="width:80px;"></div>
+    <div class="q-label" style="margin-bottom:.15rem;">2. “A number, b, has 4 taken away.”</div>
+    <div class="flowrow" style="margin:.4rem 0 1rem;"><input type="text" class="mono-input flowbox" data-key="t2f2-start" placeholder="start" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2f2-op" placeholder="op" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2f2-result" placeholder="result" style="width:80px;"></div>
+    <div class="q-label" style="margin-bottom:.15rem;">3. “10 more than c.”</div>
+    <div class="flowrow" style="margin:.4rem 0 1rem;"><input type="text" class="mono-input flowbox" data-key="t2f3-start" placeholder="start" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2f3-op" placeholder="op" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2f3-result" placeholder="result" style="width:80px;"></div>
+    <div class="q-label" style="margin-bottom:.15rem;">4. “d decreased by 6.”</div>
+    <div class="flowrow" style="margin:.4rem 0 1rem;"><input type="text" class="mono-input flowbox" data-key="t2f4-start" placeholder="start" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2f4-op" placeholder="op" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2f4-result" placeholder="result" style="width:80px;"></div>
+    <div class="q-label" style="margin-bottom:.15rem;">5. “3 added to e.”</div>
+    <div class="flowrow" style="margin:.4rem 0 1rem;"><input type="text" class="mono-input flowbox" data-key="t2f5-start" placeholder="start" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2f5-op" placeholder="op" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2f5-result" placeholder="result" style="width:80px;"></div>
+    <div class="q-label" style="margin-bottom:.15rem;">6. “f minus 9.”</div>
+    <div class="flowrow" style="margin:.4rem 0 1rem;"><input type="text" class="mono-input flowbox" data-key="t2f6-start" placeholder="start" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2f6-op" placeholder="op" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2f6-result" placeholder="result" style="width:80px;"></div>
+  </div>
+  <div class="tier tier-d">
+    <div class="tier-label">🟡 Developing — sometimes you’re given a box, not just the phrase</div>
+    <div class="q-label" style="margin-bottom:.15rem;">1. Complete the flow diagram for “g divided by 3.”</div>
+    <div class="flowrow" style="margin:.4rem 0 1rem;"><input type="text" class="mono-input flowbox" data-key="t2d1-start" placeholder="start" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2d1-op" placeholder="op" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2d1-result" placeholder="result" style="width:80px;"></div>
+    <div class="q-label" style="margin-bottom:.15rem;">2. Complete the flow diagram for “h multiplied by 5.”</div>
+    <div class="flowrow" style="margin:.4rem 0 1rem;"><input type="text" class="mono-input flowbox" data-key="t2d2-start" placeholder="start" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2d2-op" placeholder="op" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2d2-result" placeholder="result" style="width:80px;"></div>
+    <div class="q-label" style="margin-bottom:.15rem;">3. Given: start = k, operation = ×7. What is the result?</div>
+    <div class="flowrow" style="margin:.4rem 0 1rem;"><div class="flowbox" style="width:80px;box-sizing:border-box;">k</div><span class="flowarrow">→</span><div class="flowbox" style="width:80px;box-sizing:border-box;">×7</div><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2d3-result" placeholder="result" style="width:80px;"></div>
+    <div class="q-label" style="margin-bottom:.15rem;">4. Given: operation = +12, result = m + 12. What was the start?</div>
+    <div class="flowrow" style="margin:.4rem 0 1rem;"><input type="text" class="mono-input flowbox" data-key="t2d4-start" placeholder="start" style="width:80px;"><span class="flowarrow">→</span><div class="flowbox" style="width:80px;box-sizing:border-box;">+12</div><span class="flowarrow">→</span><div class="flowbox" style="width:80px;box-sizing:border-box;">m + 12</div></div>
+    <div class="q-label" style="margin-bottom:.15rem;">5. Complete the flow diagram for “n shared into 4 equal groups.”</div>
+    <div class="flowrow" style="margin:.4rem 0 1rem;"><input type="text" class="mono-input flowbox" data-key="t2d5-start" placeholder="start" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2d5-op" placeholder="op" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2d5-result" placeholder="result" style="width:80px;"></div>
+    <div class="q-label" style="margin-bottom:.15rem;">6. Given: start = p, result = p − 8. What was the operation?</div>
+    <div class="flowrow" style="margin:.4rem 0 1rem;"><div class="flowbox" style="width:80px;box-sizing:border-box;">p</div><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="t2d6-op" placeholder="op" style="width:80px;"><span class="flowarrow">→</span><div class="flowbox" style="width:80px;box-sizing:border-box;">p − 8</div></div>
+  </div>
+  <div class="tier tier-e">
+    <div class="tier-label">🟣 Extending — two-step chains</div>
+    <div class="q"><div class="q-label">1. Draw or describe a two-step flow diagram for “a number, q, is tripled, then 5 is subtracted.”</div><textarea rows="2" data-key="t2e1" placeholder="Describe step 1, then step 2"></textarea><input type="text" class="mono-input" data-key="t2e1-expr" placeholder="Final expression" style="margin-top:.5rem;"></div>
+    <div class="q"><div class="q-label">2. Draw or describe a two-step flow diagram for “r has 2 added, then the result is doubled.”</div><textarea rows="2" data-key="t2e2" placeholder="Describe step 1, then step 2"></textarea><input type="text" class="mono-input" data-key="t2e2-expr" placeholder="Final expression" style="margin-top:.5rem;"></div>
+    <div class="q"><div class="q-label">3. A two-step flow diagram: start = s, operation 1 = +4, operation 2 = ×2. What is the final expression?</div><input type="text" class="mono-input" data-key="t2e3-expr" placeholder="Final expression"></div>
+  </div>
+
+  <div class="band"><div class="bnum" style="background:var(--green)">3</div><div><div class="btag">Application of Learning</div><div class="btitle">Task 3 — Build Your Own</div></div></div>
+  <div class="callout callout-tip">One capstone task per tier — pick your tier (or try more than one).</div>
+  <div class="tier tier-f">
+    <div class="tier-label">🟢 Foundation</div>
+    <div class="q"><div class="q-label">Model this scenario: “5 more than a number, k.” Draw the flow diagram, then write the expression.</div>    <div class="flowrow" style="margin:.4rem 0 1rem;"><input type="text" class="mono-input flowbox" data-key="own-f1-start" placeholder="start" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="own-f1-op" placeholder="op" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="own-f1-result" placeholder="result" style="width:80px;"></div>
+    <input type="text" class="mono-input" data-key="own-f1-expr" placeholder="Expression" style="margin-top:.3rem;"></div>
+  </div>
+  <div class="tier tier-d">
+    <div class="tier-label">🟡 Developing</div>
+    <div class="q"><div class="q-label">Write your own one-step worded scenario using multiplication or division, then diagram it.</div><textarea rows="2" data-key="own-d1-scenario" placeholder="Write your scenario in words first"></textarea>    <div class="flowrow" style="margin:.4rem 0 1rem;"><input type="text" class="mono-input flowbox" data-key="own-d1-start" placeholder="start" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="own-d1-op" placeholder="op" style="width:80px;"><span class="flowarrow">→</span><input type="text" class="mono-input flowbox" data-key="own-d1-result" placeholder="result" style="width:80px;"></div>
+    <input type="text" class="mono-input" data-key="own-d1-expr" placeholder="Expression" style="margin-top:.3rem;"></div>
+  </div>
+  <div class="tier tier-e">
+    <div class="tier-label">🟣 Extending — two-step chain</div>
+    <div class="q"><div class="q-label">Chain two operations in one flow diagram (e.g. add, then multiply) for a number, n. Show both steps and the simplified expression.</div><textarea rows="3" data-key="own-e1-model" placeholder="Describe step 1, then step 2 of your flow diagram"></textarea>    <input type="text" class="mono-input" data-key="own-e1-expr" placeholder="Final expression" style="margin-top:.3rem;"></div>
+  </div>
+
+  <!-- SECTION 4: RESPONSIVE TEACHING -->
+  <div class="band"><div class="bnum" style="background:var(--purple)">4</div><div><div class="btag">Responsive Teaching</div><div class="btitle">Quick Check</div></div></div>
+  <div class="callout callout-extend">Your teacher will reveal <b>Slide 13</b> — check your thinking against the class answers.</div>
+  <div class="panel">
+    <div class="q">
+      <div class="q-label">1. True or False: <span class="mono-input">2x = 6</span> is an expression.</div>
+      <div class="selfcheck">
+        <label><input type="radio" name="qc1" value="true"> True</label>
+        <label><input type="radio" name="qc1" value="false"> False</label>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-label">2. Why did you choose that answer? What's different about an expression and an equation?</div>
+      <textarea rows="2" data-key="qc1-reason" placeholder="Explain in your own words — what makes the two different?"></textarea>
+    </div>
+    <div class="q">
+      <div class="q-label">3. "A box contains apples. Another 2 apples are added. How many apples are there?" was answered with <span class="mono-input">a + 2</span>. What's missing from this answer?</div>
+      <textarea rows="2" data-key="qc2-reason" placeholder="Think about what 'a' actually means here, and whether that's been stated anywhere"></textarea>
+    </div>
+  </div>
+
+  <!-- SECTION 5: REFLECTION -->
+  <div class="band"><div class="bnum" style="background:var(--ink3,#5B6472)">5</div><div><div class="btag">Reflection</div><div class="btitle">Self-Assessment</div></div></div>
+  <div class="panel">
+    <div class="q">
+      <div class="q-label">Tick the statements you can now do confidently:</div>
+      <label class="opt"><input type="checkbox" data-key="sa-f"> 🟢 I can identify the coefficient, variable and constant in an algebraic expression.</label>
+      <label class="opt"><input type="checkbox" data-key="sa-d"> 🟡 I can translate a word phrase into an algebraic expression, using a flow diagram.</label>
+      <label class="opt"><input type="checkbox" data-key="sa-e"> 🟣 I can build my own flow diagram and expression for a two-step worded scenario.</label>
+    </div>
+    <div class="q"><div class="q-label">What are you proud of from today?</div><textarea rows="2" data-key="refl-proud" placeholder="Be specific — which question or moment?"></textarea></div>
+    <div class="q"><div class="q-label">What do you still need to work on?</div><textarea rows="2" data-key="refl-improve" placeholder="Name one thing you'd like more practice with"></textarea></div>
+  </div>
+
+  <!-- SECTION 6: EXIT TICKET -->
+  <div class="band"><div class="bnum" style="background:var(--red)">6</div><div><div class="btag">Exit Ticket</div><div class="btitle">Show What You Know</div></div></div>
+  <div class="panel exit-panel">
+    <div class="q">
+      <div class="q-label">1. In the expression <span class="mono-input">9p − 4</span>, identify the coefficient, variable and constant.</div>
+      <textarea rows="2" data-key="et-1" placeholder="Coefficient: ... Variable: ... Constant: ..."></textarea>
+    </div>
+    <div class="q">
+      <div class="q-label">2. Write an expression for: "8 less than m."</div>
+      <input type="text" class="mono-input" data-key="et-2" placeholder="Expression">
+    </div>
+    <div class="q">
+      <div class="q-label">3. 🟣 Draw or describe a flow diagram for: "a number, n, is doubled, then 3 is added."</div>
+      <textarea rows="2" data-key="et-3" placeholder="Describe start → operation → operation → result"></textarea>
+    </div>
+  </div>
+
+  <footer>Year 7 Mathematics · Algebraic Techniques · Double 3 · y7-maths-u1-d3-building-expressions-flowchart</footer>
+</div>
+
+<div class="submit-bar">
+  <span class="submit-note" id="submit-status">Not yet submitted</span>
+  <button class="btn-submit" id="submitBtn" onclick="DataService.submit()">Submit Workbook</button>
+</div>
+
+<script>
+const LESSON_ID = 'y7-maths-u1-d3-building-expressions-flowchart';
+const UNIT_ID = 'y7-maths-u1';
+
+const DataService = {
+  studentId() {
+    return JSON.parse(localStorage.getItem('eduportal_session') || '{}').id || 'current_student';
+  },
+  fieldKeys() {
+    return Array.from(document.querySelectorAll('[data-key]')).map(el => el.dataset.key);
+  },
+  collect() {
+    const data = {};
+    document.querySelectorAll('[data-key]').forEach(el => {
+      if (el.type === 'checkbox') data[el.dataset.key] = el.checked;
+      else if (el.type === 'radio') { if (el.checked) data[el.dataset.key] = el.value; }
+      else data[el.dataset.key] = el.value;
+    });
+    data['stu-name'] = document.getElementById('stu-name').value;
+    data['stu-class'] = document.getElementById('stu-class').value;
+    data['stu-date'] = document.getElementById('stu-date').value;
+    data['stu-teacher'] = document.getElementById('stu-teacher').value;
+    const tt = document.querySelector('input[name="target-tier"]:checked');
+    data['target-tier'] = tt ? tt.value : '';
+    const qc1 = document.querySelector('input[name="qc1"]:checked');
+    data['qc1'] = qc1 ? qc1.value : '';
+    return data;
+  },
+  save() {
+    try {
+      const key = `eduportal_workbook_${this.studentId()}_${LESSON_ID}`;
+      localStorage.setItem(key, JSON.stringify(this.collect()));
+      this._syncProgress('in-progress');
+      const st = document.getElementById('savestatus');
+      st.style.opacity = 1; st.textContent = 'Saved';
+      setTimeout(() => st.style.opacity = 0, 1500);
+    } catch(e) { console.warn('Save failed', e); }
+  },
+  load() {
+    try {
+      const key = `eduportal_workbook_${this.studentId()}_${LESSON_ID}`;
+      const raw = localStorage.getItem(key);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      document.querySelectorAll('[data-key]').forEach(el => {
+        if (!(el.dataset.key in data)) return;
+        if (el.type === 'checkbox') el.checked = data[el.dataset.key];
+        else if (el.type === 'radio') { if (el.value === data[el.dataset.key]) el.checked = true; }
+        else el.value = data[el.dataset.key];
+      });
+      if (data['stu-name']) document.getElementById('stu-name').value = data['stu-name'];
+      if (data['stu-class']) document.getElementById('stu-class').value = data['stu-class'];
+      if (data['stu-date']) document.getElementById('stu-date').value = data['stu-date'];
+      if (data['stu-teacher']) document.getElementById('stu-teacher').value = data['stu-teacher'];
+      if (data['target-tier']) {
+        const r = document.querySelector(`input[name="target-tier"][value="${data['target-tier']}"]`);
+        if (r) r.checked = true;
+      }
+      if (data['qc1']) {
+        const q = document.querySelector(`input[name="qc1"][value="${data['qc1']}"]`);
+        if (q) q.checked = true;
+      }
+      updateProgress();
+    } catch(e) { console.warn('Load failed', e); }
+  },
+  manualSave() { this.save(); },
+  manualLoad() { this.load(); },
+  autoSave() { this.save(); },
+  autoLoad() { this.load(); },
+  submit() {
+    this.save();
+    try {
+      const key = `eduportal_workbook_${this.studentId()}_${LESSON_ID}`;
+      const data = this.collect();
+      data._submittedAt = new Date().toISOString();
+      localStorage.setItem(key, JSON.stringify(data));
+      this._syncProgress('submitted');
+      document.getElementById('submit-status').textContent = 'Submitted ✓';
+      document.getElementById('submitBtn').disabled = true;
+      document.getElementById('submitBtn').textContent = 'Submitted';
+    } catch(e) { console.warn('Submit failed', e); }
+  },
+  _syncProgress(status) {
+    try {
+      const key = `eduportal_progress_${this.studentId()}_${LESSON_ID}`;
+      localStorage.setItem(key, JSON.stringify({ status, updatedAt: new Date().toISOString() }));
+    } catch(e) {}
+  }
+};
+
+function updateProgress() {
+  const keys = DataService.fieldKeys();
+  let filled = 0;
+  document.querySelectorAll('[data-key]').forEach(el => {
+    if (el.type === 'checkbox') { if (el.checked) filled++; }
+    else if (el.type === 'radio') { if (el.checked) filled++; }
+    else if (el.value && el.value.trim().length > 0) filled++;
+  });
+  const pct = keys.length ? Math.round((filled / keys.length) * 100) : 0;
+  document.getElementById('progfill').style.width = pct + '%';
+  document.getElementById('progpct').textContent = pct + '%';
+}
+
+let firstEntry = false;
+document.querySelectorAll('[data-key], input[type=radio], input[type=checkbox]').forEach(el => {
+  el.addEventListener('input', () => { if (!firstEntry) { firstEntry = true; DataService._syncProgress('in-progress'); } updateProgress(); });
+  el.addEventListener('change', () => { updateProgress(); DataService.save(); });
+});
+let saveTimer;
+document.querySelectorAll('textarea, input[type=text]').forEach(el => {
+  el.addEventListener('input', () => { clearTimeout(saveTimer); saveTimer = setTimeout(() => DataService.save(), 900); });
+});
+
+function checkRecap() {
+  const groups = ['rc1', 'rc2', 'rc3'];
+  let correct = 0;
+  groups.forEach(g => { const sel = document.querySelector(`input[name="${g}"]:checked`); if (sel && sel.value === 'correct') correct++; });
+  const fb = document.getElementById('recap-feedback');
+  fb.classList.add('show');
+  if (correct === 3) { fb.className = 'feedback show correct'; fb.textContent = '✓ All three correct — nice recall!'; }
+  else { fb.className = 'feedback show incorrect'; fb.textContent = `${correct}/3 correct — check the ones you missed, then re-check.`; }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('eduportal_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+if (localStorage.getItem('eduportal_theme') === 'light') document.body.classList.add('light');
+
+window.addEventListener('load', () => { DataService.autoLoad(); updateProgress(); });
+</script>
+</body>
+</html>

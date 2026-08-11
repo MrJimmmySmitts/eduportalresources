@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L4 &mdash; Security Controls | Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dark-bg:#0D1117; --light-bg:#FFFFFF;
+  --blue:#4361EE; --green:#10B981; --amber:#F59E0B; --purple:#8B5CF6; --red:#EF4444;
+  --bg:#0D1117; --panel:#161B22; --panel-2:#1C2331; --border:#2A3241;
+  --text:#E6EDF3; --text-muted:#8B98A9; --input-bg:#0D1117;
+  --font-head:'DM Serif Display', serif; --font-body:'DM Sans', sans-serif;
+  --font-read:'Atkinson Hyperlegible', sans-serif; --font-mono:'DM Mono', monospace;
+}
+html.light-mode{
+  --bg:#FFFFFF; --panel:#F7F8FC; --panel-2:#EEF1F7; --border:#DDE3ED;
+  --text:#1F2328; --text-muted:#57606A; --input-bg:#FFFFFF;
+}
+*{box-sizing:border-box;}
+body{margin:0; background:var(--bg); color:var(--text); font-family:var(--font-body); transition:background .2s,color .2s;}
+a{color:var(--blue);}
+.wrap{max-width:920px; margin:0 auto; padding:0 20px 80px;}
+
+.topbar{position:sticky; top:0; z-index:50; background:var(--panel); border-bottom:1px solid var(--border); backdrop-filter:blur(6px);}
+.topbar-inner{max-width:920px; margin:0 auto; padding:10px 20px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+.progress-track{flex:1 1 200px; height:10px; background:var(--panel-2); border-radius:6px; overflow:hidden; border:1px solid var(--border); min-width:140px;}
+.progress-fill{height:100%; width:0%; background:linear-gradient(90deg,var(--blue),var(--green)); transition:width .3s;}
+.progress-label{font-family:var(--font-mono); font-size:12px; color:var(--text-muted); white-space:nowrap;}
+.topbar-btn{font-family:var(--font-body); font-size:13px; font-weight:600; padding:7px 14px; border-radius:8px; border:1px solid var(--border); background:var(--panel-2); color:var(--text); cursor:pointer;}
+.topbar-btn:hover{border-color:var(--blue);}
+.topbar-status{font-size:12px; color:var(--text-muted); font-family:var(--font-mono);}
+
+.cover{padding:44px 0 28px; border-bottom:1px solid var(--border); margin-bottom:32px;}
+.eyebrow{font-family:var(--font-mono); font-size:12px; letter-spacing:1.5px; color:var(--blue); text-transform:uppercase; margin-bottom:10px;}
+.cover h1{font-family:var(--font-head); font-size:36px; margin:0 0 10px; line-height:1.15;}
+.cover .sub{color:var(--text-muted); font-size:16px; margin-bottom:24px; max-width:680px;}
+.info-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+.info-field label{display:block; font-size:11px; text-transform:uppercase; letter-spacing:0.6px; color:var(--text-muted); margin-bottom:5px; font-family:var(--font-mono);}
+.info-field input{width:100%; padding:9px 10px; background:var(--input-bg); border:1px solid var(--border); border-radius:6px; color:var(--text); font-family:var(--font-body); font-size:14px;}
+
+.section{margin-bottom:40px;}
+.section-band{display:flex; align-items:center; gap:14px; margin-bottom:16px;}
+.sn{width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:15px; flex-shrink:0;}
+.slbl{font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted);}
+.stit{font-family:var(--font-head); font-size:22px; margin:2px 0 0;}
+.badge{margin-left:auto; font-size:11px; font-weight:700; padding:5px 11px; border-radius:20px; color:#fff; white-space:nowrap;}
+
+.reading{font-family:var(--font-read); color:var(--text-muted); font-size:15px; margin:0 0 18px 48px;}
+.site-link{margin:0 0 18px 48px; font-size:13.5px;}
+
+.callout{border-radius:10px; padding:16px 18px; margin:0 0 18px 48px; font-family:var(--font-read); font-size:15px; line-height:1.55; border:1px solid;}
+.callout-info{background:rgba(67,97,238,.08); border-color:var(--blue);}
+.callout-tip{background:rgba(16,185,129,.08); border-color:var(--green);}
+.callout-note{background:rgba(245,158,11,.08); border-color:var(--amber);}
+.callout-extend{background:rgba(139,92,246,.08); border-color:var(--purple);}
+.callout-title{font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:6px; font-family:var(--font-body);}
+
+.task-block{margin:0 0 20px 48px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:10px;}
+.task-label{font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; color:var(--text-muted); margin-bottom:10px;}
+.question{font-family:var(--font-read); font-size:16px; margin:0 0 12px; line-height:1.5;}
+.field-label{display:block; font-size:12.5px; color:var(--text-muted); margin-bottom:6px; font-family:var(--font-body);}
+textarea, select{width:100%; padding:11px 12px; background:var(--input-bg); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:var(--font-read); font-size:15px; resize:vertical;}
+textarea:focus, select:focus, input:focus{outline:2px solid var(--blue); outline-offset:1px;}
+.pair{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:10px;}
+.match-row{display:flex; align-items:center; gap:12px; padding:9px 0; border-bottom:1px dashed var(--border);}
+.match-row:last-child{border-bottom:none;}
+.match-row .stmt{flex:1; font-family:var(--font-read); font-size:14.5px;}
+.match-row select{width:220px; flex-shrink:0;}
+
+.tier-tag{display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:20px; margin-bottom:10px;}
+.tier-foundation{background:rgba(16,185,129,.12); color:var(--green);}
+.tier-developing{background:rgba(245,158,11,.12); color:var(--amber);}
+.tier-extending{background:rgba(139,92,246,.12); color:var(--purple);}
+
+.criteria-card{margin:0 0 12px 48px; padding:14px 18px; border-radius:10px; border:1px solid var(--border); background:var(--panel); display:flex; gap:12px; align-items:flex-start;}
+.criteria-card input[type=checkbox]{margin-top:3px; width:18px; height:18px; flex-shrink:0; accent-color:var(--blue);}
+.criteria-card .ct{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:4px;}
+.criteria-card p{margin:0; font-family:var(--font-read); font-size:14.5px; line-height:1.5;}
+
+.exit-ticket{margin:0 0 16px 48px; padding:18px 20px; background:rgba(239,68,68,.06); border:1px solid var(--red); border-radius:10px;}
+
+.section-submit{margin:0 0 8px 48px; display:flex; align-items:center; gap:12px;}
+.btn{font-family:var(--font-body); font-size:13.5px; font-weight:700; padding:9px 18px; border-radius:8px; border:none; cursor:pointer;}
+.btn.primary{background:var(--blue); color:#fff;}
+.btn.primary:hover{background:#3651d4;}
+.hint{font-size:12.5px; color:var(--text-muted); font-family:var(--font-mono);}
+.next-lesson{margin-top:48px; padding:20px 24px; border:1px dashed var(--border); border-radius:10px; text-align:center; color:var(--text-muted); font-size:14px;}
+.next-lesson a{font-weight:600;}
+footer.credits{text-align:center; color:var(--text-muted); font-size:12px; margin-top:32px; font-family:var(--font-mono);}
+@media (max-width:640px){
+  .info-grid{grid-template-columns:1fr 1fr;}
+  .pair{grid-template-columns:1fr;}
+  .match-row{flex-direction:column; align-items:stretch;}
+  .match-row select{width:100%;}
+  .reading,.callout,.task-block,.criteria-card,.exit-ticket,.section-submit,.site-link{margin-left:0;}
+}
+
+.mini-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+.scenario{margin:0 0 18px 48px; padding:18px 20px; background:var(--panel-2); border:1px solid var(--border); border-left:3px solid var(--purple); border-radius:10px; font-family:var(--font-read); font-size:15px; line-height:1.6;}
+.scenario h4{margin:0 0 8px; font-family:var(--font-head); font-size:18px;}
+.qnum{font-family:var(--font-mono); font-size:12px; color:var(--text-muted); margin-right:6px;}
+@media (max-width:640px){ .mini-grid{grid-template-columns:1fr;} .scenario{margin-left:0;} }
+</style>
+
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="progress-label" id="progress-pct">0% complete</span>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <span class="topbar-status" id="save-status">Not saved yet</span>
+    <button class="topbar-btn" id="btn-load">Load</button>
+    <button class="topbar-btn" id="btn-save">Save</button>
+    <button class="topbar-btn" id="btn-export">Export / Print</button>
+    <button class="topbar-btn" id="btn-theme">&#9728; / &#127769;</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="cover">
+    <div class="eyebrow">VCE Software Development · Unit 4 · Area of Study 2 · Victorian Curriculum</div>
+    <h1>Lesson 4 — Security Controls:<br>Protecting Development &amp; Data</h1>
+    <p class="sub">Version control and code repositories, robust identity and access management, encryption, code review, regular updates and patches, and separated development, testing and production environments.</p>
+    <div class="info-grid">
+      <div class="info-field"><label for="f-name">Name</label><input type="text" id="f-name" placeholder="Your name"></div>
+      <div class="info-field"><label for="f-class">Class</label><input type="text" id="f-class" placeholder="e.g. 12SDA"></div>
+      <div class="info-field"><label for="f-date">Date</label><input type="text" id="f-date" placeholder="YYYY-MM-DD"></div>
+      <div class="info-field"><label for="f-teacher">Teacher</label><input type="text" id="f-teacher" placeholder="Teacher name"></div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 1: Objective & Success Criteria ============ -->
+  <section class="section" id="sec-1">
+    <div class="section-band">
+      <div class="sn" style="background:var(--blue)">1</div>
+      <div><div class="slbl">Learning Objective</div><div class="stit">Where you're headed today</div></div>
+    </div>
+    <p class="reading">To describe the six security controls used to protect software development practices and data, and to explain what each control protects against and where its limits are.</p>
+
+    <div class="criteria-card">
+      <input type="checkbox" class="track-field" id="sc-foundation">
+      <div><div class="ct" style="color:var(--green)">🟢 Foundation</div>
+      <p>I can name all six security controls and state, for each one, what it does and one vulnerability it addresses.</p></div>
+    </div>
+    <div class="criteria-card">
+      <input type="checkbox" class="track-field" id="sc-developing">
+      <div><div class="ct" style="color:var(--amber)">🟡 Developing</div>
+      <p>I can explain how a given control works in practice, and evaluate one limitation — something it cannot protect against.</p></div>
+    </div>
+    <div class="criteria-card">
+      <input type="checkbox" class="track-field" id="sc-extending">
+      <div><div class="ct" style="color:var(--purple)">🟣 Extending</div>
+      <p>I can analyse an organisation's practices, identify which controls are missing, and justify a prioritised set of recommendations.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 2: Explicit Explanation (copy prompts) ============ -->
+  <section class="section" id="sec-2">
+    <div class="section-band">
+      <div class="sn" style="background:var(--blue)">2</div>
+      <div><div class="slbl">Explicit Explanation</div><div class="stit">Notes from the lesson</div></div>
+    </div>
+    <p class="site-link">📖 Full notes on this topic: <a href="U4_CyberSecuritySoftwareDev_site.html#y12-sd-u4-l4-security-controls" target="_blank">See the unit site, Lesson 4 →</a></p>
+
+    <div class="callout callout-info">
+      <div class="callout-title">Before you start</div>
+      <p>Work from the paper notes you took during the explicit teaching, not from the slides on screen. If a field asks for something you did not write down, that is worth noticing — flag it and check the unit site before the SAC.</p>
+    </div>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — what a security control is (Slide 4)</div>
+      <p>Record the three ways a control can work, with one example of each from your notes.</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="l4-t0">Preventive / detective / corrective</label>
+      <textarea id="l4-t0" class="track-field" rows="4" placeholder="Which of the three does each control on today's list belong to? Some belong to more than one."></textarea>
+    </div>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — version control and code repositories (Slides 5–6)</div>
+      <p>Note what version control does, and the four access roles a repository assigns.</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="l4-t1">Your notes</label>
+      <textarea id="l4-t1" class="track-field" rows="4" placeholder="What stops unfinished code entering the project, and what makes the history useful after an incident?"></textarea>
+    </div>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — robust identity and access management (Slide 8)</div>
+      <p>Note the ACSC credential guidance, and the two situations where multi-factor authentication is required.</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="l4-t2">Your notes</label>
+      <textarea id="l4-t2" class="track-field" rows="4" placeholder="Split your notes in two: which parts are about proving identity, and which are about limiting access?"></textarea>
+    </div>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — encryption (Slide 10)</div>
+      <p>Note the assumption encryption is built on, and the difference between data in transit and data at rest.</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="l4-t3">Your notes</label>
+      <textarea id="l4-t3" class="track-field" rows="3" placeholder="What does encryption assume has already happened? Why does that change what it can do?"></textarea>
+    </div>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — code review (Slide 12)</div>
+      <p>Note what makes a code review effective. In Lesson 3 the same activity was a vulnerability — record what separates the two.</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="l4-t4">Your notes</label>
+      <textarea id="l4-t4" class="track-field" rows="3" placeholder="If you watched two teams review code, what would you actually see the effective one doing differently?"></textarea>
+    </div>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — regular updates and patches (Slides 13–14)</div>
+      <p>Note how responsibility is split between the software company and the operator, plus the key facts of the WannaCry case.</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="l4-t5">Your notes</label>
+      <textarea id="l4-t5" class="track-field" rows="4" placeholder="Who was obliged to do what, and which of those obligations was actually met?"></textarea>
+    </div>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — separated environments (Slide 15)</div>
+      <p>Note what separation prevents, and how a testing environment can be realistic without holding real data.</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="l4-t6">Your notes</label>
+      <textarea id="l4-t6" class="track-field" rows="3" placeholder="What exactly is being kept apart, and what would a tester lose if you took the real data away?"></textarea>
+    </div>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — the synthesis table (Slide 16)</div>
+      <p>Copy the table into your notes. For each control, record the vulnerabilities from Lessons 2 and 3 that it addresses.</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="l4-t7">Control → vulnerabilities it addresses</label>
+      <textarea id="l4-t7" class="track-field" rows="6" placeholder="One control per line. Then look across your six lines — which vulnerabilities appear more than once, and which appear only once?"></textarea>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 3: Application of Learning ============ -->
+  <section class="section" id="sec-3">
+    <div class="section-band">
+      <div class="sn" style="background:var(--green)">3</div>
+      <div><div class="slbl">Application of Learning</div><div class="stit">Your turn</div></div>
+      <span class="badge" style="background:var(--green)">On devices</span>
+    </div>
+
+    <div class="callout callout-tip">
+      <div class="callout-title">How to work through this section</div>
+      <p>Start at Foundation and work down. If you finish a tier, keep going into the next one — you are not limited to a single tier, and the Extending case is worth attempting even if you do not finish it.</p>
+    </div>
+
+    <!-- ── Foundation 1: control → definition ── -->
+    <div class="task-block">
+      <span class="tier-tag tier-foundation">🟢 Foundation</span>
+      <p class="question">Task 1 — Match each security control to what it does.</p>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">1.1</span> Records every change so the team can roll back, and gates what is allowed into the project</span>
+        <select class="track-field" id="c-1"><option value="">Choose...</option><option>Version control and code repositories</option><option>Robust identity and access management</option><option>Encryption</option><option>Code review</option><option>Regular updates and patches</option><option>Separated development, testing and production environments</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">1.2</span> Ensures only authorised individuals can reach a given resource or system</span>
+        <select class="track-field" id="c-2"><option value="">Choose...</option><option>Version control and code repositories</option><option>Robust identity and access management</option><option>Encryption</option><option>Code review</option><option>Regular updates and patches</option><option>Separated development, testing and production environments</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">1.3</span> Encodes data so it is unintelligible to anyone not properly authorised and accredited</span>
+        <select class="track-field" id="c-3"><option value="">Choose...</option><option>Version control and code repositories</option><option>Robust identity and access management</option><option>Encryption</option><option>Code review</option><option>Regular updates and patches</option><option>Separated development, testing and production environments</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">1.4</span> Systematically examines source code to find and remove vulnerabilities before deployment</span>
+        <select class="track-field" id="c-4"><option value="">Choose...</option><option>Version control and code repositories</option><option>Robust identity and access management</option><option>Encryption</option><option>Code review</option><option>Regular updates and patches</option><option>Separated development, testing and production environments</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">1.5</span> Applies vendor-released fixes to known vulnerabilities in software already in use</span>
+        <select class="track-field" id="c-5"><option value="">Choose...</option><option>Version control and code repositories</option><option>Robust identity and access management</option><option>Encryption</option><option>Code review</option><option>Regular updates and patches</option><option>Separated development, testing and production environments</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">1.6</span> Isolates the stages of the PSM so untested code and real data never meet</span>
+        <select class="track-field" id="c-6"><option value="">Choose...</option><option>Version control and code repositories</option><option>Robust identity and access management</option><option>Encryption</option><option>Code review</option><option>Regular updates and patches</option><option>Separated development, testing and production environments</option></select>
+      </div>
+    </div>
+
+    <!-- ── Foundation 2: vulnerability → control ── -->
+    <div class="task-block">
+      <span class="tier-tag tier-foundation">🟢 Foundation</span>
+      <p class="question">Task 2 — For each vulnerability from Lessons 2 and 3, choose the control that most directly addresses it.</p>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">2.1</span> Unpatched software</span>
+        <select class="track-field" id="v-1"><option value="">Choose...</option><option>Version control and code repositories</option><option>Robust identity and access management</option><option>Encryption</option><option>Code review</option><option>Regular updates and patches</option><option>Separated environments</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">2.2</span> Man-in-the-middle attacks</span>
+        <select class="track-field" id="v-2"><option value="">Choose...</option><option>Version control and code repositories</option><option>Robust identity and access management</option><option>Encryption</option><option>Code review</option><option>Regular updates and patches</option><option>Separated environments</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">2.3</span> Poor identity and access management practices</span>
+        <select class="track-field" id="v-3"><option value="">Choose...</option><option>Version control and code repositories</option><option>Robust identity and access management</option><option>Encryption</option><option>Code review</option><option>Regular updates and patches</option><option>Separated environments</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">2.4</span> Combined development, testing and production environments</span>
+        <select class="track-field" id="v-4"><option value="">Choose...</option><option>Version control and code repositories</option><option>Robust identity and access management</option><option>Encryption</option><option>Code review</option><option>Regular updates and patches</option><option>Separated environments</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">2.5</span> Ineffective code review practices</span>
+        <select class="track-field" id="v-5"><option value="">Choose...</option><option>Version control and code repositories</option><option>Robust identity and access management</option><option>Encryption</option><option>Code review</option><option>Regular updates and patches</option><option>Separated environments</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">2.6</span> A rushed developer pushing an untested temporary fix straight into the shared codebase</span>
+        <select class="track-field" id="v-6"><option value="">Choose...</option><option>Version control and code repositories</option><option>Robust identity and access management</option><option>Encryption</option><option>Code review</option><option>Regular updates and patches</option><option>Separated environments</option></select>
+      </div>
+    </div>
+
+    <!-- ── Foundation 3: classification ── -->
+    <div class="task-block">
+      <span class="tier-tag tier-foundation">🟢 Foundation</span>
+      <p class="question">Task 3 — Classify each control by how it works. Some controls do more than one job; choose the one that best describes its main purpose.</p>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">3.1</span> Encryption</span>
+        <select class="track-field" id="k-1"><option value="">Choose...</option><option>Preventive</option><option>Detective</option><option>Corrective</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">3.2</span> Regular updates and patches</span>
+        <select class="track-field" id="k-2"><option value="">Choose...</option><option>Preventive</option><option>Detective</option><option>Corrective</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">3.3</span> Monitoring for unusual account activity or suspicious logins</span>
+        <select class="track-field" id="k-3"><option value="">Choose...</option><option>Preventive</option><option>Detective</option><option>Corrective</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">3.4</span> Rolling a repository back to the last known good version after a bad merge</span>
+        <select class="track-field" id="k-4"><option value="">Choose...</option><option>Preventive</option><option>Detective</option><option>Corrective</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">3.5</span> Requiring multi-factor authentication for all remote access</span>
+        <select class="track-field" id="k-5"><option value="">Choose...</option><option>Preventive</option><option>Detective</option><option>Corrective</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt"><span class="qnum">3.6</span> An audit trail showing which developer committed which change, and when</span>
+        <select class="track-field" id="k-6"><option value="">Choose...</option><option>Preventive</option><option>Detective</option><option>Corrective</option></select>
+      </div>
+    </div>
+
+    <!-- ── Foundation 4: short definitions ── -->
+    <div class="task-block">
+      <span class="tier-tag tier-foundation">🟢 Foundation</span>
+      <p class="question">Task 4 — In your own words, and without copying from the unit site.</p>
+      <label class="field-label" for="f-q1">4.1 What are the four access roles a code repository can assign?</label>
+      <textarea id="f-q1" class="track-field" rows="2" placeholder="From your notes on Slide 5."></textarea>
+      <label class="field-label" for="f-q2" style="margin-top:10px;">4.2 Whose responsibility is it to install a patch once the vendor has released it? Explain in one sentence why that matters.</label>
+      <textarea id="f-q2" class="track-field" rows="2" placeholder="Say who, then say what follows from that."></textarea>
+      <label class="field-label" for="f-q3" style="margin-top:10px;">4.3 Give one example of data in transit and one example of data at rest.</label>
+      <textarea id="f-q3" class="track-field" rows="2" placeholder="Use examples from your own life rather than the ones on the slide."></textarea>
+      <label class="field-label" for="f-q4" style="margin-top:10px;">4.4 Which control appears in the study design as both a vulnerability and a control, depending on how well it is done?</label>
+      <textarea id="f-q4" class="track-field" rows="2" placeholder="Name it, then say in a few words what makes the difference between the two versions."></textarea>
+    </div>
+
+    <!-- ── Developing 1 ── -->
+    <div class="task-block">
+      <span class="tier-tag tier-developing">🟡 Developing</span>
+      <p class="question">Task 5 — Choose a control and work it through properly.</p>
+      <label class="field-label" for="d1-which">Control chosen</label>
+      <select id="d1-which" class="track-field"><option value="">Choose...</option><option>Version control and code repositories</option><option>Robust identity and access management</option><option>Encryption</option><option>Code review</option><option>Regular updates and patches</option><option>Separated development, testing and production environments</option></select>
+      <label class="field-label" for="d1-how" style="margin-top:10px;">5.1 How does it work in practice? Describe what an organisation actually does, day to day.</label>
+      <textarea id="d1-how" class="track-field" rows="4" placeholder="Describe actions and decisions, not the definition. What would you see if you sat in that office for a week?"></textarea>
+      <label class="field-label" for="d1-limit" style="margin-top:10px;">5.2 Evaluate one limitation — something this control cannot protect against, and why not.</label>
+      <textarea id="d1-limit" class="track-field" rows="4" placeholder="A cost or an inconvenience is not a limitation. Name a kind of attack this control cannot see, and explain what makes it invisible."></textarea>
+      <label class="field-label" for="d1-pair" style="margin-top:10px;">5.3 Which other control would you pair with it to cover that gap? Justify the pairing.</label>
+      <textarea id="d1-pair" class="track-field" rows="3" placeholder="Your justification should refer back to the specific gap you named in 5.2."></textarea>
+    </div>
+
+    <!-- ── Developing 2 ── -->
+    <div class="task-block">
+      <span class="tier-tag tier-developing">🟡 Developing</span>
+      <p class="question">Task 6 — Now do the same for a second, different control.</p>
+      <label class="field-label" for="d2-which">Control chosen</label>
+      <select id="d2-which" class="track-field"><option value="">Choose...</option><option>Version control and code repositories</option><option>Robust identity and access management</option><option>Encryption</option><option>Code review</option><option>Regular updates and patches</option><option>Separated development, testing and production environments</option></select>
+      <label class="field-label" for="d2-how" style="margin-top:10px;">6.1 How does it work in practice?</label>
+      <textarea id="d2-how" class="track-field" rows="4" placeholder="Same standard as 5.1 — what happens, and who does it?"></textarea>
+      <label class="field-label" for="d2-limit" style="margin-top:10px;">6.2 Evaluate one limitation.</label>
+      <textarea id="d2-limit" class="track-field" rows="4" placeholder="Check your answer against 5.2 — if the two limitations are the same, you have described a general weakness rather than one specific to this control."></textarea>
+    </div>
+
+    <!-- ── Developing 3: applied short answers ── -->
+    <div class="task-block">
+      <span class="tier-tag tier-developing">🟡 Developing</span>
+      <p class="question">Task 7 — Applied questions. One short paragraph each.</p>
+      <label class="field-label" for="d3-q1">7.1 Microsoft released the WannaCry patch in March; the damage was done in May. Explain where the control failed, and who carried the legal exposure.</label>
+      <textarea id="d3-q1" class="track-field" rows="3" placeholder="Deal with the vendor and the operator separately before you decide."></textarea>
+      <label class="field-label" for="d3-q2" style="margin-top:10px;">7.2 A company encrypts its customer database. An employee with legitimate access then copies 6,000 records to a personal cloud drive. Explain why encryption did not help, and name the control that would have.</label>
+      <textarea id="d3-q2" class="track-field" rows="3" placeholder="Think about what the system believes about that employee at the moment of access."></textarea>
+      <label class="field-label" for="d3-q3" style="margin-top:10px;">7.3 A tester says: "I need the live customer data — synthetic data isn't realistic enough." Respond to that argument.</label>
+      <textarea id="d3-q3" class="track-field" rows="3" placeholder="Take the objection seriously — what is the tester genuinely losing, and is there a way to give it back to them?"></textarea>
+      <label class="field-label" for="d3-q4" style="margin-top:10px;">7.4 Version control keeps a full history of every change. Explain one way that history helps security, and one way it can create a new risk.</label>
+      <textarea id="d3-q4" class="track-field" rows="3" placeholder="For the risk half: what does 'permanent record of everything ever committed' mean if something sensitive was committed once?"></textarea>
+    </div>
+
+    <!-- ── Extending ── -->
+    <div class="scenario">
+      <h4>Case study — Northbridge Rail Systems</h4>
+      <p>Northbridge Rail Systems has 60 staff and builds scheduling software used by three regional rail operators. Its current practices are as follows.</p>
+      <p>Developers work directly on a single shared server, which also runs the live scheduling system the three operators depend on. That server holds real passenger contact details, and developers use those records as test data because, as one put it, "it's more realistic than making stuff up". Source files are shared through a network drive using dated folder names such as <em>scheduler_v4_final_fixed</em>; any developer can copy files from that drive onto the live server. Two senior developers hold the administrator password for the live server, and it is written on a whiteboard in the development room so nobody gets locked out. The server's operating system was last updated in 2021, because a restart would interrupt scheduling for the operators. Changes are checked over by whoever happens to be free before a release; last month a release went out with no check at all, because the deadline had moved forward. Passenger contact details are stored in the database as plain text. All staff sign in with a username and password only.</p>
+    </div>
+
+    <div class="task-block">
+      <span class="tier-tag tier-extending">🟣 Extending</span>
+      <p class="question">Task 8 — Analyse Northbridge Rail Systems using the case study above.</p>
+      <label class="field-label" for="e-missing">8.1 Identify the security controls that are missing or ineffective. For each one, quote or paraphrase the specific detail in the case that is your evidence.</label>
+      <textarea id="e-missing" class="track-field" rows="7" placeholder="Work through the case sentence by sentence rather than working down the list of six controls — that way you will notice details that map to more than one."></textarea>
+      <label class="field-label" for="e-worst" style="margin-top:10px;">8.2 Which single practice here would cause the most damage if exploited? Justify your choice against the alternatives you rejected.</label>
+      <textarea id="e-worst" class="track-field" rows="4" placeholder="A justification has to explain why the others are less serious, not only why yours is serious."></textarea>
+      <label class="field-label" for="e-rec1" style="margin-top:10px;">8.3 Recommendation 1 (highest priority) — state the control, what Northbridge should do, and why this one comes first.</label>
+      <textarea id="e-rec1" class="track-field" rows="3" placeholder="Name the control, then the action, then the reason it outranks your other two."></textarea>
+      <label class="field-label" for="e-rec2" style="margin-top:10px;">8.4 Recommendation 2</label>
+      <textarea id="e-rec2" class="track-field" rows="3" placeholder="Same three parts: control, action, reason for its position."></textarea>
+      <label class="field-label" for="e-rec3" style="margin-top:10px;">8.5 Recommendation 3</label>
+      <textarea id="e-rec3" class="track-field" rows="3" placeholder="Same three parts: control, action, reason for its position."></textarea>
+      <label class="field-label" for="e-obstacle" style="margin-top:10px;">8.6 The case gives a reason why the server has not been updated since 2021. Northbridge will give you that reason back when you recommend patching. How do you answer it?</label>
+      <textarea id="e-obstacle" class="track-field" rows="3" placeholder="The objection is a real operational constraint, not an excuse. Which of the other five controls makes it easier to solve?"></textarea>
+    </div>
+
+    <div class="callout callout-extend">
+      <div class="callout-title">🟣 If you finish early</div>
+      <p>Northbridge's board will only fund three of your recommendations. Which one do you drop, and what is the single sentence you would use to tell the board what risk they are choosing to keep?</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="e-board">Your sentence to the board</label>
+      <textarea id="e-board" class="track-field" rows="2" placeholder="One sentence. Written for people who do not work in software."></textarea>
+    </div>
+
+    <div class="section-submit">
+      <button class="btn primary" data-submit-section>Mark Section 3 complete</button>
+      <span class="hint" data-submit-status></span>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 4: Responsive Teaching ============ -->
+  <section class="section" id="sec-4">
+    <div class="section-band">
+      <div class="sn" style="background:var(--purple)">4</div>
+      <div><div class="slbl">Responsive Teaching</div><div class="stit">Check your understanding</div></div>
+    </div>
+    <div class="task-block">
+      <div class="task-label">💬 Recap — try this from memory before checking Section 2</div>
+      <label class="field-label" for="rt-1">Name a control and the vulnerability it addresses. Then answer the follow-up: what does that control <em>not</em> protect against?</label>
+      <textarea id="rt-1" class="track-field" rows="4" placeholder="Do the second half without looking back. If you cannot, that is the topic to revisit on the unit site."></textarea>
+      <label class="field-label" for="rt-2" style="margin-top:10px;">Across the six controls, five are mainly preventive and only some are detective. What does that imbalance mean for an organisation that relies on this set alone?</label>
+      <textarea id="rt-2" class="track-field" rows="3" placeholder="Think about what happens after a control fails — how would anyone find out?"></textarea>
+    </div>
+    <div class="criteria-card">
+      <input type="checkbox" class="track-field" id="rt-checklist">
+      <div><div class="ct">Outcome 2 checklist</div>
+      <p>I can name all six security controls, explain what each protects against, and state one limitation of at least two of them. Key knowledge 4.2.4 is now complete.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 5: Exit Ticket ============ -->
+  <section class="section" id="sec-5">
+    <div class="section-band">
+      <div class="sn" style="background:var(--red)">5</div>
+      <div><div class="slbl">Next Steps</div><div class="stit">Exit ticket</div></div>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket — complete individually and silently</div>
+      <label class="field-label" for="et-1">1. Name three of the six security controls. For each, state one vulnerability it addresses.</label>
+      <textarea id="et-1" class="track-field" rows="3"></textarea>
+      <label class="field-label" for="et-2" style="margin-top:10px;">2. Choose one control and explain one thing it cannot protect against, and why.</label>
+      <textarea id="et-2" class="track-field" rows="3"></textarea>
+      <label class="field-label" for="et-3" style="margin-top:10px;">3. Encryption and code review both reduce risk, but in different ways. Which one assumes the attacker has already got in? Explain your choice.</label>
+      <textarea id="et-3" class="track-field" rows="3"></textarea>
+      <label class="field-label" for="et-4" style="margin-top:10px;">4. Self-rate: which success-criteria tier did you reach today?</label>
+      <select id="et-4" class="track-field">
+        <option value="">Choose...</option>
+        <option>🟢 Foundation</option>
+        <option>🟡 Developing</option>
+        <option>🟣 Extending</option>
+      </select>
+    </div>
+    <div class="section-submit">
+      <button class="btn primary" id="btn-submit-workbook">Submit workbook</button>
+      <span class="hint" id="submit-status"></span>
+    </div>
+
+    <div class="next-lesson">
+      Next lesson: <a href="L5_ThreatModelling_workbook.html">L5 — Threat Modelling</a><br>
+      Homework: return to the organisation in your L1 article — which of the six controls was missing or ineffective? Write three sentences naming the control and the evidence for your claim.
+    </div>
+  </section>
+
+</div>
+
+<footer class="credits">EduPortal · VCE Software Development · Unit 4 · Area of Study 2 · y12-sd-u4-l4-security-controls</footer>
+
+<script>
+(function(){
+  const LESSON_ID = 'y12-sd-u4-l4-security-controls';
+  const UNIT_ID = 'y12-sd-u4';
+
+  const DataService = {
+    studentId() {
+      return JSON.parse(localStorage.getItem('eduportal_session') || '{}').id || 'current_student';
+    },
+    _key() { return `eduportal_workbook_${this.studentId()}_${LESSON_ID}`; },
+    _progressKey() { return `eduportal_progress_${this.studentId()}_${LESSON_ID}`; },
+    collect() {
+      const data = {};
+      document.querySelectorAll('.track-field').forEach(el => {
+        if (el.type === 'checkbox') data[el.id] = el.checked;
+        else data[el.id] = el.value;
+      });
+      return data;
+    },
+    apply(data) {
+      if (!data) return;
+      Object.keys(data).forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.type === 'checkbox') el.checked = !!data[id];
+        else el.value = data[id];
+      });
+    },
+    save() {
+      const payload = { lessonId: LESSON_ID, unitId: UNIT_ID, savedAt: new Date().toISOString(), fields: this.collect() };
+      localStorage.setItem(this._key(), JSON.stringify(payload));
+      return payload;
+    },
+    load() {
+      const raw = localStorage.getItem(this._key());
+      if (!raw) return null;
+      try { return JSON.parse(raw); } catch (e) { return null; }
+    },
+    autoSave: debounce(function () { DataService.save(); updateSaveStatus('Auto-saved ' + nowTime()); }, 1500),
+    autoLoad() {
+      const data = this.load();
+      if (data && data.fields) { this.apply(data.fields); updateSaveStatus('Loaded from last save'); }
+    },
+    submit() {
+      this.save();
+      this._syncProgress('submitted');
+    },
+    _syncProgress(status) {
+      localStorage.setItem(this._progressKey(), JSON.stringify({ lessonId: LESSON_ID, status, updatedAt: new Date().toISOString() }));
+    }
+  };
+
+  function debounce(fn, wait) {
+    let t;
+    return function (...args) { clearTimeout(t); t = setTimeout(() => fn.apply(this, args), wait); };
+  }
+  function nowTime() { return new Date().toISOString().slice(11, 16); }
+  function updateSaveStatus(text) { document.getElementById('save-status').textContent = text; }
+
+  function updateProgress() {
+    const fields = document.querySelectorAll('.track-field');
+    let filled = 0;
+    fields.forEach(el => {
+      if (el.type === 'checkbox') { if (el.checked) filled++; }
+      else if (el.value && el.value.trim().length > 0) filled++;
+    });
+    const pct = fields.length ? Math.round((filled / fields.length) * 100) : 0;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-pct').textContent = pct + '% complete';
+  }
+
+  let hasStartedProgress = false;
+  document.querySelectorAll('.track-field').forEach(el => {
+    const evt = (el.tagName === 'SELECT' || el.type === 'checkbox') ? 'change' : 'input';
+    el.addEventListener(evt, () => {
+      if (!hasStartedProgress) { DataService._syncProgress('in-progress'); hasStartedProgress = true; }
+      updateProgress();
+      DataService.autoSave();
+    });
+  });
+
+  document.querySelectorAll('[data-submit-section]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      DataService.save();
+      const statusEl = btn.parentElement.querySelector('[data-submit-status]');
+      if (statusEl) statusEl.textContent = 'Saved ' + nowTime();
+      updateProgress();
+    });
+  });
+
+  document.getElementById('btn-submit-workbook').addEventListener('click', () => {
+    DataService.submit();
+    document.getElementById('submit-status').textContent = 'Workbook submitted ' + nowTime();
+  });
+
+  document.getElementById('btn-save').addEventListener('click', () => {
+    DataService.save();
+    updateSaveStatus('Saved ' + nowTime());
+  });
+  document.getElementById('btn-load').addEventListener('click', () => {
+    DataService.autoLoad();
+    updateProgress();
+  });
+  document.getElementById('btn-export').addEventListener('click', () => window.print());
+
+  document.getElementById('btn-theme').addEventListener('click', () => {
+    document.documentElement.classList.toggle('light-mode');
+    localStorage.setItem('eduportal_theme_pref', document.documentElement.classList.contains('light-mode') ? 'light' : 'dark');
+  });
+  const savedTheme = localStorage.getItem('eduportal_theme_pref');
+  if (savedTheme === 'light') document.documentElement.classList.add('light-mode');
+
+  DataService.autoLoad();
+  updateProgress();
+})();
+</script>
+</body>
+</html>

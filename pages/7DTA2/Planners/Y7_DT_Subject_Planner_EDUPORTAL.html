@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y7 Digital Technology — Subject Planner · EduPortal</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0A0E14;--bg2:#111620;--bg3:#181E2C;--bg4:#202840;--bg5:#2A3452;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+  --text:#EEF0F8;--text2:#8A92B2;--text3:#5C6488;
+  --jade:#00D97E;--jade-bg:rgba(0,217,126,.12);
+  --cobalt:#2979FF;--cobalt-bg:rgba(41,121,255,.12);
+  --gold:#FFB830;--gold-bg:rgba(255,184,48,.12);
+  --coral:#FF4757;--coral-bg:rgba(255,71,87,.12);
+  --violet:#C678FF;--violet-bg:rgba(198,120,255,.12);
+  --amber:#FFB830;--amber-bg:rgba(255,184,48,.14);
+  --font:'Plus Jakarta Sans',sans-serif; --mono:'DM Mono',monospace;
+  --r:12px;--rsm:7px;--rpill:999px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15px;line-height:1.65;padding-bottom:80px;}
+.wrap{max-width:980px;margin:0 auto;padding:0 28px;}
+
+.suite-nav{background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+.suite-nav-inner{display:flex;gap:4px;overflow-x:auto;padding:10px 28px;max-width:980px;margin:0 auto;}
+.suite-nav a{font-family:var(--mono);font-size:11px;color:var(--text3);text-decoration:none;padding:6px 12px;border-radius:var(--rpill);white-space:nowrap;}
+.suite-nav a:hover{color:var(--text);background:var(--bg3);}
+.suite-nav a.current{color:var(--cobalt);background:var(--cobalt-bg);font-weight:700;}
+
+.cover{background:var(--bg2);border-bottom:1px solid var(--border);padding:56px 0 40px;margin-bottom:8px;}
+.cover .wrap{display:flex;flex-direction:column;gap:14px;}
+.eyebrow-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.chip{font-family:var(--mono);font-size:10.5px;font-weight:700;padding:4px 11px;border-radius:var(--rpill);letter-spacing:.06em;text-transform:uppercase;}
+.chip-cobalt{background:var(--cobalt-bg);color:var(--cobalt);border:1px solid rgba(41,121,255,.25);}
+.chip-grey{background:var(--bg4);color:var(--text2);border:1px solid var(--border2);}
+.chip-jade{background:var(--jade-bg);color:var(--jade);border:1px solid rgba(0,217,126,.25);}
+.cover h1{font-size:2rem;font-weight:800;letter-spacing:-.02em;}
+.cover .sub{color:var(--text2);font-size:15px;max-width:680px;}
+.cover .meta{font-family:var(--mono);font-size:11.5px;color:var(--text3);margin-top:6px;}
+
+.toc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;margin:28px 0;}
+.toc-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
+.toc ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;}
+.toc a{color:var(--text2);text-decoration:none;font-size:13.5px;}
+.toc a:hover{color:var(--cobalt);}
+
+.sband{display:flex;align-items:center;gap:13px;padding:10px 0;border-bottom:1px solid var(--border);margin:48px 0 20px;}
+.sband .sn{width:30px;height:30px;border-radius:50%;background:var(--bg4);color:var(--text);font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--border2);}
+.sband .slbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
+.sband .stit{font-size:20px;font-weight:800;letter-spacing:-.02em;}
+
+h3{font-size:16px;font-weight:700;margin:26px 0 10px;}
+h4{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin:18px 0 8px;}
+p{color:var(--text2);margin-bottom:12px;}
+code{font-family:var(--mono);font-size:.9em;background:var(--bg4);padding:1px 6px;border-radius:4px;color:var(--text);}
+strong{color:var(--text);font-weight:700;}
+ul.plain{margin:0 0 16px 20px;color:var(--text2);}
+ul.plain li{margin-bottom:6px;}
+a{color:var(--cobalt);}
+
+.callout{border-left:3px solid;border-radius:0 8px 8px 0;padding:13px 17px;margin:16px 0;font-size:13.5px;line-height:1.6;background:var(--bg2);}
+.callout-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:5px;font-weight:700;}
+.callout-info{border-color:var(--cobalt);} .callout-info .callout-label{color:var(--cobalt);}
+.callout-tip{border-color:var(--jade);}    .callout-tip .callout-label{color:var(--jade);}
+.callout-note{border-color:var(--gold);}   .callout-note .callout-label{color:var(--gold);}
+.callout-review{border-color:var(--amber);background:var(--amber-bg);} .callout-review .callout-label{color:var(--amber);}
+
+table{width:100%;border-collapse:collapse;margin:14px 0 20px;font-size:13px;}
+th{background:var(--bg3);color:var(--text2);font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;text-align:left;padding:9px 12px;border:1px solid var(--border);}
+td{padding:9px 12px;border:1px solid var(--border);color:var(--text2);vertical-align:top;}
+tr:nth-child(even) td{background:rgba(255,255,255,.015);}
+td.review, th.review{background:var(--amber-bg)!important;}
+td code{font-size:11.5px;}
+
+.status-pill{font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 9px;border-radius:var(--rpill);display:inline-block;white-space:nowrap;}
+.st-avail{background:var(--jade-bg);color:var(--jade);}
+.st-none{background:var(--bg4);color:var(--text3);}
+.st-review{background:var(--amber-bg);color:var(--amber);}
+
+.unit-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:20px 24px;margin:18px 0 22px;}
+.unit-card-hdr{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px;}
+.unit-card-hdr .wk{font-family:var(--mono);font-size:11px;color:var(--text3);}
+.unit-num{font-family:var(--mono);font-size:20px;font-weight:800;color:var(--cobalt);}
+
+.legend-row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;font-size:12.5px;color:var(--text2);margin:8px 0 4px;}
+.legend-row .sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;}
+
+footer{text-align:center;color:var(--text3);font-family:var(--mono);font-size:11px;padding:40px 0 10px;}
+</style>
+</head>
+<body>
+
+<nav class="suite-nav"><div class="suite-nav-inner">
+  <a href="#overview" class="current">Overview</a>
+  <a href="#unit1">Unit 1</a>
+  <a href="#unit2">Unit 2</a>
+  <a href="#unit3">Unit 3</a>
+  <a href="#unit4">Unit 4</a>
+  <a href="#unit5">Unit 5</a>
+  <a href="#timing">Timing Summary</a>
+  <a href="#review-log">Review Log</a>
+</div></nav>
+
+<div class="cover" id="overview">
+  <div class="wrap">
+    <div class="eyebrow-row">
+      <span class="chip chip-cobalt">EduPortal Subject Planner</span>
+      <span class="chip chip-grey">Digital Technology · Year 7</span>
+      <span class="chip chip-jade">Regenerated for course-planner upload</span>
+    </div>
+    <h1>Year 7 Digital Technology — Subject Planner</h1>
+    <p class="sub">The optional, teacher-authored course-level document a subject card can carry — one per subject, uploaded and replaced through the dashboard (<code>Subject.planner</code>, Document 02). This edition brings the original 2025 planner in line with the units actually running this year.</p>
+    <div class="meta">Revision 2 · Regenerated 17 Jul 2026 · Source: 2026_Y7_Digital_Technologies_Unit_Planner.docx</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="callout callout-review">
+    <div class="callout-label">⚑ For Review</div>
+    This edition corrects a document-wide spelling corruption from the original file, removes the Digital Data unit (deliberately deferred), renumbers CAT assessments, fills in content that was blank in the original, and — in this latest pass — inserts a new Unit 3: Robotics between Game Programming and 3D Modelling and reallocates weeks across all five units so the full 18 weeks are scheduled with no unscheduled buffer. Every changed section below carries a <span class="status-pill st-review">FOR REVIEW</span> badge. The full list of changes, with reasons, is in the <a href="#review-log">Review Log</a> at the end — please read it before treating this as the planner of record.
+  </div>
+
+  <div class="toc">
+    <div class="toc-label">On this page</div>
+    <ul>
+      <li><a href="#achievement">Achievement Standard</a></li>
+      <li><a href="#knowledge">Key Knowledge &amp; Key Skills</a></li>
+      <li><a href="#assessment">Assessment Overview</a></li>
+      <li><a href="#schedule">Term Schedule</a></li>
+      <li><a href="#unit1">Unit 1 — Digital Citizenship</a></li>
+      <li><a href="#unit2">Unit 2 — Game Programming</a></li>
+      <li><a href="#unit3">Unit 3 — Robotics</a></li>
+      <li><a href="#unit4">Unit 4 — 3D Modelling</a></li>
+      <li><a href="#unit5">Unit 5 — The Internet</a></li>
+      <li><a href="#timing">Timing Summary</a></li>
+      <li><a href="#review-log">Review Log</a></li>
+    </ul>
+  </div>
+
+  <h4 id="achievement">Victorian Curriculum Achievement Standard</h4>
+  <div class="unit-card">
+    <p><strong>By the end of Level 8</strong>, students select appropriate hardware for particular tasks. They explain how data is transmitted and secured in networks. Students identify and describe cyber security threats.</p>
+    <p>Students represent data using integers and binary. They acquire, manipulate and validate data using spreadsheets and single-table databases. Students interpret, model and visualise data using spreadsheets and database queries to draw conclusions. They select and use a range of digital tools to create, locate and communicate content, applying common conventions. Students use a range of digital tools to plan tasks, share content online, and manage individual and collaborative iterative projects. They manage their digital footprint and privacy when collecting data.</p>
+    <p>Students define and decompose real-world problems, and determine functional requirements and constraints. They design and trace algorithms using flowcharts and pseudocode. Students design and modify user interfaces and user experiences, and evaluate alternative designs. They implement algorithms and debug programs using a general-purpose programming language. Students evaluate digital solutions against the functional requirements.</p>
+    <span class="status-pill st-review">FOR REVIEW — spelling corrected</span>
+  </div>
+
+  <h4 id="knowledge">Key Knowledge &amp; Key Skills — Whole Course</h4>
+  <table>
+    <thead><tr><th>Key Knowledge</th><th class="review">Key Skills</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>
+          <ul class="plain">
+            <li>Functions of hardware and software components in digital systems</li>
+            <li>Design thinking principles — planning, prototyping, testing, evaluating</li>
+            <li>Principles of visual design, including pixel art and 3D modelling</li>
+            <li>Representation of data in binary and through various media</li>
+            <li>Developing algorithms using flowcharts and pseudocode</li>
+            <li>Programming concepts: sequence, selection, iteration, variables, events</li>
+            <li>Characteristics of effective user interfaces and game design</li>
+            <li>How digital networks operate and common cyber security threats</li>
+            <li>Digital citizenship, online safety, and responsible use of digital systems</li>
+          </ul>
+        </td>
+        <td class="review">
+          <ul class="plain">
+            <li>Use block-based programming to complete game development</li>
+            <li>Apply the design process to physical and digital products, including games and models</li>
+            <li>Create visual assets using pixel art tools (Piskel) and 3D modelling tools (Tinkercad)</li>
+            <li>Represent data and algorithms using binary, flowcharts, and pseudocode</li>
+            <li>Write, modify and debug programs using block-based and general-purpose languages</li>
+            <li>Analyse and evaluate digital solutions against requirements and user needs</li>
+            <li>Plan and manage individual and collaborative projects using digital tools</li>
+            <li>Communicate ideas and findings using digital formats and conventions</li>
+            <li>Demonstrate ethical, responsible behaviour on online platforms</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="callout callout-review">
+    <div class="callout-label">⚑ For Review</div>
+    Two spreadsheet/database bullets referring to the Digital Data unit were removed from Key Skills, since that unit is out of scope for this revision.
+  </div>
+
+  <h4 id="assessment">Assessment Overview</h4>
+  <table>
+    <thead><tr><th>CAT</th><th>Task</th><th>Unit</th></tr></thead>
+    <tbody>
+      <tr><td><strong>CAT 1</strong></td><td>Game Design — build and customise an original game in MakeCode Arcade with custom pixel art, a promotional poster, and documentation/evaluation. Six-criterion F/D/E rubric.</td><td>Unit 2 — Game Programming</td></tr>
+      <tr><td><strong>CAT 2</strong></td><td>Alien Character Design — design and model an alien in Tinkercad for 3D printing, following a design brief.</td><td>Unit 3 — 3D Modelling</td></tr>
+      <tr><td><strong>CAT 3</strong></td><td>The Internet — slideshow presentation on a chosen topic from the unit.</td><td>Unit 4 — The Internet</td></tr>
+    </tbody>
+  </table>
+  <div class="callout callout-review">
+    <div class="callout-label">⚑ For Review</div>
+    Resequenced to match the current unit order — originally CAT 1 was Alien Design and CAT 2 was Game Design. A proposed CAT 4 (Presenting Data) has been removed entirely, since Digital Data is out of scope. The new Unit 3: Robotics has no formal CAT — see that unit's Curriculum Links &amp; Assessment table for a proposed informal assessment approach.
+  </div>
+
+  <h4 id="schedule">Term Schedule</h4>
+  <table>
+    <thead><tr><th>Week</th><th>Unit</th><th>Overview</th><th>Assessment</th></tr></thead>
+    <tbody>
+      <tr><td>1 – 2</td><td>Digital Citizenship</td><td>Responsible digital citizenship · trustworthy sources · managing digital schoolwork</td><td>—</td></tr>
+      <tr class="review"><td class="review">3 – 6</td><td class="review">Game Programming</td><td class="review">Design process · pixel art · block programming · game design</td><td class="review">CAT 1</td></tr>
+      <tr class="review"><td class="review">7 – 9</td><td class="review">Robotics</td><td class="review">Physical computing with micro:bit · programming Maqueen robots · sensors and movement</td><td class="review">—</td></tr>
+      <tr class="review"><td class="review">10 – 13</td><td class="review">3D Modelling</td><td class="review">Tinkercad fundamentals · alien character design</td><td class="review">CAT 2</td></tr>
+      <tr class="review"><td class="review">14 – 17</td><td class="review">The Internet</td><td class="review">History of the internet · networks &amp; data transfer · servers &amp; clouds · cyber security basics</td><td class="review">CAT 3</td></tr>
+      <tr><td>18</td><td>Activities</td><td>Minecraft Ed server / Tetris competition</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════════════ UNIT 1 ══════════════════ -->
+  <div class="sband" id="unit1"><div class="sn">1</div><div><div class="slbl">Weeks 1–2</div><div class="stit">Digital Citizenship</div></div></div>
+
+  <div class="unit-card">
+    <p>In this unit, students explore how they can be safe, responsible, and effective digital citizens. Through practical tasks and scenario-based activities, students develop an understanding of online safety, responsible use of school digital tools, and strategies for managing digital schoolwork, including their digital footprint and file organisation.</p>
+  </div>
+
+  <table>
+    <thead><tr><th>Victorian Curriculum Descriptors</th><th>Key Knowledge</th><th>Key Skills</th></tr></thead>
+    <tbody><tr>
+      <td>
+        <ul class="plain">
+          <li>Explain how multi-factor authentication protects an account and identify phishing / cyber security threats <code>VC2TDI8S03</code></li>
+          <li>Investigate and manage the digital footprint that systems and solutions collect <code>VC2TDI8D06</code></li>
+          <li>Select and use digital tools to share content and manage iterative projects <code>VC2TDI8D05</code></li>
+        </ul>
+      </td>
+      <td>
+        <ul class="plain">
+          <li>Multi-factor authentication and strong passwords</li>
+          <li>Identifying phishing scams and unsafe online behaviour</li>
+          <li>Trustworthy vs. untrustworthy online sources</li>
+          <li>Digital footprint and permanence of online actions</li>
+          <li>Responsible use of school digital devices and platforms</li>
+          <li>Managing digital files and online schoolwork</li>
+          <li>Privacy settings and shared-content visibility</li>
+        </ul>
+      </td>
+      <td>
+        <ul class="plain">
+          <li>Create and manage secure passwords</li>
+          <li>Apply multi-factor authentication where applicable</li>
+          <li>Analyse websites/emails for phishing signs</li>
+          <li>Evaluate online sources for credibility and reliability</li>
+          <li>Map their own digital footprint</li>
+          <li>Organise digital files with folders and naming conventions</li>
+          <li>Communicate respectfully using collaboration tools</li>
+          <li>Adjust privacy/sharing settings</li>
+        </ul>
+      </td>
+    </tr></tbody>
+  </table>
+
+  <table>
+    <thead><tr><th>Formal Assessment</th><th>Formative Assessment</th></tr></thead>
+    <tbody><tr>
+      <td>No formal assessment for this unit.</td>
+      <td>
+        <ul class="plain">
+          <li>Completion of Interland activities (tracked online)</li>
+          <li>Credibility checklist and reflection (Tree Octopus, DHMO)</li>
+          <li>File organisation and login checklist</li>
+        </ul>
+      </td>
+    </tr></tbody>
+  </table>
+
+  <h4>Lessons</h4>
+  <table>
+    <thead><tr><th>Lesson</th><th>Objective / Success Criteria</th><th>Tasks</th><th>Resources</th><th>Adjustments</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>1 — Digital Citizen</strong><br><code>y7-dt-u1-l1-digital-citizen</code></td>
+        <td>Understand what it means to be a safe, responsible digital citizen. <em>Can describe appropriate online behaviour.</em></td>
+        <td>Introduction to digital citizenship; brainstorm digital rights/responsibilities; complete Google's "Be Internet Awesome" Interland activities.</td>
+        <td><span class="status-pill st-none">Not yet built</span><br>Interland — beinternetawesome.withgoogle.com</td>
+      <td><strong>Extension:</strong> Research and present one real-world phishing case study; propose an additional rule for the class digital-safety code.<br><strong>Support:</strong> Step-by-step visual checklist for the Interland activities; sentence starters for describing online behaviours.</td>
+      </tr>
+      <tr>
+        <td><strong>2 — Critical Thinking</strong><br><code>y7-dt-u1-l2-critical-thinking</code></td>
+        <td>Critically evaluate the credibility of online sources. <em>Can identify signs of trustworthy/untrustworthy sites.</em></td>
+        <td>Class discussion; group analysis of DHMO.org and Tree Octopus site; students choose a third site; complete credibility checklist + reflection.</td>
+        <td><span class="status-pill st-none">Not yet built</span></td>
+      <td><strong>Extension:</strong> Locate and critique a third “hoax-style” website independently and justify why it fools people.<br><strong>Support:</strong> Pre-filled credibility checklist with guiding questions; teacher-supported pairing for site analysis.</td>
+      </tr>
+      <tr>
+        <td><strong>3 — Managing Digital Schoolwork</strong><br><code>y7-dt-u1-l3-managing-digital-schoolwork</code></td>
+        <td>Organise and manage digital files/tools effectively. <em>Can log in, organise folders, create shortcuts.</em></td>
+        <td>Log in to school accounts; organise Drive/OneDrive folders per subject; add bookmarks; practise renaming/filing documents.</td>
+        <td><span class="status-pill st-none">Not yet built</span></td>
+      <td><strong>Extension:</strong> Create a shared folder-naming convention guide for the class to adopt.<br><strong>Support:</strong> Printed step-by-step login/folder-setup card; peer buddy pairing for shortcut creation.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="callout callout-note">
+    <div class="callout-label">Not changed</div>
+    Unit 1 content is carried over unchanged from the original planner (spelling corrected only). Lesson files have not yet been generated in EduPortal for this unit.
+  </div>
+
+  <!-- ══════════════════ UNIT 2 ══════════════════ -->
+  <div class="sband" id="unit2"><div class="sn">2</div><div><div class="slbl">Weeks 3–6</div><div class="stit">Game Programming</div></div></div>
+
+  <div class="unit-card">
+    <span class="status-pill st-review">FOR REVIEW — renamed &amp; narrowed</span>
+    <p style="margin-top:10px;">In this unit, students are introduced to computational thinking, design processes, and block-based programming through hands-on and digital activities, progressing from foundational problem-solving into pixel art and coding with MakeCode Arcade. The unit culminates in an original video game, assessed as CAT 1: Game Design.</p>
+  </div>
+  <div class="callout callout-review">
+    <div class="callout-label">⚑ For Review</div>
+    Renamed from "Creating Digital Solutions" and narrowed — Tinkercad and alien-design content has moved to the new standalone Unit 3: 3D Modelling.
+  </div>
+
+  <table>
+    <thead><tr><th>Key Knowledge</th><th>Key Skills</th></tr></thead>
+    <tbody><tr>
+      <td>
+        <ul class="plain">
+          <li>Algorithms and their role in problem-solving</li>
+          <li>The problem-solving process: Identify, Plan, Create, Evaluate</li>
+          <li>Block programming features — sprites, events, variables, conditionals</li>
+          <li>Loops, conditionals, and event handlers</li>
+          <li>Representing solutions with flowcharts and pseudocode</li>
+          <li>Debugging and testing</li>
+        </ul>
+      </td>
+      <td>
+        <ul class="plain">
+          <li>Create flowcharts / pseudocode for algorithms</li>
+          <li>Construct block-based programs (sequence, selection, iteration)</li>
+          <li>Debug and refine block-based programs</li>
+          <li>Design and develop an interactive game with original pixel art</li>
+          <li>Evaluate digital solutions against a brief</li>
+          <li>Collaborate and communicate during development</li>
+        </ul>
+      </td>
+    </tr></tbody>
+  </table>
+
+  <table>
+    <thead><tr class="review"><th class="review">Assessment Task and Rubric</th><th>Formative Assessment</th></tr></thead>
+    <tbody><tr>
+      <td class="review">
+        <strong>CAT 1: Game Design</strong> — plan and develop an original game in MakeCode Arcade, including custom pixel art, a promotional poster (Canva), and documentation/evaluation, assessed against a six-criterion Foundation/Developing/Extending rubric.
+        <div style="margin-top:6px;"><span class="status-pill st-none">Info sheet — link to be added</span> <span class="status-pill st-none">Rubric — link to be added</span></div>
+      </td>
+      <td>
+        <ul class="plain">
+          <li>Algorithms &amp; Flowcharts worksheet</li>
+          <li>Conditionals &amp; Loops worksheet</li>
+          <li>MakeCode Arcade tutorial completion</li>
+          <li>Pixel-art sprite (Piskel)</li>
+          <li>Peer feedback from showcase</li>
+        </ul>
+      </td>
+    </tr></tbody>
+  </table>
+  <div class="callout callout-review">
+    <div class="callout-label">⚑ For Review</div>
+    CAT description expanded to name all three assessed components (game, poster, documentation) and the rubric structure — the original only described the game itself.
+  </div>
+
+  <h4>Lessons</h4>
+  <table>
+    <thead><tr><th>Lesson</th><th>Objective / Success Criteria</th><th>Tasks</th><th>Resources</th><th>Adjustments</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1 &amp; 2 — The Design Process &amp; Pixel Art</strong><br><code>y7-dt-u2-l1-design-process</code> / <code>-l2-pixel-art-sprites</code></td>
+        <td>Understand design-process steps and collaborative problem-solving; understand how digital images are built from pixels.</td>
+        <td>Unplugged challenge — tallest freestanding paper tower; reflection on teamwork. Introduction to pixel art; create original sprite art in Piskel; export for later use.</td>
+        <td><span class="status-pill st-avail">Available</span><br>L1_TheDesignProcess<br><span class="status-pill st-avail">Available</span><br>L2_PixelArtSprites</td><td><strong>Extension:</strong> Add a second design constraint (budget/time limit) to the tower challenge; create a 3-frame animated sprite.<br><strong>Support:</strong> Partially-built tower structure to modify; pixel-art grid template to trace before drawing freehand.</td>
+      </tr>
+      <tr><td><strong>3 &amp; 4 — Algorithms, Flowcharts &amp; MakeCode Arcade Intro</strong><br><code>y7-dt-u2-l3-algorithms-flowcharts</code> / <code>-l4-makecode-arcade-intro</code></td>
+        <td>Understand algorithms and represent them as flowcharts; explore a block-based programming environment.</td>
+        <td>Real-world examples; flowchart symbols/structure; worksheet activities. Teacher walkthrough of MakeCode Arcade; "Chase the Pizza" and other tutorials.</td>
+        <td><span class="status-pill st-avail">Available</span><br>L3_AlgorithmsFlowcharts<br><span class="status-pill st-avail">Available</span><br>L4_MakeCodeArcadeIntro</td><td><strong>Extension:</strong> Convert the flowchart into pseudocode as well as a diagram; explore an additional MakeCode tutorial independently.<br><strong>Support:</strong> Partially completed flowchart to finish; pair-program the first tutorial with teacher check-ins.</td>
+      </tr>
+      <tr><td><strong>5 &amp; 6 — Variables, Conditionals &amp; Loops</strong><br><code>y7-dt-u2-l5-variables</code> / <code>-l6-conditionals-loops</code></td>
+        <td>Understand the role of variables in programming; apply conditionals and loops and debug simple programs.</td>
+        <td>Modify an example game's variables; complete variable worksheet. Conditional/loop examples in MakeCode; coding-challenge worksheet with deliberate bugs.</td>
+        <td><span class="status-pill st-avail">Available</span><br>L5_Variables<br><span class="status-pill st-avail">Available</span><br>L6_ConditionalsLoops</td><td><strong>Extension:</strong> Add an extra variable (lives/timer) to the example game; combine a loop and conditional in one block chain.<br><strong>Support:</strong> Annotated code snippets showing where variables/conditionals belong; reduce the worksheet to core bugs only.</td>
+      </tr>
+      <tr><td><strong>7 — Game Critique</strong><br><code>y7-dt-u2-l7-game-critique</code></td>
+        <td>Analyse features of a well-designed game.</td>
+        <td>Game-analysis worksheet — controls, goals, feedback, UI; class discussion.</td>
+        <td><span class="status-pill st-avail">Available</span><br>L7_GameCritique</td><td><strong>Extension:</strong> Write a comparative critique of two games, using a rubric they help design.<br><strong>Support:</strong> Structured critique template with guiding questions for each feature.</td>
+      </tr>
+      <tr><td><strong>8 &amp; 9 — CAT 1 Studio Sessions</strong><br><code>y7-dt-u2-l8 / -l9</code></td>
+        <td>Apply the full design/programming process to build an original game.</td>
+        <td>Build and customise game in MakeCode Arcade across two sessions; poster in Canva; documentation against the rubric.</td>
+        <td><span class="status-pill st-avail">Available</span><br>L8/L9_CAT1StudioSession<br><span class="status-pill st-none">Task sheet — link to be added</span></td><td><strong>Extension:</strong> Add a stretch feature (scoring multiplier/second level) beyond the brief; write an extended evaluation.<br><strong>Support:</strong> Simplified game template/scaffold; smaller checklisted milestones with more frequent check-ins.</td>
+      </tr>
+      <tr><td><strong>10 — Game Showcase &amp; Reflection</strong><br><code>y7-dt-u2-l10-game-showcase-reflection</code></td>
+        <td>Present and evaluate digital projects.</td>
+        <td>Present games to peers; peer review; written reflection.</td>
+        <td><span class="status-pill st-avail">Available</span><br>L10_GameShowcaseReflection</td><td><strong>Extension:</strong> Facilitate peer feedback for a small group and synthesise common themes for the class.<br><strong>Support:</strong> Sentence starters for the written reflection; allow an oral reflection told to the teacher.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="callout callout-review">
+    <div class="callout-label">⚑ For Review</div>
+    Restructured from the original's 14 lesson-periods to the 10 lessons actually built: Tinkercad/alien-design periods removed (now Unit 4), Algorithms+Flowcharts merged, Conditionals+Loops merged, two CAT studio sessions added explicitly. Resource links point to the real generated files. In this latest pass, lessons 1&amp;2, 3&amp;4 and 5&amp;6 have also been re-paired into double-period sessions (matching the existing 8&amp;9 pattern) so all 10 lesson-periods fit within the unit's new 4-week allocation — no content was cut, only the session grouping changed. See Review Log item 9.
+  </div>
+
+  <!-- ══════════════════ UNIT 3 (NEW) ══════════════════ -->
+  <div class="sband" id="unit3"><div class="sn">3</div><div><div class="slbl">Weeks 7–9</div><div class="stit">Robotics</div></div></div>
+
+  <div class="unit-card">
+    <span class="status-pill st-review">FOR REVIEW — new unit</span>
+    <p style="margin-top:10px;">In this unit, students move from on-screen programming into physical computing. They program the BBC micro:bit using MakeCode, then connect it to a Maqueen robot to control movement and respond to sensors, culminating in a hands-on robotics challenge.</p>
+  </div>
+  <div class="callout callout-review">
+    <div class="callout-label">⚑ For Review</div>
+    New unit inserted between Game Programming and 3D Modelling, using micro:bit processors and Maqueen robots. All lesson content below is newly drafted for this revision and has not yet been built in EduPortal. Curriculum codes are reused from the 3D Modelling unit's verified Creating Digital Solutions codes as a best fit — please confirm against the specific programming/hardware descriptors. See Review Log item 10.
+  </div>
+
+  <table>
+    <thead><tr><th>Curriculum Links</th><th>Assessment</th></tr></thead>
+    <tbody><tr>
+      <td>
+        <ul class="plain">
+          <li><code>VC2TDI8C01</code> — decompose the design brief</li>
+          <li><code>VC2TDI8C03</code> — design, modify and evaluate alternative designs</li>
+          <li><code>VC2TDI8C05</code> — evaluate against requirements</li>
+        </ul>
+      </td>
+      <td>No formal CAT for this unit.
+        <div style="margin-top:6px;">Informal, criteria-based teacher observation during the Lesson 4 robotics challenge (recommended — see Review Log item 10 for discussion).</div>
+      </td>
+    </tr></tbody>
+  </table>
+
+  <h4>Lessons</h4>
+  <table>
+    <thead><tr><th>Lesson</th><th>Objective / Success Criteria</th><th>Tasks</th><th>Resources</th><th>Adjustments</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1 — Introducing micro:bit</strong><br><code>y7-dt-u3-l1-microbit-intro</code></td>
+        <td>Understand the basic features and inputs/outputs of the BBC micro:bit.</td>
+        <td>Teacher walkthrough of the micro:bit and the MakeCode for micro:bit block editor; "flashing name badge" tutorial and a button-press reaction program.</td>
+        <td><span class="status-pill st-none">Not yet built</span><br>MakeCode for micro:bit — makecode.microbit.org</td><td><strong>Extension:</strong> Modify the badge program to respond to shake/tilt as well as button press.<br><strong>Support:</strong> Step-by-step annotated block diagram; pair students for the tutorials.</td>
+      </tr>
+      <tr><td><strong>2 — Programming with Sensors</strong><br><code>y7-dt-u3-l2-programming-sensors</code></td>
+        <td>Use the micro:bit's built-in sensors within a program incorporating loops and conditionals.</td>
+        <td>Demonstrate sensor blocks; students build a "digital dice" or light-triggered program using loops and conditionals, extending Game Programming skills.</td>
+        <td><span class="status-pill st-none">Not yet built</span></td><td><strong>Extension:</strong> Combine two sensors (light and the accelerometer) into one program.<br><strong>Support:</strong> Partially-built program with one block missing to complete.</td>
+      </tr>
+      <tr><td><strong>3 — Meet the Maqueen Robot</strong><br><code>y7-dt-u3-l3-meet-the-maqueen</code></td>
+        <td>Understand how the Maqueen robot connects to and is controlled by the micro:bit.</td>
+        <td>Teacher walkthrough of Maqueen parts (motors, wheels, line-following sensors, ultrasonic sensor); in pairs, build and test simple movement programs.</td>
+        <td><span class="status-pill st-none">Not yet built</span></td><td><strong>Extension:</strong> Program a short choreographed movement sequence (e.g. a square path) independently.<br><strong>Support:</strong> Labelled diagram of Maqueen parts; teacher/peer-supported pairing for wiring and connection.</td>
+      </tr>
+      <tr><td><strong>4 — Robotics Challenge</strong><br><code>y7-dt-u3-l4-robotics-challenge</code></td>
+        <td>Apply programming and sensor skills to complete a physical robotics challenge.</td>
+        <td>Small-group challenge — program the Maqueen to navigate a taped course or avoid obstacles using the ultrasonic sensor; showcase and class discussion.</td>
+        <td><span class="status-pill st-none">Not yet built</span></td><td><strong>Extension:</strong> Add obstacle-avoidance logic on top of line-following for a bonus challenge.<br><strong>Support:</strong> Reduce the course to a simpler straight-line task; pre-written movement program to adapt.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="callout callout-review">
+    <div class="callout-label">⚑ For Review — new content</div>
+    Lesson content, curriculum codes, and resources for this new unit are drafted for this revision and need full review before use — nothing here has been built in EduPortal yet. See Review Log item 10.
+  </div>
+
+  <!-- ══════════════════ UNIT 4 ══════════════════ -->
+  <div class="sband" id="unit4"><div class="sn">4</div><div><div class="slbl">Weeks 10–13</div><div class="stit">3D Modelling</div></div></div>
+
+  <div class="unit-card">
+    <span class="status-pill st-review">FOR REVIEW — renumbered &amp; expanded</span>
+    <p style="margin-top:10px;">In this unit, students learn the basic tools of a 3D modelling environment (Tinkercad) and apply the design process to design, refine, and print an original alien character.</p>
+  </div>
+  <div class="callout callout-review">
+    <div class="callout-label">⚑ For Review</div>
+    Renumbered from Unit 3 to Unit 4 following the insertion of the new Robotics unit — content and CAT 2 assessment unchanged in substance. Length extended from 2 to 4 weeks and the lesson sequence expanded from 2 rows to 5 (6 sessions) to fill the extra time: the original single "Alien Design" assessment lesson has been split out with a new planning lesson beforehand and printing/showcase lessons afterwards. Lesson IDs updated from <code>y7-dt-u3-…</code> to <code>y7-dt-u4-…</code>. See Review Log item 11.
+  </div>
+
+  <table>
+    <thead><tr><th>Curriculum Links</th><th>Assessment</th></tr></thead>
+    <tbody><tr>
+      <td>
+        <ul class="plain">
+          <li><code>VC2TDI8C01</code> — decompose the design brief</li>
+          <li><code>VC2TDI8C03</code> — design, modify and evaluate alternative designs</li>
+          <li><code>VC2TDI8C05</code> — evaluate against requirements</li>
+        </ul>
+      </td>
+      <td><strong>CAT 2: Alien Character Design</strong> — design and model an alien in Tinkercad for 3D printing, following a design brief.
+        <div style="margin-top:6px;"><span class="status-pill st-none">Info sheet — link to be added</span> <span class="status-pill st-none">Rubric — link to be added</span></div>
+      </td>
+    </tr></tbody>
+  </table>
+
+  <h4>Lessons</h4>
+  <table>
+    <thead><tr><th>Lesson</th><th class="review">Objective / Success Criteria</th><th class="review">Tasks</th><th>Resources</th><th class="review">Adjustments</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1 — Tinkercad Introduction</strong><br><code>y7-dt-u4-l1-tinkercad-intro</code></td>
+        <td>Learn the basic tools/functions of a 3D modelling environment.</td>
+        <td>Teacher walkthrough of Tinkercad; beginner tutorials (name tag, house, rocket).</td>
+        <td><span class="status-pill st-none">Not yet built</span><br>Tinkercad — tinkercad.com/learn</td><td><strong>Extension:</strong> Complete an additional advanced tutorial (combining shapes) beyond the set three.<br><strong>Support:</strong> Step-by-step screenshot guide for each tutorial; extra 1:1 time on the “hole” tool.</td>
+      </tr>
+      <tr><td class="review"><strong>2 — Design Process &amp; Planning</strong><br><code>y7-dt-u4-l2-design-process-planning</code></td>
+        <td class="review">Apply the design process to plan an original alien character that meets a brief.</td>
+        <td class="review">Recap the design process; sketch and plan alien design on paper, noting key features and how each meets the brief, then teacher/peer feedback before modelling.</td>
+        <td class="review"><span class="status-pill st-none">Not yet built</span></td><td class="review"><strong>Extension:</strong> Sketch two alternative alien concepts and justify which best meets the brief.<br><strong>Support:</strong> Sketch template with labelled prompts (body shape, features, size).</td>
+      </tr>
+      <tr><td><strong>3 &amp; 4 — Alien Modelling: Building &amp; Refining (Assessment)</strong><br><code>y7-dt-u4-l3-l4-alien-modelling</code></td>
+        <td>Apply the design process to create a 3D model that meets a brief.</td>
+        <td>Model alien in Tinkercad building on the Lesson 2 plan; refine across two sessions with teacher checkpoints; export STL for 3D printing.</td>
+        <td><span class="status-pill st-none">Not yet built</span><br>Tinkercad — tinkercad.com/learn<br><span class="status-pill st-none">CAT task sheet — link to be added</span></td><td><strong>Extension:</strong> Add a moving/articulated part or extra design detail (e.g. a textured surface).<br><strong>Support:</strong> Simplified base shape to build from; smaller checklisted steps with more check-ins.</td>
+      </tr>
+      <tr><td class="review"><strong>5 — 3D Printing &amp; Troubleshooting</strong><br><code>y7-dt-u4-l5-3d-printing-troubleshooting</code></td>
+        <td class="review">Understand how a 3D print is prepared and produced, and how to troubleshoot common print issues.</td>
+        <td class="review">Teacher demonstration of slicing software and the 3D printer; class discussion of common print problems (warping, stringing, supports) and fixes; students prepare their own file.</td>
+        <td class="review"><span class="status-pill st-none">Not yet built</span></td><td class="review"><strong>Extension:</strong> Research and present one additional print issue and fix not covered in class.<br><strong>Support:</strong> Troubleshooting reference card; pair students for the slicing software walkthrough.</td>
+      </tr>
+      <tr><td class="review"><strong>6 — Showcase &amp; Reflection</strong><br><code>y7-dt-u4-l6-showcase-reflection</code></td>
+        <td class="review">Present and evaluate a completed design project.</td>
+        <td class="review">Display printed/rendered aliens; peer feedback and class discussion; individual written reflection against the CAT 2 rubric.</td>
+        <td class="review"><span class="status-pill st-none">Not yet built</span></td><td class="review"><strong>Extension:</strong> Compare their design against a peer's and identify one thing they would borrow.<br><strong>Support:</strong> Sentence starters for the reflection; allow a verbal reflection to the teacher.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="callout callout-review">
+    <div class="callout-label">⚑ For Review — new content</div>
+    Content carried over unchanged for Lesson 1 and the assessment core of Lesson 3 &amp; 4. Lessons 2, 5 and 6 are new content drafted for this revision to fill the extended 4-week allocation — no lesson files have been generated for this unit yet.
+  </div>
+
+  <!-- ══════════════════ UNIT 5 ══════════════════ -->
+  <div class="sband" id="unit5"><div class="sn">5</div><div><div class="slbl">Weeks 14–17</div><div class="stit">The Internet</div></div></div>
+
+  <div class="unit-card">
+    <span class="status-pill st-review">FOR REVIEW — renumbered &amp; expanded</span>
+    <p style="margin-top:10px;">In this unit, students explore the history and importance of the internet, how networks transfer data between devices, how servers and cloud computing underpin modern digital systems, and basic cyber security practices. The unit culminates in CAT 3: The Internet, a slideshow presentation.</p>
+  </div>
+  <div class="callout callout-review">
+    <div class="callout-label">⚑ For Review</div>
+    Renumbered from Unit 4 to Unit 5 following the insertion of the new Robotics unit. Length extended from 3 to 4 weeks and the lesson sequence expanded from 3 to 6 sessions (Lessons 1–3 unchanged in substance; a new Cyber Security Basics lesson and a two-session CAT 3 studio block added) to fill the extra time and give CAT 3 dedicated in-class studio sessions rather than starting it inside Lesson 3. See Review Log item 12.
+  </div>
+
+  <table>
+    <thead><tr class="review"><th class="review">Key Knowledge</th><th class="review">Key Skills</th></tr></thead>
+    <tbody><tr>
+      <td class="review">
+        <ul class="plain">
+          <li>Brief history of the internet and why it was developed</li>
+          <li>How networks transmit data — routers, switches, cables (incl. undersea)</li>
+          <li>Internet vs. World Wide Web</li>
+          <li>Role of servers and what "the cloud" actually is</li>
+          <li>Basic cyber security for using networked services safely</li>
+        </ul>
+      </td>
+      <td class="review">
+        <ul class="plain">
+          <li>Explain, in own words, how data travels between devices</li>
+          <li>Interpret a simple network diagram</li>
+          <li>Compare cloud storage/computing with local storage — a benefit and a risk of each</li>
+          <li>Identify common cyber security threats and describe basic strategies to stay safe online</li>
+          <li>Research and synthesise a topic into a slideshow, using correct terminology (network, server, client, cloud, bandwidth)</li>
+        </ul>
+      </td>
+    </tr></tbody>
+  </table>
+  <div class="callout callout-review">
+    <div class="callout-label">⚑ For Review — filled in from scratch</div>
+    This table was entirely blank in the original planner for this unit. Filled in to align with the lessons below and the <code>VC2TDI8N</code> descriptor strand — please review against your intended depth before publishing. Cyber security skill line added in this pass to match the new Lesson 4.
+  </div>
+
+  <table>
+    <thead><tr><th>Formal Assessment</th><th class="review">Formative Assessment</th></tr></thead>
+    <tbody><tr>
+      <td><strong>CAT 3: The Internet</strong> — students create a slideshow based on topics covered during this unit.
+        <div style="margin-top:6px;"><span class="status-pill st-none">Info sheet — link to be added</span> <span class="status-pill st-none">Rubric — link to be added</span></div>
+      </td>
+      <td class="review">
+        <ul class="plain">
+          <li>History/importance-of-the-internet worksheet</li>
+          <li>Network diagram labelling activity</li>
+          <li>Vocabulary check on network terms</li>
+          <li>Cyber security scenario worksheet</li>
+          <li>Slideshow draft/outline on chosen topic</li>
+        </ul>
+      </td>
+    </tr></tbody>
+  </table>
+
+  <h4>Lessons</h4>
+  <table>
+    <thead><tr><th>Lesson</th><th class="review">Objective / Success Criteria</th><th class="review">Tasks</th><th>Resources</th><th class="review">Adjustments</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1 — History and Importance of the Internet</strong><br><code>y7-dt-u5-l1-history-of-the-internet</code></td>
+        <td class="review">Understand why/how the internet was developed and its significance today.</td>
+        <td class="review">Watch Kurzgesagt "Who Invented the Internet and Why"; class timeline of key milestones; worksheet on how the internet changed daily life.</td>
+        <td><span class="status-pill st-none">Not yet built</span><br>Kurzgesagt video<br><span class="status-pill st-none">Worksheet — link to be added</span></td><td class="review"><strong>Extension:</strong> Research an additional milestone not covered in class and add it to the timeline.<br><strong>Support:</strong> Partially-completed timeline to fill in; word bank for the worksheet.</td>
+      </tr>
+      <tr><td><strong>2 — Networks and Transferring Data</strong><br><code>y7-dt-u5-l2-networks-transferring-data</code></td>
+        <td class="review">Understand how data physically travels between devices across a network.</td>
+        <td class="review">Routers/switches/IP/packets via a postal-system analogy; explore the Interactive Submarine Cable Map; diagram-labelling worksheet; pair discussion on cable damage.</td>
+        <td><span class="status-pill st-none">Not yet built</span><br>Submarine Cable Map<br><span class="status-pill st-none">Worksheet — link to be added</span></td><td class="review"><strong>Extension:</strong> Research and explain one real submarine cable disruption event.<br><strong>Support:</strong> Labelled network diagram to annotate rather than build from scratch.</td>
+      </tr>
+      <tr><td><strong>3 — Servers and Clouds</strong><br><code>y7-dt-u5-l3-servers-and-clouds</code></td>
+        <td class="review">Understand the role of servers and basic cloud computing.</td>
+        <td class="review">Server request/response explanation; discuss where school files live; cloud-computing scenario cards (benefits vs. risks).</td>
+        <td><span class="status-pill st-none">Not yet built</span><br><span class="status-pill st-none">Scenario cards — link to be added</span></td><td class="review"><strong>Extension:</strong> Compare two real cloud providers' stated privacy policies.<br><strong>Support:</strong> Simplified scenario card set with fewer variables to discuss.</td>
+      </tr>
+      <tr><td class="review"><strong>4 — Cyber Security Basics</strong><br><code>y7-dt-u5-l4-cyber-security-basics</code></td>
+        <td class="review">Identify common cyber security threats and describe basic strategies to stay safe when using networked services.</td>
+        <td class="review">Common threats relevant to networked/cloud services (phishing, weak passwords, unsecured Wi-Fi), recapping links to Digital Citizenship; small-group scenario worksheet.</td>
+        <td class="review"><span class="status-pill st-none">Not yet built</span></td><td class="review"><strong>Extension:</strong> Design a “spot the phishing email” example for peers to try.<br><strong>Support:</strong> Scenario/response matching card sort instead of open-ended writing.</td>
+      </tr>
+      <tr><td class="review"><strong>5 &amp; 6 — CAT 3 Studio Sessions (Assessment)</strong><br><code>y7-dt-u5-l5-l6-cat3-studio-sessions</code></td>
+        <td class="review">Research, plan, and produce a slideshow presentation on a chosen internet/network topic.</td>
+        <td class="review">Session 5: choose a topic and research/outline the slideshow, with teacher checkpoints. Session 6: build and finalise the slideshow, then present to peers with reflection.</td>
+        <td class="review"><span class="status-pill st-none">Not yet built</span><br><span class="status-pill st-none">CAT 3 task sheet — link to be added</span></td><td class="review"><strong>Extension:</strong> Include a comparison or original diagram in the slideshow beyond the minimum requirement.<br><strong>Support:</strong> Slideshow outline template with prompts per slide; reduce topic scope with teacher guidance.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="callout callout-review">
+    <div class="callout-label">⚑ For Review — new content</div>
+    Lessons 1–3 carried over with only light rewording (unchanged in substance). Lesson 4 (Cyber Security Basics) and the Lesson 5 &amp; 6 CAT 3 studio block are new content drafted for this revision to fill the extended 4-week allocation — CAT 3 previously started inside Lesson 3 with no dedicated studio time. No lesson files have been generated for the new lessons yet.
+  </div>
+
+  <!-- ══════════════════ TIMING ══════════════════ -->
+  <div class="sband" id="timing"><div class="sn">✓</div><div><div class="slbl">Week 18</div><div class="stit">Timing Summary</div></div></div>
+
+  <p>Digital Citizenship (2wk) + Game Programming (4wk) + Robotics (3wk) + 3D Modelling (4wk) + The Internet (4wk) = 17 weeks, weeks 1–17. Week 18 is fixed for end-of-year activities. All 18 weeks are now allocated — there is no unscheduled buffer remaining in this revision.</p>
+
+  <table>
+    <thead><tr><th>Digital Data — status</th><th>If revisited</th></tr></thead>
+    <tbody><tr>
+      <td>Still deliberately out of scope for this revision. With weeks 15–17 now absorbed into Game Programming, Robotics, 3D Modelling and The Internet, there is no remaining gap for it to fill.</td>
+      <td>A 2–3 week Digital Data unit (data types, spreadsheets, charting, survey design — <code>VC2TDI8D01–06</code>) would now need to displace part of another unit's time, or the course would need to run over more than 18 weeks. It previously existed as a fully-scoped unit in the original planner and could be restored from that content if a decision is made to bring it back.</td>
+    </tr></tbody>
+  </table>
+  <div class="callout callout-review">
+    <div class="callout-label">⚑ For Review</div>
+    Section renamed from "Timing &amp; Free Weeks" to "Timing Summary" and the running total updated now that all 18 weeks are allocated (previously weeks 15–17 were left open). See Review Log item 13.
+  </div>
+
+  <!-- ══════════════════ REVIEW LOG ══════════════════ -->
+  <div class="sband" id="review-log"><div class="sn">§</div><div><div class="slbl">Audit</div><div class="stit">Review Log</div></div></div>
+  <p>Every <span class="status-pill st-review">FOR REVIEW</span> badge and amber-shaded cell above corresponds to one of the items below. Please review each before treating this as the current planner of record.</p>
+  <table>
+    <thead><tr><th style="width:32px;">#</th><th>Change</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Corrected a document-wide text corruption from the original file where every "li" was rendered as "LO" (e.g. "onLOne" → "online", "vaLOdate" → "validate", "ALOen" → "Alien", "reLOable" → "reliable"). Affected almost every paragraph; corrected throughout rather than flagged cell-by-cell, since it's a single mechanical fix, not a content decision.</td></tr>
+      <tr><td>2</td><td>Unit order and names changed to match the current course: Unit 1 Digital Citizenship (unchanged), Unit 2 Game Programming (was "Creating Digital Solutions", narrowed), Unit 3 3D Modelling (new standalone unit, split out), Unit 4 The Internet (was "Networks", renamed to match its CAT).</td></tr>
+      <tr><td>3</td><td>Course-level Key Skills trimmed of the two spreadsheet/database bullets that referred to the now-removed Digital Data unit.</td></tr>
+      <tr><td>4</td><td>Unit 4 (The Internet): Key Knowledge, Key Skills, and the formative-assessment list were filled in from scratch — entirely blank in the original. Lessons 2 and 3's Objectives/Success Criteria and Tasks were also filled in from scratch.</td></tr>
+      <tr><td>5</td><td>CAT numbering resequenced: CAT 1 = Game Design (was CAT 2), CAT 2 = Alien Character Design (was CAT 1), CAT 3 = The Internet (was CAT 4). Digital Data's CAT 3/4 proposal removed entirely.</td></tr>
+      <tr><td>6</td><td>Unit 2 (Game Programming) lesson list restructured from 14 lesson-periods to the 10 lessons actually built in EduPortal: Tinkercad/alien-design periods removed (now Unit 3), Algorithms+Flowcharts merged, Conditionals+Loops merged, two explicit CAT 1 studio sessions added.</td></tr>
+      <tr><td>7</td><td>Weeks 15–17 changed from an implicit gap to an explicit "Unscheduled" status, with the Digital Data option documented as a deliberate, named decision.</td></tr>
+      <tr><td>8</td><td>Resource links for Unit 2 point to the actual generated lesson files; all other links across Units 1, 3 and 4 are marked "Not yet built" / "link to be added", since those files haven't been generated yet.</td></tr>
+      <tr><td>9</td><td>Weeks restructured to the new brief: Game Programming 7wk→4wk (all 10 lesson-periods kept, re-paired into 6 double-period sessions to fit cadence), Robotics inserted as a new 3wk/4-lesson unit, 3D Modelling 2wk→4wk (2→5 lesson rows / 6 sessions), The Internet 3wk→4wk (3→6 lesson rows). All 18 weeks are now allocated with no unscheduled buffer (previously weeks 15–17 were open).</td></tr>
+      <tr><td>10</td><td>New Unit 3: Robotics added between Game Programming and 3D Modelling, using micro:bit and Maqueen robots. Lesson content, curriculum codes and resource links are newly drafted and unbuilt — flagged for review throughout.</td></tr>
+      <tr><td>11</td><td>3D Modelling renumbered Unit 3→Unit 4 and expanded from 2 to 5 lesson rows (6 sessions) to fill its new 4-week allocation: Lesson 1 (Tinkercad Introduction) and the modelling/refining core of the old combined assessment lesson are unchanged in substance; a new planning lesson and new printing/showcase lessons were drafted to fill the remaining time.</td></tr>
+      <tr><td>12</td><td>The Internet renumbered Unit 4→Unit 5 and expanded from 3 to 6 lesson sessions to fill its new 4-week allocation: Lessons 1–3 unchanged in substance; a new Cyber Security Basics lesson and a dedicated two-session CAT 3 studio block were drafted (CAT 3 previously started inside Lesson 3 with no dedicated studio time).</td></tr>
+      <tr><td>13</td><td>"Timing &amp; Free Weeks" renamed "Timing Summary" and rewritten now that all 18 weeks are allocated; the Digital Data deferral note is retained but updated to reflect that reviving it would now require displacing another unit rather than filling an open gap.</td></tr>
+      <tr><td>14</td><td>An Adjustments column was added to every unit's Lessons table (Units 1&ndash;5), giving two differentiation notes per lesson &mdash; an Extension strategy for students ready to go further, and a Support strategy for students who need scaffolding, including those with additional needs. These are suggested starting points only and should be cross-checked against individual students' learning plans.</td></tr>
+    </tbody>
+  </table>
+
+</div>
+
+<footer>EduPortal Subject Planner · Y7 Digital Technology · Revision 2</footer>
+
+</body>
+</html>

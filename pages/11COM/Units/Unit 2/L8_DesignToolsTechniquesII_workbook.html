@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L8 Workbook — Design Tools &amp; Techniques II · Y11 AC U2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark-bg: #0D1117; --light-bg: #FFFFFF;
+    --surface: #161B22; --surface2: #1F2530;
+    --border: #30363D;
+    --text: #E6EDF3; --text-dim: #9BA3AF;
+    --blue: #4361EE; --green: #10B981; --amber: #F59E0B; --purple: #8B5CF6; --red: #EF4444;
+    --blue-lt: rgba(67,97,238,0.12); --green-lt: rgba(16,185,129,0.12);
+    --amber-lt: rgba(245,158,11,0.12); --purple-lt: rgba(139,92,246,0.12); --red-lt: rgba(239,68,68,0.12);
+  }
+  body.light {
+    --dark-bg: #FFFFFF; --surface: #F6F8FA; --surface2: #EDF0F3;
+    --border: #D0D7DE; --text: #0D1117; --text-dim: #57606A;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--dark-bg); color: var(--text); font-family: 'DM Sans', sans-serif; line-height: 1.6; transition: background .2s, color .2s; }
+
+  #progress-bar { position: sticky; top: 0; z-index: 100; background: var(--surface); display: flex; align-items: center; gap: 1rem; padding: 0.5rem 1.5rem; border-bottom: 2px solid var(--blue); }
+  #progress-bar .wb-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--blue); letter-spacing: 0.08em; white-space: nowrap; }
+  #pct-display { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text); white-space: nowrap; }
+  #pct-bar { flex: 1; height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+  #pct-fill { height: 100%; background: var(--blue); border-radius: 2px; width: 0%; transition: width 0.4s; }
+  .bar-btns { display: flex; gap: 0.5rem; margin-left: auto; }
+  .bar-btns button { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text); background: transparent; border: 1px solid var(--border); border-radius: 4px; padding: 0.22rem 0.65rem; cursor: pointer; }
+  .bar-btns button:hover { border-color: var(--text); }
+  .bar-btns button.save { border-color: var(--blue); color: var(--blue); }
+  .bar-btns button.save:hover { background: var(--blue); color: #fff; }
+
+  .cover { background: var(--surface); padding: 2.5rem 2rem 2rem; border-bottom: 1px solid var(--border); }
+  .cover .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .cover .subject { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--blue); margin-bottom: 0.75rem; }
+  .cover h1 { font-family: 'DM Serif Display', serif; font-size: 2.1rem; color: var(--text); margin-bottom: 0.5rem; }
+  .cover .doc-type { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--amber); margin-bottom: 1.25rem; }
+
+  .student-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; }
+  .si-field { display: flex; flex-direction: column; gap: 0.25rem; }
+  .si-field label { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; }
+  .si-field input { background: var(--surface2); border: 1px solid var(--border); border-radius: 5px; padding: 0.45rem 0.65rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--text); outline: none; }
+  .si-field input:focus { border-color: var(--blue); }
+
+  main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+
+  .section-band { display: flex; align-items: center; gap: 0.75rem; margin: 2.5rem 0 1.25rem; }
+  .section-num { width: 2rem; height: 2rem; background: var(--blue); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+  .section-meta { display: flex; flex-direction: column; }
+  .section-mono { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-dim); letter-spacing: 0.06em; text-transform: uppercase; }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--text); }
+
+  .callout { border-radius: 8px; padding: 1rem 1.25rem; border: 1px solid var(--border); }
+  .callout-info { background: var(--blue-lt); border-left: 3px solid var(--blue); }
+  .callout-tip  { background: var(--green-lt); border-left: 3px solid var(--green); }
+  .callout-note { background: var(--amber-lt); border-left: 3px solid var(--amber); }
+  .callout-extend { background: var(--purple-lt); border-left: 3px solid var(--purple); }
+  .callout-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; margin-bottom: 0.4rem; }
+  .callout-info .callout-label { color: var(--blue); }
+  .callout-tip .callout-label  { color: var(--green); }
+  .callout-note .callout-label { color: var(--amber); }
+  .callout-extend .callout-label { color: var(--purple); }
+  .callout p { font-size: 0.9rem; color: var(--text); font-family: 'Atkinson Hyperlegible', sans-serif; }
+
+  .chip { font-family: 'DM Mono', monospace; font-size: 0.62rem; padding: 0.1rem 0.5rem; border-radius: 4px; margin-left: 0.5rem; }
+  .chip-off { background: var(--red-lt); color: var(--red); border: 1px solid var(--red); }
+  .chip-on { background: var(--green-lt); color: var(--green); border: 1px solid var(--green); }
+
+  .q-block { margin: 1.5rem 0; }
+  .q-meta { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+  .q-num { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--text-dim); font-weight: 600; }
+  .tier { display: inline-flex; align-items: center; gap: 0.35rem; font-family: 'DM Mono', monospace; font-size: 0.68rem; font-weight: 500; padding: 0.16rem 0.55rem; border-radius: 4px; }
+  .tier-f { background: var(--green-lt); color: var(--green); border: 1px solid var(--green); }
+  .tier-d { background: var(--amber-lt); color: var(--amber); border: 1px solid var(--amber); }
+  .tier-e { background: var(--purple-lt); color: var(--purple); border: 1px solid var(--purple); }
+
+  .q-text { font-size: 0.95rem; color: var(--text); margin-bottom: 0.4rem; font-family: 'Atkinson Hyperlegible', sans-serif; }
+  .q-ref { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--blue); margin-bottom: 0.4rem; }
+  .q-hint { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 0.4rem; font-family: 'Atkinson Hyperlegible', sans-serif; }
+
+  textarea, input[type=text], input[type=number], select { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 7px; padding: 0.7rem 0.9rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--text); outline: none; resize: vertical; }
+  textarea { min-height: 80px; }
+  textarea:focus, input:focus, select:focus { border-color: var(--blue); }
+  textarea::placeholder, input::placeholder { color: var(--text-dim); }
+
+  .scaffold-grid { display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .addbtn { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--blue); background: transparent; border: 1px dashed var(--blue); border-radius: 5px; padding: 0.35rem 0.9rem; cursor: pointer; margin-top: 0.6rem; }
+  .addbtn:hover { background: var(--blue-lt); }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  .exit-block { background: var(--surface2); border-radius: 10px; padding: 1.5rem; margin-top: 2rem; }
+
+  .signoff-grid { display: flex; flex-direction: column; gap: 0.5rem; margin: 1rem 0; }
+  .signoff-item { display: flex; align-items: flex-start; gap: 0.6rem; background: var(--surface); border: 1px solid var(--border); border-radius: 7px; padding: 0.65rem 0.9rem; }
+  .signoff-item input { width: auto; margin-top: 0.2rem; }
+  .signoff-item span { font-size: 0.88rem; color: var(--text); font-family: 'Atkinson Hyperlegible', sans-serif; }
+
+  /* ── Track picker ─────────────────────────────────────────────── */
+  .track-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+  .track-card { background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 1rem 1.1rem; cursor: pointer; transition: border-color .15s, background .15s; }
+  .track-card:hover { border-color: var(--text-dim); }
+  .track-card.selected { border-color: var(--blue); background: var(--blue-lt); }
+  .track-card.selected.site { border-color: var(--purple); background: var(--purple-lt); }
+  .track-card .track-icon { font-size: 1.3rem; margin-bottom: 0.35rem; }
+  .track-card .track-name { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--text); margin-bottom: 0.3rem; }
+  .track-card .track-desc { font-size: 0.82rem; color: var(--text-dim); font-family: 'Atkinson Hyperlegible', sans-serif; }
+  @media (max-width: 620px) { .track-picker { grid-template-columns: 1fr; } }
+
+  .track-section { display: none; }
+  .track-section.active { display: block; }
+
+  /* ── Pseudocode line builder ──────────────────────────────────── */
+  .pc-editor { background: #0D1117; border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem; }
+  body.light .pc-editor { background: #0D1117; }
+  .pc-line { display: grid; grid-template-columns: 3.2rem 8.5rem 1fr 2.2rem; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem; }
+  .pc-line select { background: #161B22; color: #4EF0C0; border: 1px solid #30363D; font-family: 'DM Mono', monospace; font-size: 0.78rem; padding: 0.45rem 0.4rem; }
+  .pc-line input { background: #161B22; color: #E6EDF3; border: 1px solid #30363D; font-family: 'DM Mono', monospace; font-size: 0.82rem; padding: 0.45rem 0.6rem; }
+  .pc-indent { display: flex; gap: 0.15rem; }
+  .pc-indent button { width: 1.5rem; height: 1.9rem; background: #161B22; border: 1px solid #30363D; color: #9BA3AF; border-radius: 4px; cursor: pointer; font-family: 'DM Mono', monospace; font-size: 0.85rem; }
+  .pc-indent button:hover { color: #E6EDF3; border-color: #4361EE; }
+  .pc-line .del-btn { background: transparent; border: 1px solid #30363D; border-radius: 4px; color: var(--red); cursor: pointer; font-size: 0.85rem; width: 1.9rem; height: 1.9rem; }
+  .pc-line .del-btn:hover { background: rgba(239,68,68,0.15); }
+  .pc-preview-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin: 0.9rem 0 0.4rem; }
+  .pc-preview { background: #000; border-radius: 6px; padding: 0.8rem 1rem; font-family: 'DM Mono', monospace; font-size: 0.82rem; color: #4EF0C0; white-space: pre; overflow-x: auto; line-height: 1.6; }
+
+  /* ── Site map node builder ────────────────────────────────────── */
+  .sm-row { display: grid; grid-template-columns: 1fr 1fr 1.4fr 2.2rem; gap: 0.5rem; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: 7px; padding: 0.55rem 0.6rem; margin-bottom: 0.5rem; }
+  .sm-row input, .sm-row select { font-size: 0.82rem; padding: 0.5rem 0.6rem; }
+  .sm-row .del-btn { background: transparent; border: 1px solid var(--border); border-radius: 4px; color: var(--red); cursor: pointer; font-size: 0.85rem; width: 1.9rem; height: 1.9rem; }
+  .sm-row .del-btn:hover { background: var(--red-lt); }
+  .sm-preview-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin: 0.9rem 0 0.4rem; }
+  .sm-preview { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1.1rem; font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--text); line-height: 1.9; }
+  .sm-preview .sm-node-home { color: var(--purple); font-weight: 700; }
+  .sm-preview .sm-node-1 { color: var(--blue); }
+  .sm-preview .sm-node-2 { color: var(--green); }
+  .sm-preview .sm-node-3 { color: var(--amber); }
+  .sm-preview .sm-orphan { color: var(--red); }
+
+  @media (max-width: 700px) {
+    .pc-line { grid-template-columns: 2.4rem 6.5rem 1fr 2rem; }
+    .sm-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar">
+  <span class="wb-label">STUDENT WORKBOOK</span>
+  <span id="pct-display">0%</span>
+  <div id="pct-bar"><div id="pct-fill"></div></div>
+  <div class="bar-btns">
+    <button onclick="document.body.classList.toggle('light')">Theme</button>
+    <button class="save" onclick="DS.save()">Save</button>
+    <button onclick="DS.load()">Load</button>
+    <button onclick="window.print()">Print</button>
+  </div>
+</div>
+
+<div class="cover">
+  <p class="eyebrow">D5.2 Design Tools &amp; Techniques II</p>
+  <p class="subject">Year 11 Applied Computing — Unit 2 · AoS1 Innovative Solutions</p>
+  <h1>Pseudocode &amp; Site Maps</h1>
+  <p class="doc-type">STUDENT WORKBOOK · Lesson 8 · y11-ac-u2-l8-design-tools-techniques-ii</p>
+  <div class="student-grid">
+    <div class="si-field"><label>Student Name</label><input id="si-name" type="text" autocomplete="off" placeholder="Your name"></div>
+    <div class="si-field"><label>Class</label><input id="si-class" type="text" autocomplete="off" placeholder="e.g. 11AC-1"></div>
+    <div class="si-field"><label>Date</label><input id="si-date" type="text" autocomplete="off" placeholder="YYYY-MM-DD"></div>
+    <div class="si-field"><label>Teacher</label><input id="si-teacher" type="text" autocomplete="off" placeholder="Mr Smith"></div>
+  </div>
+</div>
+
+<main>
+
+  <!-- SECTION 1 — Choose Your Track -->
+  <div class="section-band">
+    <div class="section-num">1</div>
+    <div class="section-meta">
+      <span class="section-mono">Foundation · D5.2</span>
+      <span class="section-title">Choose Your Track</span>
+    </div>
+  </div>
+
+  <div class="callout callout-tip" style="margin-bottom: 1rem;">
+    <p class="callout-label">Laptop Gate <span class="chip chip-on">DEVICES ON</span></p>
+    <p>Look at your Gantt chart and pick a part of your solution that involves either a decision/calculation, or a set of sections a user moves between. You'll represent it with the matching tool below.</p>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q1</span><span class="tier tier-f">🟢 Foundation</span></div>
+    <p class="q-text">Name the part of your solution you're representing today, and which Gantt chart task it belongs to.</p>
+    <textarea id="q1" data-field="q1" placeholder="Name the feature/part and the Gantt chart task it belongs to."></textarea>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q2</span><span class="tier tier-f">🟢 Foundation</span></div>
+    <p class="q-text">Pick your track for today. You can only build one track's activity below — choose the tool that actually fits what you named above.</p>
+    <div class="track-picker">
+      <div class="track-card" id="track-card-pseudo" onclick="selectTrack('pseudo')">
+        <div class="track-icon">🧩</div>
+        <div class="track-name">Pseudocode Track</div>
+        <div class="track-desc">My part makes a decision, check, or calculation.</div>
+      </div>
+      <div class="track-card site" id="track-card-site" onclick="selectTrack('site')">
+        <div class="track-icon">🗺️</div>
+        <div class="track-name">Site Map Track</div>
+        <div class="track-desc">My part is a set of sections a user navigates between.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 2 — Build It -->
+  <div class="section-band">
+    <div class="section-num">2</div>
+    <div class="section-meta">
+      <span class="section-mono">Developing · D5.2</span>
+      <span class="section-title">Build It</span>
+    </div>
+  </div>
+
+  <!-- PSEUDOCODE TRACK -->
+  <div class="track-section" id="section-pseudo">
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q3</span><span class="tier tier-d">🟡 Developing</span></div>
+      <p class="q-text">Build your pseudocode line by line. Pick a keyword for each line, describe what it does, and use the indent buttons to show what sits inside an IF or WHILE block.</p>
+      <p class="q-ref">→ <a href="L8_DesignToolsTechniquesII_site.html#l8-s1" style="color:inherit;">See Reference Site: Pseudocode Conventions</a>.</p>
+      <div class="pc-editor">
+        <div id="pc-lines"></div>
+        <button class="addbtn" onclick="addPcLine()" type="button">+ Add line</button>
+        <p class="pc-preview-label">Live preview</p>
+        <div class="pc-preview" id="pc-preview"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SITE MAP TRACK -->
+  <div class="track-section" id="section-site">
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q3</span><span class="tier tier-d">🟡 Developing</span></div>
+      <p class="q-text">Build your site map node by node. Start with your Home / main page, then add each section and choose its parent — the tree preview builds itself.</p>
+      <p class="q-ref">→ <a href="L8_DesignToolsTechniquesII_site.html#l8-s2" style="color:inherit;">See Reference Site: Site Maps</a>.</p>
+      <div id="sm-rows"></div>
+      <button class="addbtn" onclick="addSmRow()" type="button">+ Add section</button>
+      <p class="sm-preview-label">Live tree preview</p>
+      <div class="sm-preview" id="sm-preview"></div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 3 — Trace & Justify -->
+  <div class="section-band">
+    <div class="section-num">3</div>
+    <div class="section-meta">
+      <span class="section-mono">Extending · D5.2</span>
+      <span class="section-title">Trace &amp; Justify</span>
+    </div>
+  </div>
+
+  <div class="track-section" id="trace-pseudo">
+    <div class="callout callout-extend" style="margin-bottom: 1rem;">
+      <p class="callout-label">Bench-testing your algorithm</p>
+      <p>Pick one realistic input for your pseudocode. Step through it line by line, by hand, and record what each variable holds and what gets displayed.</p>
+    </div>
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q4</span><span class="tier tier-e">🟣 Extending</span></div>
+      <p class="q-text">Trace your pseudocode with one input. What value(s) did you start with, and what did each step of your algorithm produce?</p>
+      <textarea id="q4-pseudo" data-field="q4-pseudo" data-track="pseudo" placeholder="Starting input(s), then what changed at each step, then the final output."></textarea>
+    </div>
+  </div>
+
+  <div class="track-section" id="trace-site">
+    <div class="callout callout-extend" style="margin-bottom: 1rem;">
+      <p class="callout-label">Checking your navigation depth</p>
+      <p>Look at your finished tree. Find the section closest to Home, and the section furthest from Home.</p>
+    </div>
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q4</span><span class="tier tier-e">🟣 Extending</span></div>
+      <p class="q-text">Which section is reachable in the fewest clicks from Home, and which takes the most? How many clicks is each?</p>
+      <textarea id="q4-site" data-field="q4-site" data-track="site" placeholder="Name the shortest and longest paths from Home and how many clicks each takes."></textarea>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q5</span><span class="tier tier-e">🟣 Extending</span></div>
+    <p class="q-text">Justify one design decision you made above. Why this structure/logic, and not a simpler or different one?</p>
+    <textarea id="q5" data-field="q5" placeholder="Name the decision and explain why you chose it over an alternative."></textarea>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 4 — Sign-Off Checklist -->
+  <div class="section-band">
+    <div class="section-num">4</div>
+    <div class="section-meta">
+      <span class="section-mono">Developing · D5.2</span>
+      <span class="section-title">Sign-Off Checklist</span>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q6</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">Confirm each element is genuinely present before moving on.</p>
+    <div class="signoff-grid">
+      <label class="signoff-item"><input type="checkbox" data-field="q6-a"><span>I named the part of my solution and picked the track that actually fits it.</span></label>
+      <label class="signoff-item"><input type="checkbox" data-field="q6-b" data-track="pseudo"><span>My pseudocode uses ← for assignment and = only for comparison.</span></label>
+      <label class="signoff-item"><input type="checkbox" data-field="q6-c" data-track="pseudo"><span>Every IF/WHILE block I opened has a matching ENDIF/ENDWHILE, and indentation shows what's inside it.</span></label>
+      <label class="signoff-item"><input type="checkbox" data-field="q6-b-site" data-track="site"><span>Every node except Home has a parent — my tree has no orphaned sections.</span></label>
+      <label class="signoff-item"><input type="checkbox" data-field="q6-c-site" data-track="site"><span>My site map covers every major section my solution needs.</span></label>
+      <label class="signoff-item"><input type="checkbox" data-field="q6-d"><span>I traced my work by hand and recorded a genuine result, not a guess.</span></label>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 5 — Exit Ticket -->
+  <div class="exit-block">
+    <div class="section-band" style="margin-top:0;">
+      <div class="section-num" style="background:var(--red);">5</div>
+      <div class="section-meta">
+        <span class="section-mono">Exit Ticket</span>
+        <span class="section-title" style="color: var(--text);">Exit Ticket</span>
+      </div>
+    </div>
+
+    <div class="callout callout-note" style="margin-bottom: 1rem;">
+      <p class="callout-label">Devices OFF <span class="chip chip-off">DEVICES OFF</span></p>
+      <p>Complete this section from memory — no scrolling back to check your earlier answers.</p>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q7</span><span class="tier tier-f">🟢 Foundation</span></div>
+      <p class="q-text">In your own words, what is pseudocode used for?</p>
+      <textarea id="q7" data-field="q7" placeholder="Explain what pseudocode represents, in your own words."></textarea>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q8</span><span class="tier tier-d">🟡 Developing</span></div>
+      <p class="q-text">What's the difference between ← and = in pseudocode?</p>
+      <textarea id="q8" data-field="q8" placeholder="Explain what each symbol does, from memory."></textarea>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q9</span><span class="tier tier-e">🟣 Extending</span></div>
+      <p class="q-text">Why would you build a site map before designing individual screens?</p>
+      <textarea id="q9" data-field="q9" placeholder="Explain the value of mapping structure first, from memory."></textarea>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 6 — Project Progress Checkpoint -->
+  <div class="section-band">
+    <div class="section-num" style="background:var(--amber);">6</div>
+    <div class="section-meta">
+      <span class="section-mono">Progress Checkpoint · Not part of today's lesson</span>
+      <span class="section-title">Where Your Project Should Be</span>
+    </div>
+  </div>
+
+  <div class="callout callout-note" style="margin-bottom: 1rem;">
+    <p class="callout-label">Milestone 1 — due Wednesday 2026-08-12</p>
+    <p>This section doesn't add new work — it's a checkpoint against your group's actual progress. Go through each item honestly with your group before you leave today.</p>
+  </div>
+
+  <div class="q-block">
+    <p class="q-text">By this point in the project (Lesson 8), your group should have:</p>
+    <div class="signoff-grid">
+      <label class="signoff-item"><input type="checkbox" data-field="q10-a"><span><strong>Lesson 5</strong> — A problem statement the whole group has agreed on, naming the need/opportunity and who it affects.</span></label>
+      <label class="signoff-item"><input type="checkbox" data-field="q10-b"><span><strong>Lesson 5</strong> — Functional and non-functional specifications listing what the solution must do and its constraints.</span></label>
+      <label class="signoff-item"><input type="checkbox" data-field="q10-c"><span><strong>Lesson 6</strong> — The solution broken into tasks, each with a named, accountable owner.</span></label>
+      <label class="signoff-item"><input type="checkbox" data-field="q10-d"><span><strong>Lesson 6</strong> — A Gantt chart showing dependencies and an identifiable critical path — this is Milestone 1, due 2026-08-12.</span></label>
+      <label class="signoff-item"><input type="checkbox" data-field="q10-e"><span><strong>Lesson 7</strong> — A mock-up and storyboard completed for at least one screen or interaction in your solution.</span></label>
+      <label class="signoff-item"><input type="checkbox" data-field="q10-f"><span><strong>Lesson 8 (today)</strong> — Pseudocode and/or a site map completed for another part of your solution.</span></label>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q10</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">If anything above isn't ticked, name the one item your group will finish first, and when.</p>
+    <textarea id="q10-reflect" data-field="q10-reflect" placeholder="Name the specific gap and a realistic time it will be done by — or write 'On track' if everything above is ticked."></textarea>
+  </div>
+
+</main>
+
+<script>
+// ── Constants ─────────────────────────────────────────────────────────────────
+const LESSON_ID = 'y11-ac-u2-l8-design-tools-techniques-ii';
+let currentTrack = null; // 'pseudo' | 'site'
+
+function escAttr(s) { return String(s).replace(/"/g, '&quot;'); }
+
+// ── Track selection ─────────────────────────────────────────────────────────
+function selectTrack(track, skipSave) {
+  currentTrack = track;
+  document.getElementById('track-card-pseudo').classList.toggle('selected', track === 'pseudo');
+  document.getElementById('track-card-site').classList.toggle('selected', track === 'site');
+  document.getElementById('section-pseudo').classList.toggle('active', track === 'pseudo');
+  document.getElementById('section-site').classList.toggle('active', track === 'site');
+  document.getElementById('trace-pseudo').classList.toggle('active', track === 'pseudo');
+  document.getElementById('trace-site').classList.toggle('active', track === 'site');
+  document.querySelectorAll('[data-track]').forEach(el => {
+    const relevant = el.dataset.track === track;
+    const item = el.closest('.signoff-item') || el;
+    item.style.display = relevant ? '' : 'none';
+  });
+  updateProgress();
+  if (!skipSave) DataService.autoSave();
+}
+
+// ── Pseudocode line builder ──────────────────────────────────────────────────
+let pcLineCount = 0;
+const PC_KEYWORDS = ['INPUT', 'DISPLAY', 'SET', 'IF', 'ELSE', 'ENDIF', 'WHILE', 'ENDWHILE', 'FOR', 'NEXT', 'RETURN'];
+function addPcLine(vals) {
+  pcLineCount++;
+  const n = pcLineCount;
+  const wrap = document.getElementById('pc-lines');
+  const row = document.createElement('div');
+  row.className = 'pc-line';
+  row.id = 'pc-line-' + n;
+  const opts = PC_KEYWORDS.map(k => `<option value="${k}" ${vals && vals.kw === k ? 'selected' : ''}>${k}</option>`).join('');
+  const indent = (vals && vals.indent) || 0;
+  row.innerHTML = `
+    <div class="pc-indent">
+      <button type="button" onclick="pcIndent(${n},-1)" title="Decrease indent">‹</button>
+      <button type="button" onclick="pcIndent(${n},1)" title="Increase indent">›</button>
+    </div>
+    <select data-field="pc-kw-${n}" data-pcfield onchange="renderPcPreview()">${opts}</select>
+    <input type="text" data-field="pc-text-${n}" data-pcfield placeholder="What does this line do?" value="${vals && vals.text ? escAttr(vals.text) : ''}">
+    <button class="del-btn" type="button" onclick="removePcLine(${n})" title="Remove line">×</button>`;
+  row.dataset.indent = indent;
+  wrap.appendChild(row);
+  attachFieldListeners(row);
+  row.querySelectorAll('input').forEach(el => el.addEventListener('input', renderPcPreview));
+  renderPcPreview();
+  updateProgress();
+}
+function pcIndent(n, dir) {
+  const row = document.getElementById('pc-line-' + n);
+  let ind = parseInt(row.dataset.indent || '0', 10);
+  ind = Math.max(0, Math.min(4, ind + dir));
+  row.dataset.indent = ind;
+  renderPcPreview();
+  DataService.autoSave();
+}
+function removePcLine(n) {
+  const row = document.getElementById('pc-line-' + n);
+  if (row) row.remove();
+  renderPcPreview();
+  updateProgress();
+}
+function renderPcPreview() {
+  const wrap = document.getElementById('pc-lines');
+  const lines = [...wrap.querySelectorAll('.pc-line')].map(row => {
+    const kw = row.querySelector('select').value;
+    const text = row.querySelector('input').value;
+    const ind = parseInt(row.dataset.indent || '0', 10);
+    return '  '.repeat(ind) + kw + (text ? ' ' + text : '');
+  });
+  document.getElementById('pc-preview').textContent = lines.length ? lines.join('\n') : '// Add a line to see your pseudocode build here';
+}
+for (let i = 0; i < 4; i++) addPcLine();
+
+// ── Site map node builder ────────────────────────────────────────────────────
+let smRowCount = 0;
+function addSmRow(vals) {
+  smRowCount++;
+  const n = smRowCount;
+  const wrap = document.getElementById('sm-rows');
+  const row = document.createElement('div');
+  row.className = 'sm-row';
+  row.id = 'sm-row-' + n;
+  const isHome = n === 1;
+  row.innerHTML = `
+    <input type="text" data-field="sm-name-${n}" data-smfield placeholder="${isHome ? 'Home / main page name' : 'Section name'}" value="${vals && vals.name ? escAttr(vals.name) : ''}">
+    <select data-field="sm-parent-${n}" data-smfield ${isHome ? 'disabled' : ''}></select>
+    <input type="text" data-field="sm-purpose-${n}" data-smfield placeholder="What does a user find here?" value="${vals && vals.purpose ? escAttr(vals.purpose) : ''}">
+    <button class="del-btn" type="button" onclick="removeSmRow(${n})" title="Remove section">×</button>`;
+  wrap.appendChild(row);
+  attachFieldListeners(row);
+  row.querySelectorAll('input, select').forEach(el => el.addEventListener('input', renderSmPreview));
+  refreshSmParentOptions();
+  renderSmPreview();
+  updateProgress();
+}
+function removeSmRow(n) {
+  const row = document.getElementById('sm-row-' + n);
+  if (row) row.remove();
+  refreshSmParentOptions();
+  renderSmPreview();
+  updateProgress();
+}
+function refreshSmParentOptions() {
+  const rows = [...document.querySelectorAll('.sm-row')];
+  const names = rows.map(r => {
+    const input = r.querySelector('input[data-smfield]');
+    return input ? (input.value.trim() || ('Section ' + r.id.split('-')[2])) : '';
+  });
+  rows.forEach((r, idx) => {
+    if (idx === 0) return; // home has no parent select active
+    const sel = r.querySelector('select[data-smfield]');
+    const current = sel.value;
+    sel.innerHTML = names.slice(0, idx).map((nm, i) => `<option value="${i}">${escAttr(nm)}</option>`).join('');
+    if (current && parseInt(current, 10) < idx) sel.value = current;
+  });
+}
+function renderSmPreview() {
+  const rows = [...document.querySelectorAll('.sm-row')];
+  if (!rows.length) { document.getElementById('sm-preview').textContent = 'Add sections to see your tree build here'; return; }
+  const nodes = rows.map((r, idx) => {
+    const nameInput = r.querySelector('input[data-field^="sm-name"]');
+    const parentSel = r.querySelector('select[data-field^="sm-parent"]');
+    return {
+      idx,
+      name: nameInput.value.trim() || (idx === 0 ? 'Home / main page' : 'Untitled section'),
+      parent: idx === 0 ? null : (parentSel.value === '' ? null : parseInt(parentSel.value, 10)),
+    };
+  });
+  function depthOf(i, seen) {
+    if (i === 0) return 0;
+    const node = nodes[i];
+    if (node.parent === null || node.parent === undefined) return 1; // orphan, treat as depth 1
+    if (seen.has(i)) return 1; // guard cycles
+    seen.add(i);
+    return 1 + depthOf(node.parent, seen);
+  }
+  const lines = nodes.map((node, i) => {
+    if (i === 0) return `<span class="sm-node-home">${escAttr(node.name)}</span>`;
+    const d = Math.min(depthOf(i, new Set()), 3);
+    const orphan = (node.parent === null || node.parent === undefined);
+    const cls = orphan ? 'sm-orphan' : ('sm-node-' + d);
+    const indent = '  '.repeat(d) + '└─ ';
+    const parentLabel = orphan ? ' (no parent set!)' : '';
+    return `${indent}<span class="${cls}">${escAttr(node.name)}${parentLabel}</span>`;
+  });
+  document.getElementById('sm-preview').innerHTML = lines.join('\n');
+}
+addSmRow(); addSmRow(); addSmRow(); addSmRow();
+
+// ── DataService (canonical EduPortal pattern) ──────────────────────────────────
+const DataService = {
+  getStudentId() {
+    return JSON.parse(localStorage.getItem('eduportal_session') || '{}').id || 'current_student';
+  },
+  workbookKey(lessonId) { return 'eduportal_workbook_' + this.getStudentId() + '_' + lessonId; },
+  _getData() {
+    const data = {};
+    document.querySelectorAll('[data-field]').forEach(el => {
+      const key = el.dataset.field;
+      if (el.type === 'checkbox') data[key] = el.checked;
+      else data[key] = el.value;
+    });
+    ['name','class','date','teacher'].forEach(f => {
+      const el = document.getElementById('si-' + f);
+      if (el) data['si-' + f] = el.value;
+    });
+    data['_track'] = currentTrack;
+    data['_pcLineCount'] = pcLineCount;
+    data['_pcIndents'] = [...document.querySelectorAll('.pc-line')].map(r => r.dataset.indent || '0');
+    data['_smRowCount'] = smRowCount;
+    return data;
+  },
+  _setData(data) {
+    if (data['_pcLineCount'] && data['_pcLineCount'] > pcLineCount) {
+      const toAdd = data['_pcLineCount'] - pcLineCount;
+      for (let i = 0; i < toAdd; i++) addPcLine();
+    }
+    if (data['_smRowCount'] && data['_smRowCount'] > smRowCount) {
+      const toAdd = data['_smRowCount'] - smRowCount;
+      for (let i = 0; i < toAdd; i++) addSmRow();
+    }
+    document.querySelectorAll('[data-field]').forEach(el => {
+      const key = el.dataset.field;
+      if (data[key] === undefined) return;
+      if (el.type === 'checkbox') el.checked = !!data[key];
+      else el.value = data[key];
+    });
+    ['name','class','date','teacher'].forEach(f => {
+      const el = document.getElementById('si-' + f);
+      if (el && data['si-' + f]) el.value = data['si-' + f];
+    });
+    if (data['_pcIndents']) {
+      [...document.querySelectorAll('.pc-line')].forEach((row, i) => {
+        if (data['_pcIndents'][i] !== undefined) row.dataset.indent = data['_pcIndents'][i];
+      });
+    }
+    refreshSmParentOptions();
+    renderPcPreview();
+    renderSmPreview();
+    if (data['_track']) selectTrack(data['_track'], true);
+  },
+  save() {
+    const data = this._getData();
+    localStorage.setItem(this.workbookKey(LESSON_ID), JSON.stringify(data));
+    this._syncProgress('in-progress');
+    const btn = document.querySelector('.bar-btns .save');
+    const orig = btn.textContent;
+    btn.textContent = 'Saved ✓';
+    setTimeout(() => btn.textContent = orig, 1800);
+  },
+  load() {
+    const raw = localStorage.getItem(this.workbookKey(LESSON_ID));
+    if (raw) { try { this._setData(JSON.parse(raw)); updateProgress(); } catch(e){} }
+  },
+  autoSave() {
+    clearTimeout(DataService._timer);
+    DataService._timer = setTimeout(() => DataService.save(), 1200);
+  },
+  autoLoad() { this.load(); },
+  submit() {
+    this.save();
+    this._syncProgress('submitted');
+    alert('Workbook submitted. See your teacher to confirm.');
+  },
+  _syncProgress(status) {
+    localStorage.setItem(`eduportal_progress_${this.getStudentId()}_${LESSON_ID}`, JSON.stringify({ status, ts: Date.now() }));
+  }
+};
+const DS = DataService; // short alias used by inline handlers
+
+// ── Progress tracking (track-aware) ─────────────────────────────────────────
+function isFieldVisible(el) {
+  if (el.closest('.track-section') && !el.closest('.track-section').classList.contains('active')) return false;
+  const item = el.closest('.signoff-item');
+  if (item && item.style.display === 'none') return false;
+  return true;
+}
+function countFilled() {
+  let filled = 0, total = 0;
+  document.querySelectorAll('textarea[data-field]').forEach(el => {
+    if (!isFieldVisible(el)) return;
+    total++;
+    if (el.value.trim().length > 5) filled++;
+  });
+  document.querySelectorAll('input[type="text"][data-field]').forEach(el => {
+    if (!isFieldVisible(el)) return;
+    if (el.dataset.pcfield || el.dataset.smfield) return; // builder rows counted separately below
+    total++;
+    if (String(el.value).trim().length > 0) filled++;
+  });
+  document.querySelectorAll('input[type="checkbox"][data-field]').forEach(el => {
+    if (!isFieldVisible(el)) return;
+    total++;
+    if (el.checked) filled++;
+  });
+  // Track choice
+  total++; if (currentTrack) filled++;
+  // Builder activity — count as complete once at least 3 lines/rows have real content
+  if (currentTrack === 'pseudo') {
+    total++;
+    const withText = [...document.querySelectorAll('#pc-lines .pc-line input')].filter(i => i.value.trim().length > 0).length;
+    if (withText >= 3) filled++;
+  } else if (currentTrack === 'site') {
+    total++;
+    const withText = [...document.querySelectorAll('#sm-rows input[data-field^="sm-name"]')].filter(i => i.value.trim().length > 0).length;
+    if (withText >= 3) filled++;
+  }
+  return { filled, total };
+}
+function updateProgress() {
+  const { filled, total } = countFilled();
+  const pct = total ? Math.round((filled / total) * 100) : 0;
+  document.getElementById('pct-fill').style.width = pct + '%';
+  document.getElementById('pct-display').textContent = pct + '%';
+}
+
+// ── Field listeners ───────────────────────────────────────────────────────────
+function attachFieldListeners(root) {
+  root.querySelectorAll('[data-field]').forEach(el => {
+    el.addEventListener('input', () => { updateProgress(); DataService.autoSave(); });
+    el.addEventListener('change', () => { updateProgress(); DataService.autoSave(); if (el.dataset.smfield) refreshSmParentOptions(); });
+  });
+}
+attachFieldListeners(document);
+
+// ── First entry tracking + auto-load on open ───────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  DataService.autoLoad();
+  updateProgress();
+  document.querySelectorAll('[data-field]').forEach(el => {
+    el.addEventListener('input', function firstEntry() {
+      DataService._syncProgress('in-progress');
+      el.removeEventListener('input', firstEntry);
+    }, { once: true });
+  });
+});
+</script>
+</body>
+</html>

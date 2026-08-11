@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L4 — MakeCode Arcade: Blocks &amp; Variables | Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0D1117; --surface:#151B24; --surface2:#1B2330;
+  --text:#E8EDF4; --text2:#A9B4C2; --text3:#6E7A89;
+  --border:#26303C; --border2:#33404F;
+  --blue:#4361EE;  --blue-bg:rgba(67,97,238,.13);
+  --green:#10B981; --green-bg:rgba(16,185,129,.13);
+  --amber:#F59E0B; --amber-bg:rgba(245,158,11,.13);
+  --purple:#8B5CF6;--purple-bg:rgba(139,92,246,.13);
+  --red:#EF4444;   --red-bg:rgba(239,68,68,.13);
+  --sans:'DM Sans',sans-serif; --serif:'DM Serif Display',serif;
+  --mono:'DM Mono',monospace;  --read:'Atkinson Hyperlegible',sans-serif;
+}
+body.light{
+  --bg:#FFFFFF; --surface:#F7F9FC; --surface2:#EEF2F7;
+  --text:#0D1117; --text2:#41505F; --text3:#6E7A89;
+  --border:#DDE4EC; --border2:#C6D0DB;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;padding-bottom:90px;transition:background .2s,color .2s;}
+
+/* ---------- top bar ---------- */
+.top-bar{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:0 20px;height:46px;}
+.tb-progress{flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;}
+.tb-fill{height:100%;width:0;background:var(--blue);border-radius:3px;transition:width .4s ease;}
+.tb-pct{font-family:var(--mono);font-size:11px;color:var(--text3);min-width:38px;text-align:right;}
+.tb-btn{background:transparent;border:1px solid var(--border2);color:var(--text2);font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;padding:5px 11px;border-radius:4px;cursor:pointer;transition:.15s;text-transform:uppercase;}
+.tb-btn:hover{border-color:var(--blue);color:var(--text);}
+
+/* ---------- cover ---------- */
+.cover{background:var(--surface);border-bottom:1px solid var(--border);padding:48px 40px 40px;}
+.cover-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--text3);text-transform:uppercase;margin-bottom:18px;}
+.cover-title{font-family:var(--serif);font-size:38px;line-height:1.12;margin-bottom:8px;}
+.cover-sub{font-size:14px;color:var(--text2);margin-bottom:30px;}
+.cover-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;max-width:580px;}
+.cfield label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:5px;}
+.cfield input{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:5px;padding:8px 11px;color:var(--text);font-family:var(--sans);font-size:14px;outline:none;}
+.cfield input:focus{border-color:var(--blue);}
+
+/* ---------- sections ---------- */
+main{max-width:960px;margin:0 auto;padding:0 24px;}
+section{padding:38px 0;border-bottom:1px solid var(--border);}
+.section-band{display:flex;align-items:center;gap:13px;margin-bottom:20px;flex-wrap:wrap;}
+.sec-num{width:30px;height:30px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--text2);flex:none;}
+.sec-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);}
+.sec-title{font-family:var(--serif);font-size:25px;line-height:1.2;flex:1;min-width:220px;}
+.badge{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;padding:4px 11px;border-radius:20px;border:1px solid;}
+.b-obj{color:var(--blue);border-color:var(--blue);background:var(--blue-bg);}
+.b-exp{color:var(--amber);border-color:var(--amber);background:var(--amber-bg);}
+.b-task{color:var(--green);border-color:var(--green);background:var(--green-bg);}
+.b-exit{color:var(--red);border-color:var(--red);background:var(--red-bg);}
+
+p.lead{font-family:var(--read);color:var(--text2);margin-bottom:16px;}
+.q{font-family:var(--read);font-weight:700;margin:20px 0 8px;}
+.q span.slide{font-family:var(--mono);font-weight:400;font-size:11px;color:var(--text3);margin-left:8px;}
+textarea,input[type=text].wide{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:6px;padding:11px 13px;color:var(--text);font-family:var(--read);font-size:14.5px;line-height:1.6;outline:none;resize:vertical;}
+textarea:focus,input[type=text].wide:focus{border-color:var(--blue);}
+textarea::placeholder,input::placeholder{color:var(--text3);font-style:italic;}
+
+/* ---------- callouts ---------- */
+.callout{border:1px solid var(--border2);border-radius:8px;padding:14px 17px;margin:16px 0;font-family:var(--read);font-size:14px;color:var(--text2);}
+.callout strong{color:var(--text);}
+.c-info{background:var(--blue-bg);border-color:var(--blue);}
+.c-tip{background:var(--green-bg);border-color:var(--green);}
+.c-note{background:var(--amber-bg);border-color:var(--amber);}
+.c-extend{background:var(--purple-bg);border-color:var(--purple);}
+.sitelink{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--blue);text-decoration:none;border-bottom:1px solid var(--blue);margin-top:6px;}
+
+/* ---------- success criteria ---------- */
+.crits{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:18px;}
+.crit{background:var(--surface);border:1px solid var(--border2);border-left-width:4px;border-radius:8px;padding:14px 16px;cursor:pointer;transition:.15s;}
+.crit:hover{border-color:var(--border2);transform:translateY(-1px);}
+.crit .tier{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px;display:block;}
+.crit p{font-family:var(--read);font-size:13.5px;color:var(--text2);}
+.crit.f{border-left-color:var(--green);} .crit.f .tier{color:var(--green);}
+.crit.d{border-left-color:var(--amber);} .crit.d .tier{color:var(--amber);}
+.crit.e{border-left-color:var(--purple);} .crit.e .tier{color:var(--purple);}
+.crit.checked{background:var(--surface2);} .crit.checked::after{content:' ✓';float:right;color:var(--green);font-weight:700;margin-top:-26px;}
+.crit input{display:none;}
+
+/* ---------- checklists ---------- */
+.check{display:flex;align-items:flex-start;gap:11px;padding:9px 0;border-bottom:1px solid var(--border);font-family:var(--read);font-size:14px;}
+.check:last-child{border-bottom:none;}
+.check input{margin-top:4px;width:16px;height:16px;accent-color:var(--blue);flex:none;cursor:pointer;}
+.check label{cursor:pointer;color:var(--text2);}
+.check.ext label{color:var(--purple);}
+
+/* ---------- multiple choice ---------- */
+.mc{margin:12px 0 4px;}
+.mc-opt{display:flex;align-items:flex-start;gap:11px;background:var(--surface);border:1px solid var(--border2);border-radius:6px;padding:10px 14px;margin-bottom:8px;cursor:pointer;font-family:var(--read);font-size:14px;color:var(--text2);transition:.15s;}
+.mc-opt:hover{border-color:var(--blue);}
+.mc-opt input{margin-top:3px;accent-color:var(--blue);flex:none;}
+.mc-opt.correct-ans{border-color:var(--green);background:var(--green-bg);color:var(--text);}
+.mc-opt.wrong-ans{border-color:var(--red);background:var(--red-bg);}
+.mc-result{font-family:var(--mono);font-size:11.5px;margin-top:4px;display:none;}
+.mc-result.show-c{display:block;color:var(--green);}
+.mc-result.show-w{display:block;color:var(--red);}
+
+/* ---------- match table ---------- */
+table.match{width:100%;border-collapse:collapse;margin-top:12px;font-family:var(--read);font-size:14px;}
+table.match th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);text-align:left;padding:8px 10px;border-bottom:1px solid var(--border2);}
+table.match td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:middle;}
+table.match select{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:5px;padding:8px 10px;color:var(--text);font-family:var(--read);font-size:14px;outline:none;}
+table.match select:focus{border-color:var(--blue);}
+code{font-family:var(--mono);font-size:13px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:1px 6px;color:var(--text);}
+
+.submit-row{padding:34px 0 10px;text-align:center;}
+.submit-btn{background:var(--blue);border:none;color:#fff;font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:14px 34px;border-radius:6px;cursor:pointer;transition:.15s;}
+.submit-btn:hover{filter:brightness(1.12);}
+.exit-note{font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:10px;}
+@media print{.top-bar,.submit-row{display:none;}body{background:#fff;color:#000;}}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="tb-progress"><div class="tb-fill" id="tbFill"></div></div>
+  <div class="tb-pct" id="tbPct">0%</div>
+  <button class="tb-btn" onclick="DataService.save()">Save</button>
+  <button class="tb-btn" onclick="DataService.load()">Load</button>
+  <button class="tb-btn" onclick="window.print()">Export</button>
+  <button class="tb-btn" onclick="document.body.classList.toggle('light')">Theme</button>
+</div>
+
+<div class="cover">
+  <div class="cover-eyebrow">Year 7 · Digital Technology · Unit 2 — Game Programming · Lesson 4</div>
+  <h1 class="cover-title">MakeCode Arcade: Blocks &amp; Variables</h1>
+  <p class="cover-sub">Student workbook — use the unit site and the slides for reference. Your paper notes stay open beside you.</p>
+  <div class="cover-fields">
+    <div class="cfield"><label for="f_name">Student name</label><input type="text" id="f_name" placeholder="Your full name"></div>
+    <div class="cfield"><label for="f_class">Class</label><input type="text" id="f_class" placeholder="e.g. 7DT-B"></div>
+    <div class="cfield"><label for="f_date">Date</label><input type="text" id="f_date" placeholder="YYYY-MM-DD"></div>
+    <div class="cfield"><label for="f_teacher">Teacher</label><input type="text" id="f_teacher" placeholder="Teacher name"></div>
+  </div>
+</div>
+
+<main>
+
+<!-- 1 -->
+<section id="s1">
+  <div class="section-band"><div class="sec-num">1</div><div><div class="sec-label">Learning Objective — Slide 3</div></div><h2 class="sec-title">What We're Learning Today</h2><span class="badge b-obj">Objective</span></div>
+  <p class="lead"><strong>Learning objective:</strong> Explore the MakeCode Arcade environment, explain what different categories of blocks do, and use variables to track values that change while a game runs.</p>
+  <p class="lead" style="font-size:13.5px;">Click each criterion when you can actually demonstrate it — not when you think you could.</p>
+  <div class="crits">
+    <div class="crit f" onclick="toggleCrit(this,'sc1')"><input type="checkbox" id="sc1"><span class="tier">🟢 Foundation</span><p>I can identify the main block categories, complete a guided tutorial, and explain what a variable is using the labelled box analogy.</p></div>
+    <div class="crit d" onclick="toggleCrit(this,'sc2')"><input type="checkbox" id="sc2"><span class="tier">🟡 Developing</span><p>I can explain what an "event" block does and why games are built around events, and create a variable with a starting value that changes correctly.</p></div>
+    <div class="crit e" onclick="toggleCrit(this,'sc3')"><input type="checkbox" id="sc3"><span class="tier">🟣 Extending</span><p>I can add an extra event-driven behaviour beyond the tutorial, and use two variables together to drive a win or lose condition.</p></div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+  <div class="section-band"><div class="sec-num">2</div><div><div class="sec-label">Tool Walkthrough — Slide 4</div></div><h2 class="sec-title">Finding Your Way Around</h2><span class="badge b-exp">Tool</span></div>
+  <p class="lead">Tick each area once you can point to it on your own screen without checking the slide.</p>
+  <div class="check"><input type="checkbox" id="ck_sim"><label for="ck_sim">Simulator</label></div>
+  <div class="check"><input type="checkbox" id="ck_tool"><label for="ck_tool">Toolbox / block categories</label></div>
+  <div class="check"><input type="checkbox" id="ck_work"><label for="ck_work">Workspace</label></div>
+  <div class="check"><input type="checkbox" id="ck_js"><label for="ck_js">Blocks / JavaScript toggle</label></div>
+  <p class="q">Which area tells you whether your program actually works, and how do you know?<span class="slide">Slide 4</span></p>
+  <textarea id="q_sim" rows="3" placeholder="Name the area, then say what it shows you that the others don't."></textarea>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+  <div class="section-band"><div class="sec-num">3</div><div><div class="sec-label">Explicit Explanation — Slide 5</div></div><h2 class="sec-title">The Event Model</h2><span class="badge b-exp">Key Idea</span></div>
+  <p class="q">Which best describes how a MakeCode program runs?<span class="slide">Slide 5</span></p>
+  <div class="mc">
+    <label class="mc-opt"><input type="radio" name="mc_event" value="a" onchange="recordMC('mc_event',this,'b')"> Top to bottom, like a list of instructions</label>
+    <label class="mc-opt"><input type="radio" name="mc_event" value="b" onchange="recordMC('mc_event',this,'b')"> It waits, and reacts when specific events happen</label>
+    <label class="mc-opt"><input type="radio" name="mc_event" value="c" onchange="recordMC('mc_event',this,'b')"> It runs every block at the same time</label>
+    <label class="mc-opt"><input type="radio" name="mc_event" value="d" onchange="recordMC('mc_event',this,'b')"> It only runs once, when the game is exported</label>
+  </div>
+  <div class="mc-result" id="mc_event_result"></div>
+  <p class="q">In your own words, explain what an "event" block does. Use one example from your paper notes.</p>
+  <textarea id="q_event" rows="4" placeholder="Your notes have the example — write the explanation in your own words, not the slide's."></textarea>
+  <p class="q">Think back to the warm-up. Pick one of the triggers you listed and describe the event block a programmer would need for it.</p>
+  <textarea id="q_warmup" rows="3" placeholder="Which trigger did you pick, and what would have to happen for it to fire?"></textarea>
+  <div class="callout c-info">Full notes on the event model live on the unit site.<br><a class="sitelink" href="U2_GameProgramming_site.html#y7-dt-u2-l4-makecode-blocks-variables">Open the unit site — Lesson 4 →</a></div>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+  <div class="section-band"><div class="sec-num">4</div><div><div class="sec-label">Connecting Back — Slide 6</div></div><h2 class="sec-title">Your Flowchart, Now in Blocks</h2><span class="badge b-exp">Link</span></div>
+  <p class="q">Open your Lesson 3 flowchart. Choose one decision point from it and explain how it would become blocks.</p>
+  <textarea id="q_flow" rows="4" placeholder="Which decision did you pick? What has to be true for the game to take each path?"></textarea>
+  <div class="callout c-extend"><strong>🟣 Extending:</strong> Name one part of your flowchart that does <em>not</em> map neatly onto a single block, and explain what makes it awkward.
+    <textarea id="q_flow_ext" rows="3" style="margin-top:10px;" placeholder="What does that step need that one block can't give it?"></textarea></div>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+  <div class="section-band"><div class="sec-num">5</div><div><div class="sec-label">Reference — Slide 7</div></div><h2 class="sec-title">Block Categories</h2><span class="badge b-exp">Reference</span></div>
+  <p class="lead">Match each job to the category you would reach for. Check your paper notes if you're stuck.</p>
+  <table class="match">
+    <tr><th style="width:58%">What you want to do</th><th>Category</th></tr>
+    <tr><td>Read a button press from the player</td><td>
+      <select id="m_1"><option value="">— choose —</option><option value="sprites">Sprites</option><option value="controller">Controller</option><option value="game">Game</option><option value="variables">Variables</option></select></td></tr>
+    <tr><td>Keep track of the player's score</td><td>
+      <select id="m_2"><option value="">— choose —</option><option value="sprites">Sprites</option><option value="controller">Controller</option><option value="game">Game</option><option value="variables">Variables</option></select></td></tr>
+    <tr><td>Change how a game object looks on screen</td><td>
+      <select id="m_3"><option value="">— choose —</option><option value="sprites">Sprites</option><option value="controller">Controller</option><option value="game">Game</option><option value="variables">Variables</option></select></td></tr>
+    <tr><td>End the game when the player runs out of lives</td><td>
+      <select id="m_4"><option value="">— choose —</option><option value="sprites">Sprites</option><option value="controller">Controller</option><option value="game">Game</option><option value="variables">Variables</option></select></td></tr>
+  </table>
+  <div style="margin-top:12px;"><button class="tb-btn" onclick="checkMatch()">Check my answers</button> <span class="mc-result" id="match_result"></span></div>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+  <div class="section-band"><div class="sec-num">6</div><div><div class="sec-label">Application of Learning — Slide 8</div></div><h2 class="sec-title">Your First Game</h2><span class="badge b-task">Task</span></div>
+  <div class="callout c-tip"><strong>Laptops open.</strong> Work through the tutorial, then come back and tick off what you've done. Save before the break — you build on this same file in the second half.</div>
+  <div class="check"><input type="checkbox" id="t1_tut"><label for="t1_tut">Tutorial completed and running</label></div>
+  <div class="check"><input type="checkbox" id="t1_art"><label for="t1_art">Player sprite replaced with my own Lesson 2 art</label></div>
+  <div class="check"><input type="checkbox" id="t1_save"><label for="t1_save">Project saved to my own account</label></div>
+  <div class="check ext"><input type="checkbox" id="t1_ext"><label for="t1_ext">🟣 Extending — one extra event-driven behaviour added</label></div>
+  <p class="q">What is one thing that confused you at first, and how did you work it out?</p>
+  <textarea id="q_reflect1" rows="3" placeholder="Describe what you tried, not just what went wrong."></textarea>
+  <p class="q">🟣 Extending — describe the extra behaviour you added and which event triggers it.</p>
+  <textarea id="q_ext1" rows="3" placeholder="What sets it off, and what happens as a result?"></textarea>
+</section>
+
+<!-- 7 -->
+<section id="s7">
+  <div class="section-band"><div class="sec-num">7</div><div><div class="sec-label">Explicit Explanation — Slide 10</div></div><h2 class="sec-title">A Variable Is a Labelled Box</h2><span class="badge b-exp">Analogy</span></div>
+  <div class="callout c-note"><strong>Laptops closed for this part.</strong> Take your notes on paper first — you'll come back to the workbook at Section 9.</div>
+  <p class="q">Explain the labelled box analogy in your own words.<span class="slide">Slide 10</span></p>
+  <textarea id="q_box" rows="4" placeholder="What is the box, what is the label, and what is the thing inside?"></textarea>
+  <p class="q">Which block adds 1 to the player's score when they collect a coin?<span class="slide">Slide 11</span></p>
+  <div class="mc">
+    <label class="mc-opt"><input type="radio" name="mc_var" value="a" onchange="recordMC('mc_var',this,'b')"> <code>set score to 1</code></label>
+    <label class="mc-opt"><input type="radio" name="mc_var" value="b" onchange="recordMC('mc_var',this,'b')"> <code>change score by 1</code></label>
+    <label class="mc-opt"><input type="radio" name="mc_var" value="c" onchange="recordMC('mc_var',this,'b')"> <code>show score</code></label>
+    <label class="mc-opt"><input type="radio" name="mc_var" value="d" onchange="recordMC('mc_var',this,'b')"> <code>score = coin</code></label>
+  </div>
+  <div class="mc-result" id="mc_var_result"></div>
+  <p class="q">Name two other values in a game that would need to be variables, and say why each one changes.</p>
+  <textarea id="q_two" rows="3" placeholder="For each one: what makes it go up, down, or change?"></textarea>
+</section>
+
+<!-- 8 -->
+<section id="s8">
+  <div class="section-band"><div class="sec-num">8</div><div><div class="sec-label">Common Pitfalls — Slide 12</div></div><h2 class="sec-title">What Goes Wrong</h2><span class="badge b-exp">Pitfalls</span></div>
+  <p class="q">Predict the output — a variable is created but never given a starting value, then <code>change score by 1</code> runs. What happens, and why is that a problem?</p>
+  <textarea id="q_predict" rows="4" placeholder="Predict first, then say what the player would actually see."></textarea>
+  <p class="q">Spot the error — a student puts <code>set score to 1</code> inside their coin-collision event. Describe what the score does as the player collects coin after coin.</p>
+  <textarea id="q_error" rows="3" placeholder="Follow it through: coin one, coin two, coin three."></textarea>
+  <p class="q">Write the fix for the student above in one sentence.</p>
+  <input type="text" class="wide" id="q_fix" placeholder="What should change, and where?">
+</section>
+
+<!-- 9 -->
+<section id="s9">
+  <div class="section-band"><div class="sec-num">9</div><div><div class="sec-label">Application of Learning — Slide 13</div></div><h2 class="sec-title">Score &amp; Lives</h2><span class="badge b-task">Task</span></div>
+  <div class="callout c-tip"><strong>Laptops open again.</strong> Reopen the project you built before the break and add to it — don't start a new one.</div>
+  <div class="check"><input type="checkbox" id="t2_score"><label for="t2_score">score variable added</label></div>
+  <div class="check"><input type="checkbox" id="t2_lives"><label for="t2_lives">lives variable added</label></div>
+  <div class="check"><input type="checkbox" id="t2_start"><label for="t2_start">Both starting values set on start</label></div>
+  <div class="check"><input type="checkbox" id="t2_test"><label for="t2_test">Tested in the simulator — score and lives both change correctly</label></div>
+  <div class="check ext"><input type="checkbox" id="t2_ext"><label for="t2_ext">🟣 Extending — lives wired to a lose condition</label></div>
+  <p class="q">What starting values did you choose, and why those numbers?</p>
+  <textarea id="q_start" rows="3" placeholder="Think about what happens on the very first frame of your game."></textarea>
+  <p class="q">Which mechanic modification in your CAT might use variables, and how?</p>
+  <textarea id="q_cat" rows="3" placeholder="Which value would need to be remembered while the game runs?"></textarea>
+</section>
+
+<!-- 10 -->
+<section id="s10">
+  <div class="section-band"><div class="sec-num">10</div><div><div class="sec-label">Next Steps — Slide 14</div></div><h2 class="sec-title">Exit Ticket</h2><span class="badge b-exit">Exit Ticket</span></div>
+  <p class="lead">Answer from memory — close the slides and the unit site first.</p>
+  <p class="q">1. Name one event block you used today and what it made happen.</p>
+  <textarea id="x1" rows="2" placeholder="From memory — no looking back."></textarea>
+  <p class="q">2. What is the difference between <code>set score to 0</code> and <code>change score by 1</code>?</p>
+  <textarea id="x2" rows="3" placeholder="From memory — no looking back."></textarea>
+  <p class="q">3. Why does a variable need a starting value?</p>
+  <textarea id="x3" rows="2" placeholder="From memory — no looking back."></textarea>
+  <p class="q">4. Go back to Section 1 and tick the criteria you've achieved. Which tier did you reach, and what would move you up one?</p>
+  <textarea id="x4" rows="2" placeholder="Name the tier, then the one thing standing between you and the next one."></textarea>
+  <div class="submit-row">
+    <button class="submit-btn" onclick="DataService.submit()">Submit workbook ✓</button>
+    <div class="exit-note">Next lesson — Conditionals &amp; Loops: making your game decide and repeat.</div>
+  </div>
+</section>
+
+</main>
+
+<script>
+const LESSON_ID = 'y7-dt-u2-l4-makecode-blocks-variables';
+
+const DataService = {
+  studentId() {
+    const raw = localStorage.getItem('eduportal_session');
+    if (raw) { try { return JSON.parse(raw).id || 'current_student'; } catch(e) {} }
+    return 'current_student';
+  },
+  _key() { return `eduportal_workbook_${this.studentId()}_${LESSON_ID}`; },
+  save() {
+    try {
+      localStorage.setItem(this._key(), JSON.stringify({ ...collectAll(), savedAt: new Date().toISOString() }));
+      this._syncProgress('in-progress');
+      showToast('✓ Progress saved');
+    } catch(e) { showToast('⚠ Could not save'); }
+  },
+  load() {
+    try {
+      const raw = localStorage.getItem(this._key());
+      if (!raw) { showToast('No saved progress found'); return; }
+      restoreAll(JSON.parse(raw));
+      updateProgress();
+      showToast('✓ Progress loaded');
+    } catch(e) { showToast('⚠ Could not load'); }
+  },
+  autoSave(d) {
+    try {
+      localStorage.setItem(this._key(), JSON.stringify({ ...d, savedAt: new Date().toISOString() }));
+      this._syncProgress('in-progress');
+    } catch(e) {}
+  },
+  autoLoad() {
+    try {
+      const raw = localStorage.getItem(this._key());
+      if (raw) restoreAll(JSON.parse(raw));
+    } catch(e) {}
+  },
+  submit() {
+    try {
+      const studentId    = this.studentId();
+      const submissionId = `${studentId}_${LESSON_ID}_${Date.now()}`;
+      const payload = { id: submissionId, studentId, lessonId: LESSON_ID, ...collectAll(),
+                        submittedAt: new Date().toISOString(), status: 'submitted' };
+      localStorage.setItem(`eduportal_submission_${submissionId}`, JSON.stringify(payload));
+      this._syncProgress('submitted', submissionId);
+      showToast('✓ Submitted — thank you!');
+    } catch(e) { showToast('⚠ Submission failed — try again'); }
+  },
+  _syncProgress(status, submissionId = null) {
+    try {
+      localStorage.setItem(`eduportal_progress_${this.studentId()}_${LESSON_ID}`,
+        JSON.stringify({ status, submissionId, updatedAt: new Date().toISOString() }));
+    } catch(e) {}
+  }
+};
+
+const MATCH_ANSWERS = { m_1:'controller', m_2:'variables', m_3:'sprites', m_4:'game' };
+const MC_GROUPS = ['mc_event','mc_var'];
+
+function collectAll() {
+  const d = {};
+  document.querySelectorAll('textarea[id], input[type=text][id]').forEach(el => { d[el.id] = el.value; });
+  document.querySelectorAll('input[type=checkbox][id]').forEach(el => { d[el.id] = el.checked; });
+  document.querySelectorAll('select[id]').forEach(el => { d[el.id] = el.value; });
+  document.querySelectorAll('input[type=radio]:checked').forEach(el => { d['radio_' + el.name] = el.value; });
+  return d;
+}
+function restoreAll(d) {
+  if (!d) return;
+  Object.entries(d).forEach(([k, v]) => {
+    if (['savedAt','submittedAt','status','id','studentId','lessonId'].includes(k)) return;
+    if (k.startsWith('radio_')) {
+      const name = k.replace('radio_', '');
+      document.querySelectorAll(`input[name="${name}"]`).forEach(el => { el.checked = el.value === v; });
+      return;
+    }
+    const el = document.getElementById(k);
+    if (!el) return;
+    if (el.type === 'checkbox') el.checked = Boolean(v);
+    else el.value = v;
+  });
+  ['sc1','sc2','sc3'].forEach(id => {
+    const cb = document.getElementById(id);
+    if (cb && cb.checked) cb.closest('.crit').classList.add('checked');
+  });
+}
+function updateProgress() {
+  const texts   = document.querySelectorAll('textarea[id], input[type=text][id]');
+  const filled  = [...texts].filter(el => el.value.trim().length > 1).length;
+  const cbTotal = document.querySelectorAll('input[type=checkbox][id]').length;
+  const cbs     = [...document.querySelectorAll('input[type=checkbox][id]')].filter(cb => cb.checked).length;
+  const selTot  = document.querySelectorAll('select[id]').length;
+  const sels    = [...document.querySelectorAll('select[id]')].filter(s => s.value).length;
+  const rads    = MC_GROUPS.filter(n => document.querySelector(`input[name="${n}"]:checked`)).length;
+  const total   = texts.length + cbTotal + selTot + MC_GROUPS.length;
+  const pct     = Math.min(100, Math.round((filled + cbs + sels + rads) / total * 100));
+  document.getElementById('tbFill').style.width = pct + '%';
+  document.getElementById('tbPct').textContent  = pct + '%';
+  clearTimeout(window._st);
+  window._st = setTimeout(() => DataService.autoSave(collectAll()), 1800);
+}
+function recordMC(groupId, radioEl, correct) {
+  document.querySelectorAll(`input[name="${groupId}"]`).forEach(r =>
+    r.parentElement.classList.remove('correct-ans','wrong-ans'));
+  const res = document.getElementById(groupId + '_result');
+  if (radioEl.value === correct) {
+    radioEl.parentElement.classList.add('correct-ans');
+    res.textContent = '✓ Correct'; res.className = 'mc-result show-c';
+  } else {
+    radioEl.parentElement.classList.add('wrong-ans');
+    res.textContent = '✗ Not quite — check your paper notes and try again.';
+    res.className = 'mc-result show-w';
+  }
+  updateProgress();
+}
+function checkMatch() {
+  const ids = Object.keys(MATCH_ANSWERS);
+  const right = ids.filter(id => document.getElementById(id).value === MATCH_ANSWERS[id]).length;
+  const res = document.getElementById('match_result');
+  res.textContent = `${right} of ${ids.length} correct` + (right === ids.length ? ' ✓' : ' — check the ones you\u2019re unsure of again.');
+  res.className = 'mc-result ' + (right === ids.length ? 'show-c' : 'show-w');
+  updateProgress();
+}
+function toggleCrit(card, cbId) {
+  const cb = document.getElementById(cbId);
+  cb.checked = !cb.checked;
+  card.classList.toggle('checked', cb.checked);
+  updateProgress();
+}
+function showToast(msg) {
+  let t = document.getElementById('_toast');
+  if (!t) {
+    t = document.createElement('div'); t.id = '_toast';
+    t.style.cssText = 'position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#151B24;color:#E8EDF4;border:1px solid #33404F;padding:9px 20px;border-radius:6px;font-size:12px;font-family:DM Mono,monospace;z-index:9999;transition:opacity .3s;white-space:nowrap;pointer-events:none;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg; t.style.opacity = '1';
+  clearTimeout(t._t); t._t = setTimeout(() => t.style.opacity = '0', 2600);
+}
+document.addEventListener('input',  updateProgress);
+document.addEventListener('change', updateProgress);
+window.addEventListener('load', () => { DataService.autoLoad(); updateProgress(); });
+setInterval(() => DataService.autoSave(collectAll()), 60000);
+</script>
+</body>
+</html>

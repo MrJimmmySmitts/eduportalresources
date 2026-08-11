@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Elements of a Game — Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dark-bg:#0D1117; --light-bg:#FFFFFF;
+    --blue:#4361EE; --green:#10B981; --amber:#F59E0B; --purple:#8B5CF6; --red:#EF4444;
+    --bg: var(--dark-bg); --panel:#161B22; --panel-2:#1C2330; --border:#2A3140;
+    --text:#E6E8EE; --text-dim:#9BA3B4; --input-bg:#0D1117;
+  }
+  [data-theme="light"]{
+    --bg: var(--light-bg); --panel:#F7F8FC; --panel-2:#F0F2F8; --border:#DCE0EA;
+    --text:#1A1A2E; --text-dim:#5A5A6E; --input-bg:#FFFFFF;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; transition:background .2s,color .2s;}
+  h1,h2,h3{font-family:'DM Serif Display',serif; font-weight:400; margin:0;}
+  .mono{font-family:'DM Mono',monospace;}
+  .read{font-family:'Atkinson Hyperlegible',sans-serif;}
+  a{color:var(--blue);}
+
+  /* Progress bar */
+  #progressbar{
+    position:sticky; top:0; z-index:50; background:var(--panel); border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:16px; padding:10px 20px; flex-wrap:wrap;
+  }
+  #progressbar .track{flex:1; min-width:140px; height:8px; background:var(--panel-2); border-radius:4px; overflow:hidden;}
+  #progressbar .fill{height:100%; background:var(--blue); width:0%; transition:width .3s;}
+  #progressbar .pct{font-family:'DM Mono',monospace; font-size:13px; color:var(--text-dim); min-width:40px;}
+  .btn{
+    font-family:'DM Mono',monospace; font-size:12px; border:1px solid var(--border); background:var(--panel-2);
+    color:var(--text); padding:7px 12px; border-radius:6px; cursor:pointer;
+  }
+  .btn:hover{border-color:var(--blue);}
+  .btn.primary{background:var(--blue); color:#fff; border-color:var(--blue);}
+  .btn.exit{background:var(--red); color:#fff; border-color:var(--red);}
+
+  .wrap{max-width:920px; margin:0 auto; padding:0 20px 80px;}
+
+  /* Cover */
+  .cover{padding:40px 0 24px; border-bottom:1px solid var(--border); margin-bottom:32px;}
+  .eyebrow{font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.08em; color:var(--blue); margin-bottom:10px;}
+  .cover h1{font-size:34px; margin-bottom:6px;}
+  .cover .sub{color:var(--text-dim); font-size:15px; margin-bottom:20px;}
+  .infogrid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:18px;}
+  .infogrid label{display:block; font-family:'DM Mono',monospace; font-size:11px; color:var(--text-dim); margin-bottom:4px;}
+  .infogrid input{width:100%; background:var(--input-bg); border:1px solid var(--border); border-radius:6px; padding:8px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px;}
+
+  /* Section band */
+  .section-band{display:flex; align-items:center; gap:12px; margin:44px 0 18px;}
+  .num-circle{width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'DM Mono',monospace; font-weight:700; font-size:14px; color:#fff; flex-shrink:0;}
+  .section-band h2{font-size:22px;}
+  .section-label{font-family:'DM Mono',monospace; font-size:11px; color:var(--text-dim); text-transform:uppercase;}
+  .badge{margin-left:auto; font-family:'DM Mono',monospace; font-size:11px; padding:4px 10px; border-radius:12px; border:1px solid var(--border); color:var(--text-dim);}
+
+  .card{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:20px; margin-bottom:16px;}
+
+  /* Callouts */
+  .callout{border-radius:10px; padding:16px 18px; margin-bottom:20px; border:1px solid; font-family:'Atkinson Hyperlegible',sans-serif; font-size:15px; line-height:1.5;}
+  .callout-info{background:rgba(67,97,238,.08); border-color:var(--blue);}
+  .callout-tip{background:rgba(16,185,129,.08); border-color:var(--green);}
+  .callout-note{background:rgba(245,158,11,.08); border-color:var(--amber);}
+  .callout-extend{background:rgba(139,92,246,.08); border-color:var(--purple);}
+  .callout b{display:block; font-family:'DM Mono',monospace; font-size:11px; text-transform:uppercase; margin-bottom:6px; letter-spacing:.04em;}
+
+  /* Tier tags */
+  .tier{display:inline-flex; align-items:center; gap:6px; font-family:'DM Mono',monospace; font-size:12px; font-weight:700; padding:4px 10px; border-radius:12px; margin-bottom:10px;}
+  .tier.foundation{background:rgba(16,185,129,.12); color:var(--green);}
+  .tier.developing{background:rgba(245,158,11,.12); color:var(--amber);}
+  .tier.extending{background:rgba(139,92,246,.12); color:var(--purple);}
+
+  textarea, input[type=text]{
+    width:100%; background:var(--input-bg); border:1px solid var(--border); border-radius:8px;
+    padding:10px 12px; color:var(--text); font-family:'Atkinson Hyperlegible',sans-serif; font-size:14.5px; resize:vertical;
+  }
+  textarea:focus, input:focus{outline:2px solid var(--blue); outline-offset:1px;}
+  label.q{display:block; font-family:'DM Sans',sans-serif; font-weight:600; font-size:14.5px; margin-bottom:6px; margin-top:14px;}
+
+  select{
+    background:var(--input-bg); border:1px solid var(--border); border-radius:6px; color:var(--text);
+    padding:7px 10px; font-family:'DM Sans',sans-serif; font-size:13.5px; width:100%;
+  }
+
+  .element-row{display:grid; grid-template-columns:170px 1fr; gap:14px; align-items:start; padding:12px 0; border-bottom:1px solid var(--border);}
+  .element-row:last-child{border-bottom:none;}
+  .element-row .el-label{display:flex; align-items:center; gap:8px; font-weight:700; padding-top:8px;}
+  .dot{width:10px; height:10px; border-radius:50%; flex-shrink:0;}
+
+  .match-row{display:grid; grid-template-columns:1fr 260px; gap:14px; align-items:center; padding:8px 0;}
+
+  .checklist label{display:flex; gap:10px; align-items:flex-start; font-size:14px; margin:8px 0; cursor:pointer;}
+  .checklist input{margin-top:3px;}
+
+  .toggle-row{display:flex; justify-content:flex-end; padding:14px 20px 0;}
+  .toggle-row button{background:none; border:1px solid var(--border); color:var(--text-dim); border-radius:6px; padding:6px 10px; font-family:'DM Mono',monospace; font-size:11px; cursor:pointer;}
+
+  .site-link{display:inline-flex; align-items:center; gap:6px; font-family:'DM Mono',monospace; font-size:12.5px; padding:8px 14px; border:1px solid var(--blue); border-radius:6px; color:var(--blue); text-decoration:none; margin:6px 0 4px;}
+  .site-link:hover{background:rgba(67,97,238,.1);}
+
+  .check-btn{margin-top:10px;}
+  .match-feedback{font-family:'DM Mono',monospace; font-size:12px; margin-top:10px; min-height:18px;}
+  .footer-note{color:var(--text-dim); font-size:12.5px; text-align:center; margin-top:50px; font-family:'DM Mono',monospace;}
+</style>
+</head>
+<body data-theme="dark">
+
+<div id="progressbar">
+  <span class="mono" style="font-size:12px; color:var(--text-dim);">PROGRESS</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+  <span class="pct" id="progressPct">0%</span>
+  <button class="btn" onclick="DataService.save(true)">Save</button>
+  <button class="btn" onclick="DataService.autoLoad(true)">Load</button>
+  <button class="btn" onclick="window.print()">Export</button>
+  <button class="btn" id="themeToggle" onclick="toggleTheme()">☾ Light mode</button>
+</div>
+
+<div class="wrap">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="eyebrow">VICTORIAN CURRICULUM 2.0 · DIGITAL TECHNOLOGIES · YEAR 10</div>
+    <h1>The Elements of a Game</h1>
+    <div class="sub">Game Programming — Unit 1, Lesson 1 · Student Workbook</div>
+    <div class="infogrid">
+      <div><label>Name</label><input type="text" id="s_name" placeholder="Your name"></div>
+      <div><label>Class</label><input type="text" id="s_class" placeholder="e.g. 10DIT2"></div>
+      <div><label>Date</label><input type="text" id="s_date" placeholder="YYYY-MM-DD"></div>
+      <div><label>Teacher</label><input type="text" id="s_teacher" value="Mr Smith" readonly></div>
+    </div>
+  </div>
+
+  <!-- LAPTOP GATE -->
+  <div class="callout callout-note">
+    <b>🔒 Laptop Gate — read before opening</b>
+    Don't open this workbook until your teacher tells you to. During the explicit teaching part of today's lesson, take notes on paper — you'll use those notes for the first task below. This workbook is for the independent work later in the lesson.
+  </div>
+
+  <!-- SECTION 1: LO & Success Criteria -->
+  <div class="section-band">
+    <div class="num-circle" style="background:var(--blue);">1</div>
+    <div><div class="section-label">Stage 1</div><h2>Learning Objective &amp; Success Criteria</h2></div>
+    <div class="badge">Self-check</div>
+  </div>
+
+  <div class="callout callout-info">
+    <b>Today's objective</b>
+    To identify and describe the core elements that combine to create a game.
+  </div>
+
+  <div class="card">
+    <div class="checklist">
+      <label><input type="checkbox" class="sc-check" data-key="sc_foundation"><span><span class="tier foundation">🟢 Foundation</span><br>I can name and define at least five elements of a game.</span></label>
+      <label><input type="checkbox" class="sc-check" data-key="sc_developing"><span><span class="tier developing">🟡 Developing</span><br>I can explain how those elements work together in a real game.</span></label>
+      <label><input type="checkbox" class="sc-check" data-key="sc_extending"><span><span class="tier extending">🟣 Extending</span><br>I can evaluate how changing one element would affect the player's experience.</span></label>
+    </div>
+    <p style="color:var(--text-dim); font-size:12.5px; margin-top:12px; margin-bottom:0;">Tick these off honestly as you complete each level of today's task — you'll revisit this at the exit ticket.</p>
+  </div>
+
+  <!-- SECTION 2: Recap from paper notes -->
+  <div class="section-band">
+    <div class="num-circle" style="background:var(--green);">2</div>
+    <div><div class="section-label">Stage 2 → 3 bridge</div><h2>Recap From Your Paper Notes</h2></div>
+    <div class="badge">Auto-marked</div>
+  </div>
+
+  <div class="callout callout-tip">
+    <b>Before you type anything</b>
+    Have your paper notes from the explicit teaching part of the lesson in front of you. Don't rely on memory alone — check what you wrote down.
+  </div>
+
+  <a class="site-link" href="U1_GameProgramming_site.html#l1-elements-of-a-game" target="_blank">See the unit site for full notes on this topic →</a>
+
+  <div class="card">
+    <p class="read" style="margin-top:0;">Match each element to its definition, using your notes. Select an answer for all seven, then check your work.</p>
+    <div id="matchArea"></div>
+    <button class="btn primary check-btn" onclick="checkMatching()">Check my answers</button>
+    <div class="match-feedback" id="matchFeedback"></div>
+  </div>
+
+  <div class="card">
+    <label class="q">In your own words, from your notes — what's the difference between a game's <em>mechanics</em> and its <em>aesthetics</em>?</label>
+    <textarea rows="3" class="autosave" data-key="q_mechanics_vs_aesthetics" placeholder="Write this from your notes, in your own words — don't copy the slide."></textarea>
+
+    <label class="q">Your teacher discussed whether a jigsaw puzzle done alone counts as a "game." What did your class decide, and why?</label>
+    <textarea rows="3" class="autosave" data-key="q_jigsaw_discussion" placeholder="What was the class argument for and against? What's your own view?"></textarea>
+  </div>
+
+  <!-- SECTION 3: Application -->
+  <div class="section-band">
+    <div class="num-circle" style="background:var(--green);">3</div>
+    <div><div class="section-label">Stage 3</div><h2>Deconstruct a Game</h2></div>
+    <div class="badge">Main task</div>
+  </div>
+
+  <div class="callout callout-tip">
+    <b>Task</b>
+    Choose a game you know well and break it down using all seven elements — just like your teacher did with Among Us. Pick a game only YOU can explain in detail; vague answers are the easiest way to lose marks here.
+  </div>
+
+  <div class="card">
+    <label class="q">Which game are you analysing?</label>
+    <input type="text" class="autosave" data-key="game_choice" placeholder="Name the game">
+  </div>
+
+  <div class="card">
+    <span class="tier foundation">🟢 Foundation</span> — fill in at least 5 of the 7 rows below.<br>
+    <span class="tier developing" style="margin-top:6px;">🟡 Developing</span> — fill in all 7, with one specific example each.
+
+    <div style="margin-top:14px;">
+      <div class="element-row"><div class="el-label"><span class="dot" style="background:var(--blue);"></span>Objective</div><textarea rows="2" class="autosave" data-key="el_objective" placeholder="What is the player trying to achieve in your game?"></textarea></div>
+      <div class="element-row"><div class="el-label"><span class="dot" style="background:var(--green);"></span>Rules</div><textarea rows="2" class="autosave" data-key="el_rules" placeholder="What can and can't the player do?"></textarea></div>
+      <div class="element-row"><div class="el-label"><span class="dot" style="background:var(--amber);"></span>Mechanics</div><textarea rows="2" class="autosave" data-key="el_mechanics" placeholder="List the player's main actions — the verbs."></textarea></div>
+      <div class="element-row"><div class="el-label"><span class="dot" style="background:var(--red);"></span>Challenge</div><textarea rows="2" class="autosave" data-key="el_challenge" placeholder="What makes reaching the objective hard?"></textarea></div>
+      <div class="element-row"><div class="el-label"><span class="dot" style="background:var(--purple);"></span>Narrative</div><textarea rows="2" class="autosave" data-key="el_narrative" placeholder="Is there a story or theme? If not, say so."></textarea></div>
+      <div class="element-row"><div class="el-label"><span class="dot" style="background:#028090;"></span>Aesthetics</div><textarea rows="2" class="autosave" data-key="el_aesthetics" placeholder="Describe the art style and/or sound."></textarea></div>
+      <div class="element-row"><div class="el-label"><span class="dot" style="background:#990011;"></span>Feedback</div><textarea rows="2" class="autosave" data-key="el_feedback" placeholder="How does the game tell you how you're doing?"></textarea></div>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:var(--purple);">
+    <span class="tier extending">🟣 Extending</span>
+    <label class="q" style="margin-top:10px;">Pick ONE element from your table above. If it were completely removed from the game, what would happen to the player's experience?</label>
+    <textarea rows="4" class="autosave" data-key="el_extend_removal" placeholder="Which element, and what changes? Would the game still work at all?"></textarea>
+  </div>
+
+  <!-- SECTION 4: Responsive teaching -->
+  <div class="section-band">
+    <div class="num-circle" style="background:var(--purple);">4</div>
+    <div><div class="section-label">Stage 4</div><h2>Share Back &amp; Reflect</h2></div>
+    <div class="badge">Discussion</div>
+  </div>
+
+  <div class="card">
+    <label class="q">Which element was hardest to pin down for your game, and why?</label>
+    <textarea rows="3" class="autosave" data-key="reflect_hardest" placeholder="Which of the 7, and what made it tricky?"></textarea>
+
+    <label class="q">Did your partner guess your game from one clue? What did that tell you about how clearly you'd described that element?</label>
+    <textarea rows="3" class="autosave" data-key="reflect_partner" placeholder="What happened, and what does it show about your description?"></textarea>
+  </div>
+
+  <!-- SECTION 5: Exit ticket -->
+  <div class="section-band">
+    <div class="num-circle" style="background:var(--red);">5</div>
+    <div><div class="section-label">Stage 5</div><h2>Exit Ticket</h2></div>
+    <div class="badge" style="border-color:var(--red); color:var(--red);">Complete before you leave</div>
+  </div>
+
+  <div class="card" style="border-color:var(--red);">
+    <label class="q">1. From memory (no looking back!) — list as many of the 7 elements as you can.</label>
+    <textarea rows="3" class="autosave" data-key="exit_list" placeholder="Type as many as you remember."></textarea>
+
+    <label class="q">2. Pick one element and explain, in one sentence, why it matters to a game.</label>
+    <textarea rows="2" class="autosave" data-key="exit_why_matters" placeholder="One element, one clear reason."></textarea>
+
+    <label class="q">3. Rate your confidence against today's success criteria.</label>
+    <div class="checklist" style="margin-top:8px;">
+      <label><input type="radio" name="confidence" class="autosave-radio" value="foundation"><span><span class="tier foundation">🟢</span> Foundation — I can name and define 5+ elements</span></label>
+      <label><input type="radio" name="confidence" class="autosave-radio" value="developing"><span><span class="tier developing">🟡</span> Developing — I can explain how elements work together</span></label>
+      <label><input type="radio" name="confidence" class="autosave-radio" value="extending"><span><span class="tier extending">🟣</span> Extending — I can evaluate the effect of changing an element</span></label>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:20px;">
+    <button class="btn exit" style="padding:12px 26px; font-size:13px;" onclick="submitWorkbook()">Submit Workbook</button>
+  </div>
+
+  <div class="footer-note">
+    Game Programming · Year 10 Digital Technologies · Lesson 1 of Unit 1<br>
+    See the <a href="U1_GameProgramming_site.html#l1-elements-of-a-game" target="_blank">unit reference site</a> for full notes on this lesson.
+  </div>
+
+</div>
+
+<script>
+const LESSON_ID = 'l1-elements-of-a-game';
+
+const DataService = {
+  getStudentId() {
+    return JSON.parse(localStorage.getItem('eduportal_session') || '{}').id || 'current_student';
+  },
+  _collect() {
+    const data = {};
+    document.querySelectorAll('.autosave').forEach(el => { data[el.dataset.key] = el.value; });
+    document.querySelectorAll('.autosave-radio:checked').forEach(el => { data[el.name] = el.value; });
+    document.querySelectorAll('.sc-check').forEach(el => { data[el.dataset.key] = el.checked; });
+    document.querySelectorAll('.match-select').forEach(el => { data[el.dataset.key] = el.value; });
+    data['s_name'] = document.getElementById('s_name').value;
+    data['s_class'] = document.getElementById('s_class').value;
+    data['s_date'] = document.getElementById('s_date').value;
+    return data;
+  },
+  save(manual) {
+    const studentId = this.getStudentId();
+    const payload = this._collect();
+    try {
+      localStorage.setItem(`eduportal_workbook_${studentId}_${LESSON_ID}`, JSON.stringify(payload));
+      if (manual) flashButton('Saved ✓');
+    } catch (e) { console.error('Save failed', e); }
+  },
+  load() {
+    const studentId = this.getStudentId();
+    try {
+      const raw = localStorage.getItem(`eduportal_workbook_${studentId}_${LESSON_ID}`);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      document.querySelectorAll('.autosave').forEach(el => { if (data[el.dataset.key] !== undefined) el.value = data[el.dataset.key]; });
+      document.querySelectorAll('.autosave-radio').forEach(el => { if (data[el.name] === el.value) el.checked = true; });
+      document.querySelectorAll('.sc-check').forEach(el => { if (data[el.dataset.key]) el.checked = true; });
+      document.querySelectorAll('.match-select').forEach(el => { if (data[el.dataset.key] !== undefined) el.value = data[el.dataset.key]; });
+      if (data.s_name) document.getElementById('s_name').value = data.s_name;
+      if (data.s_class) document.getElementById('s_class').value = data.s_class;
+      if (data.s_date) document.getElementById('s_date').value = data.s_date;
+    } catch (e) { console.error('Load failed', e); }
+  },
+  autoLoad(manual) {
+    this.load();
+    updateProgress();
+    if (manual) flashButton('Loaded ✓');
+  },
+  autoSave: (() => {
+    let t;
+    return function(d) { clearTimeout(t); t = setTimeout(() => { DataService.save(false); updateProgress(); }, 500); };
+  })(),
+  submit() {
+    const studentId = this.getStudentId();
+    this.save(false);
+    this._syncProgress('submitted');
+    alert('Workbook submitted. Your teacher can now see your progress.');
+  },
+  _syncProgress(status) {
+    const studentId = this.getStudentId();
+    // Status must be one of: 'in-progress' | 'submitted' | 'marked'
+    localStorage.setItem(`eduportal_progress_${studentId}_${LESSON_ID}`, status);
+  }
+};
+
+function flashButton(msg) {
+  const pct = document.getElementById('progressPct');
+  const old = pct.textContent;
+  pct.textContent = msg;
+  setTimeout(() => { pct.textContent = old; }, 1200);
+}
+
+function submitWorkbook() { DataService.submit(); }
+
+function updateProgress() {
+  const fields = document.querySelectorAll('.autosave, .match-select');
+  let filled = 0;
+  fields.forEach(el => { if (el.value && el.value.trim().length > 0) filled++; });
+  const radios = document.querySelectorAll('input[name="confidence"]');
+  const radioFilled = Array.from(radios).some(r => r.checked) ? 1 : 0;
+  const total = fields.length + 1;
+  const pct = Math.round(((filled + radioFilled) / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  if (pct > 0) DataService._syncProgress('in-progress');
+}
+
+// Matching activity
+const matchItems = [
+  { key: 'm_objective', label: 'Objective', correct: 'goal', def: [
+      ['goal', "The clear goal the player is working toward"],
+      ['verbs', "The specific actions the player can perform"],
+      ['boundaries', "What actions are allowed, forbidden, or required"],
+      ['feel', "How the game looks and sounds"],
+    ]},
+  { key: 'm_rules', label: 'Rules', correct: 'boundaries', def: null },
+  { key: 'm_mechanics', label: 'Mechanics', correct: 'verbs', def: null },
+  { key: 'm_challenge', label: 'Challenge', correct: 'obstacle', def: [
+      ['obstacle', "What stands between the player and the objective"],
+      ['story', "The story or theme wrapped around play"],
+      ['signal', "How the game tells you how you're doing"],
+    ]},
+  { key: 'm_narrative', label: 'Narrative', correct: 'story', def: null },
+  { key: 'm_aesthetics', label: 'Aesthetics', correct: 'feel', def: null },
+  { key: 'm_feedback', label: 'Feedback', correct: 'signal', def: null },
+];
+
+const allDefs = [
+  ['goal', "The clear goal the player is working toward"],
+  ['boundaries', "What actions are allowed, forbidden, or required"],
+  ['verbs', "The specific actions the player can perform"],
+  ['obstacle', "What stands between the player and the objective"],
+  ['story', "The story or theme wrapped around play"],
+  ['feel', "How the game looks and sounds"],
+  ['signal', "How the game tells you how you're doing"],
+];
+
+function buildMatching() {
+  const area = document.getElementById('matchArea');
+  matchItems.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'match-row';
+    const label = document.createElement('div');
+    label.textContent = item.label;
+    label.style.fontWeight = '600';
+    const select = document.createElement('select');
+    select.className = 'match-select autosave';
+    select.dataset.key = item.key;
+    const blank = document.createElement('option');
+    blank.value = ''; blank.textContent = '— choose a definition —';
+    select.appendChild(blank);
+    // shuffle definitions consistently but randomised once per row
+    const shuffled = [...allDefs].sort(() => Math.random() - 0.5);
+    shuffled.forEach(([val, text]) => {
+      const opt = document.createElement('option');
+      opt.value = val; opt.textContent = text;
+      select.appendChild(opt);
+    });
+    select.addEventListener('change', () => DataService.autoSave());
+    row.appendChild(label);
+    row.appendChild(select);
+    area.appendChild(row);
+  });
+}
+buildMatching();
+
+function checkMatching() {
+  let correctCount = 0;
+  matchItems.forEach(item => {
+    const sel = document.querySelector(`.match-select[data-key="${item.key}"]`);
+    if (sel && sel.value === item.correct) correctCount++;
+  });
+  const fb = document.getElementById('matchFeedback');
+  fb.textContent = `${correctCount} / ${matchItems.length} correct — recheck any that don't match your notes.`;
+  fb.style.color = correctCount === matchItems.length ? 'var(--green)' : 'var(--amber)';
+}
+
+function toggleTheme() {
+  const body = document.body;
+  const isDark = body.getAttribute('data-theme') === 'dark';
+  body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeToggle').textContent = isDark ? '☀ Dark mode' : '☾ Light mode';
+}
+
+// Wire autosave listeners
+document.querySelectorAll('.autosave, .autosave-radio').forEach(el => {
+  el.addEventListener('input', () => DataService.autoSave());
+  el.addEventListener('change', () => DataService.autoSave());
+});
+document.querySelectorAll('.sc-check').forEach(el => {
+  el.addEventListener('change', () => { DataService.save(false); updateProgress(); });
+});
+
+// init
+DataService.autoLoad(false);
+if (!document.getElementById('s_date').value) {
+  document.getElementById('s_date').placeholder = new Date().toISOString().slice(0,10);
+}
+</script>
+</body>
+</html>

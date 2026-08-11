@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 4: Software Development — Reference Site</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#4361EE; --green:#10B981; --amber:#F59E0B; --purple:#8B5CF6;
+  --teal:#14B8A6; --sky:#0EA5E9; --slate:#64748B; --red:#EF4444;
+  --dark-bg:#0D1117; --dark-surface:#161B22; --dark-border:#30363D;
+  --dark-text:#E6EDF3; --dark-text-mute:#8B949E;
+  --light-bg:#FFFFFF; --light-surface:#F6F8FA; --light-border:#D0D7DE;
+  --light-text:#1F2328; --light-text-mute:#57606A;
+  --bg:var(--dark-bg); --surface:var(--dark-surface); --border:var(--dark-border);
+  --text:var(--dark-text); --text-mute:var(--dark-text-mute);
+}
+html.light-mode{
+  --bg:var(--light-bg); --surface:var(--light-surface); --border:var(--light-border);
+  --text:var(--light-text); --text-mute:var(--light-text-mute);
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:'DM Sans',sans-serif; line-height:1.6;
+  transition:background .2s,color .2s;
+}
+h1,h2,h3,h4{font-family:'DM Serif Display',serif; font-weight:400; margin:0 0 .5em;}
+.mono{font-family:'DM Mono',monospace;}
+.reading{font-family:'Atkinson Hyperlegible',sans-serif; font-size:18px; line-height:1.7;}
+a{color:var(--blue);}
+.skip-link{position:absolute; left:-999px; top:0; background:var(--blue); color:#fff; padding:.75em 1.25em; z-index:200;}
+.skip-link:focus{left:1em; top:1em;}
+
+/* Nav */
+nav.topnav{
+  position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between;
+  padding:.85em 1.5em; background:var(--surface); border-bottom:1px solid var(--border);
+  backdrop-filter:blur(6px);
+}
+nav.topnav .brand{font-family:'DM Serif Display',serif; font-size:1.15em;}
+nav.topnav .brand .eyebrow{display:block; font-family:'DM Mono',monospace; font-size:.62em; letter-spacing:.08em; color:var(--text-mute); text-transform:uppercase;}
+nav.topnav .actions{display:flex; align-items:center; gap:.75em;}
+button.toggle{
+  background:transparent; border:1px solid var(--border); color:var(--text);
+  border-radius:999px; padding:.5em 1em; font-family:'DM Mono',monospace; font-size:.85em;
+  cursor:pointer; min-height:44px;
+}
+button.toggle:hover{border-color:var(--blue);}
+button.toggle:focus-visible{outline:3px solid var(--blue); outline-offset:2px;}
+
+/* Cover */
+.cover{
+  padding:4em 1.5em 3em; background:linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border);
+}
+.cover-inner{max-width:900px; margin:0 auto;}
+.cover .eyebrow{font-family:'DM Mono',monospace; letter-spacing:.1em; text-transform:uppercase; font-size:.8em; color:var(--sky);}
+.cover h1{font-size:2.6em; margin:.3em 0 .4em;}
+.cover p.lede{font-family:'Atkinson Hyperlegible',sans-serif; font-size:1.15em; color:var(--text-mute); max-width:65ch;}
+.cover .meta-row{display:flex; flex-wrap:wrap; gap:.6em; margin-top:1.5em;}
+.pill{
+  font-family:'DM Mono',monospace; font-size:.78em; padding:.4em .9em; border-radius:999px;
+  border:1px solid var(--border); color:var(--text-mute);
+}
+
+/* Layout: sidebar + content */
+.layout{display:flex; max-width:1400px; margin:0 auto;}
+aside.toc{
+  width:270px; flex-shrink:0; position:sticky; top:64px; align-self:flex-start;
+  max-height:calc(100vh - 64px); overflow-y:auto; padding:2em 1.25em; border-right:1px solid var(--border);
+}
+aside.toc h2{font-size:.78em; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.08em; color:var(--text-mute); margin-bottom:1em;}
+aside.toc .toc-group{margin-bottom:1.3em;}
+aside.toc .toc-group-label{font-family:'DM Mono',monospace; font-size:.72em; color:var(--sky); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.4em;}
+aside.toc a{display:block; padding:.4em .5em; border-radius:6px; text-decoration:none; color:var(--text); font-size:.92em;}
+aside.toc a:hover, aside.toc a:focus-visible{background:var(--surface); color:var(--blue);}
+aside.toc a .badge-dot{display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:.5em;}
+@media (max-width:900px){ aside.toc{display:none;} }
+
+main{flex:1; min-width:0; padding:0 0 6em;}
+.section-wrap{max-width:880px; margin:0 auto; padding:0 1.5em;}
+
+.section-band{
+  display:flex; align-items:center; gap:1em; padding:2.5em 0 1em; margin-top:2em; border-top:1px solid var(--border);
+}
+.section-band:first-of-type{border-top:none; margin-top:0;}
+.sn{
+  width:2.4em; height:2.4em; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-family:'DM Mono',monospace; font-weight:600; color:#fff; flex-shrink:0; font-size:1em;
+}
+.si{flex:1;}
+.slbl{font-family:'DM Mono',monospace; font-size:.72em; text-transform:uppercase; letter-spacing:.08em; color:var(--text-mute);}
+.stit{font-family:'DM Serif Display',serif; font-size:1.6em; margin-top:.1em;}
+.crit-badge{
+  font-family:'DM Mono',monospace; font-size:.72em; padding:.35em .8em; border-radius:999px; color:#fff; white-space:nowrap;
+}
+
+.copy-banner{
+  background:color-mix(in srgb, var(--amber) 18%, transparent); border:1px solid var(--amber);
+  color:var(--text); padding:.7em 1.1em; border-radius:8px; font-family:'DM Mono',monospace; font-size:.85em; margin:1.2em 0;
+}
+.def-box{
+  background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.3em 1.5em; margin:1.2em 0;
+}
+.def-label{font-family:'DM Mono',monospace; font-size:.72em; text-transform:uppercase; letter-spacing:.08em; color:var(--blue); margin-bottom:.4em;}
+.def-text{font-family:'Atkinson Hyperlegible',sans-serif; font-size:1.05em;}
+
+table{width:100%; border-collapse:collapse; margin:1.2em 0; font-size:.95em;}
+th,td{text-align:left; padding:.7em .9em; border:1px solid var(--border); vertical-align:top;}
+th{background:var(--surface); font-family:'DM Mono',monospace; font-size:.78em; text-transform:uppercase; letter-spacing:.05em;}
+
+.callout{border-radius:8px; padding:1em 1.2em; margin:1.2em 0; border:1px solid; font-family:'Atkinson Hyperlegible',sans-serif;}
+.callout-title{font-family:'DM Mono',monospace; font-size:.72em; text-transform:uppercase; letter-spacing:.08em; margin-bottom:.4em; display:block;}
+.callout-info{border-color:var(--blue); background:color-mix(in srgb, var(--blue) 12%, transparent);}
+.callout-info .callout-title{color:var(--blue);}
+.callout-tip{border-color:var(--green); background:color-mix(in srgb, var(--green) 12%, transparent);}
+.callout-tip .callout-title{color:var(--green);}
+.callout-note{border-color:var(--amber); background:color-mix(in srgb, var(--amber) 14%, transparent);}
+.callout-note .callout-title{color:var(--amber);}
+.callout-extend{border-color:var(--purple); background:color-mix(in srgb, var(--purple) 12%, transparent);}
+.callout-extend .callout-title{color:var(--purple);}
+
+.criteria-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1em; margin:1.4em 0;}
+.crit-card{border-radius:10px; padding:1.1em 1.2em; border:1px solid var(--border); background:var(--surface);}
+.crit-card .crit-tier{font-family:'DM Mono',monospace; font-size:.72em; text-transform:uppercase; letter-spacing:.06em; padding:.25em .7em; border-radius:999px; color:#fff; display:inline-block; margin-bottom:.6em;}
+.crit-card p{margin:0; font-size:.95em;}
+
+.wb-link{
+  display:inline-flex; align-items:center; gap:.5em; margin:1.5em 0; padding:.9em 1.3em;
+  background:var(--blue); color:#fff; text-decoration:none; border-radius:8px; font-family:'DM Sans',sans-serif; font-weight:600;
+}
+.wb-link:hover{opacity:.9;}
+
+footer{text-align:center; padding:3em 1.5em; color:var(--text-mute); font-size:.85em; font-family:'DM Mono',monospace;}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<nav class="topnav">
+  <div class="brand">
+    <span class="eyebrow">VCE Applied Computing · Software Development</span>
+    Unit 4 Reference Site
+  </div>
+  <div class="actions">
+    <button class="toggle" id="theme-toggle" aria-pressed="false">☀ Light mode</button>
+  </div>
+</nav>
+
+<div class="cover">
+  <div class="cover-inner">
+    <div class="eyebrow">Year 12 · VCE Applied Computing — Software Development</div>
+    <h1>Unit 4: Development, Evaluation &amp; Cyber Security</h1>
+    <p class="lede">Your permanent reference for Unit 4 — full notes, definitions and tables for every lesson, organised so you can jump straight to what you need. Copy prompts flagged here belong in your <strong>SAT Portfolio Workbook</strong>, not on this page.</p>
+    <div class="meta-row">
+      <span class="pill">Term 3, 2026 · Wks 1–10</span>
+      <span class="pill">Outcome 1 — Criteria 6–10 (SAT)</span>
+      <span class="pill">Outcome 2 — Cyber Security (SAC)</span>
+      <span class="pill">Updated: 2026-07-04</span>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="toc" aria-label="Table of contents">
+    <h2>On this page</h2>
+    <div class="toc-group">
+      <div class="toc-group-label">Orientation</div>
+      <a href="#y12-sd-u4-l1-sat-transition"><span class="badge-dot" style="background:var(--slate)"></span>L1 · SAT Transition &amp; Outcome 1 Overview</a>
+      <a href="#y12-sd-u4-l2-revisiting-design"><span class="badge-dot" style="background:var(--slate)"></span>L2 · Revisiting the Preferred Design</a>
+      <a href="#y12-sd-u4-l3-environment-setup"><span class="badge-dot" style="background:var(--slate)"></span>L3 · Environment &amp; Repository Setup</a>
+    </div>
+    <div class="toc-group">
+      <div class="toc-group-label">Week 1–2 · AoS1</div>
+      <a href="#y12-sd-u4-l4-launch-orientation"><span class="badge-dot" style="background:var(--blue)"></span>L4 · Unit 4 Launch &amp; Solution Orientation</a>
+      <a href="#y12-sd-u4-l5-prog-features-1"><span class="badge-dot" style="background:var(--blue)"></span>L5 · Programming Language Features I</a>
+      <a href="#y12-sd-u4-l6-prog-features-2"><span class="badge-dot" style="background:var(--blue)"></span>L6 · Programming Language Features II</a>
+      <a href="#y12-sd-u4-l7-prog-features-3"><span class="badge-dot" style="background:var(--blue)"></span>L7 · Programming Language Features III</a>
+    </div>
+    <div class="toc-group">
+      <div class="toc-group-label">Week 3–4 · AoS1 (C6 completion → C7)</div>
+      <a href="#y12-sd-u4-l8-prog-features-4"><span class="badge-dot" style="background:var(--blue)"></span>L8 · Programming Language Features IV</a>
+      <a href="#y12-sd-u4-l9-naming-documentation"><span class="badge-dot" style="background:var(--green)"></span>L9 · Naming Conventions &amp; Internal Documentation</a>
+      <a href="#y12-sd-u4-l10-validation"><span class="badge-dot" style="background:var(--green)"></span>L10 · Validation Techniques</a>
+      <a href="#y12-sd-u4-l11-dev-approaches"><span class="badge-dot" style="background:var(--green)"></span>L11 · Established &amp; Innovative Development Approaches</a>
+    </div>
+    <div class="toc-group">
+      <div class="toc-group-label">Week 5 · AoS1 (C8)</div>
+      <a href="#y12-sd-u4-l12-debug-alpha-1"><span class="badge-dot" style="background:var(--amber)"></span>L12 · Debugging &amp; Alpha Testing I</a>
+      <a href="#y12-sd-u4-l13-debug-alpha-2"><span class="badge-dot" style="background:var(--amber)"></span>L13 · Debugging &amp; Alpha Testing II</a>
+    </div>
+    <div class="toc-group">
+      <div class="toc-group-label">Week 6 · AoS1 tail + AoS2</div>
+      <a href="#y12-sd-u4-l14-beta-testing"><span class="badge-dot" style="background:var(--purple)"></span>L14 · Beta Testing</a>
+      <a href="#y12-sd-u4-l15-orgs-vulnerabilities"><span class="badge-dot" style="background:var(--sky)"></span>L15 · Organisations, Development Models &amp; Vulnerabilities</a>
+    </div>
+    <div class="toc-group">
+      <div class="toc-group-label">Week 7 · AoS1 tail + AoS2</div>
+      <a href="#y12-sd-u4-l16-evaluation"><span class="badge-dot" style="background:var(--teal)"></span>L16 · Evaluation of Solution &amp; Project Plan</a>
+      <a href="#y12-sd-u4-l17-controls-legislation"><span class="badge-dot" style="background:var(--sky)"></span>L17 · Security Controls, Threat Modelling, Legislation &amp; Ethics</a>
+    </div>
+    <div class="toc-group">
+      <div class="toc-group-label">Week 8 · SAC</div>
+      <a href="#y12-sd-u4-l18-sac-revision"><span class="badge-dot" style="background:var(--sky)"></span>L18 · SAC Revision</a>
+      <a href="#y12-sd-u4-l19-sac-day"><span class="badge-dot" style="background:var(--red)"></span>L19 · SAC — Assessment Day</a>
+    </div>
+    <div class="toc-group">
+      <div class="toc-group-label">Week 9 · Revision</div>
+      <a href="#y12-sd-u4-l20-exam-revision-1"><span class="badge-dot" style="background:var(--slate)"></span>L20 · General Exam Revision I</a>
+      <a href="#y12-sd-u4-l21-exam-revision-2"><span class="badge-dot" style="background:var(--slate)"></span>L21 · General Exam Revision II</a>
+    </div>
+  </aside>
+
+  <main id="main-content">
+    <div class="section-wrap">
+
+      <!-- ============ L1 ============ -->
+      <section id="y12-sd-u4-l1-sat-transition">
+        <div class="section-band">
+          <div class="sn" style="background:var(--slate)">1</div>
+          <div class="si">
+            <div class="slbl">Orientation · Pre-Term 3</div>
+            <div class="stit">SAT Transition &amp; Outcome 1 Overview</div>
+          </div>
+          <span class="crit-badge" style="background:var(--slate)">Orientation</span>
+        </div>
+
+        <p>Your School-assessed Task (SAT) does not restart in Unit 4 — it <em>continues</em>. Unit 3 Outcome 2 (Criteria 1–5) is complete. Unit 4 Outcome 1 (Criteria 6–10) is the next stage of the <strong>same</strong> piece of work, assessed against the same rubric.</p>
+
+        <div class="def-box">
+          <div class="def-label">Unit 4 Outcome 1 — official outcome statement</div>
+          <div class="def-text">Develop and evaluate a software solution that meets requirements and assess the effectiveness of the project plan.</div>
+        </div>
+
+        <h3>What the finished Outcome 1 body of work contains</h3>
+        <ul class="reading">
+          <li>A software solution that meets your software requirements specification (SRS)</li>
+          <li>Preparation and conduct of beta testing</li>
+          <li>An evaluation of the efficiency and effectiveness of the software solution</li>
+          <li>An assessment of the effectiveness of the project plan (Gantt chart) in monitoring project progress</li>
+        </ul>
+        <p>The last two items are presented as <strong>one</strong> of: a written report, or an annotated visual plan. Time allocated for Outcome 1 is at least 8 weeks of class time — that's Weeks 1–8 of this term.</p>
+
+        <div class="callout callout-note">
+          <span class="callout-title">Important boundary — read carefully</span>
+          If your Unit 3 design has issues that will affect development, your teacher can give feedback on the quality of the design — but any changes to the design must be <strong>your</strong> decision, not something your teacher directs. Changing your design does not get your Unit 3 score reassessed; your original Criteria 1–5 scores stand either way.
+        </div>
+
+        <div class="callout callout-tip">
+          <span class="callout-title">How this actually gets submitted</span>
+          Your finished software is delivered as a compressed (zipped) folder containing everything needed for it to run — negotiate the exact delivery format with your teacher. The evaluation and project-plan documents are <strong>not essays</strong> — use headings and dot points, the same way a professional report would.
+        </div>
+
+        <h3>Criteria 6–10 at a glance</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Criterion 6</span><p>Skills in using the features of the programming language.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--green)">Criterion 7</span><p>Skills in developing the software solution — naming conventions, documentation, validation.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--amber)">Criterion 8</span><p>Skills in debugging and alpha testing the software solution.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--purple)">Criterion 9</span><p>Skills in conducting beta testing.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--teal)">Criterion 10</span><p>Skills in evaluating the solution and assessing the project plan.</p></div>
+        </div>
+
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 1</div>
+        <div class="def-box">
+          <div class="def-label">Gantt chart — first Unit 4 monitoring entry</div>
+          <div class="def-text">Your Gantt chart from Unit 3 doesn't stop being live. From today, every time your plan changes — a task runs long, you drop something, you reorder work — that's evidence for Criterion 10. Annotate it now: is your original Unit 3 timeline still realistic for an 8-week build?</div>
+        </div>
+
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--slate)">Understand</span><p>I can explain how Unit 3 Outcome 2 and Unit 4 Outcome 1 form one continuous SAT.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--slate)">Apply</span><p>I can identify what the finished Outcome 1 body of work needs to contain.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--slate)">Extend</span><p>I can make my first Unit 4 Gantt chart annotation with a specific, justified reason.</p></div>
+        </div>
+
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l1-sat-transition">Open the SAT Portfolio — Section 1 →</a>
+      </section>
+
+      <!-- ============ L2 ============ -->
+      <section id="y12-sd-u4-l2-revisiting-design">
+        <div class="section-band">
+          <div class="sn" style="background:var(--slate)">2</div>
+          <div class="si">
+            <div class="slbl">Orientation · Pre-Term 3</div>
+            <div class="stit">Revisiting the Preferred Design</div>
+          </div>
+          <span class="crit-badge" style="background:var(--slate)">Orientation</span>
+        </div>
+
+        <p>Before you write a line of code, your preferred design from Unit 3 needs a hard, honest re-read. Time and distance since you designed it means you'll spot gaps now that you wouldn't have in the moment.</p>
+
+        <h3>The four artefacts you're checking</h3>
+        <table>
+          <tr><th>Artefact</th><th>What to check</th></tr>
+          <tr><td>Object descriptions</td><td>Do the objects still match what your solution needs to represent? Any missing attributes or methods?</td></tr>
+          <tr><td>IPO charts</td><td>Is every Input → Process → Output chain complete for each module, with nothing implicit or assumed?</td></tr>
+          <tr><td>Data dictionary</td><td>Does every data item have a defined type, format and validation rule you can actually code against?</td></tr>
+          <tr><td>Pseudocode modules</td><td>Could someone else follow your pseudocode and build the module without asking you questions?</td></tr>
+        </table>
+
+        <div class="callout callout-note">
+          <span class="callout-title">A note on "modules" — this is not the Unit 3 SAC</span>
+          In Unit 3 Area of Study 1 you built exactly four teacher-provided modules, with a GUI mandated on at least two of them — that was School-assessed Coursework, a separate, already-completed assessment. The SAT (Criteria 1–10) has no VCAA-mandated module count or GUI quota. Your solution is structured however <strong>your own</strong> Unit 3 Outcome 2 design specifies — that might be two modules, five, or any other number. Throughout this portfolio, "first module", "second module" etc. just mean the build order <strong>you</strong> justify in Lesson 3 — not a fixed universal numbering.
+        </div>
+
+        <div class="callout callout-info">
+          <span class="callout-title">Why this matters for Criterion 6</span>
+          Criterion 6's higher bands expect graphical user interfaces to be genuinely demonstrated across your solution. Confirm now — from your design, not from memory — which of your modules use a GUI and what controls each one needs.
+        </div>
+
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 2</div>
+        <div class="def-box">
+          <div class="def-label">Design readiness checklist</div>
+          <div class="def-text">For each module in your design: name it, confirm its inputs/processes/outputs are fully specified, confirm whether it needs a GUI, and flag anything unclear enough that you'd need to make a judgement call while coding.</div>
+        </div>
+
+        <div class="callout callout-note">
+          <span class="callout-title">Found a real gap?</span>
+          Remember the transition rule from Lesson 1: flag it with your teacher and decide the fix yourself. Don't wait for your teacher to tell you what to change — document the gap and your reasoning for closing it.
+        </div>
+
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--slate)">Understand</span><p>I can name the four design artefacts and what each one is used for during build.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--slate)">Apply</span><p>I can complete a design readiness check for every module in my design.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--slate)">Extend</span><p>I can identify a genuine gap in my own design and propose a specific, justified fix.</p></div>
+        </div>
+
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l2-revisiting-design">Open the SAT Portfolio — Section 2 →</a>
+      </section>
+
+      <!-- ============ L3 ============ -->
+      <section id="y12-sd-u4-l3-environment-setup">
+        <div class="section-band">
+          <div class="sn" style="background:var(--slate)">3</div>
+          <div class="si">
+            <div class="slbl">Orientation · Pre-Term 3</div>
+            <div class="stit">Development Environment &amp; Repository Setup</div>
+          </div>
+          <span class="crit-badge" style="background:var(--slate)">Orientation</span>
+        </div>
+
+        <p>A tidy, version-controlled workspace is what turns your pseudocode modules into working code without losing your place. Set this up properly once, now, and it pays off for the next eight weeks.</p>
+
+        <h3>What to set up today</h3>
+        <table>
+          <tr><th>Component</th><th>Purpose</th></tr>
+          <tr><td>IDE / editor</td><td>Whatever programming language and environment you specified in your Unit 3 design and technical environment section.</td></tr>
+          <tr><td>Code repository</td><td>Version control (e.g. Git) — every saved milestone is a discrete, meaningful commit, not "final_final_v3". A repository also gives you a full history to fall back on if something breaks.</td></tr>
+          <tr><td>Folder / module structure</td><td>One clearly named location per module, matching the module names in your design — not ad hoc file names invented while coding.</td></tr>
+          <tr><td>Backup</td><td>A second location (external drive, network drive or secure cloud storage) — required for authentication purposes.</td></tr>
+        </table>
+
+        <div class="callout callout-info">
+          <span class="callout-title">Why version control, specifically</span>
+          A repository isn't just backup — it's a record of every working state your solution has been in. If a change breaks something, you can see exactly what changed and roll it back, instead of guessing. Commit only working, tested code where possible — resist the temptation to commit something "temporary" and forget to fix it.
+        </div>
+
+        <div class="callout callout-tip">
+          <span class="callout-title">Build order</span>
+          Use your design readiness check from Lesson 2 to decide which module to build first — usually the one with the fewest dependencies on the others, so you have something working early.
+        </div>
+
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 3</div>
+        <div class="def-box">
+          <div class="def-label">Environment confirmation &amp; build order</div>
+          <div class="def-text">Record what you set up (tool, repository location, backup location) and the order you plan to build your modules in, with one sentence justifying the order.</div>
+        </div>
+
+        <div class="def-box">
+          <div class="def-label">Gantt chart — monitoring entry</div>
+          <div class="def-text">Log today's setup as a completed Gantt chart task, and annotate any change to your build-order sequence versus what you originally planned in Unit 3.</div>
+        </div>
+
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--slate)">Understand</span><p>I can explain why version control and a backup location matter for a solo 8-week build.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--slate)">Apply</span><p>I have a working environment, repository and folder structure matching my module names.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--slate)">Extend</span><p>I can justify my build order using dependencies identified in my own design.</p></div>
+        </div>
+
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l3-environment-setup">Open the SAT Portfolio — Section 3 →</a>
+      </section>
+
+      <!-- ============ L4 ============ -->
+      <section id="y12-sd-u4-l4-launch-orientation">
+        <div class="section-band">
+          <div class="sn" style="background:var(--blue)">4</div>
+          <div class="si">
+            <div class="slbl">Week 1 · AoS1</div>
+            <div class="stit">Unit 4 Launch &amp; Solution Orientation</div>
+          </div>
+          <span class="crit-badge" style="background:var(--blue)">Criterion 6</span>
+        </div>
+
+        <p>Term 3 begins here — and so does your Criterion 6 evidence. You've already done the heavy lifting in Lessons 1–3: the SAT overview, the design re-check, and your environment setup. Today is about confirming you're ready, seeing the 8-week shape of Outcome 1, and writing your first real code.</p>
+
+        <h3>The 8-week shape of Outcome 1</h3>
+        <table>
+          <tr><th>Weeks</th><th>Focus</th><th>Criterion</th></tr>
+          <tr><td>1–3</td><td>Programming language features — building all your modules</td><td>Criterion 6</td></tr>
+          <tr><td>3–4</td><td>Naming conventions, documentation, validation</td><td>Criterion 7</td></tr>
+          <tr><td>5</td><td>Debugging &amp; alpha testing — every module must pass before beta testing</td><td>Criterion 8</td></tr>
+          <tr><td>6–7</td><td>Beta testing strategy, conduct, results &amp; modifications</td><td>Criterion 9</td></tr>
+          <tr><td>7–8</td><td>Evaluation of the solution and the project plan</td><td>Criterion 10</td></tr>
+        </table>
+
+        <div class="callout callout-info">
+          <span class="callout-title">Readiness check — quick, not a re-teach</span>
+          From Lessons 1–3 you should already have: your design readiness check complete, your environment and repository set up, and a justified build order. If any of those three are missing, sort them out before starting to code today — everything after this depends on them.
+        </div>
+
+        <h3>Starting to code — sequence and selection first</h3>
+        <p>Today and next lesson (Programming Language Features I) you'll begin your first module — whichever one you decided to build first in Lesson 3 — using the most fundamental language features: local and global variables and constants, data types, and control structures — sequence and selection. Iteration, arithmetic/logical/conditional operators and GUIs come in Weeks 2–3.</p>
+
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 4</div>
+        <div class="def-box">
+          <div class="def-label">First module — starting code</div>
+          <div class="def-text">Write the skeleton of your first module: declare your key variables and constants with correct data types, matching your data dictionary exactly. This is the base everything else in this module builds on.</div>
+        </div>
+
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Understand</span><p>I can describe the 8-week shape of Outcome 1 and where I am in it.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Apply</span><p>I have declared my first module's variables and constants with data types matching my data dictionary.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Extend</span><p>I can explain why my chosen data types are the right ones for each variable.</p></div>
+        </div>
+
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l4-launch-orientation">Open the SAT Portfolio — Section 4 →</a>
+      </section>
+
+      <!-- ============ L5 ============ -->
+      <section id="y12-sd-u4-l5-prog-features-1">
+        <div class="section-band">
+          <div class="sn" style="background:var(--blue)">5</div>
+          <div class="si">
+            <div class="slbl">Week 1 · AoS1</div>
+            <div class="stit">Programming Language Features I</div>
+          </div>
+          <span class="crit-badge" style="background:var(--blue)">Criterion 6</span>
+        </div>
+
+        <p>Variables, constants, data types, and the two simplest control structures — sequence and selection — are the foundation every other language feature in this unit builds on.</p>
+
+        <h3>Data types and structures — input, storage, output</h3>
+        <p>Every data type or structure behaves differently at three points: how it's <strong>input</strong>, how it's <strong>stored</strong>, and how it's <strong>output</strong>. Knowing all three matters more than just knowing the type's name.</p>
+        <table>
+          <tr><th>Data type / structure</th><th>Typical input</th><th>Output consideration</th></tr>
+          <tr><td>Character</td><td>Single symbol via keyboard</td><td>Displayed as a visual symbol</td></tr>
+          <tr><td>String</td><td>Sequence of symbols via user input or file</td><td>Displayed in original character order</td></tr>
+          <tr><td>Integer</td><td>Whole number, decimal representation</td><td>Displayed as a whole number</td></tr>
+          <tr><td>Floating point</td><td>Decimal input with a fractional part</td><td>Displayed to a set precision</td></tr>
+          <tr><td>Date/time</td><td>String input or a UI date picker</td><td>Formatted per your solution's date/time convention</td></tr>
+          <tr><td>One-dimensional array</td><td>Sequential or indexed entries</td><td>Displayed as an ordered list</td></tr>
+          <tr><td>Two-dimensional array</td><td>Entered by row and column</td><td>Displayed as a table/grid</td></tr>
+          <tr><td>Record</td><td>Multiple related fields entered together</td><td>Displayed as a grouped set of fields</td></tr>
+        </table>
+        <div class="callout callout-note">
+          <span class="callout-title">Check against your data dictionary</span>
+          Your Unit 3 data dictionary should already specify which of these each data item uses. Today you're translating that specification into real declarations — not choosing types freely.
+        </div>
+
+        <h3>Local, global and constant — by scope, not by convenience</h3>
+        <table>
+          <tr><th>Variable type</th><th>Scope</th><th>When to use it</th></tr>
+          <tr><td>Local variable</td><td>Declared and only accessible within a single function/module</td><td>Default choice — use unless something outside genuinely needs it</td></tr>
+          <tr><td>Global variable</td><td>Declared outside any function — accessible everywhere</td><td>Only when multiple modules genuinely need to read or change the same value</td></tr>
+          <tr><td>Constant</td><td>Fixed value that cannot change once set, conventionally uppercase</td><td>Any value that shouldn't change during execution (e.g. a maximum size, a tax rate)</td></tr>
+        </table>
+
+        <h3>Sequence and selection</h3>
+        <p><strong>Sequence</strong> is the default: instructions run in the exact order they're written. <strong>Selection</strong> is branching logic that directs the flow depending on a condition — and it comes in two shapes:</p>
+        <ul class="reading">
+          <li><strong>Binary branching</strong> — a single If/Then (with an optional Else) choosing between two paths.</li>
+          <li><strong>Multiple branching</strong> — a Switch/Case (or If…Then…Else chain) choosing between several possible paths.</li>
+        </ul>
+        <div class="callout callout-info">
+          <span class="callout-title">Stacking vs nesting</span>
+          Control structures combine in only two ways: <strong>stacking</strong> (one after another, in sequence) or <strong>nesting</strong> (one placed inside another). Know which one your pseudocode actually calls for — they behave very differently.
+        </div>
+
+        <div class="callout callout-note">
+          <span class="callout-title">Common mistake</span>
+          Defaulting to global variables because they're "easier" — a global used where a local one belongs is exactly the kind of choice Criterion 6's higher bands expect you to have moved past.
+        </div>
+
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 5</div>
+        <div class="def-box">
+          <div class="def-label">First module — build log</div>
+          <div class="def-text">Record which variables/constants you declared (local vs global, and why, matching a data type/structure from the table above), and implement at least one sequence and one selection structure from your first module's pseudocode — note whether your selection is binary or multiple branching.</div>
+        </div>
+
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Understand</span><p>I can explain the difference between local and global variables and when to use each.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Apply</span><p>I have implemented sequence and selection structures matching my first module's pseudocode.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Extend</span><p>I can justify each local/global choice, and explain whether my control structures are stacked or nested.</p></div>
+        </div>
+
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l5-prog-features-1">Open the SAT Portfolio — Section 5 →</a>
+      </section>
+
+      <!-- ============ L6 ============ -->
+      <section id="y12-sd-u4-l6-prog-features-2">
+        <div class="section-band">
+          <div class="sn" style="background:var(--blue)">6</div>
+          <div class="si">
+            <div class="slbl">Week 2 · AoS1</div>
+            <div class="stit">Programming Language Features II</div>
+          </div>
+          <span class="crit-badge" style="background:var(--blue)">Criterion 6</span>
+        </div>
+
+        <p>With sequence and selection working, today adds the third control structure — iteration — plus the operators that make conditions and calculations possible.</p>
+
+        <h3>Iteration — three shapes, same job</h3>
+        <p>Iteration (repetition) repeats a block of code. Which shape you choose depends on when the loop's condition is checked, and whether you know the number of repetitions in advance.</p>
+        <table>
+          <tr><th>Loop type</th><th>When the condition is checked</th><th>Use it when…</th></tr>
+          <tr><td>Pre-test (e.g. While…Do)</td><td>Before the loop body runs — may not execute at all</td><td>The loop might legitimately need to run zero times</td></tr>
+          <tr><td>Post-test (e.g. Do…While, Repeat…Until)</td><td>After the loop body runs — always executes at least once</td><td>The loop must run at least once regardless of the condition</td></tr>
+          <tr><td>Counted (e.g. For…Next)</td><td>Tracked against a counter</td><td>You know exactly how many repetitions are needed in advance</td></tr>
+        </table>
+        <div class="callout callout-note">
+          <span class="callout-title">Watch for infinite loops</span>
+          If a pre-test or post-test loop's condition can never become false, it never ends. Always check: does something inside the loop actually move the condition toward becoming false?
+        </div>
+
+        <h3>Operators</h3>
+        <table>
+          <tr><th>Type</th><th>Examples</th><th>Used for</th></tr>
+          <tr><td>Arithmetic</td><td>+ − × ÷ (and modulus, remainder after division)</td><td>Calculations on numeric data</td></tr>
+          <tr><td>Logical</td><td>AND, OR, NOT</td><td>Combining or inverting multiple conditions</td></tr>
+          <tr><td>Conditional</td><td>Comparison operators inside an If/Switch condition</td><td>Deciding which branch of a selection structure runs</td></tr>
+        </table>
+
+        <div class="callout callout-info">
+          <span class="callout-title">Combining operators with iteration</span>
+          A counted loop's exit condition is itself a conditional operator comparing the counter to a target value. A logical AND/OR often combines two conditions inside a single loop or selection test — check your pseudocode for exactly where these appear.
+        </div>
+
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 6</div>
+        <div class="def-box">
+          <div class="def-label">First module — build log (iteration &amp; operators)</div>
+          <div class="def-text">Implement at least one iteration structure from your first module's pseudocode, naming its type (pre-test, post-test or counted) and why that type fits. List the arithmetic, logical or conditional operators you used and what each does in context.</div>
+        </div>
+
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Understand</span><p>I can name the three loop types and explain when each is the right choice.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Apply</span><p>I have implemented an iteration structure in my first module, using arithmetic and/or logical operators correctly.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Extend</span><p>I can explain how I avoided an infinite loop in my own code.</p></div>
+        </div>
+
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l6-prog-features-2">Open the SAT Portfolio — Section 6 →</a>
+      </section>
+
+      <!-- ============ L7 ============ -->
+      <section id="y12-sd-u4-l7-prog-features-3">
+        <div class="section-band">
+          <div class="sn" style="background:var(--blue)">7</div>
+          <div class="si">
+            <div class="slbl">Week 2 · AoS1</div>
+            <div class="stit">Programming Language Features III</div>
+          </div>
+          <span class="crit-badge" style="background:var(--blue)">Criterion 6</span>
+        </div>
+
+        <p>Today shifts from top-down flow to <strong>event-driven</strong> flow — the model behind every graphical user interface — plus the difference between a function and a method. Work on your second module begins.</p>
+
+        <h3>Graphical user interfaces are event-driven</h3>
+        <p>Everything so far — sequence, selection, iteration — has run in an order <em>you</em> control. A GUI flips that: the program waits, and the <strong>user's actions</strong> (a click, a keypress, a menu selection) decide what runs next and when.</p>
+        <div class="callout callout-info">
+          <span class="callout-title">What this means for your build</span>
+          Each interactive element on your GUI (a button, a field, a menu item) needs its own event handler — a block of code that runs only when that specific event happens. You're not writing one long script anymore; you're writing many small responses to possible user actions.
+        </div>
+
+        <h3>Functions vs methods</h3>
+        <table>
+          <tr><th>Term</th><th>What it is</th></tr>
+          <tr><td>Function</td><td>A standalone, reusable block of code — takes input (parameters), does something, optionally returns a result. Not tied to any object.</td></tr>
+          <tr><td>Method</td><td>A function that <em>belongs to</em> an object or class — it can access and change that object's own data.</td></tr>
+        </table>
+        <div class="callout callout-note">
+          <span class="callout-title">Why the distinction matters</span>
+          If your solution uses classes and objects (even simple ones), code that only makes sense in relation to a specific object's data should be a method on that object — not a free-floating function that has to be passed the object's data every time.
+        </div>
+
+        <h3>GUI reminder</h3>
+        <p>Criterion 6 expects GUIs genuinely demonstrated across your solution — check your own design for which modules need one. If your second module is one of them, its event handlers are today's main build target.</p>
+
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 7</div>
+        <div class="def-box">
+          <div class="def-label">Second module — build log</div>
+          <div class="def-text">List the GUI elements this module needs and the event each one responds to. For each function/method you write today, note whether it's a standalone function or a method belonging to an object, and why.</div>
+        </div>
+
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Understand</span><p>I can explain what "event-driven" means and how it differs from sequential flow.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Apply</span><p>I have implemented at least one GUI event handler and one function or method in my second module.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Extend</span><p>I can justify each choice between a standalone function and an object method.</p></div>
+        </div>
+
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l7-prog-features-3">Open the SAT Portfolio — Section 7 →</a>
+      </section>
+
+      <!-- ============ L8 ============ -->
+      <section id="y12-sd-u4-l8-prog-features-4">
+        <div class="section-band">
+          <div class="sn" style="background:var(--blue)">8</div>
+          <div class="si"><div class="slbl">Week 3 · AoS1</div><div class="stit">Programming Language Features IV</div></div>
+          <span class="crit-badge" style="background:var(--blue)">Criterion 6 — completion</span>
+        </div>
+        <p>Classes, objects and access modifiers — the last language features for Criterion 6, and today's the checkpoint where every module in your solution should show a genuine range of features, not just the easy ones.</p>
+        <table>
+          <tr><th>Concept</th><th>What it means for your build</th></tr>
+          <tr><td>Class</td><td>A blueprint defining a set of attributes and methods that characterise any object created from it.</td></tr>
+          <tr><td>Object</td><td>An instance of a class — each object can hold different values for the attributes its class defines.</td></tr>
+          <tr><td>Public</td><td>Visible and usable from anywhere.</td></tr>
+          <tr><td>Protected</td><td>Visible to the class and to classes that inherit from it — not to anything else.</td></tr>
+          <tr><td>Private</td><td>Visible only within the class itself — not even to inheriting classes.</td></tr>
+        </table>
+        <div class="callout callout-note">
+          <span class="callout-title">Criterion 6 completion checkpoint</span>
+          By the end of today, each module in your solution should be able to show evidence across the full range: variables/constants with correct types, control structures (sequence, selection, iteration), GUIs where your design calls for them, functions/methods, and — where your design calls for it — classes, objects and access modifiers.
+        </div>
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 8</div>
+        <div class="def-box"><div class="def-label">Criterion 6 evidence checkpoint</div><div class="def-text">For each module, list which language features it demonstrates. Flag any module that's missing something your design called for.</div></div>
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Understand</span><p>I can explain the difference between public, protected and private visibility.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Apply</span><p>I have implemented at least one class/object with an appropriate access modifier where my design calls for it.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--blue)">Extend</span><p>I can identify exactly which language features each of my modules demonstrates.</p></div>
+        </div>
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l8-prog-features-4">Open the SAT Portfolio — Section 8 →</a>
+      </section>
+
+      <!-- ============ L9 ============ -->
+      <section id="y12-sd-u4-l9-naming-documentation">
+        <div class="section-band">
+          <div class="sn" style="background:var(--green)">9</div>
+          <div class="si"><div class="slbl">Week 3 · AoS1</div><div class="stit">Naming Conventions &amp; Internal Documentation</div></div>
+          <span class="crit-badge" style="background:var(--green)">Criterion 7 begins</span>
+        </div>
+        <p>Working code isn't the same as <em>good</em> code. From today, Criterion 7 assesses how your solution communicates itself — to a marker, and to you in six weeks' time.</p>
+        <table>
+          <tr><th>Element</th><th>What "suitable" looks like</th></tr>
+          <tr><td>Variables</td><td>Consistent, descriptive names (e.g. <code>studentAge</code>, not <code>x</code> or <code>temp2</code>)</td></tr>
+          <tr><td>Interface controls</td><td>Named to reflect purpose (e.g. <code>btnSubmit</code>, not <code>button1</code>)</td></tr>
+          <tr><td>Code structures</td><td>Functions, methods and classes named for what they do, not how they work internally</td></tr>
+        </table>
+        <div class="callout callout-info">
+          <span class="callout-title">Internal documentation is not a substitute for clear code</span>
+          Clear naming makes code readable without comments. Internal documentation adds context that naming can't — why a decision was made, what a module's overall purpose is, what a tricky piece of logic is actually doing.
+        </div>
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 9</div>
+        <div class="def-box"><div class="def-label">Naming &amp; documentation pass</div><div class="def-text">Rename anything unclear across your modules so far, matching the conventions above. Add internal documentation to at least one completed module explaining its overall functionality.</div></div>
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--green)">Understand</span><p>I can explain the difference between self-documenting code and internal documentation.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--green)">Apply</span><p>I have applied consistent naming conventions across variables, interface controls and code structures.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--green)">Extend</span><p>I have written internal documentation explaining a completed module's functionality.</p></div>
+        </div>
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l9-naming-documentation">Open the SAT Portfolio — Section 9 →</a>
+      </section>
+
+      <!-- ============ L10 ============ -->
+      <section id="y12-sd-u4-l10-validation">
+        <div class="section-band">
+          <div class="sn" style="background:var(--green)">10</div>
+          <div class="si"><div class="slbl">Week 4 · AoS1</div><div class="stit">Validation Techniques</div></div>
+          <span class="crit-badge" style="background:var(--green)">Criterion 7</span>
+        </div>
+        <p>Validation checks that input data is <em>reasonable</em> — it can't tell whether someone is lying, but it can catch nonsense before it breaks your solution.</p>
+        <table>
+          <tr><th>Check</th><th>What it catches</th></tr>
+          <tr><td>Existence</td><td>A required field was left blank or null.</td></tr>
+          <tr><td>Type</td><td>Data isn't the right kind — e.g. letters entered where a number was expected.</td></tr>
+          <tr><td>Range</td><td>Data is outside an acceptable range — e.g. an age of 174.</td></tr>
+        </table>
+        <div class="callout callout-note">
+          <span class="callout-title">Validation ≠ verification</span>
+          Verification checks that you're building the thing correctly against your requirements. Validation checks that the finished thing actually behaves sensibly when real data hits it. You need both, but they're not the same activity.
+        </div>
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 10</div>
+        <div class="def-box"><div class="def-label">Validation pass</div><div class="def-text">List each input field across your modules and which check(s) — existence, type, range — apply to it. Implement validation for at least one module today.</div></div>
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--green)">Understand</span><p>I can explain the difference between existence, type and range checks.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--green)">Apply</span><p>I have implemented validation on at least one module's input fields.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--green)">Extend</span><p>I can explain why validation can't guarantee data is truthful, only reasonable.</p></div>
+        </div>
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l10-validation">Open the SAT Portfolio — Section 10 →</a>
+      </section>
+
+      <!-- ============ L11 ============ -->
+      <section id="y12-sd-u4-l11-dev-approaches">
+        <div class="section-band">
+          <div class="sn" style="background:var(--green)">11</div>
+          <div class="si"><div class="slbl">Week 4 · AoS1</div><div class="stit">Established &amp; Innovative Development Approaches</div></div>
+          <span class="crit-badge" style="background:var(--green)">Criterion 6/7 support</span>
+        </div>
+        <p>How you build matters, not just what you build — and today's choices become evidence you'll use later, in your evaluation.</p>
+        <table>
+          <tr><th>Approach</th><th>What it offers</th></tr>
+          <tr><td>Code repositories (e.g. Git)</td><td>Version history, meaningful commits, the ability to roll back a broken change.</td></tr>
+          <tr><td>APIs &amp; libraries</td><td>Pre-written, tested functionality you don't have to build or debug yourself.</td></tr>
+          <tr><td>AI-based assistants</td><td>Can help debug, suggest fixes, or generate test cases — but every suggestion needs your own understanding and verification before you use it.</td></tr>
+        </table>
+        <div class="callout callout-info">
+          <span class="callout-title">Justify, don't just use</span>
+          Using a library or an AI suggestion isn't automatically good practice — using it <em>and being able to explain why it was the right call</em> is what Criterion 6/7's higher bands and your later evaluation are actually looking for.
+        </div>
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 11</div>
+        <div class="def-box"><div class="def-label">Development approach log</div><div class="def-text">Record any repository, API/library or AI assistant you've used so far, and a one-sentence justification for each.</div></div>
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--green)">Understand</span><p>I can name the development approaches available to me and what each offers.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--green)">Apply</span><p>I have used at least one approach directly in my remaining modules.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--green)">Extend</span><p>I can justify my choice, not just describe what I used.</p></div>
+        </div>
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l11-dev-approaches">Open the SAT Portfolio — Section 11 →</a>
+      </section>
+
+      <!-- ============ L12 ============ -->
+      <section id="y12-sd-u4-l12-debug-alpha-1">
+        <div class="section-band">
+          <div class="sn" style="background:var(--amber)">12</div>
+          <div class="si"><div class="slbl">Week 5 · AoS1</div><div class="stit">Debugging &amp; Alpha Testing I</div></div>
+          <span class="crit-badge" style="background:var(--amber)">Criterion 8</span>
+        </div>
+        <p>Alpha testing is internal — you and your development team, in your own environment, checking the solution meets its initial requirements before anyone outside sees it.</p>
+        <h3>The debugging process</h3>
+        <ol class="reading">
+          <li>Set breakpoints at critical points in the code</li>
+          <li>Run the program and observe its behaviour</li>
+          <li>When it hits a breakpoint, it pauses — inspect variables and data</li>
+          <li>If needed, comment out sections suspected to be problematic, to isolate the issue</li>
+          <li>Modify the code to fix what you've identified</li>
+          <li>Repeat until it functions correctly</li>
+        </ol>
+        <div class="callout callout-note">
+          <span class="callout-title">Commenting out ≠ deleting</span>
+          Temporarily disabling a section of code (rather than deleting it) lets you test the rest of the program in isolation without losing your work if the section turns out to be fine after all.
+        </div>
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 12</div>
+        <div class="def-box"><div class="def-label">Alpha testing begins</div><div class="def-text">Start systematic alpha testing on your completed modules. Log any bug found, the breakpoint/technique that revealed it, and the fix.</div></div>
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--amber)">Understand</span><p>I can describe the debugging process steps in order.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--amber)">Apply</span><p>I have used breakpoints and/or commenting out to isolate a real bug.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--amber)">Extend</span><p>I can explain why alpha testing happens internally before beta testing happens externally.</p></div>
+        </div>
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l12-debug-alpha-1">Open the SAT Portfolio — Section 12 →</a>
+      </section>
+
+      <!-- ============ L13 ============ -->
+      <section id="y12-sd-u4-l13-debug-alpha-2">
+        <div class="section-band">
+          <div class="sn" style="background:var(--amber)">13</div>
+          <div class="si"><div class="slbl">Week 5 · AoS1</div><div class="stit">Debugging &amp; Alpha Testing II</div></div>
+          <span class="crit-badge" style="background:var(--amber)">Criterion 8</span>
+        </div>
+        <p>Good test data is what separates real evidence from "I tried it and it seemed fine." Today's about building that evidence properly, in testing tables.</p>
+        <h3>Types of test data</h3>
+        <table>
+          <tr><th>Type</th><th>Example</th></tr>
+          <tr><td>Valid data</td><td>Perfectly acceptable, reasonable, expected to be processed normally</td></tr>
+          <tr><td>Valid but unusual</td><td>Technically acceptable but at the edge — e.g. age exactly 18 for an "adult" check</td></tr>
+          <tr><td>Invalid data</td><td>Should be rejected — e.g. a negative age</td></tr>
+        </table>
+        <div class="callout callout-info">
+          <span class="callout-title">A testing table needs all of this</span>
+          What was tested, how it was tested, expected result, actual result, and — if it failed — how it was fixed. Missing any column makes the evidence weaker.
+        </div>
+        <div class="callout callout-note">
+          <span class="callout-title">Gate before beta</span>
+          All modules must be alpha-tested and functioning correctly before beta testing begins next lesson block — beta testing assumes a working solution, not a debugging session with real users.
+        </div>
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 13</div>
+        <div class="def-box"><div class="def-label">Testing table</div><div class="def-text">Build a testing table for at least one module: valid, valid-but-unusual and invalid test data, with expected vs actual output for each.</div></div>
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--amber)">Understand</span><p>I can explain the difference between valid, valid-but-unusual and invalid test data.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--amber)">Apply</span><p>I have built a complete testing table with expected and actual results.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--amber)">Extend</span><p>I can confirm all my modules are alpha-tested and functioning before moving on.</p></div>
+        </div>
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l13-debug-alpha-2">Open the SAT Portfolio — Section 13 →</a>
+      </section>
+
+      <!-- ============ L14 ============ -->
+      <section id="y12-sd-u4-l14-beta-testing">
+        <div class="section-band">
+          <div class="sn" style="background:var(--purple)">14</div>
+          <div class="si"><div class="slbl">Week 6 · AoS1 tail</div><div class="stit">Beta Testing</div></div>
+          <span class="crit-badge" style="background:var(--purple)">Criterion 9</span>
+        </div>
+        <p>Beta testing is where a nearly-complete version of your solution meets real end users, on their own equipment, in real-world conditions — not yours.</p>
+        <div class="callout callout-note">
+          <span class="callout-title">Compressed lesson — plan for time outside class</span>
+          This lesson covers strategy AND conduct together. Recruiting users and running your beta test needs to happen largely outside this lesson — start recruiting today, don't wait.
+        </div>
+        <h3>What your beta testing plan needs</h3>
+        <ul class="reading">
+          <li>Test scenarios targeting your solution's <strong>functional and non-functional requirements</strong></li>
+          <li>At least two potential users recruited and scheduled — chosen and justified (not just "whoever was free")</li>
+          <li>A method for collecting results as they happen — not just a memory of how it went</li>
+        </ul>
+        <div class="callout callout-info">
+          <span class="callout-title">Collecting results</span>
+          Screen recording, live observation notes, or direct feedback forms all work. Whatever you choose, record technical issues, usability issues and user feedback as they occur, not reconstructed afterward.
+        </div>
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 14</div>
+        <div class="def-box"><div class="def-label">Beta testing plan</div><div class="def-text">Write your test scenarios, list your recruited users with a reason for each, and choose your results-collection method. Begin testing this week.</div></div>
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--purple)">Understand</span><p>I can explain how beta testing differs from alpha testing.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--purple)">Apply</span><p>I have a beta testing plan with scenarios and recruited users.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--purple)">Extend</span><p>I can justify why I chose my specific users and my results-collection method.</p></div>
+        </div>
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l14-beta-testing">Open the SAT Portfolio — Section 14 →</a>
+      </section>
+
+      <!-- ============ L15 ============ -->
+      <section id="y12-sd-u4-l15-orgs-vulnerabilities">
+        <div class="section-band">
+          <div class="sn" style="background:var(--sky)">15</div>
+          <div class="si"><div class="slbl">Week 6 · AoS2</div><div class="stit">Organisations, Development Models &amp; Vulnerabilities</div></div>
+          <span class="crit-badge" style="background:var(--sky)">Outcome 2</span>
+        </div>
+        <p>Outcome 2 starts here — a shift from building your own solution to analysing how organisations develop software securely (or don't).</p>
+        <h3>In-house vs external development</h3>
+        <table>
+          <tr><th></th><th>In-house</th><th>External</th></tr>
+          <tr><td>Control</td><td>High — direct oversight of the whole process</td><td>Lower — dependent on the external provider's practices</td></tr>
+          <tr><td>Cost</td><td>Higher ongoing staffing cost</td><td>Often lower upfront, but less predictable long-term</td></tr>
+          <tr><td>Expertise</td><td>Limited to what the organisation already has</td><td>Access to specialised skills the organisation may lack</td></tr>
+        </table>
+        <h3>Vulnerabilities in insecure development environments</h3>
+        <p>Common sources of risk during development itself (not just the finished product): APIs exposing insufficiently secured endpoints, malware, unpatched software, poor identity and access management, man-in-the-middle attacks, insider threats, undisclosed security incidents, third-party software risk, ineffective code review, and combined development/testing/production environments where insecure code can reach live data.</p>
+        <div class="callout callout-note">
+          <span class="callout-title">Why "combined environments" matters</span>
+          Keeping development, testing and production separate isn't bureaucracy — it stops untested code from ever touching real user data, and makes it far easier to trace where an issue actually came from.
+        </div>
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 15</div>
+        <div class="def-box"><div class="def-label">Case-study application</div><div class="def-text">For your case-study organisation: is it in-house or external development, and what specific vulnerabilities from today's list are most relevant to its context?</div></div>
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--sky)">Understand</span><p>I can compare in-house and external development on control, cost and expertise.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--sky)">Apply</span><p>I can identify which vulnerabilities apply to a given development scenario.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--sky)">Extend</span><p>I can explain why combined dev/test/production environments increase risk.</p></div>
+        </div>
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l15-orgs-vulnerabilities">Open the SAT Portfolio — Section 15 →</a>
+      </section>
+
+      <!-- ============ L16 ============ -->
+      <section id="y12-sd-u4-l16-evaluation">
+        <div class="section-band">
+          <div class="sn" style="background:var(--teal)">16</div>
+          <div class="si"><div class="slbl">Week 7 · AoS1 tail</div><div class="stit">Evaluation of Solution &amp; Project Plan</div></div>
+          <span class="crit-badge" style="background:var(--teal)">Criterion 10</span>
+        </div>
+        <p>Evaluation is not testing — testing checks the solution works; evaluation checks how well it satisfies the need it was built for, using the criteria you set back in Unit 3.</p>
+        <div class="callout callout-note">
+          <span class="callout-title">Compressed lesson — three components in one</span>
+          Today covers solution evaluation, proposing a future evaluation strategy, and assessing your project plan's effectiveness. Come with your beta test results and your full Gantt chart history ready.
+        </div>
+        <h3>Evaluating the solution</h3>
+        <p>For each of your Unit 3 evaluation criteria, choose an evaluation method: <strong>objective</strong> (measurable, fact-based) wherever possible, or <strong>subjective</strong> (interviews, surveys, opinions) where a measurable fact isn't available. Consider efficiency (resource use, functionality, speed of processing) as well as effectiveness (does it meet functional and non-functional requirements).</p>
+        <h3>Proposing a future evaluation strategy</h3>
+        <p>Because you won't have long-term user data, propose how the solution <em>should</em> be evaluated later: a timeframe, which criteria to use, and who would be responsible for conducting it.</p>
+        <h3>Assessing your project plan</h3>
+        <table>
+          <tr><th>Data to review</th><th>What it tells you</th></tr>
+          <tr><td>Change log</td><td>Total number of changes made to the plan, and why</td></tr>
+          <tr><td>Reasons for delay</td><td>Scope creep, personnel changes, technical issues</td></tr>
+          <tr><td>Critical path</td><td>Whether time could have been better allocated across tasks</td></tr>
+        </table>
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 16</div>
+        <div class="def-box"><div class="def-label">Evaluation report draft</div><div class="def-text">Draft your solution evaluation against your Unit 3 criteria, your future evaluation strategy, and your project plan effectiveness assessment — headings and dot points, not an essay.</div></div>
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--teal)">Understand</span><p>I can explain why evaluation is different from testing.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--teal)">Apply</span><p>I have evaluated my solution against my own Unit 3 criteria using objective and/or subjective methods.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--teal)">Extend</span><p>I can identify specific reasons my project plan changed and their impact.</p></div>
+        </div>
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l16-evaluation">Open the SAT Portfolio — Section 16 →</a>
+      </section>
+
+      <!-- ============ L17 ============ -->
+      <section id="y12-sd-u4-l17-controls-legislation">
+        <div class="section-band">
+          <div class="sn" style="background:var(--sky)">17</div>
+          <div class="si"><div class="slbl">Week 7 · AoS2</div><div class="stit">Security Controls, Threat Modelling, Legislation &amp; Ethics</div></div>
+          <span class="crit-badge" style="background:var(--sky)">Outcome 2</span>
+        </div>
+        <div class="callout callout-note">
+          <span class="callout-title">Compressed lesson — the widest-content session in the unit</span>
+          Four areas in one lesson. This is dense — lean hard on L18's SAC revision to consolidate what doesn't stick today.
+        </div>
+        <h3>Security controls</h3>
+        <p>Version control/code repositories, identity and access management, encryption, code review, patching, and separated development/testing/production environments.</p>
+        <h3>Threat modelling — the process</h3>
+        <ol class="reading">
+          <li>Determine threats — identify what could go wrong (unauthorised access, data breaches, malware, denial-of-service)</li>
+          <li>React to threats — develop specific security requirements in response</li>
+          <li>Prioritise — not all requirements can be implemented at once; rank by potential impact</li>
+          <li>Confirm mitigation — verify the control actually addresses the threat</li>
+        </ol>
+        <h3>Key legislation</h3>
+        <table>
+          <tr><th>Law / framework</th><th>Covers</th></tr>
+          <tr><td>Copyright Act 1968</td><td>Protects creators' rights over creative and artistic works</td></tr>
+          <tr><td>Essential Eight (ACSC)</td><td>Industry framework of mitigation strategies, assessed across four maturity levels</td></tr>
+          <tr><td>Information Security Manual</td><td>Additional security mitigation guidance</td></tr>
+          <tr><td>Privacy Act 1988 (APPs)</td><td>Governs how personal information can be used federally</td></tr>
+          <tr><td>Privacy and Data Protection Act 2014 (IPPs)</td><td>Victorian equivalent, governing information privacy</td></tr>
+        </table>
+        <h3>Ethics</h3>
+        <p>Legal and ethical are not the same thing — something can be legal and still widely regarded as wrong. Consider: bias in AI-driven decision-making, intellectual property conflicts, and the consequences of ineffective security practices even where no law was technically broken.</p>
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 17</div>
+        <div class="def-box"><div class="def-label">Case-study practice run</div><div class="def-text">Using your case-study organisation: identify one threat, the control that mitigates it, one relevant piece of legislation, and one ethical consideration.</div></div>
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--sky)">Understand</span><p>I can name the four steps of threat modelling in order.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--sky)">Apply</span><p>I can match a security control to a specific threat.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--sky)">Extend</span><p>I can distinguish a legal issue from an ethical one in a given scenario.</p></div>
+        </div>
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l17-controls-legislation">Open the SAT Portfolio — Section 17 →</a>
+      </section>
+
+      <!-- ============ L18 ============ -->
+      <section id="y12-sd-u4-l18-sac-revision">
+        <div class="section-band">
+          <div class="sn" style="background:var(--sky)">18</div>
+          <div class="si"><div class="slbl">Week 8</div><div class="stit">SAC Revision</div></div>
+          <span class="crit-badge" style="background:var(--sky)">Outcome 2</span>
+        </div>
+        <p>One lesson to consolidate everything from L15 and L17 before the SAC. The case-study structure in the actual assessment will mirror what you practise today: analyse practices → evaluate controls and threats → recommend improvements.</p>
+        <div class="callout callout-info">
+          <span class="callout-title">Know your command terms</span>
+          <em>Explain</em> wants reasoning, not just a fact. <em>Evaluate</em> wants a judgement backed by criteria. <em>Discuss</em> wants more than one perspective. <em>Justify</em> wants a defended position. Answering the wrong command term is the most common way marks are lost.
+        </div>
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 18</div>
+        <div class="def-box"><div class="def-label">Self-assessment</div><div class="def-text">Rate your own confidence (1–5) on: organisations &amp; development models, vulnerabilities, security controls, threat modelling, legislation, ethics. Circle back to your weakest area first.</div></div>
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--sky)">Understand</span><p>I know which command terms require which kind of response.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--sky)">Apply</span><p>I have completed a practice case-study response under timed conditions.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--sky)">Extend</span><p>I have identified my weakest AoS2 area and revised it specifically.</p></div>
+        </div>
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l18-sac-revision">Open the SAT Portfolio — Section 18 →</a>
+      </section>
+
+      <!-- ============ L19 ============ -->
+      <section id="y12-sd-u4-l19-sac-day">
+        <div class="section-band">
+          <div class="sn" style="background:var(--red)">19</div>
+          <div class="si"><div class="slbl">Week 8</div><div class="stit">SAC — Assessment Day</div></div>
+          <span class="crit-badge" style="background:var(--red)">Assessed · Outcome 2</span>
+        </div>
+        <p>This is the School-assessed Coursework for Outcome 2 — a case study under test conditions, 100–120 minutes, run as a double period. No new content is taught today.</p>
+        <div class="callout callout-note">
+          <span class="callout-title">On the day</span>
+          Bring what your teacher specifies for test conditions. There is nothing to copy into your workbook for this section — it exists here only to keep the unit's lesson sequence complete.
+        </div>
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l19-sac-day">Open the SAT Portfolio — Section 19 →</a>
+      </section>
+
+      <!-- ============ L20 ============ -->
+      <section id="y12-sd-u4-l20-exam-revision-1">
+        <div class="section-band">
+          <div class="sn" style="background:var(--slate)">20</div>
+          <div class="si"><div class="slbl">Week 9</div><div class="stit">General Exam Revision I</div></div>
+          <span class="crit-badge" style="background:var(--slate)">Exam prep</span>
+        </div>
+        <p>With the SAT submitted and the SAC complete, the final two lessons turn to the Units 3&amp;4 exam itself — content across both units, not just Unit 4.</p>
+        <h3>Today's focus: coverage check</h3>
+        <p>Work through a topic checklist spanning Unit 3 (analysis, design) and Unit 4 (development, evaluation, cyber security). Identify genuine gaps — not just things you'd like to re-read, but things you actually can't yet do.</p>
+        <div class="callout callout-info">
+          <span class="callout-title">Use past exam-style questions</span>
+          Practising real exam-style questions under rough time pressure is more useful than re-reading notes. Note which question types (short answer, extended response, case study) you're least comfortable with.
+        </div>
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 20</div>
+        <div class="def-box"><div class="def-label">Coverage checklist</div><div class="def-text">List every Unit 3 &amp; 4 topic. Mark each: confident, needs review, or genuine gap. Prioritise gaps for L21 and independent study.</div></div>
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--slate)">Understand</span><p>I know the full scope of what the exam covers, across both units.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--slate)">Apply</span><p>I have attempted at least one past exam-style question under timed conditions.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--slate)">Extend</span><p>I can name my specific weakest topics, not just "I need to study more."</p></div>
+        </div>
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l20-exam-revision-1">Open the SAT Portfolio — Section 20 →</a>
+      </section>
+
+      <!-- ============ L21 ============ -->
+      <section id="y12-sd-u4-l21-exam-revision-2">
+        <div class="section-band">
+          <div class="sn" style="background:var(--slate)">21</div>
+          <div class="si"><div class="slbl">Week 9</div><div class="stit">General Exam Revision II</div></div>
+          <span class="crit-badge" style="background:var(--slate)">Exam prep</span>
+        </div>
+        <p>The last Software Development lesson before trial exams. Today is targeted — working directly on the gaps identified in L20, not a general re-read of everything.</p>
+        <h3>Exam technique</h3>
+        <ul class="reading">
+          <li>Read the command term first, then the question — it changes what kind of answer is expected.</li>
+          <li>Match your answer length to the marks available — a 1-mark question doesn't need a paragraph.</li>
+          <li>For case-study questions, refer explicitly back to the case study — generic answers lose marks even when correct in principle.</li>
+        </ul>
+        <div class="callout callout-note">
+          <span class="callout-title">Before you leave today</span>
+          Everyone should be able to name their top 3 remaining weak spots and have a specific plan for addressing each one before trial exams — not just "I'll study more."
+        </div>
+        <div class="copy-banner">📋 Copy this into your workbook — Portfolio Section 21</div>
+        <div class="def-box"><div class="def-label">Final gap-closing plan</div><div class="def-text">List your top 3 remaining weak spots from L20's checklist and a specific, concrete plan for each before trial exams.</div></div>
+        <h3>Success criteria for this lesson</h3>
+        <div class="criteria-grid">
+          <div class="crit-card"><span class="crit-tier" style="background:var(--slate)">Understand</span><p>I can explain what my command-term answers need to include.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--slate)">Apply</span><p>I have closed at least one gap identified in L20 through targeted practice.</p></div>
+          <div class="crit-card"><span class="crit-tier" style="background:var(--slate)">Extend</span><p>I have a specific, actionable plan for my remaining weak spots.</p></div>
+        </div>
+        <a class="wb-link" href="U4_SoftwareDevelopment_SATPortfolio_workbook.html#y12-sd-u4-l21-exam-revision-2">Open the SAT Portfolio — Section 21 →</a>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<footer>EduPortal · Unit 4 Reference Site · Read-only — no progress tracked on this page</footer>
+
+<script>
+(function(){
+  const root = document.documentElement;
+  const btn = document.getElementById('theme-toggle');
+  function apply(light){
+    root.classList.toggle('light-mode', light);
+    btn.textContent = light ? '🌙 Dark mode' : '☀ Light mode';
+    btn.setAttribute('aria-pressed', String(light));
+  }
+  const saved = localStorage.getItem('eduportal_theme_pref');
+  apply(saved === 'light');
+  btn.addEventListener('click', function(){
+    const nowLight = !root.classList.contains('light-mode');
+    apply(nowLight);
+    localStorage.setItem('eduportal_theme_pref', nowLight ? 'light' : 'dark');
+  });
+})();
+</script>
+</body>
+</html>

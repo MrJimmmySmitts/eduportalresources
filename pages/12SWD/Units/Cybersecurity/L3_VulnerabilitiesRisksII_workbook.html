@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L3 — Vulnerabilities &amp; Risks II | Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dark-bg:#0D1117; --light-bg:#FFFFFF;
+  --blue:#4361EE; --green:#10B981; --amber:#F59E0B; --purple:#8B5CF6; --red:#EF4444;
+  --bg:#0D1117; --panel:#161B22; --panel-2:#1C2331; --border:#2A3241;
+  --text:#E6EDF3; --text-muted:#8B98A9; --input-bg:#0D1117;
+  --font-head:'DM Serif Display', serif; --font-body:'DM Sans', sans-serif;
+  --font-read:'Atkinson Hyperlegible', sans-serif; --font-mono:'DM Mono', monospace;
+}
+html.light-mode{
+  --bg:#FFFFFF; --panel:#F7F8FC; --panel-2:#EEF1F7; --border:#DDE3ED;
+  --text:#1F2328; --text-muted:#57606A; --input-bg:#FFFFFF;
+}
+*{box-sizing:border-box;}
+body{margin:0; background:var(--bg); color:var(--text); font-family:var(--font-body); transition:background .2s,color .2s;}
+a{color:var(--blue);}
+.wrap{max-width:920px; margin:0 auto; padding:0 20px 80px;}
+
+.topbar{position:sticky; top:0; z-index:50; background:var(--panel); border-bottom:1px solid var(--border); backdrop-filter:blur(6px);}
+.topbar-inner{max-width:920px; margin:0 auto; padding:10px 20px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+.progress-track{flex:1 1 200px; height:10px; background:var(--panel-2); border-radius:6px; overflow:hidden; border:1px solid var(--border); min-width:140px;}
+.progress-fill{height:100%; width:0%; background:linear-gradient(90deg,var(--blue),var(--green)); transition:width .3s;}
+.progress-label{font-family:var(--font-mono); font-size:12px; color:var(--text-muted); white-space:nowrap;}
+.topbar-btn{font-family:var(--font-body); font-size:13px; font-weight:600; padding:7px 14px; border-radius:8px; border:1px solid var(--border); background:var(--panel-2); color:var(--text); cursor:pointer;}
+.topbar-btn:hover{border-color:var(--blue);}
+.topbar-status{font-size:12px; color:var(--text-muted); font-family:var(--font-mono);}
+
+.cover{padding:44px 0 28px; border-bottom:1px solid var(--border); margin-bottom:32px;}
+.eyebrow{font-family:var(--font-mono); font-size:12px; letter-spacing:1.5px; color:var(--blue); text-transform:uppercase; margin-bottom:10px;}
+.cover h1{font-family:var(--font-head); font-size:36px; margin:0 0 10px; line-height:1.15;}
+.cover .sub{color:var(--text-muted); font-size:16px; margin-bottom:24px; max-width:680px;}
+.info-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+.info-field label{display:block; font-size:11px; text-transform:uppercase; letter-spacing:0.6px; color:var(--text-muted); margin-bottom:5px; font-family:var(--font-mono);}
+.info-field input{width:100%; padding:9px 10px; background:var(--input-bg); border:1px solid var(--border); border-radius:6px; color:var(--text); font-family:var(--font-body); font-size:14px;}
+
+.section{margin-bottom:40px;}
+.section-band{display:flex; align-items:center; gap:14px; margin-bottom:16px;}
+.sn{width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:15px; flex-shrink:0;}
+.slbl{font-family:var(--font-mono); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted);}
+.stit{font-family:var(--font-head); font-size:22px; margin:2px 0 0;}
+.badge{margin-left:auto; font-size:11px; font-weight:700; padding:5px 11px; border-radius:20px; color:#fff; white-space:nowrap;}
+
+.reading{font-family:var(--font-read); color:var(--text-muted); font-size:15px; margin:0 0 18px 48px;}
+.site-link{margin:0 0 18px 48px; font-size:13.5px;}
+
+.callout{border-radius:10px; padding:16px 18px; margin:0 0 18px 48px; font-family:var(--font-read); font-size:15px; line-height:1.55; border:1px solid;}
+.callout-info{background:rgba(67,97,238,.08); border-color:var(--blue);}
+.callout-tip{background:rgba(16,185,129,.08); border-color:var(--green);}
+.callout-note{background:rgba(245,158,11,.08); border-color:var(--amber);}
+.callout-extend{background:rgba(139,92,246,.08); border-color:var(--purple);}
+.callout-title{font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:6px; font-family:var(--font-body);}
+
+.task-block{margin:0 0 20px 48px; padding:18px 20px; background:var(--panel); border:1px solid var(--border); border-radius:10px;}
+.task-label{font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; color:var(--text-muted); margin-bottom:10px;}
+.question{font-family:var(--font-read); font-size:16px; margin:0 0 12px; line-height:1.5;}
+.field-label{display:block; font-size:12.5px; color:var(--text-muted); margin-bottom:6px; font-family:var(--font-body);}
+textarea, select{width:100%; padding:11px 12px; background:var(--input-bg); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:var(--font-read); font-size:15px; resize:vertical;}
+textarea:focus, select:focus, input:focus{outline:2px solid var(--blue); outline-offset:1px;}
+.pair{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:10px;}
+.match-row{display:flex; align-items:center; gap:12px; padding:9px 0; border-bottom:1px dashed var(--border);}
+.match-row:last-child{border-bottom:none;}
+.match-row .stmt{flex:1; font-family:var(--font-read); font-size:14.5px;}
+.match-row select{width:220px; flex-shrink:0;}
+
+.tier-tag{display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:20px; margin-bottom:10px;}
+.tier-foundation{background:rgba(16,185,129,.12); color:var(--green);}
+.tier-developing{background:rgba(245,158,11,.12); color:var(--amber);}
+.tier-extending{background:rgba(139,92,246,.12); color:var(--purple);}
+
+.criteria-card{margin:0 0 12px 48px; padding:14px 18px; border-radius:10px; border:1px solid var(--border); background:var(--panel); display:flex; gap:12px; align-items:flex-start;}
+.criteria-card input[type=checkbox]{margin-top:3px; width:18px; height:18px; flex-shrink:0; accent-color:var(--blue);}
+.criteria-card .ct{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:4px;}
+.criteria-card p{margin:0; font-family:var(--font-read); font-size:14.5px; line-height:1.5;}
+
+.exit-ticket{margin:0 0 16px 48px; padding:18px 20px; background:rgba(239,68,68,.06); border:1px solid var(--red); border-radius:10px;}
+
+.section-submit{margin:0 0 8px 48px; display:flex; align-items:center; gap:12px;}
+.btn{font-family:var(--font-body); font-size:13.5px; font-weight:700; padding:9px 18px; border-radius:8px; border:none; cursor:pointer;}
+.btn.primary{background:var(--blue); color:#fff;}
+.btn.primary:hover{background:#3651d4;}
+.hint{font-size:12.5px; color:var(--text-muted); font-family:var(--font-mono);}
+.next-lesson{margin-top:48px; padding:20px 24px; border:1px dashed var(--border); border-radius:10px; text-align:center; color:var(--text-muted); font-size:14px;}
+.next-lesson a{font-weight:600;}
+footer.credits{text-align:center; color:var(--text-muted); font-size:12px; margin-top:32px; font-family:var(--font-mono);}
+@media (max-width:640px){
+  .info-grid{grid-template-columns:1fr 1fr;}
+  .pair{grid-template-columns:1fr;}
+  .match-row{flex-direction:column; align-items:stretch;}
+  .match-row select{width:100%;}
+  .reading,.callout,.task-block,.criteria-card,.exit-ticket,.section-submit,.site-link{margin-left:0;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="progress-label" id="progress-pct">0% complete</span>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <span class="topbar-status" id="save-status">Not saved yet</span>
+    <button class="topbar-btn" id="btn-load">Load</button>
+    <button class="topbar-btn" id="btn-save">Save</button>
+    <button class="topbar-btn" id="btn-export">Export / Print</button>
+    <button class="topbar-btn" id="btn-theme">☀ / 🌙</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="cover">
+    <div class="eyebrow">VCE Software Development · Unit 4 · Area of Study 2 · Victorian Curriculum</div>
+    <h1>Lesson 3 — Vulnerabilities &amp; Risks II:<br>People &amp; Process Threats</h1>
+    <p class="sub">Insider threats, cyber security incidents &amp; social engineering, risks from third-party software, ineffective code review, and combined development environments.</p>
+    <div class="info-grid">
+      <div class="info-field"><label for="f-name">Name</label><input type="text" id="f-name" placeholder="Your name"></div>
+      <div class="info-field"><label for="f-class">Class</label><input type="text" id="f-class" placeholder="e.g. 12SDA"></div>
+      <div class="info-field"><label for="f-date">Date</label><input type="text" id="f-date" placeholder="YYYY-MM-DD"></div>
+      <div class="info-field"><label for="f-teacher">Teacher</label><input type="text" id="f-teacher" placeholder="Teacher name"></div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 1: Objective & Success Criteria ============ -->
+  <section class="section" id="sec-1">
+    <div class="section-band">
+      <div class="sn" style="background:var(--blue)">1</div>
+      <div><div class="slbl">Learning Objective</div><div class="stit">Where you're headed today</div></div>
+    </div>
+    <p class="reading">To identify and describe how insider threats, cyber security incidents, risks from third-party software, ineffective code review, and combined development environments create vulnerabilities in insecure development environments.</p>
+
+    <div class="criteria-card">
+      <input type="checkbox" class="track-field" id="sc-foundation">
+      <div><div class="ct" style="color:var(--green)">🟢 Foundation</div>
+      <p>I can define each of today's five vulnerability types and give a real example of each.</p></div>
+    </div>
+    <div class="criteria-card">
+      <input type="checkbox" class="track-field" id="sc-developing">
+      <div><div class="ct" style="color:var(--amber)">🟡 Developing</div>
+      <p>I can explain, for a given vulnerability type, what specifically makes it exploitable and one consequence for an organisation.</p></div>
+    </div>
+    <div class="criteria-card">
+      <input type="checkbox" class="track-field" id="sc-extending">
+      <div><div class="ct" style="color:var(--purple)">🟣 Extending</div>
+      <p>I can analyse a scenario and identify which vulnerability type(s) are present, with justification, and propose a matching mitigation.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 2: Explicit Explanation (copy prompts) ============ -->
+  <section class="section" id="sec-2">
+    <div class="section-band">
+      <div class="sn" style="background:var(--blue)">2</div>
+      <div><div class="slbl">Explicit Explanation</div><div class="stit">Notes from the lesson</div></div>
+    </div>
+    <p class="site-link">📖 Full notes on this topic: <a href="U4_CyberSecuritySoftwareDev_site.html#y12-sd-u4-l3-vulnerabilities-risks-ii" target="_blank">See the unit site, Lesson 3 →</a></p>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — insider threats (Slide 4)</div>
+      <p>Note the three types of insider threat, and one detail from the Tesla case that shows how little access was actually needed.</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="l3-t1">Your notes</label>
+      <textarea id="l3-t1" class="track-field" rows="4" placeholder="Which of the three types does the Tesla case show? What made it possible?"></textarea>
+    </div>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — cyber security incidents & social engineering (Slide 5)</div>
+      <p>Note the five social engineering tactics from the slide, and what each one relies on to work.</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="l3-t2">Your notes</label>
+      <textarea id="l3-t2" class="track-field" rows="5" placeholder="For each tactic, what is the attacker actually exploiting — urgency, trust, curiosity, or something else?"></textarea>
+    </div>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — risks from third-party software (Slide 6)</div>
+      <p>Note why a third-party library or API can be risky even when the organisation's own code is secure.</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="l3-t3">Your notes</label>
+      <textarea id="l3-t3" class="track-field" rows="3" placeholder="Who is actually responsible for finding and fixing a flaw in someone else's library?"></textarea>
+    </div>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — ineffective code review practices (Slide 7)</div>
+      <p>Note two specific flaws that a rushed or superficial code review can let through undetected.</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="l3-t4">Your notes</label>
+      <textarea id="l3-t4" class="track-field" rows="3" placeholder="What's the difference between a review that's 'done' and one that's actually effective?"></textarea>
+    </div>
+
+    <div class="callout callout-note">
+      <div class="callout-title">📋 Copy this — mitigating today's five risks (Slide 9)</div>
+      <p>Copy all five mitigation strategies from the slide into the field below, matched to their vulnerability type.</p>
+    </div>
+    <div class="task-block">
+      <label class="field-label" for="l3-mitigations">Mitigation strategies</label>
+      <textarea id="l3-mitigations" class="track-field" rows="5" placeholder="List each mitigation from the slide, one per line, next to the risk it addresses."></textarea>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 3: Application of Learning ============ -->
+  <section class="section" id="sec-3">
+    <div class="section-band">
+      <div class="sn" style="background:var(--green)">3</div>
+      <div><div class="slbl">Application of Learning</div><div class="stit">Your turn</div></div>
+      <span class="badge" style="background:var(--green)">On devices</span>
+    </div>
+
+    <!-- Foundation -->
+    <div class="task-block">
+      <span class="tier-tag tier-foundation">🟢 Foundation</span>
+      <p class="question">Match each vulnerability type to its example from today's lesson.</p>
+      <div class="match-row">
+        <span class="stmt">Insider threats</span>
+        <select class="track-field" id="m-1"><option value="">Choose...</option><option>Tesla (2020)</option><option>Capital One (2019)</option><option>Fake IT-support call requesting a password reset</option><option>Analytics library secretly harvesting user data</option><option>A merged pull request that skipped review</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt">Cyber security incidents &amp; social engineering</span>
+        <select class="track-field" id="m-2"><option value="">Choose...</option><option>Tesla (2020)</option><option>Capital One (2019)</option><option>Fake IT-support call requesting a password reset</option><option>Analytics library secretly harvesting user data</option><option>A merged pull request that skipped review</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt">Risks from third-party software</span>
+        <select class="track-field" id="m-3"><option value="">Choose...</option><option>Tesla (2020)</option><option>Capital One (2019)</option><option>Fake IT-support call requesting a password reset</option><option>Analytics library secretly harvesting user data</option><option>A merged pull request that skipped review</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt">Ineffective code review</span>
+        <select class="track-field" id="m-4"><option value="">Choose...</option><option>Tesla (2020)</option><option>Capital One (2019)</option><option>Fake IT-support call requesting a password reset</option><option>Analytics library secretly harvesting user data</option><option>A merged pull request that skipped review</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt">Combined development, testing &amp; production environments</span>
+        <select class="track-field" id="m-5"><option value="">Choose...</option><option>Tesla (2020)</option><option>Capital One (2019)</option><option>Fake IT-support call requesting a password reset</option><option>Analytics library secretly harvesting user data</option><option>A merged pull request that skipped review</option></select>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <span class="tier-tag tier-foundation">🟢 Foundation</span>
+      <p class="question">Classify each scenario as a careless, compromised, or malicious insider.</p>
+      <div class="match-row">
+        <span class="stmt">1. An employee emails a spreadsheet of customer data to the wrong "John Smith" in their contacts list.</span>
+        <select class="track-field" id="in-1"><option value="">Choose...</option><option>Careless</option><option>Compromised</option><option>Malicious</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt">2. An employee's stolen login is used overnight, without their knowledge, to download a client database.</span>
+        <select class="track-field" id="in-2"><option value="">Choose...</option><option>Careless</option><option>Compromised</option><option>Malicious</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt">3. A soon-to-be-fired employee deliberately deletes a shared project folder on their last day.</span>
+        <select class="track-field" id="in-3"><option value="">Choose...</option><option>Careless</option><option>Compromised</option><option>Malicious</option></select>
+      </div>
+      <div class="match-row">
+        <span class="stmt">4. An employee saves their work password directly into a personal, unsecured browser profile.</span>
+        <select class="track-field" id="in-4"><option value="">Choose...</option><option>Careless</option><option>Compromised</option><option>Malicious</option></select>
+      </div>
+    </div>
+
+    <!-- Developing -->
+    <div class="task-block">
+      <span class="tier-tag tier-developing">🟡 Developing</span>
+      <p class="question">Choose one of today's five vulnerability types.</p>
+      <label class="field-label" for="d-which">Which vulnerability type?</label>
+      <select id="d-which" class="track-field"><option value="">Choose...</option><option>Insider threats</option><option>Cyber security incidents & social engineering</option><option>Risks from third-party software</option><option>Ineffective code review</option><option>Combined development, testing & production environments</option></select>
+      <label class="field-label" for="d-exploit" style="margin-top:10px;">What specifically makes it exploitable?</label>
+      <textarea id="d-exploit" class="track-field" rows="3" placeholder="Don't just define it — explain the specific weakness in people or process that an attacker relies on."></textarea>
+      <label class="field-label" for="d-consequence" style="margin-top:10px;">One real consequence for an organisation</label>
+      <textarea id="d-consequence" class="track-field" rows="2" placeholder="What actually happens to the organisation if this isn't addressed?"></textarea>
+    </div>
+
+    <!-- Extending -->
+    <div class="task-block">
+      <span class="tier-tag tier-extending">🟣 Extending</span>
+      <p class="question"><strong>Scenario — GreenLeaf Logistics:</strong> a contractor's system access was never deactivated after their contract ended in March. In April, that account was used, from an unrecognised location, to access the live customer database — the same database developers and testers normally connected to directly for day-to-day work — and export delivery details for around 40,000 customers. A later review found that the code change which had introduced the access loophole in the first place was merged after a single one-line review comment, two days before a product launch deadline.</p>
+      <label class="field-label" for="e-types">Which vulnerability type(s) are present? List them and justify each with a specific detail from the scenario.</label>
+      <textarea id="e-types" class="track-field" rows="5" placeholder="There's more than one — match each detail in the scenario to the vulnerability type it demonstrates. This scenario wasn't covered directly in today's slides, so reason it through using today's definitions."></textarea>
+      <label class="field-label" for="e-mitigations" style="margin-top:10px;">Propose one matching mitigation for each vulnerability type you identified</label>
+      <textarea id="e-mitigations" class="track-field" rows="4" placeholder="Match each mitigation to the specific vulnerability it addresses — don't just list general advice."></textarea>
+    </div>
+
+    <div class="section-submit">
+      <button class="btn primary" data-submit-section>Mark Section 3 complete</button>
+      <span class="hint" data-submit-status></span>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 4: Responsive Teaching ============ -->
+  <section class="section" id="sec-4">
+    <div class="section-band">
+      <div class="sn" style="background:var(--purple)">4</div>
+      <div><div class="slbl">Responsive Teaching</div><div class="stit">Check your understanding</div></div>
+    </div>
+    <div class="task-block">
+      <div class="task-label">💬 Recap</div>
+      <p class="question">Name one of today's five vulnerability types and its example, without looking back at Section 2. What made that case preventable, in hindsight?</p>
+      <textarea id="rt-1" class="track-field" rows="4" placeholder="Try this from memory first, then check your notes afterwards."></textarea>
+    </div>
+    <div class="criteria-card">
+      <input type="checkbox" class="track-field" id="rt-checklist">
+      <div><div class="ct">Outcome 2 checklist</div>
+      <p>I can define and give a real example of all five people/process vulnerability types from today.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 5: Exit Ticket ============ -->
+  <section class="section" id="sec-5">
+    <div class="section-band">
+      <div class="sn" style="background:var(--red)">5</div>
+      <div><div class="slbl">Next Steps</div><div class="stit">Exit ticket</div></div>
+    </div>
+    <div class="exit-ticket">
+      <div class="task-label">🚪 Exit ticket — complete individually and silently</div>
+      <label class="field-label" for="et-1">1. Pick two of today's five vulnerability types. In one sentence each, explain how they exploit people or process rather than pure technology.</label>
+      <textarea id="et-1" class="track-field" rows="3"></textarea>
+      <label class="field-label" for="et-2" style="margin-top:10px;">2. Name one mitigation strategy that could help against more than one of today's vulnerability types.</label>
+      <textarea id="et-2" class="track-field" rows="2"></textarea>
+      <label class="field-label" for="et-3" style="margin-top:10px;">3. Self-rate: which success-criteria tier did you reach today?</label>
+      <select id="et-3" class="track-field">
+        <option value="">Choose...</option>
+        <option>🟢 Foundation</option>
+        <option>🟡 Developing</option>
+        <option>🟣 Extending</option>
+      </select>
+    </div>
+    <div class="section-submit">
+      <button class="btn primary" id="btn-submit-workbook">Submit workbook</button>
+      <span class="hint" id="submit-status"></span>
+    </div>
+
+    <div class="next-lesson">
+      Next lesson: <a href="L4_SecurityControls_workbook.html">L4 — Security Controls</a><br>
+      Homework: one last look at your L1 article — does it also show any of today's people/process vulnerabilities, alongside or instead of a technical one?
+    </div>
+  </section>
+
+</div>
+
+<footer class="credits">EduPortal · VCE Software Development · Unit 4 · Area of Study 2 · y12-sd-u4-l3-vulnerabilities-risks-ii</footer>
+
+<script>
+(function(){
+  const LESSON_ID = 'y12-sd-u4-l3-vulnerabilities-risks-ii';
+  const UNIT_ID = 'y12-sd-u4';
+
+  const DataService = {
+    studentId() {
+      return JSON.parse(localStorage.getItem('eduportal_session') || '{}').id || 'current_student';
+    },
+    _key() { return `eduportal_workbook_${this.studentId()}_${LESSON_ID}`; },
+    _progressKey() { return `eduportal_progress_${this.studentId()}_${LESSON_ID}`; },
+    collect() {
+      const data = {};
+      document.querySelectorAll('.track-field').forEach(el => {
+        if (el.type === 'checkbox') data[el.id] = el.checked;
+        else data[el.id] = el.value;
+      });
+      return data;
+    },
+    apply(data) {
+      if (!data) return;
+      Object.keys(data).forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.type === 'checkbox') el.checked = !!data[id];
+        else el.value = data[id];
+      });
+    },
+    save() {
+      const payload = { lessonId: LESSON_ID, unitId: UNIT_ID, savedAt: new Date().toISOString(), fields: this.collect() };
+      localStorage.setItem(this._key(), JSON.stringify(payload));
+      return payload;
+    },
+    load() {
+      const raw = localStorage.getItem(this._key());
+      if (!raw) return null;
+      try { return JSON.parse(raw); } catch (e) { return null; }
+    },
+    autoSave: debounce(function () { DataService.save(); updateSaveStatus('Auto-saved ' + nowTime()); }, 1500),
+    autoLoad() {
+      const data = this.load();
+      if (data && data.fields) { this.apply(data.fields); updateSaveStatus('Loaded from last save'); }
+    },
+    submit() {
+      this.save();
+      this._syncProgress('submitted');
+    },
+    _syncProgress(status) {
+      localStorage.setItem(this._progressKey(), JSON.stringify({ lessonId: LESSON_ID, status, updatedAt: new Date().toISOString() }));
+    }
+  };
+
+  function debounce(fn, wait) {
+    let t;
+    return function (...args) { clearTimeout(t); t = setTimeout(() => fn.apply(this, args), wait); };
+  }
+  function nowTime() { return new Date().toISOString().slice(11, 16); }
+  function updateSaveStatus(text) { document.getElementById('save-status').textContent = text; }
+
+  function updateProgress() {
+    const fields = document.querySelectorAll('.track-field');
+    let filled = 0;
+    fields.forEach(el => {
+      if (el.type === 'checkbox') { if (el.checked) filled++; }
+      else if (el.value && el.value.trim().length > 0) filled++;
+    });
+    const pct = fields.length ? Math.round((filled / fields.length) * 100) : 0;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-pct').textContent = pct + '% complete';
+  }
+
+  let hasStartedProgress = false;
+  document.querySelectorAll('.track-field').forEach(el => {
+    const evt = (el.tagName === 'SELECT' || el.type === 'checkbox') ? 'change' : 'input';
+    el.addEventListener(evt, () => {
+      if (!hasStartedProgress) { DataService._syncProgress('in-progress'); hasStartedProgress = true; }
+      updateProgress();
+      DataService.autoSave();
+    });
+  });
+
+  document.querySelectorAll('[data-submit-section]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      DataService.save();
+      const statusEl = btn.parentElement.querySelector('[data-submit-status]');
+      if (statusEl) statusEl.textContent = 'Saved ' + nowTime();
+      updateProgress();
+    });
+  });
+
+  document.getElementById('btn-submit-workbook').addEventListener('click', () => {
+    DataService.submit();
+    document.getElementById('submit-status').textContent = 'Workbook submitted ' + nowTime();
+  });
+
+  document.getElementById('btn-save').addEventListener('click', () => {
+    DataService.save();
+    updateSaveStatus('Saved ' + nowTime());
+  });
+  document.getElementById('btn-load').addEventListener('click', () => {
+    DataService.autoLoad();
+    updateProgress();
+  });
+  document.getElementById('btn-export').addEventListener('click', () => window.print());
+
+  document.getElementById('btn-theme').addEventListener('click', () => {
+    document.documentElement.classList.toggle('light-mode');
+    localStorage.setItem('eduportal_theme_pref', document.documentElement.classList.contains('light-mode') ? 'light' : 'dark');
+  });
+  const savedTheme = localStorage.getItem('eduportal_theme_pref');
+  if (savedTheme === 'light') document.documentElement.classList.add('light-mode');
+
+  DataService.autoLoad();
+  updateProgress();
+})();
+</script>
+</body>
+</html>
