@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en-AU" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unit 4 AoS2 — Cyber Security: Secure Software Development Practices</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#4361EE; --green:#10B981; --amber:#F59E0B; --purple:#8B5CF6; --red:#EF4444;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --read:'Atkinson Hyperlegible','DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono',ui-monospace,monospace;
+}
+html[data-theme="dark"]{
+  --bg:#0D1117; --surface:#151B24; --surface2:#1C232E; --border:#2A3441;
+  --text:#E6EAF0; --muted:#9AA6B6;
+}
+html[data-theme="light"]{
+  --bg:#FFFFFF; --surface:#F7F8FB; --surface2:#FFFFFF; --border:#DDE2EA;
+  --text:#111827; --muted:#5B6472;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--read);font-size:17px;line-height:1.65;}
+.layout{max-width:1180px;margin:0 auto;padding:0 22px 120px;display:grid;grid-template-columns:236px 1fr;gap:40px;}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:60;background:var(--bg);border-bottom:1px solid var(--border);}
+.topbar-inner{max-width:1180px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:14px;}
+.brand{font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;color:var(--muted);}
+.brand strong{color:var(--blue);font-weight:500;}
+.spacer{flex:1}
+button{font-family:var(--sans);font-size:13px;font-weight:700;border-radius:8px;border:1px solid var(--border);
+  background:var(--surface2);color:var(--text);padding:7px 13px;cursor:pointer;}
+button:hover{border-color:var(--blue);}
+
+/* ---------- side nav ---------- */
+nav.side{position:sticky;top:64px;align-self:start;padding-top:34px;font-family:var(--sans);font-size:14.5px;}
+nav.side .navlab{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;color:var(--muted);margin:0 0 10px 12px;}
+nav.side a{display:block;padding:8px 12px;border-radius:9px;color:var(--muted);text-decoration:none;border-left:1px solid transparent;}
+nav.side a:hover{color:var(--text);background:var(--surface);}
+nav.side .n{font-family:var(--mono);font-size:11.5px;color:var(--blue);display:block;}
+nav.side hr{border:none;border-top:1px solid var(--border);margin:14px 12px;}
+
+/* ---------- cover ---------- */
+.cover{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:34px;margin-top:34px;}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--blue);font-weight:500;}
+.cover h1{font-family:var(--serif);font-size:38px;line-height:1.14;margin:12px 0 8px;font-weight:400;}
+.cover p{color:var(--muted);margin:0;}
+.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px;}
+.meta div{background:var(--surface2);border:1px solid var(--border);border-radius:11px;padding:14px 16px;}
+.meta span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;color:var(--muted);margin-bottom:4px;}
+.meta strong{font-weight:700;font-size:15.5px;}
+
+/* ---------- sections ---------- */
+section{margin-top:56px;scroll-margin-top:70px;}
+.band{display:flex;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:8px;}
+.num{width:40px;height:40px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;
+  font-family:var(--mono);font-weight:500;font-size:16px;flex:none;}
+.band .lab{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted);display:block;}
+.band h2{font-family:var(--serif);font-size:29px;font-weight:400;margin:2px 0 0;line-height:1.18;}
+h3{font-family:var(--serif);font-weight:400;font-size:22px;margin:30px 0 8px;}
+h4{font-family:var(--sans);font-weight:700;font-size:16.5px;margin:22px 0 6px;letter-spacing:.01em;}
+p{margin:10px 0;}
+ul,ol{margin:10px 0;padding-left:22px;}
+li{margin:6px 0;}
+.badge{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;font-weight:500;padding:5px 11px;border-radius:99px;
+  border:1px solid var(--border);color:var(--muted);}
+.kk{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin:14px 0 6px;
+  font-size:15px;color:var(--muted);}
+.kk strong{font-family:var(--mono);font-size:11px;letter-spacing:.09em;color:var(--blue);display:block;margin-bottom:5px;font-weight:500;}
+.lo{border:1px solid var(--blue);background:color-mix(in srgb,var(--blue) 9%,transparent);border-radius:12px;padding:16px 18px;margin:14px 0;}
+.lo strong{font-family:var(--mono);font-size:11px;letter-spacing:.09em;color:var(--blue);display:block;margin-bottom:5px;font-weight:500;}
+.callout{border-radius:12px;padding:16px 18px;margin:18px 0;border:1px solid;}
+.c-info{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 9%,transparent);}
+.c-tip{border-color:var(--green);background:color-mix(in srgb,var(--green) 9%,transparent);}
+.c-note{border-color:var(--amber);background:color-mix(in srgb,var(--amber) 9%,transparent);}
+.c-ext{border-color:var(--purple);background:color-mix(in srgb,var(--purple) 9%,transparent);}
+.copy{border-color:var(--amber);background:color-mix(in srgb,var(--amber) 12%,transparent);border-radius:12px;
+  padding:14px 18px;margin:18px 0;border:1px solid;}
+.copy strong{font-family:var(--mono);font-size:11px;letter-spacing:.09em;color:var(--amber);display:block;margin-bottom:5px;font-weight:500;}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:15.5px;}
+th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top;}
+th{background:var(--surface2);font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--muted);font-weight:500;}
+tbody tr:nth-child(even){background:var(--surface);}
+a{color:var(--blue);}
+.wblink{display:inline-block;margin-top:22px;padding:11px 18px;border-radius:10px;border:1px solid var(--blue);
+  background:color-mix(in srgb,var(--blue) 12%,transparent);text-decoration:none;font-family:var(--sans);font-weight:700;font-size:14.5px;}
+.terms{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:6px 20px;margin:18px 0;}
+.terms dl{margin:0;}
+.terms dt{font-family:var(--mono);font-size:14px;color:var(--blue);margin-top:14px;font-weight:500;}
+.terms dd{margin:3px 0 14px;font-size:15.5px;}
+.small{font-size:14.5px;color:var(--muted);}
+.pill{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;padding:3px 9px;
+  border-radius:99px;color:#fff;font-weight:500;}
+.p-green{background:var(--green)} .p-amber{background:var(--amber)} .p-red{background:var(--red)}
+.p-blue{background:var(--blue)} .p-purple{background:var(--purple)} .p-grey{background:#6B7280}
+footer{margin-top:70px;padding-top:24px;border-top:1px solid var(--border);color:var(--muted);font-size:14.5px;}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr;gap:0;}
+  nav.side{position:static;padding-top:26px;}
+  .meta{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">VCE SOFTWARE DEVELOPMENT · <strong>UNIT 4 AOS2</strong></span>
+    <span class="spacer"></span>
+    <button onclick="toggleTheme()">Theme</button>
+    <button onclick="window.print()">Print</button>
+  </div>
+</div>
+
+<div class="layout">
+
+<nav class="side">
+  <p class="navlab">LESSONS</p>
+  <a href="#y12-sd-u4-l1-why-secure-development"><span class="n">L1</span>Why secure development matters</a>
+  <a href="#y12-sd-u4-l2-vulnerabilities-technical"><span class="n">L2</span>Vulnerabilities &amp; risks I</a>
+  <a href="#y12-sd-u4-l3-vulnerabilities-people-process"><span class="n">L3</span>Vulnerabilities &amp; risks II</a>
+  <a href="#y12-sd-u4-l4-security-controls"><span class="n">L4</span>Security controls</a>
+  <a href="#y12-sd-u4-l5-threat-modelling"><span class="n">L5</span>Threat modelling principles</a>
+  <a href="#y12-sd-u4-l6-evaluating-security-practices"><span class="n">L6</span>Evaluating security practices</a>
+  <a href="#y12-sd-u4-l7-legislation-frameworks"><span class="n">L7</span>Legislation &amp; frameworks</a>
+  <a href="#y12-sd-u4-l8-ethics-improving-practices"><span class="n">L8</span>Ethics &amp; improving practices</a>
+  <hr>
+  <p class="navlab">REFERENCE</p>
+  <a href="#sac">SAC preparation</a>
+  <a href="#glossary">Glossary</a>
+  <a href="#outcome">Outcome 2 &amp; key skills</a>
+</nav>
+
+<main>
+
+<div class="cover">
+  <span class="eyebrow">UNIT 4 · AREA OF STUDY 2</span>
+  <h1>Cyber Security: Secure Software Development Practices</h1>
+  <p>The permanent reference for this unit. Everything explained in class is written out in full here — use it for homework, for revision, and when you are stuck in a workbook.</p>
+  <div class="meta">
+    <div><span>OUTCOME 2</span><strong>Analyse an organisation's practices, evaluate controls and threats, recommend improvements</strong></div>
+    <div><span>ASSESSMENT</span><strong>Response to a teacher-provided case study</strong></div>
+    <div><span>LESSONS PUBLISHED</span><strong>1–8 — the full unit</strong></div>
+  </div>
+</div>
+
+<div class="callout c-info">
+  <strong>How to use this site.</strong> Each lesson has its own section below, with the learning objective, the full notes,
+  and a link to that lesson's workbook. This site records nothing about you — your work lives in the workbooks.
+</div>
+
+<!-- ==================== LESSON 1 ==================== -->
+<section id="y12-sd-u4-l1-why-secure-development">
+  <div class="band">
+    <div class="num">1</div>
+    <div><span class="lab">LESSON 1</span><h2>Why secure software development matters</h2></div>
+  </div>
+
+  <div class="lo"><strong>LEARNING OBJECTIVE</strong>
+    To be able to explain what medium and large organisations are trying to achieve, and why the way software gets developed affects whether they achieve it.</div>
+
+  <div class="kk"><strong>KEY KNOWLEDGE</strong>
+    Goals and objectives of medium and large organisations · advantages and disadvantages of developing software in-house or externally</div>
+
+  <h3>Goals and objectives</h3>
+  <p>Every organisation exists to do something, and everything it builds is meant to serve that purpose. Three terms are used, and they are not interchangeable.</p>
+  <table>
+    <thead><tr><th style="width:22%">Term</th><th>What it means</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Vision statement</strong></td><td>A description of the organisation as it would look in a future successful position — where it is trying to end up.</td></tr>
+      <tr><td><strong>Mission statement</strong></td><td>The organisation's purpose: what it is trying to achieve. For most companies the mission includes making a profit; for a non-profit it is usually providing a service to members.</td></tr>
+      <tr><td><strong>Goal</strong></td><td>An anticipated result the organisation intends to reach. A good goal is specific, measurable, achievable and timely.</td></tr>
+      <tr><td><strong>Objective</strong></td><td>The smaller, achievable tasks undertaken in order to accomplish a goal.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="copy"><strong>COPY THIS</strong>
+    A goal is the destination; objectives are the steps taken to get there. Security practices support goals — they are not a goal in themselves. An organisation does not aim to "be secure"; it aims to keep operating, keep customers, and stay within the law, and security is how it protects those things.</div>
+
+  <h3>Why insecure development threatens the goals</h3>
+  <p>Insecure development environments are a problem for any organisation that develops software, whether the work is done internally or handed to another company. The consequences reach well past the technical:</p>
+  <ul>
+    <li><strong>Financial</strong> — the cost of the incident itself, remediation, downtime and lost sales.</li>
+    <li><strong>Reputational</strong> — customers who leave, and customers who never arrive because of what they read.</li>
+    <li><strong>Legal and regulatory</strong> — notification obligations, investigations and penalties.</li>
+    <li><strong>Operational</strong> — staff spending months fixing something instead of building the next product.</li>
+  </ul>
+
+  <h3>Developing in-house versus externally</h3>
+  <p>Organisations choose between building software with their own staff, or contracting another organisation to build it. Both choices carry security consequences.</p>
+  <table>
+    <thead><tr><th style="width:16%">Approach</th><th>Advantages</th><th>Disadvantages</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>In-house</strong></td>
+        <td>Full control over the development environment and its security; deep knowledge of the organisation's own systems and data; intellectual property stays inside; changes can be made quickly without renegotiating a contract.</td>
+        <td>Requires hiring and retaining skilled developers; the organisation carries the whole cost of tools, training and infrastructure; a small team may lack specialist security expertise.</td>
+      </tr>
+      <tr>
+        <td><strong>External</strong></td>
+        <td>Access to specialist skills without hiring them permanently; often faster to start; costs are known up front; the external provider may hold security certifications the organisation could not achieve alone.</td>
+        <td>Less visibility and control over how securely the work is actually done; sensitive data and source code are shared outside the organisation; dependence on the provider for fixes and patches; intellectual property and confidentiality must be handled by contract, such as a non-disclosure agreement.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout c-note">
+    <strong>Exam framing.</strong> Case studies rarely ask "which is better". They ask which suits <em>this</em> organisation, given its size, its data, its budget and its goals. Answer with reference to the organisation in front of you.
+  </div>
+
+  <a class="wblink" href="L1_WhySecureDevelopment_workbook.html">Open the Lesson 1 workbook →</a>
+</section>
+
+<!-- ==================== LESSON 2 ==================== -->
+<section id="y12-sd-u4-l2-vulnerabilities-technical">
+  <div class="band">
+    <div class="num">2</div>
+    <div><span class="lab">LESSON 2</span><h2>Vulnerabilities and risks I — technical</h2></div>
+  </div>
+
+  <div class="lo"><strong>LEARNING OBJECTIVE</strong>
+    To be able to describe the technical vulnerabilities present in insecure development environments, and the risks each one creates.</div>
+
+  <div class="kk"><strong>KEY KNOWLEDGE</strong>
+    Types of vulnerabilities and risks within insecure development environments, including: use of application programming interfaces (APIs) · malware · unpatched software · poor identity and access management practices · man-in-the-middle attacks</div>
+
+  <div class="copy"><strong>COPY THIS — the three terms</strong>
+    A <strong>vulnerability</strong> is a weakness. A <strong>threat</strong> is something that could exploit that weakness. A <strong>risk</strong> is the combination of how likely the exploit is and how bad the consequences would be. Keeping these apart is worth marks in every question on this area of study.</div>
+
+  <h3>Application programming interfaces (APIs)</h3>
+  <p>An API lets one piece of software call another. Using APIs increases the potential for exploitation, because every API is another doorway into a system — and one the organisation often does not control.</p>
+  <ul>
+    <li>An API with weak or missing authentication lets an attacker call it directly rather than through the app.</li>
+    <li>An API that returns more data than the app displays leaks information to anyone who inspects the response.</li>
+    <li>An API without rate limiting can be called repeatedly to extract data in bulk or to overwhelm the service.</li>
+    <li>A third-party API means trusting another organisation's security as if it were your own.</li>
+  </ul>
+
+  <h3>Malware</h3>
+  <p>Malware is malicious software designed to infiltrate and damage computer systems without authorisation. It takes advantage of weaknesses in a host computer or operating system.</p>
+  <table>
+    <thead><tr><th style="width:20%">Type</th><th>How it behaves</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Virus</strong></td><td>Malicious code that reproduces itself on a computer; often arrives as an email attachment or download and infects the active host.</td></tr>
+      <tr><td><strong>Worm</strong></td><td>A standalone, self-replicating program that spreads across systems by exploiting operating system vulnerabilities — no user action needed.</td></tr>
+      <tr><td><strong>Trojan horse</strong></td><td>Masquerades as or hides inside useful software; requires a user to activate the installation, and creates a back door into the computer.</td></tr>
+      <tr><td><strong>Logic bomb</strong></td><td>Lies dormant until a timer or a conditional trigger goes off.</td></tr>
+      <tr><td><strong>Ransomware</strong></td><td>Locks or encrypts systems and data until a ransom is paid.</td></tr>
+      <tr><td><strong>Spyware</strong></td><td>Collects information without the user's knowledge; typically arrives with a free download.</td></tr>
+      <tr><td><strong>Keylogger</strong></td><td>Records keystrokes and sends passwords or sensitive information to an attacker.</td></tr>
+      <tr><td><strong>Back door</strong></td><td>Allows remote access to a system, bypassing all normal security processes.</td></tr>
+    </tbody>
+  </table>
+  <p class="small">In a development environment specifically, malware is most dangerous when it reaches a build server or a developer's machine — because from there it can be signed, packaged and shipped to customers as part of a legitimate release.</p>
+
+  <h3>Unpatched software</h3>
+  <p>Unpatched software leaves known security flaws unaddressed. This is a particularly serious vulnerability because the flaw is <em>published</em>: once a patch is released, the details of what it fixes are usually public, so attackers know exactly what to look for on systems that have not applied it.</p>
+  <ul>
+    <li>Operating systems and servers left on old versions.</li>
+    <li>Development tools, build servers and CI pipelines that nobody has updated.</li>
+    <li>Third-party libraries and dependencies — often dozens or hundreds per project.</li>
+  </ul>
+
+  <h3>Poor identity and access management</h3>
+  <p>Poor identity and access management allows unauthorised users to reach sensitive data and critical systems. Common failures:</p>
+  <ul>
+    <li>Shared accounts, so no action can be attributed to a person.</li>
+    <li>Accounts that are never disabled when staff or contractors leave.</li>
+    <li>Everyone granted administrator rights because it is easier than managing roles.</li>
+    <li>No multi-factor authentication, so a single stolen password is enough.</li>
+    <li>Passwords reused across work and personal services, exposing the organisation to credential stuffing.</li>
+  </ul>
+
+  <h3>Man-in-the-middle (MITM) attacks</h3>
+  <p>A man-in-the-middle attack is a type of eavesdropping attack in which communications and data are exposed to an unauthorised third party. The two parties believe they are talking directly to each other; in fact an attacker sits between them, able to read and sometimes alter what passes through.</p>
+  <ul>
+    <li><strong>Where it happens:</strong> unsecured or spoofed public Wi-Fi, compromised routers, or any connection not using a secure protocol.</li>
+    <li><strong>Why it matters in development:</strong> a developer pulling code or pushing a release over an unprotected connection can have credentials captured or code altered in transit.</li>
+    <li><strong>What prevents it:</strong> encryption in transit (TLS/HTTPS, SSH), certificate validation, and not working on sensitive systems over untrusted networks.</li>
+  </ul>
+
+  <a class="wblink" href="L2_VulnerabilitiesRisksI_workbook.html">Open the Lesson 2 workbook →</a>
+</section>
+
+<!-- ==================== LESSON 3 ==================== -->
+<section id="y12-sd-u4-l3-vulnerabilities-people-process">
+  <div class="band">
+    <div class="num">3</div>
+    <div><span class="lab">LESSON 3</span><h2>Vulnerabilities and risks II — people and process</h2></div>
+  </div>
+
+  <div class="lo"><strong>LEARNING OBJECTIVE</strong>
+    To be able to describe the vulnerabilities that come from people and from the way an organisation works, rather than from its technology.</div>
+
+  <div class="kk"><strong>KEY KNOWLEDGE</strong>
+    Insider threats · cyber security incidents · risks present from software acquired by third parties · ineffective code review practices · combined development, testing and production environments</div>
+
+  <h3>Insider threats</h3>
+  <p>Insider threats come from people the organisation trusts: current employees, former employees, contractors, vendors and business partners. They are difficult to detect precisely because the access being used is legitimate.</p>
+  <table>
+    <thead><tr><th style="width:24%">Kind</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Malicious insider</strong></td><td>Deliberately takes data, damages systems or sells access — often motivated by money or grievance.</td></tr>
+      <tr><td><strong>Negligent insider</strong></td><td>No intent to harm, but bypasses controls for convenience: shares a login, emails a file home, disables a security check to meet a deadline.</td></tr>
+      <tr><td><strong>Compromised insider</strong></td><td>A legitimate account taken over by an outsider through phishing or stolen credentials. The organisation sees a trusted user; it is not one.</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Reducing insider risk:</strong> least-privilege access, separation of duties so no single person can act unchecked, logging and monitoring of privileged activity, and a genuine offboarding process that revokes access on the last day.</p>
+
+  <h3>Social engineering</h3>
+  <p>Social engineering relies on the manipulation of human nature to persuade victims to hand over personal or sensitive information, or to grant access. At its most basic it is a confidence trick, and no amount of technology fully prevents it.</p>
+  <table>
+    <thead><tr><th style="width:22%">Technique</th><th>What it involves</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Phishing</strong></td><td>Pretending to be a reputable person or entity to induce disclosure of sensitive information.</td></tr>
+      <tr><td><strong>Spear phishing</strong></td><td>Phishing tailored to a specific individual, using details that make it convincing.</td></tr>
+      <tr><td><strong>Smishing / vishing</strong></td><td>The same approach delivered by SMS or by voice call.</td></tr>
+      <tr><td><strong>Pharming</strong></td><td>Redirecting users to false websites that imitate a legitimate URL.</td></tr>
+      <tr><td><strong>Impersonation</strong></td><td>Creating a fictional persona and playing that role to deceive or defraud.</td></tr>
+      <tr><td><strong>Credential stuffing</strong></td><td>Reusing passwords harvested from one service against another, exploiting people who reuse them.</td></tr>
+      <tr><td><strong>Shoulder surfing</strong></td><td>Observing password or code entry directly, sometimes with a camera.</td></tr>
+      <tr><td><strong>Tailgating</strong></td><td>Following an authorised person through a secure door before it closes.</td></tr>
+    </tbody>
+  </table>
+  <p><strong>The main defence is training</strong> — many threats rely on inadvertent user cooperation, so users who recognise the pattern are the control. Restricting company email and SMS to business purposes, requiring unique passwords, and limiting financial authority all reduce the damage a successful attempt can do.</p>
+
+  <h3>Software acquired from third parties</h3>
+  <p>Software from third parties creates risk because users depend on the developer or distributor to supply necessary patches, improvements and modifications. The organisation inherits somebody else's decisions.</p>
+  <ul>
+    <li>A dependency that stops being maintained leaves a permanent, unfixable vulnerability.</li>
+    <li>A compromised library ships malicious code straight into your product — and your customers trust <em>your</em> name on it.</li>
+    <li>Most projects use far more third-party code than code written in-house, and few organisations keep an inventory of what they actually depend on.</li>
+    <li>Open-source components are free to use and modify, but "someone will have checked it" is an assumption, not a control.</li>
+  </ul>
+
+  <h3>Ineffective code review practices</h3>
+  <p>Ineffective code review allows security flaws and coding errors to go undetected until they are in production. Review fails in recognisable ways:</p>
+  <ul>
+    <li>Reviews that are approvals in name only — clicked through without reading.</li>
+    <li>Senior developers exempt from review, so the least-checked code is the most powerful.</li>
+    <li>Reviews that look only at whether the code works, never at whether it is safe.</li>
+    <li>No automated static analysis to catch what humans reliably miss.</li>
+    <li>Changes merged directly to the main branch, bypassing review entirely.</li>
+  </ul>
+
+  <h3>Combined development, testing and production environments</h3>
+  <p>When development, testing and production run on the same systems, every mistake made while building software can reach real users and real data.</p>
+  <ul>
+    <li>Experimental or unfinished code can reach customers before it is ready.</li>
+    <li>A test that deletes or corrupts data destroys live data instead of test data.</li>
+    <li>Developers need broad access to build software — in a combined environment that access extends over live customer records.</li>
+    <li>An attacker who compromises the weakly protected development tooling lands directly in production.</li>
+    <li>Copying live customer data into testing "so the data is realistic" recreates the same exposure even when the environments themselves are separate.</li>
+  </ul>
+
+  <a class="wblink" href="L3_VulnerabilitiesRisksII_workbook.html">Open the Lesson 3 workbook →</a>
+</section>
+
+<!-- ==================== LESSON 4 ==================== -->
+<section id="y12-sd-u4-l4-security-controls">
+  <div class="band">
+    <div class="num">4</div>
+    <div><span class="lab">LESSON 4</span><h2>Security controls</h2></div>
+  </div>
+
+  <div class="lo"><strong>LEARNING OBJECTIVE</strong>
+    To be able to describe the six security controls used to protect software development practices and the data stored within applications, and explain what each one does and does not protect against.</div>
+
+  <div class="kk"><strong>KEY KNOWLEDGE</strong>
+    Security controls used to protect software development practices and data stored within applications, including: version control and code repositories · robust identity and access management · encryption · code review · regular updates and patches to software · separated development, testing and production environments</div>
+
+  <div class="copy"><strong>COPY THIS — the six controls</strong>
+    <ol style="margin:8px 0 0">
+      <li>Version control and code repositories</li>
+      <li>Robust identity and access management</li>
+      <li>Encryption</li>
+      <li>Code review</li>
+      <li>Regular updates and patches to software</li>
+      <li>Separated development, testing and production environments</li>
+    </ol></div>
+
+  <h3>1. Version control and code repositories</h3>
+  <p>Version control records each stage of development so it is possible to roll back to any previous point. That makes it a recovery tool — but it is a security control for a further reason: every change is attributable to a named person and a point in time.</p>
+  <ul>
+    <li>Malicious or accidental changes can be identified and reversed.</li>
+    <li>The history shows who changed what and when, which supports investigation after an incident.</li>
+    <li>Repository access controls determine who can read and who can push code.</li>
+    <li>Secure protocols (SSH, HTTPS) protect code in transit; signed commits verify that a commit really came from who it claims.</li>
+  </ul>
+  <div class="callout c-note"><strong>Limitation.</strong> Version control records what happened; it does not prevent it. A developer with push access can still commit a back door — the history will simply show that they did.</div>
+
+  <h3>2. Robust identity and access management</h3>
+  <p>Identity and access management ensures that only authorised individuals reach a resource, and only the resources their role actually requires.</p>
+  <ul>
+    <li><strong>Authentication</strong> — proving who you are. Multi-factor authentication adds a second factor so a stolen password is not sufficient on its own.</li>
+    <li><strong>Authorisation</strong> — deciding what you may do. Permissions are granted by role, following the <strong>principle of least privilege</strong>: the minimum access needed for the job.</li>
+    <li><strong>Accounting</strong> — logging user activity so unauthorised attempts can be detected and traced.</li>
+    <li><strong>Lifecycle</strong> — access is granted at onboarding, adjusted when roles change, and revoked at offboarding.</li>
+  </ul>
+
+  <h3>3. Encryption</h3>
+  <p>Encryption strategies start from the assumption that data will eventually be exposed, and so make it unintelligible to anyone not authorised to read it.</p>
+  <ul>
+    <li><strong>At rest</strong> — data stored in databases, on file systems, on backups and on laptops.</li>
+    <li><strong>In transit</strong> — data moving across networks, protected with secure protocols such as TLS.</li>
+    <li><strong>Key management</strong> — the generation, distribution, storage and rotation of keys. Encryption is only as strong as the protection around its keys.</li>
+  </ul>
+  <div class="callout c-note"><strong>Three limits worth remembering.</strong> Encryption does not help if the attacker has stolen a valid key; if the attacker is using a legitimate logged-in session, since the data is decrypted for them; or if the data is exported somewhere unencrypted, such as a plain CSV on a shared drive.</div>
+
+  <h3>4. Code review</h3>
+  <p>Code review acts as a security control because examining source code identifies — and therefore allows the elimination of — vulnerabilities before deployment.</p>
+  <ul>
+    <li><strong>Peer review</strong> of every change before it merges into the main codebase.</li>
+    <li><strong>Static application security testing (SAST)</strong> — "white box" testing that analyses source, byte or binary code for vulnerabilities without executing the application.</li>
+    <li><strong>Dynamic application security testing (DAST)</strong> — "black box" testing that checks outputs for known inputs against a running application.</li>
+    <li><strong>Dedicated security reviews</strong> for critical sections such as authentication, payments or data export.</li>
+  </ul>
+
+  <h3>5. Regular updates and patches</h3>
+  <p>Deploying updates and patches is a critical component of software security, because it closes flaws that are already publicly known. Effective patch management includes a documented policy with a maximum time to apply critical patches, an inventory of what needs patching, verification that patches were correctly applied, and regular vulnerability scanning to find what was missed.</p>
+
+  <div class="callout c-info">
+    <strong>Worked example — WannaCry (2017).</strong> The WannaCry ransomware spread worldwide by exploiting a Windows vulnerability for which Microsoft had released a patch some weeks earlier. Organisations that had applied the patch were unaffected; organisations that had not — including hospitals running critical systems — lost access to their data. The vulnerability was not unknown. The failure was in patch management, which is a process, not a technology.
+  </div>
+
+  <h3>6. Separated development, testing and production environments</h3>
+  <p>Separating the three environments acts as a security control because each stage is isolated from the others.</p>
+  <table>
+    <thead><tr><th style="width:20%">Environment</th><th>Purpose</th><th>Who should have access</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Development</strong></td><td>Where code is written and experimented with. Broken states are expected.</td><td>Developers</td></tr>
+      <tr><td><strong>Testing</strong></td><td>Where code is verified against requirements before release. Uses realistic but non-live data.</td><td>Developers and testers</td></tr>
+      <tr><td><strong>Production</strong></td><td>The live system that real users depend on.</td><td>A small, named set of operations staff</td></tr>
+    </tbody>
+  </table>
+  <p>Separation can be physical or logical, and should be supported by formal deployment procedures for moving code from one environment to the next, plus change management logs recording that those procedures were followed.</p>
+
+  <h3>Which control addresses which vulnerability</h3>
+  <table>
+    <thead><tr><th style="width:34%">Vulnerability</th><th>Primary control</th><th>Supporting control</th></tr></thead>
+    <tbody>
+      <tr><td>Poor identity and access management</td><td>Robust IAM (MFA, least privilege)</td><td>Access logging and periodic review</td></tr>
+      <tr><td>Unpatched software</td><td>Regular updates and patches</td><td>Vulnerability scanning</td></tr>
+      <tr><td>Man-in-the-middle attacks</td><td>Encryption in transit</td><td>Secure repository protocols</td></tr>
+      <tr><td>Insider threats</td><td>Robust IAM and least privilege</td><td>Version control attribution; code review</td></tr>
+      <tr><td>Ineffective code review</td><td>Code review, including SAST</td><td>Branch protection in the repository</td></tr>
+      <tr><td>Combined environments</td><td>Separated dev / test / production</td><td>Formal deployment procedures</td></tr>
+      <tr><td>Third-party software risk</td><td>Regular updates and patches</td><td>Dependency inventory and scanning</td></tr>
+      <tr><td>Malware</td><td>Least privilege and patching</td><td>Separated environments limiting spread</td></tr>
+    </tbody>
+  </table>
+
+  <a class="wblink" href="L4_SecurityControls_workbook.html">Open the Lesson 4 workbook →</a>
+</section>
+
+<!-- ==================== LESSON 5 ==================== -->
+<section id="y12-sd-u4-l5-threat-modelling">
+  <div class="band">
+    <div class="num">5</div>
+    <div><span class="lab">LESSON 5</span><h2>Threat modelling principles</h2></div>
+  </div>
+
+  <div class="lo"><strong>LEARNING OBJECTIVE</strong>
+    To be able to apply threat modelling principles to an organisation's software development practices.</div>
+
+  <div class="kk"><strong>KEY KNOWLEDGE</strong>
+    Threat modelling principles, including: defining security requirements · identifying and mitigating threats · confirming threats have been mitigated</div>
+
+  <div class="copy"><strong>COPY THIS — definition</strong>
+    Threat modelling is a structured process in which an organisation identifies the threats to its systems and data, judges how serious each one is, plans actions to reduce them, and then checks that those actions worked.</div>
+
+  <p>Four things follow from that definition:</p>
+  <ul>
+    <li><strong>It is deliberate, not accidental.</strong> Threats are written down and rated, rather than dealt with only when something breaks.</li>
+    <li><strong>It involves the whole organisation.</strong> Judging "the worst that could happen" is a value judgement, and managers, developers and operations staff weigh the same threat differently. Involving a cross-section builds a shared understanding of risk.</li>
+    <li><strong>It produces priorities, not a wish list.</strong> No organisation can fix everything at once.</li>
+    <li><strong>It is never finished.</strong> Threats change, so the model is revisited.</li>
+  </ul>
+
+  <h3>Reactive security versus threat modelling</h3>
+  <table>
+    <thead><tr><th style="width:50%"><span class="pill p-red">REACTIVE</span></th><th><span class="pill p-green">PROACTIVE</span></th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Incident happens → damage discovered → emergency fix → customers notified → a control is added afterwards.<br><br><em>Cost is highest here: the breach has already happened, and the organisation pays for the fix, the downtime and the notification.</em></td>
+        <td>Assets and requirements defined → threats listed and rated → mitigations chosen by priority → mitigations tested → the model reviewed as things change.<br><br><em>Cost is lowest here: fixing a design flaw before release is far cheaper than fixing it afterwards.</em></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Industry frameworks</h3>
+  <p>Several established threat modelling frameworks exist. You are not expected to memorise their internals — you are expected to know they exist and what they have in common.</p>
+  <ul>
+    <li><strong>OWASP</strong> — the Open Worldwide Application Security Project; community-maintained guidance focused on web application security.</li>
+    <li><strong>Microsoft STRIDE</strong> — a general checklist of threat categories applied to any software design.</li>
+    <li><strong>VerSprite PASTA</strong> — Process for Attack Simulation and Threat Analysis; frames threats in business terms.</li>
+  </ul>
+  <div class="copy"><strong>COPY THIS — what all frameworks share</strong>
+    <ul style="margin:8px 0 0">
+      <li>A description of the security requirements</li>
+      <li>Assumptions that can be re-checked as threats change</li>
+      <li>Identification of potential threats</li>
+      <li>Actions that mitigate each threat</li>
+      <li>Validation of the model, and confirmation that action taken was successful</li>
+    </ul></div>
+
+  <h3>Principle 1 — Defining security requirements</h3>
+  <p>Defining security requirements means identifying and establishing the controls and measures needed to protect a system, so that security is designed in from the beginning rather than added later.</p>
+  <h4>Step A — Identify the assets</h4>
+  <ul><li>Data — customer records, payment details, source code</li><li>Applications — the customer-facing app, the admin portal</li><li>Systems and infrastructure — servers, repositories, build pipelines</li></ul>
+  <h4>Step B — Identify the stakeholders</h4>
+  <ul><li>Users of the system</li><li>Administrators and developers who hold access</li><li>Business owners who carry the legal and financial risk</li></ul>
+  <h4>Step C — Write the requirement so it can be tested</h4>
+  <table>
+    <thead><tr><th style="width:14%">Quality</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill p-red">WEAK</span></td><td>"Customer data must be kept safe." — untestable; nobody can prove it has been met.</td></tr>
+      <tr><td><span class="pill p-green">STRONG</span></td><td>"Customer payment data must be encrypted at rest and in transit, and readable only by the payments service account."</td></tr>
+    </tbody>
+  </table>
+  <h4>Prioritising and reviewing</h4>
+  <ul>
+    <li><strong>Prioritise by impact and likelihood.</strong> High-priority requirements protect assets whose loss would seriously harm the organisation, where that loss is plausible.</li>
+    <li><strong>Resources are limited.</strong> Not all requirements can be delivered at once, so they are sequenced.</li>
+    <li><strong>Review continuously.</strong> Threats evolve and systems change, so requirements are revisited on a schedule.</li>
+  </ul>
+
+  <h3>Principle 2 — Identifying and mitigating threats</h3>
+  <p>Threats to data integrity fall into three categories, and each calls for a different kind of response.</p>
+  <table>
+    <thead><tr><th style="width:17%">Category</th><th>Description</th><th>Examples</th><th style="width:22%">Response</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill p-green">ACCIDENTAL</span></td><td>Caused by people making mistakes. Note that mistakes rarely "just happen".</td><td>User inattention; confusing look-alike interfaces; no confirmation before a live change; permissions letting untrained users delete.</td><td>Better design and training</td></tr>
+      <tr><td><span class="pill p-amber">EVENT-BASED</span></td><td>External events, largely outside the organisation's control.</td><td>Storage failure; power failure; fire, flood or lightning; cloud or third-party outage; file corruption.</td><td>Contingency planning</td></tr>
+      <tr><td><span class="pill p-red">DELIBERATE</span></td><td>Someone is actively trying to cause harm.</td><td>Malware and ransomware; hackers, insiders and criminals; social engineering; DoS and DDoS attacks.</td><td>Active defences</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Contingency planning for event-based threats</h4>
+  <p>Because these cannot be prevented, the organisation prepares recovery instead:</p>
+  <ul>
+    <li><strong>Hot site</strong> — a full or partial duplicate of the primary operation with near-real-time backups; switchover in a few hours. Used when little or no downtime can be tolerated.</li>
+    <li><strong>Warm site</strong> — in between: limited in scope, relying on restored backups being brought online before services resume.</li>
+    <li><strong>Cold site</strong> — may take weeks to establish; the business operates at a reduced level in the meantime.</li>
+    <li>Plus regular full and incremental backups, RAID, diagnostic monitoring and an uninterruptible power supply.</li>
+  </ul>
+
+  <h4>Rating a threat</h4>
+  <p>Threats are rated by combining <strong>likelihood</strong> with <strong>consequence</strong>.</p>
+  <table>
+    <thead><tr><th style="width:22%">Consequence ↓ / Likelihood →</th><th>Unlikely</th><th>Possible</th><th>Likely</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Major</strong></td><td>Medium</td><td>High</td><td>Extreme</td></tr>
+      <tr><td><strong>Moderate</strong></td><td>Low</td><td>Medium</td><td>High</td></tr>
+      <tr><td><strong>Minor</strong></td><td>Low</td><td>Low</td><td>Medium</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li>A rare event with catastrophic consequences can outrank a weekly nuisance.</li>
+    <li>Extreme risks are escalated to management — they are not a developer's decision to make.</li>
+    <li>The rating is a judgement, so the reasoning behind it is recorded.</li>
+    <li>A control already in place changes the rating: a stolen laptop is a different consequence entirely if the disk was encrypted.</li>
+  </ul>
+
+  <h4>Four responses to a rated threat</h4>
+  <table>
+    <thead><tr><th style="width:14%">Strategy</th><th style="width:40%">What it means</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill p-green">REDUCE</span></td><td>Put a control in place that lowers the likelihood or the consequence.</td><td>Enforce MFA on the repository; encrypt the customer database.</td></tr>
+      <tr><td><span class="pill p-blue">AVOID</span></td><td>Stop doing the risky thing at all.</td><td>Stop storing card numbers; use a payment gateway that holds them instead.</td></tr>
+      <tr><td><span class="pill p-amber">TRANSFER</span></td><td>Move the financial consequence to someone else.</td><td>Cyber insurance; a hosting contract carrying uptime penalties.</td></tr>
+      <tr><td><span class="pill p-grey">ACCEPT</span></td><td>Consciously decide to live with it, and record that decision.</td><td>A two-minute outage during the nightly deploy window is tolerated.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout c-note"><strong>Ignoring a threat is not the same as accepting it.</strong> Acceptance is documented, dated and approved by someone with the authority to carry the consequence — and revisited when circumstances change.</div>
+
+  <h3>Principle 3 — Confirming threats have been mitigated</h3>
+  <p>Putting a control in place is a claim. Confirmation is the evidence. Six processes are used:</p>
+  <table>
+    <thead><tr><th style="width:26%">Process</th><th>What it involves</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Security assessments</strong></td><td>Vulnerability scanning and penetration testing on a schedule, finding weaknesses before an attacker does.</td></tr>
+      <tr><td><strong>Monitoring and logging</strong></td><td>Continuous monitoring of network traffic, system activity and user behaviour; logging allows incidents to be traced and audited.</td></tr>
+      <tr><td><strong>Patch management</strong></td><td>Verifying that patches were applied, applied correctly, and did not introduce new problems.</td></tr>
+      <tr><td><strong>Access control reviews</strong></td><td>Periodic checks that permissions still match job roles, with unnecessary privileges revoked.</td></tr>
+      <tr><td><strong>Security awareness training</strong></td><td>Regular training and simulations so staff recognise and respond to threats.</td></tr>
+      <tr><td><strong>Security audits</strong></td><td>Internal or external audits of the overall security posture and compliance with standards.</td></tr>
+    </tbody>
+  </table>
+  <p>Intrusion detection and prevention systems (IDS/IPS), firewalls and antivirus software add layered defence, and their alerts are themselves evidence that monitoring is working.</p>
+
+  <h3>Worked example — a threat model</h3>
+  <p class="small"><strong>Asset:</strong> source code repository. &nbsp;<strong>Requirement:</strong> only current developers can push code, and every change is attributable to a named person.</p>
+  <table>
+    <thead><tr><th>Threat</th><th style="width:13%">Type</th><th style="width:9%">Rating</th><th style="width:24%">Mitigation</th><th style="width:26%">Confirmation</th></tr></thead>
+    <tbody>
+      <tr><td>A departing developer keeps repository access</td><td>Deliberate (insider)</td><td>High</td><td>Offboarding checklist revokes access on the last day</td><td>Quarterly access review compared against the HR staff list</td></tr>
+      <tr><td>Credentials stolen by phishing</td><td>Deliberate (social engineering)</td><td>Extreme</td><td>MFA enforced on all repository accounts</td><td>Login logs show 100% MFA; simulated phishing test each semester</td></tr>
+      <tr><td>Developer pushes a secret key into the repository</td><td>Accidental</td><td>Medium</td><td>Automated secret scanning blocks the commit</td><td>Scan report shows zero secrets in the last 90 days of commits</td></tr>
+    </tbody>
+  </table>
+  <p class="small">Every entry in the Mitigation column is one of the six security controls from Lesson 4. Threat modelling is how you choose which one, and where.</p>
+
+  <h3>When a threat model is updated</h3>
+  <ul>
+    <li><strong>A new feature is released</strong> — new code means new attack surface, new data and new permissions.</li>
+    <li><strong>A security incident occurs</strong> — the incident proves the model missed something.</li>
+    <li><strong>Organisational or infrastructure change</strong> — staff turnover, a new provider, a merger or a new office all change who has access to what.</li>
+  </ul>
+  <div class="callout c-ext">
+    <strong>Assumptions are the weak point.</strong> Every threat model rests on assumptions — "our hosting provider patches their servers", "the payment gateway is secure", "nobody outside the office can reach the build server". These are recorded so they can be re-checked, because a model built on an assumption that quietly stopped being true is worse than no model at all: it creates false confidence.
+  </div>
+
+  <h3>Three mistakes to avoid</h3>
+  <ol>
+    <li><strong>Using threat, vulnerability and risk interchangeably.</strong> The vulnerability is the weakness; the threat is what could exploit it; the risk is how likely that is combined with how bad it would be.</li>
+    <li><strong>Stopping at "add a control".</strong> Naming a control without saying which threat it addresses, why it was prioritised, or how you would confirm it works leaves most of the marks on the table.</li>
+    <li><strong>Treating confirmation as optional.</strong> It is one of the three named principles — an answer with no evidence step is missing a third of the key knowledge.</li>
+  </ol>
+
+  <a class="wblink" href="L5_ThreatModelling_workbook.html">Open the Lesson 5 workbook →</a>
+</section>
+
+<!-- ==================== LESSON 6 ==================== -->
+<section id="y12-sd-u4-l6-evaluating-security-practices">
+  <div class="band">
+    <div class="num">6</div>
+    <div><span class="lab">LESSON 6</span><h2>Evaluating security practices</h2></div>
+  </div>
+
+  <div class="lo"><strong>LEARNING OBJECTIVE</strong>
+    To be able to propose criteria for evaluating an organisation's software development practices, and apply them to reach a judgement.</div>
+
+  <div class="kk"><strong>KEY KNOWLEDGE</strong>
+    Criteria for evaluating the security of software development practices within an organisation<br>
+    <strong style="margin-top:8px">KEY SKILL</strong>
+    Propose and apply criteria to evaluate the effectiveness of the current software development practices</div>
+
+  <h3>Why criteria are used</h3>
+  <table>
+    <thead><tr><th style="width:28%">Reason</th><th>Explanation</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Consistency and standardisation</strong></td><td>Clear criteria give a repeatable approach across different projects and teams, so all aspects of security are assessed uniformly and nothing is overlooked because one team was judged more gently than another.</td></tr>
+      <tr><td><strong>Proactive risk identification</strong></td><td>Systematically evaluating practices against criteria surfaces risks and vulnerabilities before they lead to incidents, rather than after.</td></tr>
+      <tr><td><strong>Benchmarks for compliance</strong></td><td>Criteria provide a clear point of comparison against industry standards and regulations, which matters most for organisations handling sensitive data.</td></tr>
+      <tr><td><strong>Continuous improvement</strong></td><td>Criteria are reviewed and updated as threats emerge, keeping security measures effective and building a culture of security awareness.</td></tr>
+    </tbody>
+  </table>
+  <p><em>Without criteria, an evaluation is just an opinion — and an opinion cannot be defended to a board, an auditor, or a court.</em></p>
+
+  <h3>The four parts of a criterion</h3>
+  <div class="copy"><strong>COPY THIS</strong>
+    <ol style="margin:8px 0 0">
+      <li><strong>Practice</strong> — which security control is being evaluated</li>
+      <li><strong>Criterion</strong> — a closed question about that practice, answerable with evidence</li>
+      <li><strong>Data to collect</strong> — the specific records, logs or documents you would gather</li>
+      <li><strong>Measurement</strong> — what you do with that data to reach a judgement</li>
+    </ol>
+    <p style="margin:10px 0 0"><strong>The test:</strong> could two different people gather the same evidence and reach the same answer? If not, it is a wish, not a criterion.</p></div>
+
+  <h3>Worked example — writing a criterion</h3>
+  <p><span class="pill p-red">ATTEMPT 1</span> &nbsp;"Code should be reviewed properly." — nothing to collect, nothing to measure, and "properly" means whatever the reader wants it to mean.</p>
+  <table>
+    <thead><tr><th style="width:20%">Part</th><th>Content</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Practice</strong></td><td>Code review</td></tr>
+      <tr><td><strong>Criterion</strong></td><td>Does every code change undergo peer review before it is merged into the main branch?</td></tr>
+      <tr><td><strong>Data to collect</strong></td><td>Pull request logs from the repository for the last 90 days, showing reviewer approval on each merge</td></tr>
+      <tr><td><strong>Measurement</strong></td><td>Count merges with a recorded approval from someone other than the author, as a percentage of all merges. Below 100% is a finding.</td></tr>
+    </tbody>
+  </table>
+  <p class="small">The measurement produces a number. Numbers can be compared over time; adjectives cannot.</p>
+
+  <h3>A criterion for each practice</h3>
+  <table>
+    <thead><tr><th style="width:25%">Practice</th><th style="width:38%">Sample criterion</th><th>Data to collect</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Version control and repositories</strong></td><td>Are only authorised personnel able to access the code repositories?</td><td>Repository audit logs showing permissions and activity</td></tr>
+      <tr><td><strong>Robust identity and access management</strong></td><td>Is MFA enforced on every account with access to development tools?</td><td>Authentication logs confirming MFA status per account</td></tr>
+      <tr><td><strong>Encryption</strong></td><td>Is sensitive data encrypted both at rest and in transit?</td><td>Database and network configuration files; protocol logs</td></tr>
+      <tr><td><strong>Code review</strong></td><td>Are automated static analysis tools run on the codebase?</td><td>Static analysis reports and records of issues resolved</td></tr>
+      <tr><td><strong>Regular updates and patches</strong></td><td>Is there a documented policy for applying security patches within a set time?</td><td>Patch policy document; records of patch application timelines</td></tr>
+      <tr><td><strong>Separated dev / test / production</strong></td><td>Are the three environments physically or logically separated?</td><td>Network diagrams and access control policies</td></tr>
+    </tbody>
+  </table>
+  <p class="small">One criterion per practice is a starting point, not a finished evaluation — a real evaluation uses several per practice, and each needs its own measurement.</p>
+
+  <h3>Applying criteria — from evidence to judgement</h3>
+  <ol>
+    <li><strong>Collect</strong> — gather the data your criterion named: logs, policies, configurations, records.</li>
+    <li><strong>Measure</strong> — do what the measurement says. Count, compare, inspect.</li>
+    <li><strong>Judge</strong> — <span class="pill p-green">MET</span> <span class="pill p-amber">PARTIALLY MET</span> <span class="pill p-red">NOT MET</span>, with the evidence attached to the judgement.</li>
+    <li><strong>Recommend</strong> — every "not met" or "partially met" becomes a recommendation, ranked by risk.</li>
+  </ol>
+
+  <div class="callout c-info">
+    <strong>Worked judgement — code review criterion</strong><br>
+    <strong>Evidence:</strong> Of 168 merges in the last 90 days, 141 carried a reviewer approval. All 27 unreviewed merges came from the two most senior developers.<br>
+    <strong>Judgement:</strong> Partially met — 84% coverage, with a consistent exemption pattern at senior level.<br>
+    <strong>Recommendation:</strong> Enforce review at the repository level so approval cannot be bypassed by seniority; re-measure next term.
+  </div>
+  <p class="small">Notice that the recommendation addresses the cause the evidence revealed — seniority bypass — rather than restating the criterion.</p>
+
+  <div class="callout c-note">
+    <strong>If the evidence does not exist, that is a finding.</strong> If nobody can produce a list of who has production access, the criterion is not "unmeasurable" — it is failed, and the recommendation writes itself.
+  </div>
+
+  <h3>What makes a recommendation worth writing</h3>
+  <ol>
+    <li><strong>Anchored in evidence</strong> — it names the finding it responds to. "Because 27 merges bypassed review…", not "because security is important".</li>
+    <li><strong>Specific and actionable</strong> — someone could be assigned it on Monday. "Improve security culture" cannot be assigned to anyone.</li>
+    <li><strong>Prioritised</strong> — ranked by the risk it addresses and what it costs.</li>
+    <li><strong>Re-measurable</strong> — it names how you will know it worked, which returns you to the criterion you started from.</li>
+  </ol>
+  <div class="callout c-tip">
+    <strong>The loop closes:</strong> criterion → evidence → judgement → recommendation → re-measure against the same criterion.
+  </div>
+
+  <h3>Easy to measure versus worth measuring</h3>
+  <p>Criteria sets drift toward what is easy to count. "Is antivirus installed on every developer machine?" is trivially measurable; "would a developer recognise and report a phishing email targeting the release pipeline?" is much harder to measure but far closer to how organisations actually get breached.</p>
+  <p>The consequence is important: <strong>an organisation can pass an evaluation while remaining genuinely insecure</strong>, if the criteria set never looks at the things that matter. A high "percentage met" measures the criteria set as much as it measures the organisation.</p>
+
+  <h3>Three mistakes to avoid</h3>
+  <ol>
+    <li><strong>Writing a control where a criterion belongs.</strong> "Use MFA" is a control — an action. "Is MFA enforced on every account with development access?" is a criterion — a question answerable with evidence.</li>
+    <li><strong>Proposing criteria but never applying them.</strong> The key skill says propose <em>and</em> apply. A criteria table with no evidence, no measurement and no judgement has done half the task.</li>
+    <li><strong>Recommendations that float free of the findings.</strong> If a recommendation could have been written before the evaluation started, the evaluation did not inform it.</li>
+  </ol>
+
+  <a class="wblink" href="L6_EvaluatingSecurityPractices_workbook.html">Open the Lesson 6 workbook →</a>
+</section>
+
+<!-- ==================== LESSON 7 ==================== -->
+<section id="y12-sd-u4-l7-legislation-frameworks">
+  <div class="band">
+    <div class="num">7</div>
+    <div><span class="lab">LESSON 7</span><h2>Legislation and industry frameworks</h2></div>
+  </div>
+
+  <div class="lo"><strong>LEARNING OBJECTIVE</strong>
+    To be able to explain the key legislation and industry frameworks that affect how organisations develop software and control the security and communication of data.</div>
+
+  <div class="kk"><strong>KEY KNOWLEDGE</strong>
+    Key legislation and industry frameworks, including the: Copyright Act 1968 (Cwlth) · Essential Eight · Information Security Manual (ISM) · Privacy Act 1988 (Cwlth) (APP 1, 6, 8, 9, 11) · Privacy and Data Protection Act 2014 (IPP 1, 2, 4, 5, 9)</div>
+
+  <div class="callout c-info">
+    <strong>Legislation tells you what you must do. Frameworks tell you how to do it well.</strong>
+    Breaching legislation carries penalties; ignoring a framework does not — but a framework is where an organisation's
+    security criteria and recommendations usually come from.
+  </div>
+
+  <h3>Copyright Act 1968 (Cwlth)</h3>
+  <p>The Copyright Act protects the rights of creators of creative and artistic works. Computer software is treated as a <strong>literary work</strong> under the Act, which means source code is protected the moment it is written — there is no need to register it.</p>
+  <ul>
+    <li>Copyright protects the <strong>expression</strong> of an idea, not the idea itself. It does not cover ideas, procedures or facts — so a competitor may legally reimplement your concept in their own code.</li>
+    <li>Copyright in a photograph belongs to the photographer, not the subject. When an AI tool generates an image, the prompt author is treated as owning the copyright.</li>
+    <li>The Act permits making a backup copy of software you own, and allows a further backup if the first is destroyed.</li>
+    <li>The Act was amended in 2001 to cover works published electronically, and again in 2006 to give clearer direction to users.</li>
+    <li>Penalties are substantial — the Act allows for a maximum of 850 penalty units for some offences, and aggravated damages are available under section 115(4).</li>
+  </ul>
+  <h4>Why it matters when developing software</h4>
+  <ul>
+    <li>Using third-party code, libraries or assets without complying with their licence is a breach.</li>
+    <li>Open-source licences are copyright licences — "free to use" comes with conditions, and some require you to release your own code.</li>
+    <li>Code copied from a forum, a tutorial, or generated by an AI assistant trained on copyrighted material carries unresolved licensing questions.</li>
+    <li>Distributing through an app store means agreeing to that store's terms as well: revenue share, acceptable content, and how many devices a copy may be installed on.</li>
+  </ul>
+
+  <h3>Privacy Act 1988 (Cwlth)</h3>
+  <p>The Privacy Act gives an individual control over the way their personal information is handled. It allows individuals to know why their information is being collected and who it will be disclosed to, to request access to it, to have incorrect information corrected, to opt out of direct marketing, and to make a complaint if their information has been mishandled.</p>
+  <p><strong>Who it covers:</strong> Australian government agencies, all private health service providers, and businesses with an annual turnover above $3 million or that trade in personal information. Smaller businesses can opt in. It does not cover local councils or state governments — Victoria has its own Act, below.</p>
+
+  <div class="copy"><strong>COPY THIS — the five examinable Australian Privacy Principles</strong>
+  </div>
+  <table>
+    <thead><tr><th style="width:9%">APP</th><th style="width:26%">Title</th><th>What it requires</th></tr></thead>
+    <tbody>
+      <tr><td><strong>APP 1</strong></td><td>Open and transparent management of personal information</td><td>Manage personal information openly and transparently, including maintaining a clearly expressed and up-to-date privacy policy.</td></tr>
+      <tr><td><strong>APP 6</strong></td><td>Use or disclosure of personal information</td><td>Sets out the limited circumstances in which an entity may use or disclose personal information it holds — generally only for the purpose it was collected.</td></tr>
+      <tr><td><strong>APP 8</strong></td><td>Cross-border disclosure of personal information</td><td>Sets out the steps that must be taken to protect personal information before it is disclosed overseas.</td></tr>
+      <tr><td><strong>APP 9</strong></td><td>Adoption, use or disclosure of government related identifiers</td><td>Organisations are generally prohibited from adopting a government identifier — a tax file number, a driver's licence number — as their own identifier for a person.</td></tr>
+      <tr><td><strong>APP 11</strong></td><td>Security of personal information</td><td>Take reasonable steps to protect personal information from misuse, interference, loss, and unauthorised access, modification or disclosure — and destroy or de-identify it when it is no longer needed.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout c-note">
+    <strong>APP 11 is the one that drives this entire area of study.</strong> "Reasonable steps" is not defined in the Act, so an organisation
+    demonstrates it through exactly the artefacts you have been building: security controls, a threat model, criteria-based evaluation,
+    and evidence that mitigations were confirmed. This is why a documented evaluation matters legally, not just technically.
+  </div>
+
+  <h3>Privacy and Data Protection Act 2014 (Victoria)</h3>
+  <p>The PDPA is Victorian legislation. It replaced the Information Privacy Act 2000 and applies to Victorian government agencies, including local councils and contractors working for the state government. It created the Privacy and Data Protection Commissioner, and uses its own <strong>Information Privacy Principles (IPPs)</strong> rather than the Commonwealth APPs.</p>
+  <table>
+    <thead><tr><th style="width:9%">IPP</th><th style="width:22%">Title</th><th>What it requires</th></tr></thead>
+    <tbody>
+      <tr><td><strong>IPP 1</strong></td><td>Collection</td><td>Collect only the information the organisation actually needs, and inform people that their information is being collected.</td></tr>
+      <tr><td><strong>IPP 2</strong></td><td>Use and disclosure</td><td>Use and disclose personal information only for the purpose it was collected for, or a secondary purpose a person would reasonably expect.</td></tr>
+      <tr><td><strong>IPP 4</strong></td><td>Data security</td><td>Protect information from misuse, loss, unauthorised access, modification or disclosure, and take reasonable steps to destroy or de-identify information no longer needed.</td></tr>
+      <tr><td><strong>IPP 5</strong></td><td>Openness</td><td>Be transparent about what the organisation does with information. Non-compliance carries a maximum penalty of 3000 penalty units for a body corporate and 600 for an individual.</td></tr>
+      <tr><td><strong>IPP 9</strong></td><td>Transborder data flows</td><td>If personal information travels outside Victoria, its privacy protections must travel with it.</td></tr>
+    </tbody>
+  </table>
+  <p class="small">A penalty unit is a fixed dollar amount set by the Victorian Government and indexed each financial year, so legislation can specify penalties without naming a figure that would date.</p>
+
+  <div class="callout c-info">
+    <strong>Telling the two Acts apart.</strong> If the case study organisation is a private company, you are in Privacy Act / APP territory.
+    If it is a Victorian government agency, a council, or a contractor working for one, you are in PDPA / IPP territory. A company that
+    builds software <em>for</em> a Victorian department can be caught by both.
+  </div>
+
+  <h3>The Essential Eight</h3>
+  <p>The Essential Eight is an industry framework published by the Australian Cyber Security Centre (ACSC), designed to help all businesses become cyber secure and resistant to cyber attack. It recommends a risk-based approach in which each organisation sets minimum expectations for preventative measures at a chosen level of maturity.</p>
+  <div class="copy"><strong>COPY THIS — the eight mitigation strategies</strong>
+    <ol style="margin:8px 0 0">
+      <li><strong>Application control</strong> — allow only approved executables to run</li>
+      <li><strong>Patch applications</strong> — update software to address known vulnerabilities</li>
+      <li><strong>Configure Microsoft Office macro settings</strong> — prevent malicious macros running</li>
+      <li><strong>User application hardening</strong> — limit browser and application functionality to reduce attack surface</li>
+      <li><strong>Restrict administrative privileges</strong> — limit who holds administrative access</li>
+      <li><strong>Patch operating systems</strong> — keep operating systems current with security patches</li>
+      <li><strong>Multi-factor authentication</strong> — require verification beyond a password</li>
+      <li><strong>Regular backups</strong> — back up critical data so it can be recovered after an incident</li>
+    </ol></div>
+  <h4>Maturity levels</h4>
+  <table>
+    <thead><tr><th style="width:18%">Level</th><th>What it means</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Level Zero</strong></td><td>There are weaknesses in the organisation's posture.</td></tr>
+      <tr><td><strong>Level One</strong></td><td>Focused on preventing access by malicious actors and mitigating simple exploits.</td></tr>
+      <tr><td><strong>Level Two</strong></td><td>Prepared for weak authentication and phishing exploits by actors intent on stealing or destroying data.</td></tr>
+      <tr><td><strong>Level Three</strong></td><td>Prepared for organised actors who exploit unpatched software, circumvent authentication controls and disguise their activity inside the organisation.</td></tr>
+    </tbody>
+  </table>
+  <p class="small">Maturity assessment is <strong>self-assessed and not externally accredited</strong>. An organisation chooses the level it wants to reach, and how it gets there. The levels encourage continuous improvement rather than a pass/fail judgement.</p>
+  <div class="callout c-tip">
+    <strong>Useful for the SAC.</strong> The Essential Eight reads almost directly as a criteria set. A recommendation phrased as
+    "adopt Essential Eight Maturity Level Two, beginning with multi-factor authentication and application patching" is specific,
+    benchmarked against an industry standard, and re-measurable — which is exactly what a strong recommendation needs.
+  </div>
+
+  <h3>The Information Security Manual (ISM)</h3>
+  <p>The ISM is also published by the ACSC and provides more detailed guidance than the Essential Eight. Its cyber security principles are grouped into four activities:</p>
+  <table>
+    <thead><tr><th style="width:14%">Activity</th><th>What it covers</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Govern</strong></td><td>Identifying and managing security risks — risks are identified, documented and managed before and during deployment.</td></tr>
+      <tr><td><strong>Protect</strong></td><td>Implementing controls to reduce risk — only trusted users, systems, applications and code are permitted; access is restricted; data is encrypted, controlled and backed up.</td></tr>
+      <tr><td><strong>Detect</strong></td><td>Collecting and analysing event logs, and analysing security events to identify incidents.</td></tr>
+      <tr><td><strong>Respond</strong></td><td>Reporting incidents internally and externally, containing them, and enacting recovery.</td></tr>
+    </tbody>
+  </table>
+  <h4>ISM Guidelines for Software Development</h4>
+  <p>The study design names three ISM sections specifically. Recommended criteria for software development environments include:</p>
+  <ul>
+    <li><strong>Development, testing and production environments</strong> — segregated areas for each, to limit the spread of malicious code.</li>
+    <li><strong>Secure software design and development</strong> — protection of software source; secure-by-design and secure-by-default principles; use of memory-safe programming languages such as C#, Go, Java, Ruby, Rust and Swift.</li>
+    <li><strong>Application security testing</strong> — testing applications for vulnerabilities before and after release.</li>
+  </ul>
+
+  <h3>Legal consequences of ineffective practices</h3>
+  <table>
+    <thead><tr><th style="width:26%">Failure</th><th>Consequence</th></tr></thead>
+    <tbody>
+      <tr><td>Personal information exposed in a breach</td><td>Breach of APP 11 or IPP 4; notification obligations; investigation by the Information Commissioner; penalties.</td></tr>
+      <tr><td>Data sent to an overseas provider without protection</td><td>Breach of APP 8 or IPP 9 — the organisation remains responsible for information it sends offshore.</td></tr>
+      <tr><td>Personal data reused for a purpose it was not collected for</td><td>Breach of APP 6 or IPP 2.</td></tr>
+      <tr><td>Third-party code used outside its licence</td><td>Breach of the Copyright Act; damages, and possible removal of the product from distribution.</td></tr>
+      <tr><td>No privacy policy, or an out-of-date one</td><td>Breach of APP 1 or IPP 5.</td></tr>
+    </tbody>
+  </table>
+
+  <a class="wblink" href="L7_LegislationFrameworks_workbook.html">Open the Lesson 7 workbook →</a>
+</section>
+
+<!-- ==================== LESSON 8 ==================== -->
+<section id="y12-sd-u4-l8-ethics-improving-practices">
+  <div class="band">
+    <div class="num">8</div>
+    <div><span class="lab">LESSON 8</span><h2>Ethics and improving practices</h2></div>
+  </div>
+
+  <div class="lo"><strong>LEARNING OBJECTIVE</strong>
+    To be able to discuss the ethical issues that arise when developing software, and recommend strategies that improve the security of an organisation's development practices.</div>
+
+  <div class="kk"><strong>KEY KNOWLEDGE</strong>
+    Ethical issues that arise when developing software, including: ineffective security practices · use of artificial intelligence during development · intellectual property · copyright issues<br>
+    Mitigation measures to reduce or eliminate threats, vulnerabilities and risks · strategies for improving the security of software development practices, including: onboarding/induction practices and developer training focused on secure development · development of risk management plans</div>
+
+  <h3>Ethics versus law</h3>
+  <p>Ethics refers to behaving in ways based on our morals and accepted standards — standards that may be shared by a society or specific to a single organisation. They apply to questionable activities <em>over and above</em> any legal requirement. Ignoring them is not necessarily a crime, but it can end a career or a company's reputation.</p>
+  <div class="copy"><strong>COPY THIS</strong>
+    Ethical principles are usually broader than the law. A law applies to certain circumstances; the ethical principle behind it applies generally. This is why "I have done nothing illegal" and "what you did was wrong" can both be true at once.</div>
+  <p>Legal remedies are often unavailable in practice: legislation may give no clear guidance, the cost and time of obtaining an enforceable judgment may be prohibitive, and the speed of social media and the ease of crossing legal jurisdictions have made many older laws ineffective. Many Privacy Act 1988 provisions have not kept pace with the digital environment.</p>
+
+  <h3>Ineffective security practices</h3>
+  <p>Ineffective security practices create ethical issues by exposing users to data breaches, identity theft and loss of privacy — which cause financial and emotional harm to people who had no say in how the software was built. Regardless of what the law requires, developers have an ethical responsibility to protect users' sensitive information and maintain the integrity and confidentiality of their data. Failing to do so breaks users' trust and erodes public confidence in technology generally, not just in that one company.</p>
+
+  <h3>Use of artificial intelligence during development</h3>
+  <ul>
+    <li><strong>Bias.</strong> AI systems embed the biases present in their training data, which can produce unfair or discriminatory outcomes and reinforce stereotypes.</li>
+    <li><strong>Transparency and accountability.</strong> Decisions made by an AI system can be difficult to explain, which makes it hard to establish who is responsible when it goes wrong.</li>
+    <li><strong>Privacy and consent.</strong> AI can process vast amounts of personal data without explicit user approval.</li>
+    <li><strong>Job displacement.</strong> Automation of development work displaces the people who previously did it.</li>
+    <li><strong>Code provenance.</strong> An AI assistant that suggests code trained on other people's repositories raises unresolved questions about copyright and licensing in the output.</li>
+  </ul>
+  <div class="callout c-info">
+    <strong>Case study — bias in recruitment algorithms.</strong> In 2018 Amazon discontinued an AI recruitment tool that was biased against women.
+    It had been trained on a decade of résumés submitted to a male-dominated industry, so it learned to favour résumés resembling those of male
+    applicants — downgrading résumés containing the word "women" and penalising experience associated with female candidates.
+    <br><br>
+    <strong>Takeaways:</strong> training data must be diverse and representative; algorithms need regular audits for bias involving diverse
+    stakeholders; and human oversight remains essential, because automation improves efficiency without guaranteeing fairness.
+  </div>
+
+  <h3>Intellectual property</h3>
+  <p>Intellectual property rights can cause ethical problems by limiting access to important technologies and ideas, slowing creativity and progress. Enforced too strictly, IP rights discourage developers from collaborating and sharing, and tend toward monopolies in which a few large companies control the market — making it harder for smaller companies and individuals to compete. The ethical task is balancing protection of inventors' rights against the value of open access and shared knowledge.</p>
+
+  <h3>Copyright issues</h3>
+  <p>The Copyright Act protects original works, but does not cover ideas, procedures or facts — and that gap creates ethical dilemmas. A developer can take an uncopyrighted idea from another source, build software on it and profit substantially, while the originator receives no recognition or compensation. At the other extreme, strict enforcement restricts access to educational and cultural material, raising questions of fair use and social equity. The tension is between protecting creators and ensuring public access to information and innovation.</p>
+
+  <h3>"Safe" programs</h3>
+  <p>Programmers are legally obliged to produce programs that work properly. If a user can link harm to the work of a programmer, the programmer may be liable for the damage caused. Licences often exclude liability where software was used in a way that was not intended — but a bug that causes harm can still leave the programmer exposed.</p>
+  <p>Ethically the bar is higher than the legal one: a programmer must consider who the users are and take no shortcuts in testing, because software is written for nuclear power plants, chemical factories, medical facilities and financial institutions as well as for entertainment.</p>
+
+  <h3>Strategies for improving security practices</h3>
+  <h4>Onboarding and induction</h4>
+  <p>Effective onboarding helps new employees become productive and integrated into the company's culture while understanding security protocols and expectations.</p>
+  <ul>
+    <li><strong>Orientation programs</strong> — an overview of the company, its goals, values, policies and security protocols, including data protection standards.</li>
+    <li><strong>Role-specific training</strong> — induction tailored to the role, emphasising the security practices relevant to it. New developers receive specialised training on secure coding, version control and the tools used in their environment.</li>
+    <li><strong>Mentorship</strong> — pairing new employees with experienced mentors who guide them through their initial period, transfer knowledge and model adherence to security protocols.</li>
+  </ul>
+
+  <h4>Developer training</h4>
+  <ul>
+    <li><strong>Regular workshops</strong> on current threats and best practice — secure coding, threat modelling, incident response.</li>
+    <li><strong>Courses and certifications</strong> in cyber security and secure software development, such as the Certified Secure Software Lifecycle Professional (CSSLP).</li>
+    <li><strong>Security awareness programs</strong> — updates on security trends, phishing simulation exercises, and recognition for developers who demonstrate strong practice.</li>
+  </ul>
+  <p class="small">Note the link back to Lesson 5: a phishing simulation is not just training, it is <em>confirmation evidence</em> — it measures behaviour rather than attendance.</p>
+
+  <h3>Risk management plans</h3>
+  <p>A risk management plan identifies, assesses and mitigates risks to software development and operations, so that the organisation can continue operating securely. A systematic risk assessment involves four activities:</p>
+  <ol>
+    <li><strong>Identify and evaluate risks</strong> to determine their potential impact and likelihood — cyber security threats, legal compliance issues and operational risks.</li>
+    <li><strong>Develop and implement mitigation strategies</strong> to reduce or eliminate identified risks — for example regular software updates, employee training and improved access controls.</li>
+    <li><strong>Prepare incident response plans</strong> so that a security incident is met with defined communication protocols, containment measures and recovery procedures, minimising damage and speeding recovery.</li>
+    <li><strong>Monitor and review the plan</strong> so it stays current and relevant — checking that new threats are considered and that current staff know their roles if an incident occurs.</li>
+  </ol>
+
+  <h4>Rating risks in a risk management plan</h4>
+  <p>Risks are assessed against a probability matrix and assigned a category, and the results identify the priority areas for management. Probability runs from Improbable to Frequent; impact runs from Insignificant to Catastrophic; the two combine to give a score from 1 to 9.</p>
+  <table>
+    <thead><tr><th style="width:14%">Score</th><th style="width:18%">Risk rating</th><th style="width:22%">Status</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td>1–2</td><td><span class="pill p-green">LOW</span></td><td>Acceptable</td><td>None</td></tr>
+      <tr><td>3</td><td><span class="pill p-green">LOW</span></td><td>Acceptable</td><td>Routine audit</td></tr>
+      <tr><td>4–5</td><td><span class="pill p-amber">MEDIUM</span></td><td>Tolerable</td><td>Address as soon as possible</td></tr>
+      <tr><td>6</td><td><span class="pill p-amber">HIGH</span></td><td>Manageable</td><td>Priority</td></tr>
+      <tr><td>7</td><td><span class="pill p-red">SERIOUS</span></td><td>Manageable</td><td>Priority</td></tr>
+      <tr><td>8</td><td><span class="pill p-red">EXTREME</span></td><td>To be avoided</td><td>Urgent priority</td></tr>
+      <tr><td>9</td><td><span class="pill p-red">CATASTROPHIC</span></td><td>To be avoided</td><td>Immediate action</td></tr>
+    </tbody>
+  </table>
+  <p class="small">This is the same likelihood-and-consequence reasoning used in threat modelling (Lesson 5), formalised into a plan the organisation maintains and reviews.</p>
+
+  <div class="callout c-tip">
+    <strong>Where everything joins up.</strong> Threats are identified and rated (L5) → controls are selected to mitigate them (L4) →
+    criteria are proposed and applied to judge whether they work (L6) → legislation and frameworks set the benchmark those criteria
+    are measured against (L7) → and the whole thing is documented as a risk management plan, supported by training, so it survives
+    staff turnover and keeps improving (L8).
+  </div>
+
+  <a class="wblink" href="L8_EthicsImprovingPractices_workbook.html">Open the Lesson 8 workbook →</a>
+</section>
+
+<!-- ==================== SAC PREPARATION ==================== -->
+<section id="sac">
+  <div class="band">
+    <div class="num">★</div>
+    <div><span class="lab">ASSESSMENT</span><h2>SAC preparation</h2></div>
+    <span class="badge">IN-CLASS TEST · CASE STUDY</span>
+  </div>
+
+  <div class="lo"><strong>THE TASK</strong>
+    An in-class test in which you respond to a teacher-provided case study describing an organisation's software development
+    practices. You will analyse those practices, identify and evaluate the security controls and threats present, and make
+    recommendations to improve them. Closed book, completed in class, within a set time.</div>
+
+  <div class="callout c-info">
+    <strong>You will not be asked to recall the unit in the abstract.</strong> Every question will point at the organisation in the case
+    study. Marks come from applying what you know to <em>that</em> organisation — its size, its data, its budget, its staff, its legal position.
+    A technically correct answer that could have been written without reading the case study will not score well.
+  </div>
+
+  <h3>What the case study will contain</h3>
+  <p>Expect a description of an organisation running to roughly one to two pages, containing some mixture of:</p>
+  <ul>
+    <li>What the organisation does, how big it is, and what it is trying to achieve</li>
+    <li>What data it holds, and whose data it is</li>
+    <li>How its software is developed — in-house or externally, and by how many people</li>
+    <li>Details of its current practices, some sound and some deliberately weak</li>
+    <li>Possibly an incident that has already occurred, or a near miss</li>
+    <li>Constraints: a budget, a deadline, a shortage of staff</li>
+  </ul>
+  <p><strong>The weaknesses are planted deliberately.</strong> Read with a pen: underline every practice detail as you go. A shared login, a contractor who still has access, a test environment using live data, a policy nobody follows — each one is there because a question depends on it.</p>
+
+  <h3>The five things you will be asked to do</h3>
+  <table>
+    <thead><tr><th style="width:30%">Key skill</th><th style="width:33%">What a strong response does</th><th>Where to revise</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Analyse and describe the organisation's software development practices</strong></td>
+        <td>Describes what they actually do, in the language of the six controls — not what they should do. Neutral, accurate, specific to the case.</td>
+        <td>Lessons 1, 4</td>
+      </tr>
+      <tr>
+        <td><strong>Identify and describe vulnerabilities and risks based on current practices</strong></td>
+        <td>Names the vulnerability, names the threat that could exploit it, and states the risk in terms of likelihood and consequence for this organisation.</td>
+        <td>Lessons 2, 3, 5</td>
+      </tr>
+      <tr>
+        <td><strong>Propose and apply criteria to evaluate the effectiveness of current practices</strong></td>
+        <td>Writes criteria with all four parts, then actually applies them to what the case study says, reaching met / partially met / not met judgements.</td>
+        <td>Lesson 6</td>
+      </tr>
+      <tr>
+        <td><strong>Identify and discuss possible legal and ethical consequences, and how they could be resolved</strong></td>
+        <td>Names the specific Act and principle (APP 11, IPP 4, the Copyright Act), states the consequence, and separates the legal issue from the ethical one.</td>
+        <td>Lessons 7, 8</td>
+      </tr>
+      <tr>
+        <td><strong>Recommend and justify improvements</strong></td>
+        <td>Each recommendation is anchored to a finding, specific enough to assign to someone, prioritised, and re-measurable.</td>
+        <td>Lessons 6, 8</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Command terms — what each one is asking for</h3>
+  <table>
+    <thead><tr><th style="width:18%">Term</th><th>What you must do</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Identify</strong></td><td>Name it. Short answer, no explanation needed unless asked.</td></tr>
+      <tr><td><strong>Describe</strong></td><td>Name it and say what it is or how it works. Add detail from the case study.</td></tr>
+      <tr><td><strong>Explain</strong></td><td>Say <em>why</em> or <em>how</em>. Cause and effect — "this happens, which means that happens".</td></tr>
+      <tr><td><strong>Discuss</strong></td><td>Present more than one side, or more than one consequence, before reaching a position.</td></tr>
+      <tr><td><strong>Analyse</strong></td><td>Break the situation into its parts and show how they relate.</td></tr>
+      <tr><td><strong>Evaluate</strong></td><td>Make a judgement against criteria, supported by evidence from the case.</td></tr>
+      <tr><td><strong>Justify</strong></td><td>Give the reasons your answer is the right one — usually why this option beats the alternatives.</td></tr>
+      <tr><td><strong>Recommend</strong></td><td>State a specific action, and (almost always) justify it as well.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout c-note">
+    <strong>The single most common error is answering a lower command term than the one asked.</strong> A question saying "evaluate" and
+    answered with a description will lose most of its marks even if everything written is true. Circle the command term before you start writing.
+  </div>
+
+  <h3>Answer structures that work</h3>
+
+  <h4>For a vulnerability or risk question</h4>
+  <div class="callout c-tip">
+    <strong>Practice → Vulnerability → Threat → Consequence for this organisation</strong><br><br>
+    "The case states that all four developers share a single administrator login for the production server <em>(practice)</em>.
+    This means no action can be attributed to a person and every developer holds far more access than their role requires
+    <em>(vulnerability — poor identity and access management, breaching least privilege)</em>. A stolen or misused credential would
+    give an attacker or a disgruntled insider complete control of production <em>(threat)</em>. Because the organisation holds
+    payment data for 40 000 customers, the consequence would be a major breach with notification obligations, and the likelihood
+    is raised by the fact that the password has never been changed <em>(risk)</em>."
+  </div>
+
+  <h4>For an evaluation question</h4>
+  <div class="callout c-tip">
+    <strong>Criterion → Evidence from the case → Judgement → Recommendation</strong><br><br>
+    "<strong>Criterion:</strong> Are the development, testing and production environments separated, and is live data kept out of testing?
+    <strong>Evidence:</strong> The case states the three environments run on separate servers, but that developers copy the live customer
+    database into testing each month. <strong>Judgement:</strong> Partially met — the environments are separated, but the data is not,
+    so the protection the separation was meant to provide is undermined. <strong>Recommendation:</strong> Because live records are being
+    copied into a lower-security environment, generate anonymised test data from the production schema instead, and verify each quarter
+    that no production records exist in the testing database."
+  </div>
+
+  <h4>For a legal and ethical question</h4>
+  <div class="callout c-tip">
+    <strong>Name the law and principle → State the breach → Separate the ethical issue → Say how it is resolved</strong><br><br>
+    "As a private company with a turnover above $3 million, the organisation is bound by the Privacy Act 1988. Storing customer records
+    unencrypted on a shared drive is unlikely to meet the requirement under APP 11 to take reasonable steps to protect personal
+    information from unauthorised access. Separately from the legal position, there is an ethical issue: customers supplied their details
+    to buy a ticket, not to have them held indefinitely in an unprotected file, and they have no way of knowing the risk they are carrying.
+    This is resolved by encrypting the data at rest, restricting access to the roles that need it, and destroying records that are no longer needed."
+  </div>
+
+  <h3>Revision checklist</h3>
+  <p>You should be able to do all of the following without notes. Tick them off honestly — the ones you skip are the ones to revise.</p>
+  <table>
+    <thead><tr><th style="width:14%">Lesson</th><th>You should be able to…</th></tr></thead>
+    <tbody>
+      <tr><td><strong>L1</strong></td><td>Distinguish vision, mission, goals and objectives; state the advantages and disadvantages of in-house versus external development.</td></tr>
+      <tr><td><strong>L2</strong></td><td>Explain the risks of APIs; distinguish virus, worm, Trojan horse and logic bomb; explain why unpatched software is dangerous; describe a MITM attack.</td></tr>
+      <tr><td><strong>L3</strong></td><td>Describe the three kinds of insider threat; name and explain at least five social engineering techniques; explain the risks of third-party software, weak code review and combined environments.</td></tr>
+      <tr><td><strong>L4</strong></td><td>Name all six security controls, explain what each protects against, and name a limitation of each.</td></tr>
+      <tr><td><strong>L5</strong></td><td>Name the three threat modelling principles; classify a threat as accidental, event-based or deliberate; rate a threat by likelihood and consequence; choose between reduce, avoid, transfer and accept; name confirmation evidence for a mitigation.</td></tr>
+      <tr><td><strong>L6</strong></td><td>Give reasons criteria are used; write a criterion with all four parts; apply criteria to evidence and judge; write a recommendation that meets all four qualities.</td></tr>
+      <tr><td><strong>L7</strong></td><td>State what APP 1, 6, 8, 9 and 11 require; state what IPP 1, 2, 4, 5 and 9 require; know when the PDPA applies rather than the Privacy Act; list the Essential Eight and its four maturity levels; describe the ISM's four activities and its software development guidelines; explain how the Copyright Act applies to source code.</td></tr>
+      <tr><td><strong>L8</strong></td><td>Distinguish an ethical issue from a legal one; discuss the four named ethical issues; describe onboarding, training and risk management plans as improvement strategies.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Managing the time</h3>
+  <ul>
+    <li><strong>Read the case study twice before writing.</strong> Once for the story, once with a pen, marking every practice detail.</li>
+    <li><strong>Check the marks.</strong> One mark is roughly one distinct point. A four-mark question needs four things, not one thing said four ways.</li>
+    <li><strong>Quote the case.</strong> Referring to a specific detail — a number, a role, a system named in the scenario — is the fastest way to show your answer is grounded in the organisation.</li>
+    <li><strong>Leave the longest question until you have banked the short ones,</strong> but do not run out of time before the recommendations — they usually carry the most marks.</li>
+    <li><strong>Do not restate the case study.</strong> Describing what the organisation does earns marks only where the question asks you to describe. Elsewhere it is padding.</li>
+  </ul>
+
+  <h3>Six mistakes that cost marks</h3>
+  <ol>
+    <li><strong>Using threat, vulnerability and risk interchangeably.</strong> Keep them apart in every answer.</li>
+    <li><strong>Listing controls without linking them to a threat in the case.</strong> A control with no threat attached answers nothing.</li>
+    <li><strong>Proposing criteria and never applying them.</strong> The skill is propose <em>and</em> apply.</li>
+    <li><strong>Naming "the Privacy Act" without naming the principle.</strong> Specify APP 11, or IPP 4, and say what it requires.</li>
+    <li><strong>Recommendations that could have been written before reading the case.</strong> "Improve security awareness" is not a recommendation.</li>
+    <li><strong>Recommending everything.</strong> The organisation has a budget. Prioritise, and say what you are consciously leaving for later.</li>
+  </ol>
+
+  <div class="callout c-ext">
+    <strong>If you only revise one thing.</strong> Practise the four-step evaluation structure — criterion, evidence, judgement,
+    recommendation — until you can write it without thinking. It answers evaluation questions, recommendation questions and most
+    "discuss" questions, and it is the structure the whole area of study has been building toward.
+  </div>
+</section>
+
+<!-- ==================== GLOSSARY ==================== -->
+<section id="glossary">
+  <div class="band">
+    <div class="num">§</div>
+    <div><span class="lab">REFERENCE</span><h2>Glossary</h2></div>
+    <span class="badge">ALL LESSONS</span>
+  </div>
+
+  <div class="terms">
+    <dl>
+      <dt>Australian Privacy Principles (APPs)</dt><dd>Thirteen principles under the Privacy Act 1988 setting the standards, rights and obligations for handling personal information. APP 1, 6, 8, 9 and 11 are examinable in this study.</dd>
+      <dt>back door</dt><dd>Allows remote access to a computer system, circumventing all security processes.</dd>
+      <dt>cold site</dt><dd>Prepared external recovery infrastructure that is not immediately ready; may take weeks to resume normal operations.</dd>
+      <dt>copyright</dt><dd>The legal right of the creator of a work to determine how that work is used. Software is treated as a literary work under the Copyright Act 1968.</dd>
+      <dt>credential stuffing</dt><dd>Exploiting password reuse across different applications to gain access with credentials stolen elsewhere.</dd>
+      <dt>criterion</dt><dd>A closed question about a practice that can be answered with evidence, used to evaluate security.</dd>
+      <dt>cyber security principles (ISM)</dt><dd>The ISM's four grouped activities — govern, protect, detect and respond — providing strategic guidance on protecting systems and data.</dd>
+      <dt>DAST</dt><dd>Dynamic application security testing; "black box" testing that checks outputs for known inputs on a running application.</dd>
+      <dt>distributed denial-of-service (DDoS)</dt><dd>An attack that overwhelms a server by flooding it with requests until it slows or stops.</dd>
+      <dt>encryption</dt><dd>Rendering data unintelligible to anyone not authorised to read it, whether stored or in transit.</dd>
+      <dt>Essential Eight</dt><dd>An industry framework published by the Australian Cyber Security Centre, setting out eight mitigation strategies and four maturity levels to help businesses resist cyber attack.</dd>
+      <dt>ethics</dt><dd>Principles of right and wrong accepted by an individual or social group; broader than the law, and applying to conduct over and above legal requirements.</dd>
+      <dt>exploit</dt><dd>To take advantage of a vulnerability.</dd>
+      <dt>honeypot</dt><dd>A decoy server imitating the real system, used to lure attackers away from production and waste their time. Multiple honeypots form a honeynet.</dd>
+      <dt>hot site</dt><dd>Prepared external recovery infrastructure ready to take over immediately, with little or no downtime.</dd>
+      <dt>identity and access management (IAM)</dt><dd>The processes ensuring only authorised individuals reach resources, and only those their role requires.</dd>
+      <dt>Information Privacy Principles (IPPs)</dt><dd>The ten principles used by Victoria's Privacy and Data Protection Act 2014. IPP 1, 2, 4, 5 and 9 are examinable in this study.</dd>
+      <dt>Information Security Manual (ISM)</dt><dd>Detailed cyber security advice published by the Australian Cyber Security Centre, including guidelines for software development.</dd>
+      <dt>insider threat</dt><dd>A threat originating from someone the organisation trusts: an employee, former employee, contractor, vendor or partner.</dd>
+      <dt>intellectual property (IP)</dt><dd>Rights over creations of the mind. Enforced too strictly, IP rights can limit collaboration and access to technology.</dd>
+      <dt>keylogger</dt><dd>Records keystrokes and sends passwords or sensitive information to an attacker.</dd>
+      <dt>least privilege</dt><dd>The principle that each account is granted only the minimum access its role requires.</dd>
+      <dt>logic bomb</dt><dd>Malicious code that lies dormant until a timer or conditional trigger activates it.</dd>
+      <dt>malicious actor</dt><dd>Any individual or group that intentionally exploits vulnerabilities in systems, networks or software to cause harm.</dd>
+      <dt>malware</dt><dd>Malicious software designed to infiltrate and damage computer systems without authorisation.</dd>
+      <dt>man-in-the-middle (MITM) attack</dt><dd>An eavesdropping attack in which communications and data are exposed to an unauthorised third party.</dd>
+      <dt>MFA / 2FA</dt><dd>Multi-factor and two-factor authentication: a password plus a verification code delivered by another device or channel.</dd>
+      <dt>mitigation</dt><dd>An action taken to reduce the likelihood or consequence of a threat.</dd>
+      <dt>non-disclosure agreement (NDA)</dt><dd>A contractual agreement restricting the ability to use or share information.</dd>
+      <dt>onboarding and induction practices</dt><dd>Processes for integrating and training new employees in company culture, job responsibilities and security protocols.</dd>
+      <dt>penalty unit</dt><dd>A fixed dollar amount set by the Victorian Government and indexed each financial year, used in legislation to specify penalties without naming a figure.</dd>
+      <dt>pharming</dt><dd>Redirecting users to false websites that imitate a legitimate URL.</dd>
+      <dt>phishing</dt><dd>Pretending to be a reputable person or entity in order to induce disclosure of sensitive information.</dd>
+      <dt>ransomware</dt><dd>Malicious software that locks or encrypts systems and data until a ransom is paid.</dd>
+      <dt>risk</dt><dd>The combination of how likely a threat is and how serious its consequences would be.</dd>
+      <dt>risk management plan</dt><dd>A documented set of strategies and processes for identifying, assessing and mitigating risks to development and operations, including incident response and regular review.</dd>
+      <dt>risk tolerance</dt><dd>Also risk appetite: the quantity and nature of risk an organisation finds acceptable.</dd>
+      <dt>SAST</dt><dd>Static application security testing; "white box" analysis of source, byte or binary code for vulnerabilities without executing the application.</dd>
+      <dt>secure-by-design</dt><dd>An ISM principle: security is built into a system from the outset rather than added afterwards. Secure-by-default means the safest configuration is the one shipped.</dd>
+      <dt>social engineering</dt><dd>Manipulating human nature to persuade a victim to disclose information or grant access.</dd>
+      <dt>spyware</dt><dd>A program that collects information without the user's knowledge, usually arriving with a free download.</dd>
+      <dt>tailgating</dt><dd>Following an authorised person through a secure door before it closes. Also called piggyback entry.</dd>
+      <dt>threat</dt><dd>Something that could exploit a vulnerability and cause harm.</dd>
+      <dt>threat modelling</dt><dd>A structured process for identifying threats, rating them, planning mitigations and confirming those mitigations worked.</dd>
+      <dt>Trojan horse</dt><dd>A program that appears safe but creates a back door into the computer; requires user activation.</dd>
+      <dt>version control</dt><dd>Records each stage of development so it is possible to roll back to any previous point, and attributes every change to a person.</dd>
+      <dt>virus</dt><dd>Malicious code that reproduces itself on a computer, often arriving as an attachment or download.</dd>
+      <dt>vulnerability</dt><dd>A weakness in a system, process or practice that could be exploited.</dd>
+      <dt>warm site</dt><dd>Recovery infrastructure between hot and cold; relies on restored backups being brought online before services resume.</dd>
+      <dt>worm</dt><dd>A standalone, self-replicating program that exploits operating system vulnerabilities to spread.</dd>
+    </dl>
+  </div>
+</section>
+
+<!-- ==================== OUTCOME ==================== -->
+<section id="outcome">
+  <div class="band">
+    <div class="num">✓</div>
+    <div><span class="lab">ASSESSMENT</span><h2>Outcome 2</h2></div>
+    <span class="badge">SCHOOL-ASSESSED COURSEWORK</span>
+  </div>
+
+  <div class="lo"><strong>THE OUTCOME</strong>
+    On completion of this unit you should be able to respond to a teacher-provided case study to analyse an organisation's software development practices, identify and evaluate current security controls and threats to software development practices, and make recommendations to improve practices.</div>
+
+  <h3>What the task asks you to do</h3>
+  <table>
+    <thead><tr><th style="width:34%">Key skill</th><th>Where it was taught</th></tr></thead>
+    <tbody>
+      <tr><td>Analyse and describe an organisation's software development practices</td><td>Lessons 1–3</td></tr>
+      <tr><td>Identify and describe vulnerabilities and risks based on current practices</td><td>Lessons 2–3, applied in Lesson 5</td></tr>
+      <tr><td>Propose and apply criteria to evaluate the effectiveness of current practices</td><td>Lesson 6</td></tr>
+      <tr><td>Identify and discuss possible legal and ethical consequences, and how these could be resolved</td><td>Lessons 7–8</td></tr>
+      <tr><td>Recommend and justify improvements to enhance secure development practices</td><td>Lesson 6, completed in Lesson 8</td></tr>
+    </tbody>
+  </table>
+
+  <h3>How the unit fits together</h3>
+  <p>Each lesson supplies one part of the response you will write under test conditions:</p>
+  <ol>
+    <li><strong>Lessons 1–3</strong> give you the language to describe what an organisation does and what is wrong with it.</li>
+    <li><strong>Lesson 4</strong> gives you the six controls that fix those weaknesses.</li>
+    <li><strong>Lesson 5</strong> gives you the process for deciding which threats matter and proving a fix worked.</li>
+    <li><strong>Lesson 6</strong> gives you the method for judging how good current practices actually are.</li>
+    <li><strong>Lesson 7</strong> gives you the legal obligations and industry benchmarks your judgement is measured against.</li>
+    <li><strong>Lesson 8</strong> gives you the ethical dimension and the strategies that keep improvement going.</li>
+  </ol>
+
+  <div class="callout c-info">
+    <strong>Reading.</strong> Nelson <em>Software Development VCE Units 3 &amp; 4</em> (2nd edition), Chapters 6 and 7. Chapter 6 covers vulnerabilities, controls and threat modelling; Chapter 7 covers evaluating security practices, legislation, frameworks, ethics and risk management plans.
+  </div>
+
+  <p class="small">Preparing for the assessment? Go to <a href="#sac">SAC preparation</a> for the task format, answer structures and the revision checklist.</p>
+</section>
+
+<footer>
+  <p>Unit 4 Area of Study 2 — Cyber Security: secure software development practices. VCE Applied Computing: Software Development.</p>
+  <p>This page is a read-only reference. Nothing you do here is recorded — your work is saved in the lesson workbooks.</p>
+</footer>
+
+</main>
+</div>
+
+<script>
+/* Read-only site: the theme toggle changes the current page only and
+   stores nothing. No progress tracking, no storage access of any kind. */
+function toggleTheme(){
+  const html = document.documentElement;
+  html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+}
+</script>
+</body>
+</html>

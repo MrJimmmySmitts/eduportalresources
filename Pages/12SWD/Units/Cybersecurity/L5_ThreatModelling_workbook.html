@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en-AU" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L5 — Threat Modelling Principles · Student Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#4361EE; --green:#10B981; --amber:#F59E0B; --purple:#8B5CF6; --red:#EF4444;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --read:'Atkinson Hyperlegible','DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono',ui-monospace,monospace;
+}
+html[data-theme="dark"]{
+  --bg:#0D1117; --surface:#151B24; --surface2:#1C232E; --border:#2A3441;
+  --text:#E6EAF0; --muted:#9AA6B6; --field:#0F1720;
+}
+html[data-theme="light"]{
+  --bg:#FFFFFF; --surface:#F7F8FB; --surface2:#FFFFFF; --border:#DDE2EA;
+  --text:#111827; --muted:#5B6472; --field:#FFFFFF;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--read);font-size:17px;line-height:1.6;}
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px 120px;}
+
+/* ---------- progress bar ---------- */
+.topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--border);}
+.topbar-inner{max-width:1060px;margin:0 auto;padding:10px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.pct{font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap;}
+.track{flex:1;min-width:160px;height:8px;background:var(--surface2);border:1px solid var(--border);border-radius:99px;overflow:hidden;}
+.fill{height:100%;width:0;background:var(--blue);transition:width .3s;}
+button{font-family:var(--sans);font-size:13px;font-weight:700;border-radius:8px;border:1px solid var(--border);
+  background:var(--surface2);color:var(--text);padding:7px 13px;cursor:pointer;}
+button:hover{border-color:var(--blue);}
+button.primary{background:var(--blue);border-color:var(--blue);color:#fff;}
+.status{font-family:var(--mono);font-size:12px;color:var(--muted);}
+
+/* ---------- cover ---------- */
+.cover{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:34px;margin-top:26px;}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--blue);font-weight:500;}
+.cover h1{font-family:var(--serif);font-size:40px;line-height:1.12;margin:12px 0 6px;font-weight:400;}
+.cover .sub{color:var(--muted);font-size:17px;margin-bottom:22px;}
+.idgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.idgrid label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);margin-bottom:5px;}
+input[type=text],input[type=date],select,textarea{
+  width:100%;background:var(--field);color:var(--text);border:1px solid var(--border);
+  border-radius:9px;padding:10px 12px;font-family:var(--read);font-size:16px;}
+textarea{resize:vertical;min-height:86px;line-height:1.55;}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue);}
+select{font-family:var(--sans);}
+
+/* ---------- sections ---------- */
+section{margin-top:38px;}
+.band{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px;}
+.num{width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;
+  font-family:var(--mono);font-weight:500;font-size:16px;flex:none;}
+.band .lab{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted);display:block;}
+.band h2{font-family:var(--serif);font-size:26px;font-weight:400;margin:2px 0 0;line-height:1.2;}
+.badge{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;font-weight:500;padding:5px 11px;border-radius:99px;
+  border:1px solid var(--border);color:var(--muted);}
+.tier{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;font-weight:500;padding:5px 11px;border-radius:99px;color:#fff;}
+.t-f{background:var(--green)} .t-d{background:var(--amber)} .t-e{background:var(--purple)} .t-x{background:var(--red)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:16px;}
+.q{font-weight:700;margin-bottom:9px;}
+.hint{font-size:14.5px;color:var(--muted);font-style:italic;margin:7px 0 0;}
+.callout{border-radius:12px;padding:16px 18px;margin:16px 0;border:1px solid;}
+.c-info{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 10%,transparent);}
+.c-tip{border-color:var(--green);background:color-mix(in srgb,var(--green) 10%,transparent);}
+.c-note{border-color:var(--amber);background:color-mix(in srgb,var(--amber) 10%,transparent);}
+.c-ext{border-color:var(--purple);background:color-mix(in srgb,var(--purple) 10%,transparent);}
+.c-exit{border-color:var(--red);background:color-mix(in srgb,var(--red) 10%,transparent);}
+a{color:var(--blue);}
+.slideref{font-family:var(--mono);font-size:12px;color:var(--muted);}
+
+/* ---------- auto-marked items ---------- */
+.item{border-top:1px solid var(--border);padding:14px 0;display:grid;grid-template-columns:1fr 260px 34px;gap:14px;align-items:center;}
+.item:first-of-type{border-top:none;}
+.item .mark{font-family:var(--mono);font-size:19px;text-align:center;}
+.ok{color:var(--green);} .no{color:var(--red);}
+.row{display:grid;gap:14px;}
+.row-2{grid-template-columns:1fr 1fr;}
+.row-3{grid-template-columns:1fr 1fr 1fr;}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:15px;}
+th,td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+th{background:var(--surface2);font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--muted);font-weight:500;}
+td textarea{min-height:70px;font-size:15px;}
+.small{font-size:14.5px;color:var(--muted);}
+.checkline{display:flex;align-items:flex-start;gap:10px;margin:9px 0;}
+.checkline input{margin-top:5px;flex:none;width:17px;height:17px;accent-color:var(--blue);}
+.scorepill{font-family:var(--mono);font-size:13px;padding:6px 12px;border-radius:99px;border:1px solid var(--border);color:var(--muted);}
+.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;}
+.submitbar{margin-top:36px;border:1px solid var(--red);border-radius:14px;padding:22px;background:color-mix(in srgb,var(--red) 8%,transparent);}
+@media print{.topbar{display:none}.card{break-inside:avoid}}
+@media (max-width:820px){
+  .idgrid,.row-2,.row-3{grid-template-columns:1fr;}
+  .item{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="pct" id="pctLabel">0% complete</span>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <button onclick="DataService.save(collect(),true)">Save</button>
+    <button onclick="DataService.autoLoad(true)">Load</button>
+    <button onclick="window.print()">Export</button>
+    <button onclick="toggleTheme()">Theme</button>
+    <span class="status" id="status"></span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="cover">
+  <span class="eyebrow">UNIT 4 · AREA OF STUDY 2 · CYBER SECURITY · LESSON 5</span>
+  <h1>Threat Modelling Principles</h1>
+  <div class="sub">Defining security requirements · Identifying and mitigating threats · Confirming mitigation</div>
+  <div class="idgrid">
+    <div><label>NAME</label><input type="text" id="stu_name" placeholder="Your full name"></div>
+    <div><label>CLASS</label><input type="text" id="stu_class" placeholder="Class code"></div>
+    <div><label>DATE</label><input type="text" id="stu_date" placeholder="YYYY-MM-DD"></div>
+    <div><label>TEACHER</label><input type="text" id="stu_teacher" placeholder="Teacher name"></div>
+  </div>
+  <div class="callout c-info" style="margin-bottom:0">
+    Your paper notes from this lesson are the source for this workbook — not the slides.
+    Full written notes are on the unit site:
+    <a href="U4_CyberSecuritySoftwareDev_site.html#y12-sd-u4-l5-threat-modelling">Unit site → Lesson 5 →</a>
+  </div>
+</div>
+
+<!-- ===================== SECTION 1 ===================== -->
+<section id="s1">
+  <div class="band">
+    <div class="num">1</div>
+    <div><span class="lab">SECTION 1</span><h2>The three principles</h2></div>
+    <span class="tier t-f">FOUNDATION</span><span class="badge">AUTO-MARKED</span>
+  </div>
+
+  <div class="card">
+    <p class="q">1.1 &nbsp;Match each principle to the question it answers.</p>
+    <p class="slideref">Slide 8 · use your notes</p>
+    <div id="q1">
+      <div class="item"><div>What evidence proves the action worked, and how do we keep proving it?</div>
+        <select data-a="3"><option value="">Choose…</option><option value="1">Principle 1 — Defining security requirements</option><option value="2">Principle 2 — Identifying and mitigating threats</option><option value="3">Principle 3 — Confirming threats have been mitigated</option></select><div class="mark"></div></div>
+      <div class="item"><div>What are we protecting, who for, and what must be true for it to count as protected?</div>
+        <select data-a="1"><option value="">Choose…</option><option value="1">Principle 1 — Defining security requirements</option><option value="2">Principle 2 — Identifying and mitigating threats</option><option value="3">Principle 3 — Confirming threats have been mitigated</option></select><div class="mark"></div></div>
+      <div class="item"><div>What could go wrong, how bad and how likely is it, and what action reduces it?</div>
+        <select data-a="2"><option value="">Choose…</option><option value="1">Principle 1 — Defining security requirements</option><option value="2">Principle 2 — Identifying and mitigating threats</option><option value="3">Principle 3 — Confirming threats have been mitigated</option></select><div class="mark"></div></div>
+      <div class="item"><div>Identifying the assets and the stakeholders happens in which principle?</div>
+        <select data-a="1"><option value="">Choose…</option><option value="1">Principle 1 — Defining security requirements</option><option value="2">Principle 2 — Identifying and mitigating threats</option><option value="3">Principle 3 — Confirming threats have been mitigated</option></select><div class="mark"></div></div>
+      <div class="item"><div>A quarterly access control review belongs to which principle?</div>
+        <select data-a="3"><option value="">Choose…</option><option value="1">Principle 1 — Defining security requirements</option><option value="2">Principle 2 — Identifying and mitigating threats</option><option value="3">Principle 3 — Confirming threats have been mitigated</option></select><div class="mark"></div></div>
+      <div class="item"><div>Deciding to enforce multi-factor authentication belongs to which principle?</div>
+        <select data-a="2"><option value="">Choose…</option><option value="1">Principle 1 — Defining security requirements</option><option value="2">Principle 2 — Identifying and mitigating threats</option><option value="3">Principle 3 — Confirming threats have been mitigated</option></select><div class="mark"></div></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="check('q1')">Check answers</button><span class="scorepill" id="q1score">not checked</span></div>
+  </div>
+
+  <div class="card">
+    <p class="q">1.2 &nbsp;Terminology check — choose the correct term.</p>
+    <div id="q2">
+      <div class="item"><div>An out-of-date library with a publicly published flaw.</div>
+        <select data-a="v"><option value="">Choose…</option><option value="v">Vulnerability</option><option value="t">Threat</option><option value="r">Risk</option><option value="c">Control</option></select><div class="mark"></div></div>
+      <div class="item"><div>An attacker scanning the internet for servers running that library.</div>
+        <select data-a="t"><option value="">Choose…</option><option value="v">Vulnerability</option><option value="t">Threat</option><option value="r">Risk</option><option value="c">Control</option></select><div class="mark"></div></div>
+      <div class="item"><div>"It is fairly likely that this flaw is exploited and 400 000 records are exposed."</div>
+        <select data-a="r"><option value="">Choose…</option><option value="v">Vulnerability</option><option value="t">Threat</option><option value="r">Risk</option><option value="c">Control</option></select><div class="mark"></div></div>
+      <div class="item"><div>Automated patching applied to all servers every Tuesday.</div>
+        <select data-a="c"><option value="">Choose…</option><option value="v">Vulnerability</option><option value="t">Threat</option><option value="r">Risk</option><option value="c">Control</option></select><div class="mark"></div></div>
+      <div class="item"><div>Every developer in the company holds a production database password.</div>
+        <select data-a="v"><option value="">Choose…</option><option value="v">Vulnerability</option><option value="t">Threat</option><option value="r">Risk</option><option value="c">Control</option></select><div class="mark"></div></div>
+      <div class="item"><div>A former employee who left angry and still remembers that password.</div>
+        <select data-a="t"><option value="">Choose…</option><option value="v">Vulnerability</option><option value="t">Threat</option><option value="r">Risk</option><option value="c">Control</option></select><div class="mark"></div></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="check('q2')">Check answers</button><span class="scorepill" id="q2score">not checked</span></div>
+  </div>
+
+  <div class="card">
+    <p class="q">1.3 &nbsp;In your own words, why does a threat model that never gets reviewed become dangerous rather than just useless?</p>
+    <textarea id="f_review" placeholder="Think about what the organisation believes about itself while the model sits unreviewed."></textarea>
+    <p class="hint">Your paper notes from the assumptions discussion (Slide 21) are the place to look.</p>
+  </div>
+</section>
+
+<!-- ===================== SECTION 2 ===================== -->
+<section id="s2">
+  <div class="band">
+    <div class="num">2</div>
+    <div><span class="lab">SECTION 2</span><h2>Classifying threats</h2></div>
+    <span class="tier t-f">FOUNDATION</span><span class="badge">AUTO-MARKED</span>
+  </div>
+
+  <div class="card">
+    <p class="q">2.1 &nbsp;Classify each threat to Aurora Ticketing as <strong>accidental</strong>, <strong>event-based</strong> or <strong>deliberate</strong>.</p>
+    <p class="slideref">Slide 13</p>
+    <div id="q3">
+      <div class="item"><div>A support officer emails a spreadsheet of customer refunds to the wrong address.</div>
+        <select data-a="a"><option value="">Choose…</option><option value="a">Accidental</option><option value="e">Event-based</option><option value="d">Deliberate</option></select><div class="mark"></div></div>
+      <div class="item"><div>Lightning strikes the office and the power surge destroys a network switch.</div>
+        <select data-a="e"><option value="">Choose…</option><option value="a">Accidental</option><option value="e">Event-based</option><option value="d">Deliberate</option></select><div class="mark"></div></div>
+      <div class="item"><div>A developer receives a convincing email from "IT support" and enters their password.</div>
+        <select data-a="d"><option value="">Choose…</option><option value="a">Accidental</option><option value="e">Event-based</option><option value="d">Deliberate</option></select><div class="mark"></div></div>
+      <div class="item"><div>The cloud hosting provider has a region-wide outage for six hours.</div>
+        <select data-a="e"><option value="">Choose…</option><option value="a">Accidental</option><option value="e">Event-based</option><option value="d">Deliberate</option></select><div class="mark"></div></div>
+      <div class="item"><div>A contractor copies the ticket-scanning source code before their contract ends.</div>
+        <select data-a="d"><option value="">Choose…</option><option value="a">Accidental</option><option value="e">Event-based</option><option value="d">Deliberate</option></select><div class="mark"></div></div>
+      <div class="item"><div>A new admin clicks "delete all" on a screen that looks identical to the archive screen.</div>
+        <select data-a="a"><option value="">Choose…</option><option value="a">Accidental</option><option value="e">Event-based</option><option value="d">Deliberate</option></select><div class="mark"></div></div>
+      <div class="item"><div>Ransomware encrypts the file server after a staff member opens an attachment.</div>
+        <select data-a="d"><option value="">Choose…</option><option value="a">Accidental</option><option value="e">Event-based</option><option value="d">Deliberate</option></select><div class="mark"></div></div>
+      <div class="item"><div>An SSD in the build server fails without warning after four years of use.</div>
+        <select data-a="e"><option value="">Choose…</option><option value="a">Accidental</option><option value="e">Event-based</option><option value="d">Deliberate</option></select><div class="mark"></div></div>
+      <div class="item"><div>A junior developer runs a test script against the production database by mistake.</div>
+        <select data-a="a"><option value="">Choose…</option><option value="a">Accidental</option><option value="e">Event-based</option><option value="d">Deliberate</option></select><div class="mark"></div></div>
+      <div class="item"><div>Traffic floods the ticketing site until it stops responding to real customers.</div>
+        <select data-a="d"><option value="">Choose…</option><option value="a">Accidental</option><option value="e">Event-based</option><option value="d">Deliberate</option></select><div class="mark"></div></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="check('q3')">Check answers</button><span class="scorepill" id="q3score">not checked</span></div>
+  </div>
+
+  <div class="card">
+    <p class="q">2.2 &nbsp;Two of the items above involve a person making a mistake, and two involve a person being tricked. Explain why they are classified differently.</p>
+    <textarea id="f_class" placeholder="What is different about the intention behind each situation?"></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">2.3 &nbsp;Each threat category calls for a different kind of response. Complete the sentence for each.</p>
+    <div class="row row-3">
+      <div><label class="small">Accidental threats are best reduced by…</label><textarea id="f_resp_a" placeholder="What changes about the system or the people?"></textarea></div>
+      <div><label class="small">Event-based threats are best handled by…</label><textarea id="f_resp_e" placeholder="You cannot stop these from happening. So what do you prepare?"></textarea></div>
+      <div><label class="small">Deliberate threats are best countered by…</label><textarea id="f_resp_d" placeholder="Someone is actively trying. What does that demand?"></textarea></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 3 ===================== -->
+<section id="s3">
+  <div class="band">
+    <div class="num">3</div>
+    <div><span class="lab">SECTION 3</span><h2>Writing testable security requirements</h2></div>
+    <span class="tier t-f">FOUNDATION</span><span class="badge">WRITTEN</span>
+  </div>
+
+  <div class="callout c-note">
+    A security requirement is only useful if someone could later check whether it has been met. Each of the three below fails that test.
+    Rewrite each so it names <em>what</em> is protected, <em>from whom or what</em>, and <em>how you would know</em>.
+  </div>
+
+  <div class="card">
+    <p class="q">3.1 &nbsp;"Customer data must be kept safe."</p>
+    <textarea id="f_req1" placeholder="Rewrite it. Which data? Protected how? Who is allowed near it?"></textarea>
+  </div>
+  <div class="card">
+    <p class="q">3.2 &nbsp;"Only the right people should have access to the system."</p>
+    <textarea id="f_req2" placeholder="Rewrite it. 'Right people' is not checkable — what would make it checkable?"></textarea>
+  </div>
+  <div class="card">
+    <p class="q">3.3 &nbsp;"Our software should be secure."</p>
+    <textarea id="f_req3" placeholder="Rewrite it. Pick one specific part of the software and one specific property of it."></textarea>
+  </div>
+  <div class="card">
+    <p class="q">3.4 &nbsp;Pick one of your three rewrites. What evidence would you ask for to prove it had been met?</p>
+    <textarea id="f_req4" placeholder="Name the artefact or the check — and say how often you would want to see it."></textarea>
+  </div>
+</section>
+
+<!-- ===================== SECTION 4 ===================== -->
+<section id="s4">
+  <div class="band">
+    <div class="num">4</div>
+    <div><span class="lab">SECTION 4</span><h2>Rating threats — likelihood and consequence</h2></div>
+    <span class="tier t-d">DEVELOPING</span><span class="badge">SELF-RATED</span>
+  </div>
+
+  <div class="callout c-info">
+    Aurora Ticketing runs a ticketing platform for music festivals. Rate each threat below using the matrix from Slide 14,
+    then justify the rating you gave. Your ratings will not all match your classmates' — the justification is what matters.
+  </div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th style="width:31%">Threat</th><th style="width:15%">Likelihood</th><th style="width:15%">Consequence</th><th style="width:11%">Rating</th><th>Why you rated it that way</th></tr></thead>
+      <tbody id="rateRows"></tbody>
+    </table>
+    <p class="hint">The Rating column fills itself from your two choices. If a rating looks wrong to you, that disagreement is worth writing down in the last column.</p>
+  </div>
+
+  <div class="card">
+    <p class="q">4.1 &nbsp;Which threat did you rate highest, and would the company's owner agree with you? Explain.</p>
+    <textarea id="f_rate1" placeholder="Whose loss is it? Different roles fear different outcomes."></textarea>
+  </div>
+  <div class="card">
+    <p class="q">4.2 &nbsp;One of these threats becomes far less serious if a control from Lesson 4 is already in place. Which one, which control, and why does the rating drop?</p>
+    <textarea id="f_rate2" placeholder="Which column of the matrix moves — likelihood, or consequence?"></textarea>
+  </div>
+</section>
+
+<!-- ===================== SECTION 5 ===================== -->
+<section id="s5">
+  <div class="band">
+    <div class="num">5</div>
+    <div><span class="lab">SECTION 5</span><h2>Build a threat model</h2></div>
+    <span class="tier t-d">DEVELOPING</span><span class="badge">EXTENDED WRITTEN</span>
+  </div>
+
+  <div class="callout c-info">
+    <strong>Asset:</strong> Aurora Ticketing's customer database — 400 000 names, email addresses, phone numbers and partial card data,
+    used by the ticketing app, the refunds portal and the marketing export.<br>
+    Build the threat model for this asset. Slide 16 shows the structure for a different asset — do not reuse its rows.
+  </div>
+
+  <div class="card">
+    <p class="q">5.1 &nbsp;Write the security requirement for this asset.</p>
+    <textarea id="f_tm_req" placeholder="One sentence. It must be specific enough that someone could later test it."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">5.2 &nbsp;Identify four threats to this asset and complete the model. Use at least two different threat types and at least two different mitigation strategies.</p>
+    <table>
+      <thead><tr><th style="width:24%">Threat</th><th style="width:13%">Type</th><th style="width:13%">Strategy</th><th style="width:25%">Mitigation</th><th style="width:25%">Confirmation evidence</th></tr></thead>
+      <tbody id="tmRows"></tbody>
+    </table>
+    <p class="hint">Confirmation is not a repeat of the mitigation. It names something you could look at, and how often you would look.</p>
+  </div>
+
+  <div class="card">
+    <p class="q">5.3 &nbsp;Justify the order you would fix these four threats in, given a limited budget.</p>
+    <textarea id="f_tm_order" placeholder="Cheapness, likelihood and severity pull in different directions. Say which one won and why."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">5.4 &nbsp;Name one assumption your threat model depends on, and describe what would happen if that assumption quietly stopped being true.</p>
+    <textarea id="f_tm_assume" placeholder="What are you taking for granted about a supplier, a network, or a person?"></textarea>
+  </div>
+</section>
+
+<!-- ===================== SECTION 6 ===================== -->
+<section id="s6">
+  <div class="band">
+    <div class="num">6</div>
+    <div><span class="lab">SECTION 6</span><h2>Audit and evaluate</h2></div>
+    <span class="tier t-e">EXTENDING</span><span class="badge">EVALUATION</span>
+  </div>
+
+  <div class="callout c-ext">
+    Northbridge Rail Systems, a signalling software developer, submitted the threat model below to its board.
+    Your job is to evaluate it — not to rewrite it.
+  </div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>Threat</th><th>Rating</th><th>Mitigation</th><th>Confirmation</th></tr></thead>
+      <tbody>
+        <tr><td>Hackers</td><td>High</td><td>We have a firewall</td><td>—</td></tr>
+        <tr><td>Staff leaking data</td><td>High</td><td>Staff sign a confidentiality agreement on hire</td><td>Signed agreement on file</td></tr>
+        <tr><td>Losing data</td><td>High</td><td>We back up to the cloud</td><td>Backups are configured</td></tr>
+        <tr><td>Software bugs</td><td>High</td><td>Developers test their own code before release</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <p class="small">Board note: "All identified threats have been mitigated. No further security spending is recommended this year."</p>
+  </div>
+
+  <div class="card">
+    <p class="q">6.1 &nbsp;Identify four distinct weaknesses in this threat model. Give one weakness per box.</p>
+    <div class="row row-2">
+      <div><textarea id="f_aud1" placeholder="Weakness 1 — look at how the threats themselves are described."></textarea></div>
+      <div><textarea id="f_aud2" placeholder="Weakness 2 — look at the Rating column as a whole."></textarea></div>
+      <div><textarea id="f_aud3" placeholder="Weakness 3 — look at the Confirmation column."></textarea></div>
+      <div><textarea id="f_aud4" placeholder="Weakness 4 — look at what the board concluded from it."></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="q">6.2 &nbsp;Rewrite the confirmation evidence for the three rows that need it. Each must name an artefact and a frequency.</p>
+    <div class="row row-3">
+      <div><label class="small">Row 1 — "Hackers"</label><textarea id="f_conf1" placeholder="What would you look at, and how often?"></textarea></div>
+      <div><label class="small">Row 3 — "Losing data"</label><textarea id="f_conf3" placeholder="A backup that has never been tested is a claim, not evidence."></textarea></div>
+      <div><label class="small">Row 4 — "Software bugs"</label><textarea id="f_conf4" placeholder="Who checks the checker?"></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="q">6.3 &nbsp;Northbridge cannot afford to fix everything this year. Choose <strong>one</strong> risk they should consciously accept. State the risk, the conditions of acceptance, and what would force them to revisit the decision.</p>
+    <textarea id="f_accept" placeholder="An accepted risk is documented, approved and revisited. Cover all three."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">6.4 &nbsp;Northbridge writes safety-critical rail signalling software. Explain how that context changes which threats matter most, compared with Aurora Ticketing.</p>
+    <textarea id="f_context" placeholder="What does 'worst that could happen' mean for each organisation?"></textarea>
+  </div>
+</section>
+
+<!-- ===================== SECTION 7 ===================== -->
+<section id="s7">
+  <div class="band">
+    <div class="num">7</div>
+    <div><span class="lab">SECTION 7</span><h2>Exit ticket</h2></div>
+    <span class="tier t-x">ASSESSED</span><span class="badge">NO NOTES</span>
+  </div>
+
+  <div class="callout c-exit">Close your notes and your unit site tab. Five minutes.</div>
+
+  <div class="card">
+    <p class="q">7.1 &nbsp;Name the three threat modelling principles, in order.</p>
+    <textarea id="f_ex1" placeholder="From memory. No looking back."></textarea>
+  </div>
+  <div class="card">
+    <p class="q">7.2 &nbsp;Aurora's build server has an unpatched operating system. Is this a vulnerability, a threat, or a risk? Explain your choice in one sentence.</p>
+    <textarea id="f_ex2" placeholder="Choose one, then say what the other two would be in this situation."></textarea>
+  </div>
+  <div class="card">
+    <p class="q">7.3 &nbsp;Give one piece of evidence that would confirm the mitigation "we enforced multi-factor authentication" actually worked.</p>
+    <textarea id="f_ex3" placeholder="Something you could look at — not something someone tells you."></textarea>
+  </div>
+  <div class="card">
+    <p class="q">7.4 &nbsp;Name one event that should trigger a review of an existing threat model.</p>
+    <textarea id="f_ex4" placeholder="Three were listed in the lesson. One is enough."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">7.5 &nbsp;Self-assessment — tick what you can do now.</p>
+    <div class="checkline"><input type="checkbox" id="sc_f1"><label for="sc_f1"><strong style="color:var(--green)">Foundation ·</strong> I can name the three threat modelling principles and explain what each one is for.</label></div>
+    <div class="checkline"><input type="checkbox" id="sc_f2"><label for="sc_f2"><strong style="color:var(--green)">Foundation ·</strong> I can classify a threat as accidental, event-based or deliberate.</label></div>
+    <div class="checkline"><input type="checkbox" id="sc_d1"><label for="sc_d1"><strong style="color:var(--amber)">Developing ·</strong> I can write security requirements for an organisation's assets and rate threats by likelihood and consequence.</label></div>
+    <div class="checkline"><input type="checkbox" id="sc_d2"><label for="sc_d2"><strong style="color:var(--amber)">Developing ·</strong> I can match a mitigation to a threat and justify why it fits.</label></div>
+    <div class="checkline"><input type="checkbox" id="sc_e1"><label for="sc_e1"><strong style="color:var(--purple)">Extending ·</strong> I can evaluate a threat model, identify what it misses, and specify the evidence needed to confirm mitigation.</label></div>
+    <div class="checkline"><input type="checkbox" id="sc_e2"><label for="sc_e2"><strong style="color:var(--purple)">Extending ·</strong> I can argue when accepting a risk is the correct decision.</label></div>
+  </div>
+
+  <div class="card">
+    <p class="q">7.6 &nbsp;One thing from today you would want explained again next lesson.</p>
+    <textarea id="f_ex6" placeholder="Be specific — 'all of it' cannot be re-taught."></textarea>
+  </div>
+
+  <div class="submitbar">
+    <strong>Ready to submit?</strong>
+    <p class="small" style="margin:6px 0 0">Submitting locks in your current answers and marks this lesson as submitted on your portal home page. You can keep editing and save again afterwards.</p>
+    <div class="actions">
+      <button class="primary" onclick="DataService.submit()">Submit workbook</button>
+      <span class="status" id="submitStatus"></span>
+    </div>
+  </div>
+</section>
+
+<p class="small" style="margin-top:34px">
+  Next lesson: criteria for evaluating the security of an organisation's software development practices.
+  Full notes for this lesson: <a href="U4_CyberSecuritySoftwareDev_site.html#y12-sd-u4-l5-threat-modelling">unit site → Lesson 5</a>.
+</p>
+
+</div>
+
+<script>
+/* ============================================================
+   EduPortal — Lesson 5 workbook
+   ============================================================ */
+const LESSON_ID = 'y12-sd-u4-l5-threat-modelling';
+const UNIT_ID   = 'y12-sd-u4';
+
+/* ---------- build the repeated table rows ---------- */
+const RATE_THREATS = [
+  "An attacker copies the customer database of 400 000 ticket buyers.",
+  "The gate-scanning service is offline for four hours on festival morning.",
+  "A developer's unencrypted laptop is stolen from a car.",
+  "A third-party payment library is found to contain a back door.",
+  "A junior developer deletes the test database.",
+  "A former employee's repository account is never disabled."
+];
+const LIK = ["Unlikely","Possible","Likely"];
+const CON = ["Minor","Moderate","Major"];
+const MATRIX = { // consequence -> likelihood
+  "Minor":   { "Unlikely":"Low",    "Possible":"Low",    "Likely":"Medium"  },
+  "Moderate":{ "Unlikely":"Low",    "Possible":"Medium", "Likely":"High"    },
+  "Major":   { "Unlikely":"Medium", "Possible":"High",   "Likely":"Extreme" }
+};
+const RATE_COLOUR = { "Low":"var(--green)","Medium":"var(--amber)","High":"var(--amber)","Extreme":"var(--red)" };
+
+function opts(arr){ return '<option value="">—</option>' + arr.map(v=>`<option value="${v}">${v}</option>`).join(''); }
+
+(function buildRateRows(){
+  const tb = document.getElementById('rateRows');
+  RATE_THREATS.forEach((t,i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${t}</td>
+      <td><select id="rt_lik_${i}">${opts(LIK)}</select></td>
+      <td><select id="rt_con_${i}">${opts(CON)}</select></td>
+      <td><span id="rt_out_${i}" class="small">—</span></td>
+      <td><textarea id="rt_why_${i}" placeholder="Why that likelihood, and why that consequence?"></textarea></td>`;
+    tb.appendChild(tr);
+  });
+  RATE_THREATS.forEach((_,i)=>{
+    ['rt_lik_','rt_con_'].forEach(p=>{
+      document.getElementById(p+i).addEventListener('change', ()=>updateRating(i));
+    });
+  });
+})();
+
+function updateRating(i){
+  const l = document.getElementById('rt_lik_'+i).value;
+  const c = document.getElementById('rt_con_'+i).value;
+  const out = document.getElementById('rt_out_'+i);
+  if(l && c){
+    const r = MATRIX[c][l];
+    out.textContent = r;
+    out.style.color = RATE_COLOUR[r];
+    out.style.fontWeight = '700';
+  } else {
+    out.textContent = '—'; out.style.color=''; out.style.fontWeight='';
+  }
+}
+
+(function buildTmRows(){
+  const tb = document.getElementById('tmRows');
+  const types = ["Accidental","Event-based","Deliberate"];
+  const strats = ["Reduce","Avoid","Transfer","Accept"];
+  const ph = [
+    ["Threat 1 — start with the one you rated highest","What would you actually put in place?","What could you look at to prove it?"],
+    ["Threat 2 — a different threat type from Threat 1","Name a specific control, not 'better security'","Name the artefact and how often you check it"],
+    ["Threat 3","Would a different strategy be cheaper here?","Evidence, not intention"],
+    ["Threat 4 — one people often forget","","Frequency matters as much as the artefact"]
+  ];
+  for(let i=0;i<4;i++){
+    const tr=document.createElement('tr');
+    tr.innerHTML = `<td><textarea id="tm_t_${i}" placeholder="${ph[i][0]}"></textarea></td>
+      <td><select id="tm_ty_${i}">${opts(types)}</select></td>
+      <td><select id="tm_st_${i}">${opts(strats)}</select></td>
+      <td><textarea id="tm_m_${i}" placeholder="${ph[i][1]}"></textarea></td>
+      <td><textarea id="tm_c_${i}" placeholder="${ph[i][2]}"></textarea></td>`;
+    tb.appendChild(tr);
+  }
+})();
+
+/* ---------- auto-marking ---------- */
+function check(groupId){
+  const g = document.getElementById(groupId);
+  const sels = g.querySelectorAll('select[data-a]');
+  let right=0, answered=0;
+  sels.forEach(sel=>{
+    const mark = sel.parentElement.querySelector('.mark');
+    if(!sel.value){ mark.textContent=''; mark.className='mark'; return; }
+    answered++;
+    if(sel.value === sel.dataset.a){ right++; mark.textContent='✓'; mark.className='mark ok'; }
+    else { mark.textContent='✗'; mark.className='mark no'; }
+  });
+  const pill = document.getElementById(groupId+'score');
+  pill.textContent = answered ? `${right} / ${sels.length} correct` : 'nothing answered yet';
+  pill.style.color = (right===sels.length) ? 'var(--green)' : 'var(--muted)';
+  DataService.autoSave(collect());
+}
+
+/* ---------- field registry ---------- */
+function allFields(){
+  return Array.from(document.querySelectorAll('input[type=text], input[type=date], textarea, select, input[type=checkbox]'))
+    .filter(el=>el.id);
+}
+function collect(){
+  const d = {};
+  allFields().forEach(el=>{ d[el.id] = (el.type==='checkbox') ? el.checked : el.value; });
+  return d;
+}
+function apply(d){
+  if(!d) return;
+  allFields().forEach(el=>{
+    if(!(el.id in d)) return;
+    if(el.type==='checkbox') el.checked = !!d[el.id]; else el.value = d[el.id];
+  });
+  RATE_THREATS.forEach((_,i)=>updateRating(i));
+  updateProgress();
+}
+
+/* ---------- DataService ----------
+   Currently backed by localStorage. Every method maps 1:1 onto a REST
+   endpoint so the storage layer can be swapped for the API without
+   touching anything above this comment.
+------------------------------------ */
+const DataService = {
+  studentId(){
+    try { return JSON.parse(localStorage.getItem('eduportal_session') || '{}').id || 'current_student'; }
+    catch(e){ return 'current_student'; }
+  },
+  _key(){ return `eduportal_workbook_${this.studentId()}_${LESSON_ID}`; },
+  _progressKey(){ return `eduportal_progress_${this.studentId()}_${LESSON_ID}`; },
+
+  // POST /api/workbooks/{studentId}/{lessonId}
+  save(data, announce){
+    try{
+      localStorage.setItem(this._key(), JSON.stringify({
+        lessonId: LESSON_ID, unitId: UNIT_ID, studentId: this.studentId(),
+        updated: new Date().toISOString().slice(0,10), data: data
+      }));
+      if(announce) setStatus('Saved ' + new Date().toISOString().slice(0,10));
+      return true;
+    } catch(e){ if(announce) setStatus('Save failed'); return false; }
+  },
+
+  // GET /api/workbooks/{studentId}/{lessonId}
+  load(){
+    try{ const raw = localStorage.getItem(this._key()); return raw ? JSON.parse(raw).data : null; }
+    catch(e){ return null; }
+  },
+
+  _timer:null,
+  autoSave(data){
+    clearTimeout(this._timer);
+    this._timer = setTimeout(()=>{
+      this.save(data,false);
+      this._syncProgress('in-progress');
+      setStatus('Autosaved');
+    }, 700);
+  },
+
+  autoLoad(announce){
+    const d = this.load();
+    if(d){ apply(d); if(announce) setStatus('Loaded your saved work'); }
+    else if(announce){ setStatus('Nothing saved yet'); }
+  },
+
+  // POST /api/workbooks/{studentId}/{lessonId}/submit
+  submit(){
+    this.save(collect(), false);
+    this._syncProgress('submitted');
+    document.getElementById('submitStatus').textContent =
+      'Submitted ' + new Date().toISOString().slice(0,10);
+    setStatus('Submitted');
+  },
+
+  _syncProgress(status){
+    try{
+      localStorage.setItem(this._progressKey(), JSON.stringify({
+        lessonId: LESSON_ID, unitId: UNIT_ID, studentId: this.studentId(),
+        status: status,                       // 'in-progress' | 'submitted' | 'marked'
+        completion: currentPercent(),
+        updated: new Date().toISOString().slice(0,10)
+      }));
+    } catch(e){ /* progress sync is best-effort */ }
+  }
+};
+
+window.DataService = DataService;
+
+/* ---------- progress ---------- */
+function currentPercent(){
+  const fields = allFields().filter(el=>el.type!=='checkbox' && !el.id.startsWith('stu_'));
+  const done = fields.filter(el=>String(el.value||'').trim().length>0).length;
+  return fields.length ? Math.round(done/fields.length*100) : 0;
+}
+function updateProgress(){
+  const p = currentPercent();
+  document.getElementById('fill').style.width = p + '%';
+  document.getElementById('pctLabel').textContent = p + '% complete';
+}
+function setStatus(t){
+  const s = document.getElementById('status');
+  s.textContent = t;
+  clearTimeout(setStatus._t);
+  setStatus._t = setTimeout(()=>{ s.textContent=''; }, 2600);
+}
+
+/* ---------- theme ---------- */
+function toggleTheme(){
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  try{ localStorage.setItem('eduportal_theme', next); }catch(e){}
+}
+(function initTheme(){
+  try{
+    const t = localStorage.getItem('eduportal_theme');
+    if(t) document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+
+/* ---------- wiring ---------- */
+let firstEntry = true;
+document.addEventListener('input', e=>{
+  if(!e.target.id) return;
+  updateProgress();
+  if(firstEntry){ firstEntry=false; DataService._syncProgress('in-progress'); }
+  DataService.autoSave(collect());
+});
+document.addEventListener('change', e=>{
+  if(!e.target.id) return;
+  updateProgress();
+  DataService.autoSave(collect());
+});
+
+window.addEventListener('DOMContentLoaded', ()=>{
+  DataService.autoLoad(false);
+  updateProgress();
+  const d = document.getElementById('stu_date');
+  if(!d.value) d.placeholder = 'YYYY-MM-DD';
+});
+</script>
+</body>
+</html>
