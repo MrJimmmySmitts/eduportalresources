@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Systems in Context — Lesson Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #12100E; --ink2: #2C2A28; --ink3: #6B6762;
+    --cream: #F7F3EC; --cream2: #EDE8DF; --white: #FFFFFF;
+    --border: #D8D3CA; --border2: #C4BFB6;
+    --pine: #1B5E47; --amber: #B8620A; --indigo: #2B3A8C; --crimson: #8C1F28;
+    --assistive: #2B3A8C; --finance: #1B5E47; --gps: #0B6E73; --robotics: #B8620A; --traffic: #8C1F28;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink);
+    line-height: 1.6; font-size: 17px;
+  }
+  h1, h2, h3 { font-family: 'DM Serif Display', serif; font-weight: 400; color: var(--ink); }
+  .mono { font-family: 'DM Mono', monospace; }
+
+  /* ---------- cover ---------- */
+  .cover {
+    background: var(--ink); color: var(--white); padding: 56px 8vw 48px;
+  }
+  .cover-eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 2px;
+    color: #C9C4BA; text-transform: uppercase; margin-bottom: 18px;
+  }
+  .cover h1 { font-size: 44px; margin-bottom: 10px; line-height: 1.15; }
+  .cover .subtitle { font-size: 19px; font-style: italic; color: #D8D3CA; margin-bottom: 32px; }
+  .cover-meta {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 760px;
+  }
+  .cover-meta-item {
+    border: 1px solid #3A3733; border-radius: 8px; padding: 12px 14px;
+  }
+  .cover-meta-label { font-family: 'DM Mono', monospace; font-size: 11px; color: #9C978D; letter-spacing: 1px; margin-bottom: 4px; }
+  .cover-meta-value { font-size: 15px; color: var(--white); }
+
+  /* ---------- nav links to other docs ---------- */
+  .doc-links {
+    display: flex; gap: 12px; padding: 18px 8vw; background: var(--cream2);
+    border-bottom: 1px solid var(--border); flex-wrap: wrap;
+  }
+  .doc-link {
+    font-family: 'DM Mono', monospace; font-size: 13px; padding: 8px 16px;
+    border-radius: 20px; border: 1px solid var(--border2); color: var(--ink2);
+    text-decoration: none; background: var(--white);
+  }
+  .doc-link:hover { border-color: var(--indigo); color: var(--indigo); }
+
+  /* ---------- progress bar ---------- */
+  .progress-bar {
+    position: sticky; top: 0; z-index: 50; background: var(--white);
+    border-bottom: 1px solid var(--border); padding: 10px 8vw;
+    display: flex; align-items: center; gap: 16px; font-family: 'DM Mono', monospace; font-size: 13px;
+  }
+  .progress-track { flex: 1; height: 8px; background: var(--cream2); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--pine); width: 100%; }
+  .progress-btn {
+    border: 1px solid var(--border2); background: var(--white); padding: 6px 14px;
+    border-radius: 6px; cursor: pointer; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink2);
+  }
+  .progress-btn:hover { border-color: var(--ink2); }
+
+  main { max-width: 1000px; margin: 0 auto; padding: 0 8vw 80px; }
+
+  /* ---------- section band ---------- */
+  .section-band {
+    display: flex; align-items: center; gap: 16px; margin: 56px 0 22px;
+  }
+  .section-num {
+    width: 38px; height: 38px; border-radius: 50%; background: var(--ink);
+    color: var(--white); display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace; font-weight: 500; flex-shrink: 0;
+  }
+  .section-label { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink3); letter-spacing: 1.5px; text-transform: uppercase; }
+  .section-title { font-size: 28px; }
+  .section-badge {
+    margin-left: auto; font-family: 'DM Mono', monospace; font-size: 11px;
+    padding: 4px 10px; border-radius: 12px; background: var(--cream2); color: var(--ink3);
+  }
+
+  /* ---------- callouts ---------- */
+  .callout { border-radius: 10px; padding: 18px 22px; margin: 18px 0; }
+  .callout-info { background: #ECEEF8; border: 1px solid #C7CCEC; }
+  .callout-tip { background: #E6F0EC; border: 1px solid #BFD9CC; }
+  .callout-note { background: #FBEEDD; border: 1px solid #ECCFA0; }
+  .callout-extend { background: #F6E3E3; border: 1px solid #DDB3B5; }
+  .callout-label {
+    font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 8px; display: block;
+  }
+  .callout-info .callout-label { color: var(--indigo); }
+  .callout-tip .callout-label { color: var(--pine); }
+  .callout-note .callout-label { color: var(--amber); }
+  .callout-extend .callout-label { color: var(--crimson); }
+
+  /* ---------- sector cards ---------- */
+  .sector-card {
+    background: var(--white); border: 1px solid var(--border); border-radius: 12px;
+    padding: 26px 28px; margin: 20px 0;
+  }
+  .sector-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .sector-icon { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .sector-icon svg { width: 24px; height: 24px; fill: var(--white); }
+  .sector-head h3 { font-size: 22px; }
+  .sector-def { font-size: 17px; color: var(--ink2); margin-bottom: 16px; }
+  .cap-box { background: var(--cream2); border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; }
+  .cap-label { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; margin-bottom: 6px; display: block; }
+  table.examples { width: 100%; border-collapse: collapse; margin-top: 6px; }
+  table.examples th {
+    text-align: left; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--ink3); padding: 8px 10px; border-bottom: 2px solid var(--border);
+  }
+  table.examples td { padding: 10px 10px; border-bottom: 1px solid var(--border); vertical-align: top; font-size: 16px; }
+  table.examples td:first-child { font-weight: 600; white-space: nowrap; }
+
+  /* ---------- two-question grid ---------- */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 20px 0; }
+  .question-card {
+    background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 22px;
+  }
+  .question-card .q-eyebrow { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+  .question-card h4 { font-size: 19px; font-family: 'DM Sans'; font-weight: 700; margin-bottom: 8px; }
+  .question-card p { font-size: 16px; color: var(--ink2); }
+
+  /* ---------- copy banner ---------- */
+  .copy-banner {
+    background: var(--amber); color: var(--white); font-family: 'DM Mono', monospace;
+    font-size: 12px; letter-spacing: 1px; padding: 6px 14px; border-radius: 20px;
+    display: inline-block; margin-bottom: 10px; text-transform: uppercase;
+  }
+
+  /* ---------- tier chips ---------- */
+  .tier-row { display: flex; flex-direction: column; gap: 12px; margin: 18px 0; }
+  .tier-chip { display: flex; gap: 16px; align-items: flex-start; background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+  .tier-label { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--white); padding: 6px 14px; border-radius: 6px; flex-shrink: 0; white-space: nowrap; }
+  .tier-foundation { background: var(--pine); }
+  .tier-developing { background: var(--amber); }
+  .tier-extending { background: var(--indigo); }
+  .tier-text { font-size: 16px; padding-top: 4px; }
+
+  /* ---------- footer nav ---------- */
+  .footer-nav {
+    border-top: 1px solid var(--border); margin-top: 64px; padding-top: 24px;
+    display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: 13px; color: var(--ink3);
+  }
+
+  @media print {
+    body { background: var(--white); font-size: 13px; }
+    .progress-bar, .doc-links { display: none; }
+    .cover { background: var(--white) !important; color: var(--ink) !important; }
+    .cover-eyebrow, .cover .subtitle { color: var(--ink3) !important; }
+    .cover-meta-item { border-color: var(--border) !important; }
+    .cover-meta-label { color: var(--ink3) !important; }
+    .cover-meta-value { color: var(--ink) !important; }
+  }
+  @media (max-width: 720px) {
+    .two-col { grid-template-columns: 1fr; }
+    .cover-meta { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-eyebrow">VCE Applied Computing · Victorian Curriculum (VCAA)</div>
+  <h1>Digital Systems in Context</h1>
+  <div class="subtitle">Unit 2 · Area of Study 1 (Outcome 1) · Lesson 2 — Reference Website</div>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><div class="cover-meta-label">UNIT</div><div class="cover-meta-value">Unit 2</div></div>
+    <div class="cover-meta-item"><div class="cover-meta-label">LESSON</div><div class="cover-meta-value">D1.2</div></div>
+    <div class="cover-meta-item"><div class="cover-meta-label">DURATION</div><div class="cover-meta-value">100 min</div></div>
+    <div class="cover-meta-item"><div class="cover-meta-label">TEACHER</div><div class="cover-meta-value">Mr Smith</div></div>
+  </div>
+</div>
+
+<div class="doc-links">
+  <a class="doc-link" href="#" id="slidesLink">📊 Open Slides</a>
+  <a class="doc-link" href="#" id="workbookLink">📝 Open Workbook</a>
+  <a class="doc-link" href="#" id="portalLink">🏠 Back to EduPortal</a>
+</div>
+
+<div class="progress-bar">
+  <span class="mono">REFERENCE — READ ONLY</span>
+  <div class="progress-track"><div class="progress-fill"></div></div>
+  <button class="progress-btn" onclick="window.print()">Export / Print</button>
+</div>
+
+<main>
+
+  <div class="section-band">
+    <div class="section-num mono">1</div>
+    <div>
+      <div class="section-label">Learning Objective</div>
+      <div class="section-title">What today is about</div>
+    </div>
+    <div class="section-badge">overview</div>
+  </div>
+  <div class="callout callout-info">
+    <span class="callout-label">Objective</span>
+    To be able to describe the functions and capabilities of digital systems used by individuals
+    and organisations, and use real examples to start narrowing your group's topic.
+  </div>
+  <div class="tier-row">
+    <div class="tier-chip"><span class="tier-label tier-foundation">FOUNDATION</span><span class="tier-text">I can describe what a digital system in at least two sectors is used for.</span></div>
+    <div class="tier-chip"><span class="tier-label tier-developing">DEVELOPING</span><span class="tier-text">I can explain how a digital system's functions and capabilities solve a real problem for its users.</span></div>
+    <div class="tier-chip"><span class="tier-label tier-extending">EXTENDING</span><span class="tier-text">I can connect a digital system example to my group's topic area and suggest a more specific direction.</span></div>
+  </div>
+
+  <div class="section-band">
+    <div class="section-num mono">2</div>
+    <div>
+      <div class="section-label">Explicit Explanation</div>
+      <div class="section-title">What counts as a "digital system"?</div>
+    </div>
+    <div class="section-badge">notes</div>
+  </div>
+  <p>A digital system is hardware, software and data working together to do a job for a user or
+  an organisation. Every example in this lesson can be examined with the same two questions:</p>
+  <div class="two-col">
+    <div class="question-card">
+      <span class="q-eyebrow" style="color: var(--indigo);">QUESTION 1</span>
+      <h4>What function does it perform?</h4>
+      <p>What is the system actually doing — what task is it carrying out?</p>
+    </div>
+    <div class="question-card">
+      <span class="q-eyebrow" style="color: var(--pine);">QUESTION 2</span>
+      <h4>What capability does that give the user?</h4>
+      <p>What can a person or organisation now do that they couldn't do before?</p>
+    </div>
+  </div>
+
+  <div class="section-band">
+    <div class="section-num mono">3</div>
+    <div>
+      <div class="section-label">Explicit Explanation</div>
+      <div class="section-title">Five sectors of digital systems</div>
+    </div>
+    <div class="section-badge">full notes</div>
+  </div>
+  <p>Below are full notes on the five sectors covered in this lesson. Each entry includes the
+  definition, the capability it gives users, and a table of real-world examples.</p>
+
+  <!-- Sector 1: Assistive Technologies -->
+  <div class="sector-card">
+    <div class="sector-head">
+      <div class="sector-icon" style="background: var(--assistive);">
+        <img src="data:image/png;base64,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" style="width: 26px; height: 26px;" alt="Assistive technologies icon">
+      </div>
+      <h3>Assistive Technologies</h3>
+    </div>
+    <p class="sector-def">Digital systems designed to remove a barrier that would otherwise stop someone doing
+    something independently.</p>
+    <div class="cap-box">
+      <span class="cap-label" style="color: var(--assistive);">CAPABILITY IT GIVES</span>
+      Gives people independence and access to everyday tasks — communication, information,
+      and movement — that a disability would otherwise block.
+    </div>
+    <span class="copy-banner">Copy this table</span>
+    <table class="examples">
+      <tr><th>System</th><th>What it does</th></tr>
+      <tr><td>Screen readers</td><td>Converts on-screen text to speech for people who are blind or have low vision</td></tr>
+      <tr><td>Hearing aids with streaming</td><td>Bluetooth-enabled aids stream phone audio directly, cutting background noise</td></tr>
+      <tr><td>Eye-gaze control</td><td>Tracks eye movement to operate a computer for users with limited mobility</td></tr>
+      <tr><td>Sensor-feedback prosthetics</td><td>Limb sensors send signals back to the user, restoring a sense of grip or touch</td></tr>
+    </table>
+  </div>
+
+  <!-- Sector 2: Financial Services -->
+  <div class="sector-card">
+    <div class="sector-head">
+      <div class="sector-icon" style="background: var(--finance);">
+        <svg viewBox="0 0 512 512"><path d="M256 0L16 96v32h480V96zm-208 160v192H32v32h448v-32h-16V160h-64v192h-64V160h-64v192h-64V160h-64v192H80V160z"/></svg>
+      </div>
+      <h3>Financial Services</h3>
+    </div>
+    <p class="sector-def">Digital systems that let individuals and organisations move, manage and protect
+    money without visiting a branch.</p>
+    <div class="cap-box">
+      <span class="cap-label" style="color: var(--finance);">CAPABILITY IT GIVES</span>
+      Gives users speed (instant transfers), security (real-time fraud detection), and access
+      (banking anywhere, anytime) that paper-based banking never could.
+    </div>
+    <span class="copy-banner">Copy this table</span>
+    <table class="examples">
+      <tr><th>System</th><th>What it does</th></tr>
+      <tr><td>Banking apps</td><td>Check balances, pay bills, and transfer money from a phone in seconds</td></tr>
+      <tr><td>Contactless / tap-to-pay</td><td>A single tap authorises a payment using encrypted card or device data</td></tr>
+      <tr><td>Fraud detection</td><td>Flags unusual spending patterns automatically, often before the user notices</td></tr>
+      <tr><td>Robo-advice</td><td>Software builds and manages an investment portfolio based on a user's goals</td></tr>
+    </table>
+  </div>
+
+  <!-- Sector 3: GPS / Location -->
+  <div class="sector-card">
+    <div class="sector-head">
+      <div class="sector-icon" style="background: var(--gps);">
+        <svg viewBox="0 0 384 512"><path d="M192 0C86 0 0 86 0 192c0 77 130 248 168 295 12 15 36 15 48 0 38-47 168-218 168-295C384 86 298 0 192 0zm0 272a80 80 0 110-160 80 80 0 010 160z"/></svg>
+      </div>
+      <h3>GPS &amp; Location Systems</h3>
+    </div>
+    <p class="sector-def">Digital systems that work out where something is in real time, using signals
+    from satellites or networks.</p>
+    <div class="cap-box">
+      <span class="cap-label" style="color: var(--gps);">CAPABILITY IT GIVES</span>
+      Gives organisations and individuals real-time positioning — enabling navigation, logistics
+      planning, and the ability to find or track something exactly when it matters.
+    </div>
+    <span class="copy-banner">Copy this table</span>
+    <table class="examples">
+      <tr><th>System</th><th>What it does</th></tr>
+      <tr><td>Turn-by-turn navigation</td><td>Calculates and updates a route in real time as conditions change</td></tr>
+      <tr><td>Fleet tracking</td><td>Lets a delivery company see every vehicle's location at once</td></tr>
+      <tr><td>Search and rescue</td><td>Locates a missing hiker's phone or beacon signal to direct responders</td></tr>
+      <tr><td>Geofencing</td><td>Triggers an action automatically when a device enters or leaves a set area</td></tr>
+    </table>
+  </div>
+
+  <!-- Sector 4: Robotics -->
+  <div class="sector-card">
+    <div class="sector-head">
+      <div class="sector-icon" style="background: var(--robotics);">
+        <img src="data:image/png;base64,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" style="width: 24px; height: 24px;" alt="Robotics icon">
+      </div>
+      <h3>Robotics</h3>
+    </div>
+    <p class="sector-def">Digital systems combined with physical machinery that sense, decide, and act in
+    the real world.</p>
+    <div class="cap-box">
+      <span class="cap-label" style="color: var(--robotics);">CAPABILITY IT GIVES</span>
+      Gives organisations precision and scale beyond human physical limits — repeating a delicate
+      or heavy task exactly, for hours, without fatigue.
+    </div>
+    <span class="copy-banner">Copy this table</span>
+    <table class="examples">
+      <tr><th>System</th><th>What it does</th></tr>
+      <tr><td>Warehouse picking robots</td><td>Locate and retrieve items from shelves to speed up order fulfilment</td></tr>
+      <tr><td>Surgical robots</td><td>Translate a surgeon's hand movements into smaller, steadier instrument motion</td></tr>
+      <tr><td>Agricultural robots / drones</td><td>Monitor crop health or apply treatment across large fields automatically</td></tr>
+    </table>
+  </div>
+
+  <!-- Sector 5: Traffic Management -->
+  <div class="sector-card">
+    <div class="sector-head">
+      <div class="sector-icon" style="background: var(--traffic);">
+        <svg viewBox="0 0 320 512"><path d="M48 0C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h224c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48H48zm112 96a48 48 0 110 96 48 48 0 010-96zm0 144a48 48 0 110 96 48 48 0 010-96zm0 144a48 48 0 110 96 48 48 0 010-96z"/></svg>
+      </div>
+      <h3>Traffic Management</h3>
+    </div>
+    <p class="sector-def">Digital systems that monitor and control the flow of vehicles across a road
+    network, often city-wide.</p>
+    <div class="cap-box">
+      <span class="cap-label" style="color: var(--traffic);">CAPABILITY IT GIVES</span>
+      Gives a city the ability to optimise traffic flow and safety at a scale no human traffic
+      controller could manage in real time.
+    </div>
+    <span class="copy-banner">Copy this table</span>
+    <table class="examples">
+      <tr><th>System</th><th>What it does</th></tr>
+      <tr><td>Adaptive traffic signals</td><td>Adjust light timing automatically based on real-time traffic volume</td></tr>
+      <tr><td>Congestion sensors</td><td>Detect slow-moving traffic and feed data into navigation apps</td></tr>
+      <tr><td>Incident detection cameras</td><td>Spot a stopped vehicle or crash and alert responders automatically</td></tr>
+    </table>
+  </div>
+
+  <div class="section-band">
+    <div class="section-num mono">4</div>
+    <div>
+      <div class="section-label">Application of Learning</div>
+      <div class="section-title">Building your function/capability table</div>
+    </div>
+    <div class="section-badge">workbook task</div>
+  </div>
+  <div class="callout callout-tip">
+    <span class="callout-label">Instructions</span>
+    Open your workbook — Section 2. Pick two sectors from the five above, complete a structured
+    function/capability table for each, and write a short paragraph linking one sector to your
+    own group's emerging topic area.
+  </div>
+
+  <div class="section-band">
+    <div class="section-num mono">5</div>
+    <div>
+      <div class="section-label">Assessment Check-in</div>
+      <div class="section-title">Outcome 1 — Group Milestone 1</div>
+    </div>
+    <div class="section-badge">reminder</div>
+  </div>
+  <div class="callout callout-note">
+    <span class="callout-label">Due Week 4, D4.2</span>
+    Problem statement and project plan (Gantt chart) due for teacher sign-off. Today is Week 1 —
+    you are still widening your view, not locking in your topic. Use today's sector examples as
+    fuel to sharpen your eventual direction.
+  </div>
+
+  <div class="section-band">
+    <div class="section-num mono">6</div>
+    <div>
+      <div class="section-label">Next Steps</div>
+      <div class="section-title">Where this leads</div>
+    </div>
+    <div class="section-badge">preview</div>
+  </div>
+  <div class="callout callout-extend">
+    <span class="callout-label">Next lesson — D2.1</span>
+    Impact of Emerging Technologies — automation, cyberbullying, productivity, economic effects,
+    and the decline of physical human interaction and interpersonal skills.
+  </div>
+  <p><strong>Homework:</strong> bring one more real-world digital system example — any sector —
+  related to your group's tentative topic, ready to share at the start of next lesson.</p>
+
+  <div class="footer-nav">
+    <span>VCE Applied Computing · Unit 2 · AoS1 · Lesson 2</span>
+    <span>y11-ac-u2-l2-digital-systems-context</span>
+  </div>
+
+</main>
+
+<script>
+  const LESSON_ID = 'y11-ac-u2-l2-digital-systems-context';
+  const DataService = {
+    studentId() {
+      return localStorage.getItem('eduportal_currentStudent') || 'current_student';
+    },
+    save(data) {
+      try {
+        localStorage.setItem('wb_' + LESSON_ID + '_view', JSON.stringify(data));
+        return true;
+      } catch (e) { return false; }
+    },
+    load() {
+      try {
+        const raw = localStorage.getItem('wb_' + LESSON_ID + '_view');
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) { return null; }
+    },
+    autoSave(data) { this.save(data); },
+    autoLoad() { return this.load(); },
+    submit() { /* read-only reference — no submission */ },
+    _syncProgress(status, score) {
+      try {
+        const key = 'eduportal_progress_' + this.studentId() + '_' + LESSON_ID;
+        const existing = JSON.parse(localStorage.getItem(key) || '{}');
+        existing.referenceViewed = true;
+        localStorage.setItem(key, JSON.stringify(existing));
+      } catch (e) { /* ignore */ }
+    }
+  };
+  DataService._syncProgress('in-progress', null);
+
+  // Placeholder hooks for portal-deployed URLs — swap '#' once slides/workbook are hosted.
+  document.getElementById('slidesLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    alert('This link will open the Lesson 2 slides once deployed in EduPortal.');
+  });
+  document.getElementById('workbookLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    alert('This link will open the Lesson 2 workbook once deployed in EduPortal.');
+  });
+  document.getElementById('portalLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    alert('This link will return to the EduPortal home page once deployed.');
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Incident Response Workbook — Cybersecurity Checkpoint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root, [data-theme="dark"] {
+    --bg: #0D1117;
+    --surface: #151B27;
+    --surface-2: #1D2433;
+    --border: #2A3244;
+    --text: #E7EAF2;
+    --text-muted: #9AA3B8;
+    --blue: #4361EE;
+    --blue-soft: #26305A;
+    --green: #10B981;
+    --green-soft: #123A30;
+    --amber: #F59E0B;
+    --amber-soft: #3D3013;
+    --purple: #8B5CF6;
+    --purple-soft: #2F2650;
+    --red: #EF4444;
+    --red-soft: #3B1D1F;
+    --shadow: 0 4px 18px rgba(0,0,0,0.35);
+  }
+  [data-theme="light"] {
+    --bg: #FFFFFF;
+    --surface: #F5F7FC;
+    --surface-2: #EEF1FF;
+    --border: #DDE2EE;
+    --text: #16192B;
+    --text-muted: #5B6178;
+    --blue: #4361EE;
+    --blue-soft: #E4E9FF;
+    --green: #10B981;
+    --green-soft: #E7F9F1;
+    --amber: #F59E0B;
+    --amber-soft: #FEF3DE;
+    --purple: #8B5CF6;
+    --purple-soft: #F1EBFE;
+    --red: #EF4444;
+    --red-soft: #FDEAEA;
+    --shadow: 0 4px 18px rgba(20,25,45,0.08);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Atkinson Hyperlegible', sans-serif;
+    line-height: 1.55;
+    padding-bottom: 4rem;
+    transition: background .2s, color .2s;
+  }
+  h1, h2, h3 { font-family: 'DM Serif Display', serif; font-weight: 400; margin: 0; }
+  .mono { font-family: 'DM Mono', monospace; }
+  .ui { font-family: 'DM Sans', sans-serif; }
+
+  /* ---------- Sticky progress bar ---------- */
+  #topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0.7rem 1.2rem;
+    display: flex; align-items: center; gap: 1rem;
+    font-family: 'DM Sans', sans-serif;
+    backdrop-filter: blur(6px);
+  }
+  #progressWrap { flex: 1; display: flex; align-items: center; gap: 0.7rem; }
+  #progressTrack {
+    flex: 1; height: 10px; border-radius: 6px; background: var(--surface-2);
+    border: 1px solid var(--border); overflow: hidden;
+  }
+  #progressFill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .3s; }
+  #progressLabel { font-size: 0.8rem; color: var(--text-muted); min-width: 6.5rem; text-align: right; }
+  .btn {
+    font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600;
+    border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
+    padding: 0.45rem 0.85rem; border-radius: 8px; cursor: pointer; white-space: nowrap;
+  }
+  .btn:hover { border-color: var(--blue); }
+  .btn.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .btn.small { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
+  #themeToggle { font-size: 1rem; padding: 0.4rem 0.6rem; }
+  #saveStatus { font-size: 0.75rem; color: var(--text-muted); min-width: 5.5rem; }
+
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 1.4rem; }
+
+  /* ---------- Cover ---------- */
+  .cover {
+    background: linear-gradient(160deg, var(--surface) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 2.6rem 0 2.2rem;
+    margin-bottom: 2.5rem;
+  }
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.08em; color: var(--blue); text-transform: uppercase; margin-bottom: 0.9rem; }
+  .cover h1 { font-size: 2.3rem; color: var(--text); margin-bottom: 0.5rem; }
+  .cover .sub { font-family: 'DM Sans'; color: var(--text-muted); font-size: 1rem; margin-bottom: 1.6rem; }
+  .studentgrid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 2rem;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem 1.4rem;
+  }
+  .field label { display: block; font-family: 'DM Mono'; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.35rem; }
+  .field input {
+    width: 100%; font-family: 'Atkinson Hyperlegible'; font-size: 1rem; color: var(--text);
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.7rem;
+  }
+  .field input:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
+
+  /* ---------- Section band ---------- */
+  .section { margin-bottom: 3rem; }
+  .section-band { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+  .num-circle {
+    width: 2rem; height: 2rem; border-radius: 50%; background: var(--blue); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-family: 'DM Sans'; font-weight: 700; font-size: 0.95rem; flex-shrink: 0;
+  }
+  .section-label { font-family: 'DM Mono'; font-size: 0.75rem; letter-spacing: 0.08em; color: var(--text-muted); text-transform: uppercase; }
+  .section-title { font-size: 1.5rem; margin-left: 0.2rem; }
+  .badge {
+    margin-left: auto; font-family: 'DM Sans'; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.03em;
+    padding: 0.3rem 0.7rem; border-radius: 999px; text-transform: uppercase;
+  }
+  .badge.blue { background: var(--blue-soft); color: var(--blue); }
+  .badge.red { background: var(--red-soft); color: var(--red); }
+
+  /* ---------- Callouts ---------- */
+  .callout { border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0; border: 1px solid; font-family: 'DM Sans'; font-size: 0.92rem; }
+  .callout-info { background: var(--blue-soft); border-color: var(--blue); }
+  .callout-tip { background: var(--green-soft); border-color: var(--green); }
+  .callout-note { background: var(--amber-soft); border-color: var(--amber); }
+  .callout-extend { background: var(--purple-soft); border-color: var(--purple); }
+  .callout b { display: block; margin-bottom: 0.25rem; font-family: 'DM Sans'; }
+
+  /* ---------- Tier chips ---------- */
+  .tier-chip { display: inline-flex; align-items: center; gap: 0.35rem; font-family: 'DM Sans'; font-weight: 700; font-size: 0.75rem;
+    padding: 0.28rem 0.7rem; border-radius: 999px; border: 1px solid; text-transform: uppercase; }
+  .tier-F { background: var(--green-soft); border-color: var(--green); color: var(--green); }
+  .tier-D { background: var(--amber-soft); border-color: var(--amber); color: var(--amber); }
+  .tier-E { background: var(--purple-soft); border-color: var(--purple); color: var(--purple); }
+
+  /* ---------- Cards / tables ---------- */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.3rem 1.4rem; margin-bottom: 1.1rem; box-shadow: var(--shadow); }
+  .recap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  @media (max-width: 760px) { .recap-grid { grid-template-columns: 1fr; } .studentgrid { grid-template-columns: 1fr; } }
+  .recap-col h3 { font-size: 1.05rem; margin-bottom: 0.6rem; }
+  .recap-col .icon { font-size: 1.4rem; }
+
+  textarea, select, input[type=text] {
+    width: 100%; font-family: 'Atkinson Hyperlegible'; font-size: 0.98rem; color: var(--text);
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 0.75rem;
+    resize: vertical; margin-top: 0.4rem;
+  }
+  textarea:focus, select:focus, input:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
+  label.q { display: block; font-family: 'DM Sans'; font-weight: 600; font-size: 0.95rem; margin-top: 1rem; }
+  .hint { font-family: 'DM Sans'; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+  .incident-box { background: var(--surface-2); border-left: 3px solid var(--blue); border-radius: 6px; padding: 0.9rem 1.1rem; margin-bottom: 0.6rem; font-family: 'DM Sans'; font-size: 0.95rem; }
+  .incident-box .k { font-family: 'DM Mono'; font-size: 0.7rem; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-bottom: 0.3rem; }
+
+  .scenario-header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.7rem; flex-wrap: wrap; }
+  .scenario-header h3 { font-size: 1.2rem; }
+
+  .match-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; align-items: center; margin-bottom: 0.6rem; }
+  .match-row .left { font-family: 'DM Sans'; font-weight: 600; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 0.8rem; }
+  @media (max-width: 600px) { .match-row { grid-template-columns: 1fr; } }
+
+  .site-link { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'DM Sans'; font-weight: 600; font-size: 0.85rem; color: var(--blue); text-decoration: none; }
+  .site-link:hover { text-decoration: underline; }
+
+  .radio-row { display: flex; gap: 0.6rem; margin-top: 0.5rem; flex-wrap: wrap; }
+  .radio-opt { display: flex; align-items: center; gap: 0.4rem; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.4rem 0.8rem; font-family: 'DM Sans'; font-size: 0.9rem; cursor: pointer; }
+  .radio-opt input { width: auto; margin: 0; }
+
+  .selfassess-row { display: flex; align-items: center; gap: 0.7rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.8rem 1rem; margin-bottom: 0.6rem; }
+  .selfassess-row input { width: auto; }
+  .selfassess-row span { font-family: 'DM Sans'; font-size: 0.9rem; }
+
+  #submitArea { text-align: center; margin-top: 2rem; }
+  #submitMsg { font-family: 'DM Sans'; font-size: 0.85rem; color: var(--green); margin-top: 0.7rem; display: none; }
+
+  footer.pagefoot { text-align: center; font-family: 'DM Sans'; font-size: 0.78rem; color: var(--text-muted); margin-top: 3rem; }
+
+  @media print {
+    #topbar { position: static; }
+    body { background: #fff; color: #000; }
+  }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <button class="btn small" id="themeToggle" title="Toggle light/dark" aria-label="Toggle theme">🌓</button>
+  <div id="progressWrap">
+    <div id="progressTrack"><div id="progressFill"></div></div>
+    <div id="progressLabel" class="ui">0% complete</div>
+  </div>
+  <span id="saveStatus" class="ui">Not saved yet</span>
+  <button class="btn" id="btnSave">💾 Save</button>
+  <button class="btn" id="btnLoad">↺ Load</button>
+  <button class="btn" id="btnExport">🖨 Export</button>
+</div>
+
+<div class="cover">
+  <div class="wrap">
+    <div class="eyebrow">Victorian Curriculum · Digital Technologies · Year 12</div>
+    <h1>Incident Response: You Be the Analyst</h1>
+    <div class="sub">Cybersecurity Unit — Checkpoint Lesson Workbook</div>
+    <div class="studentgrid">
+      <div class="field"><label for="fName">Name</label><input type="text" id="fName" placeholder="Your name"></div>
+      <div class="field"><label for="fClass">Class</label><input type="text" id="fClass" placeholder="e.g. 12DIT2"></div>
+      <div class="field"><label for="fDate">Date</label><input type="text" id="fDate" placeholder="YYYY-MM-DD"></div>
+      <div class="field"><label for="fTeacher">Teacher</label><input type="text" id="fTeacher" placeholder="Teacher name"></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- SECTION 1 -->
+  <div class="section" id="sec1">
+    <div class="section-band">
+      <div class="num-circle">1</div>
+      <div>
+        <div class="section-label">Learning Objective & Recap</div>
+        <h2 class="section-title">What we're checking today</h2>
+      </div>
+      <div class="badge blue">No new content</div>
+    </div>
+
+    <div class="callout callout-info">
+      <b>🎯 Learning objective</b>
+      To apply your knowledge of cyber threats and security controls to analyse a security incident and recommend defences.
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:0.8rem;">Success criteria — tick your target for today</h3>
+      <div class="selfassess-row"><input type="checkbox" class="track-field" data-id="target-F"><span><span class="tier-chip tier-F">🟢 Foundation</span> &nbsp;Identify the attack type and name one control that could help prevent it.</span></div>
+      <div class="selfassess-row"><input type="checkbox" class="track-field" data-id="target-D"><span><span class="tier-chip tier-D">🟡 Developing</span> &nbsp;Explain how a control gap allowed the attack, and justify a suitable defence.</span></div>
+      <div class="selfassess-row"><input type="checkbox" class="track-field" data-id="target-E"><span><span class="tier-chip tier-E">🟣 Extending</span> &nbsp;Evaluate multiple layers of defence, weighing cost, usability and effectiveness.</span></div>
+    </div>
+
+    <p class="ui">📋 Your teacher will show <b>Slides 4–5</b> — record the recap below in your own words. Full definitions are on the <a class="site-link" href="U1_Cybersecurity_site.html#y12-dt-cyber-u1-checkpoint1-incident-response" target="_blank">unit reference site →</a> if you need a refresher.</p>
+
+    <div class="card">
+      <div class="recap-grid">
+        <div class="recap-col">
+          <div class="icon">🦠</div>
+          <h3>Threats recap</h3>
+          <label class="q">Pick 2 attack types from the slide. In your own words, what makes each one distinct?</label>
+          <textarea rows="4" class="track-field" data-id="recap-threats" placeholder="Attack type 1: ...&#10;Attack type 2: ..."></textarea>
+        </div>
+        <div class="recap-col">
+          <div class="icon">🛡️</div>
+          <h3>Controls recap</h3>
+          <label class="q">For each control category, note one example you didn't already know or find interesting.</label>
+          <textarea rows="4" class="track-field" data-id="recap-controls" placeholder="Physical: ...&#10;Technical: ...&#10;Procedural: ..."></textarea>
+        </div>
+        <div class="recap-col">
+          <div class="icon">🔗</div>
+          <h3>Connect them</h3>
+          <label class="q">Why might one attack type need more than one type of control to fully defend against it?</label>
+          <textarea rows="4" class="track-field" data-id="recap-connect" placeholder="Think about the café Wi-Fi example from Slide 6..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section" id="sec2">
+    <div class="section-band">
+      <div class="num-circle">2</div>
+      <div>
+        <div class="section-label">Application of Learning</div>
+        <h2 class="section-title">Incident scenarios</h2>
+      </div>
+      <div class="badge blue">💻 ~20–25 min</div>
+    </div>
+
+    <div class="callout callout-tip">
+      <b>How to answer each scenario</b>
+      Use the same structure we modelled together on Slide 6: What happened? → What type of attack? → What control was missing or failed? → What would you recommend? Complete at least one scenario fully — you're welcome to attempt more than one tier.
+    </div>
+
+    <!-- Scenario A -->
+    <div class="card" id="scenA">
+      <div class="scenario-header"><span class="tier-chip tier-F">🟢 Foundation</span><h3>Scenario A — The Urgent Invoice</h3></div>
+      <div class="incident-box"><span class="k">Incident report</span>
+        Jai, an accounts assistant, receives an email that looks like it's from the finance manager, marked "URGENT — pay this invoice today". The sender's address is almost identical to the real one but has an extra letter. Jai clicks the attached "invoice" link and enters his email login to "view" it. Two days later, emails start being sent from Jai's account to other staff.
+      </div>
+      <label class="q">1. What happened? (1–2 sentences)</label>
+      <textarea rows="2" class="track-field" data-id="A-q1" placeholder="Summarise who did what, in order."></textarea>
+
+      <label class="q">2. What type of attack is this?</label>
+      <select class="track-field" data-id="A-q2">
+        <option value="">Choose from the recap taxonomy…</option>
+        <option>Malware</option><option>Phishing</option><option>Social engineering</option>
+        <option>DoS / DDoS</option><option>Insider threat</option><option>Brute force</option>
+      </select>
+
+      <label class="q">3. What control was missing or failed?</label>
+      <div class="hint">Think about which category this falls into — was it a technology gap, or something a person could have caught?</div>
+      <textarea rows="2" class="track-field" data-id="A-q3" placeholder="Name the gap and its category."></textarea>
+
+      <label class="q">4. What would you recommend?</label>
+      <textarea rows="2" class="track-field" data-id="A-q4" placeholder="What control would you add, and how would it have stopped this?"></textarea>
+    </div>
+
+    <!-- Scenario B -->
+    <div class="card" id="scenB">
+      <div class="scenario-header"><span class="tier-chip tier-D">🟡 Developing</span><h3>Scenario B — No Second Lock</h3></div>
+      <div class="incident-box"><span class="k">Incident report</span>
+        A retail company's customer database is accessed using a password that had been leaked in an unrelated breach months earlier. The compromised account belongs to a warehouse staff member who does not have multi-factor authentication enabled, even though IT rolled out MFA for admin accounts last year. 40,000 customer records are copied before the access is noticed three weeks later.
+      </div>
+      <label class="q">1. What happened?</label>
+      <textarea rows="2" class="track-field" data-id="B-q1" placeholder="Summarise who did what, in order."></textarea>
+
+      <label class="q">2. What type of attack is this?</label>
+      <select class="track-field" data-id="B-q2">
+        <option value="">Choose from the recap taxonomy…</option>
+        <option>Malware</option><option>Phishing</option><option>Social engineering</option>
+        <option>DoS / DDoS</option><option>Insider threat</option><option>Brute force</option>
+      </select>
+
+      <label class="q">3. What control gap allowed this to succeed?</label>
+      <div class="hint">Two things went wrong here, not one — a rollout decision, and something the password itself couldn't fix. What were they?</div>
+      <textarea rows="3" class="track-field" data-id="B-q3" placeholder="Name each gap and explain how it contributed."></textarea>
+
+      <label class="q">4. What would you recommend, and why? (justify your answer)</label>
+      <textarea rows="3" class="track-field" data-id="B-q4" placeholder="What would you change, and why would it work?"></textarea>
+    </div>
+
+    <!-- Scenario C -->
+    <div class="card" id="scenC">
+      <div class="scenario-header"><span class="tier-chip tier-D">🟡 Developing</span><h3>Scenario C — Site Down</h3></div>
+      <div class="incident-box"><span class="k">Incident report</span>
+        A small online bookstore's website becomes unreachable during their biggest sale of the year. Server logs show an enormous spike in requests from thousands of different IP addresses in a short window, far beyond their usual traffic. The business has no traffic filtering or rate-limiting in place, and their hosting plan does not scale automatically.
+      </div>
+      <label class="q">1. What happened?</label>
+      <textarea rows="2" class="track-field" data-id="C-q1" placeholder="Summarise who did what, in order."></textarea>
+
+      <label class="q">2. What type of attack is this?</label>
+      <select class="track-field" data-id="C-q2">
+        <option value="">Choose from the recap taxonomy…</option>
+        <option>Malware</option><option>Phishing</option><option>Social engineering</option>
+        <option>DoS / DDoS</option><option>Insider threat</option><option>Brute force</option>
+      </select>
+
+      <label class="q">3. What control gap allowed this to succeed?</label>
+      <textarea rows="2" class="track-field" data-id="C-q3" placeholder="What was missing that could have absorbed or blocked the traffic spike?"></textarea>
+
+      <label class="q">4. What would you recommend, and why?</label>
+      <textarea rows="3" class="track-field" data-id="C-q4" placeholder="What would you put in place, and how does it address the specific gap above?"></textarea>
+    </div>
+
+    <!-- Scenario D -->
+    <div class="card" id="scenD">
+      <div class="scenario-header"><span class="tier-chip tier-E">🟣 Extending</span><h3>Scenario D — The Long Game</h3></div>
+      <div class="incident-box"><span class="k">Incident report</span>
+        A mid-sized engineering firm discovers that design files for a client project have appeared on a competitor's tender six months later. Investigation shows a former contractor's account was never deactivated after their contract ended four months ago. Logs show the account was used twice, from an unfamiliar location. The firm's offboarding process is a verbal handover between managers with no formal checklist, and file access was granted broadly to "all staff" rather than to the project team specifically.
+      </div>
+      <label class="q">1. What happened?</label>
+      <textarea rows="2" class="track-field" data-id="D-q1" placeholder="Summarise who did what, in order."></textarea>
+
+      <label class="q">2. What type of attack / incident is this? (more than one label may apply — justify your choice)</label>
+      <textarea rows="2" class="track-field" data-id="D-q2" placeholder="Which categories from the recap apply here, and why?"></textarea>
+
+      <label class="q">3. What control gaps allowed this to succeed? (there is more than one — name each)</label>
+      <div class="hint">Look for a technical gap, a procedural gap, and a permissions decision. Each is a separate weakness.</div>
+      <textarea rows="3" class="track-field" data-id="D-q3" placeholder="List each gap and which category it belongs to."></textarea>
+
+      <label class="q">4. 🟣 Trade-off evaluation: you have a limited IT budget this quarter. Would you prioritise an automated offboarding system, stricter access permissions, or regular access audits?</label>
+      <div class="hint">A good answer names a genuine downside of your choice, not just its benefits.</div>
+      <textarea rows="4" class="track-field" data-id="D-q4" placeholder="State your choice, justify it, and name one real trade-off or limitation."></textarea>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section" id="sec3">
+    <div class="section-band">
+      <div class="num-circle">3</div>
+      <div>
+        <div class="section-label">Responsive Teaching</div>
+        <h2 class="section-title">Quick recap check</h2>
+      </div>
+      <div class="badge blue">📕 Devices down for discussion</div>
+    </div>
+
+    <p class="ui">Your teacher will show <b>Slide 10</b> for class discussion first. Then match each attack to the control that best defends against it.</p>
+
+    <div class="card">
+      <div class="match-row"><div class="left">Phishing email</div>
+        <select class="track-field" data-id="match1"><option value="">Choose a control…</option>
+          <option>Staff access policy + least privilege</option><option>Traffic filtering / rate limiting</option>
+          <option>Staff training + email filtering</option><option>MFA + account lockout after attempts</option></select></div>
+      <div class="match-row"><div class="left">Brute-force login attempt</div>
+        <select class="track-field" data-id="match2"><option value="">Choose a control…</option>
+          <option>Staff access policy + least privilege</option><option>Traffic filtering / rate limiting</option>
+          <option>Staff training + email filtering</option><option>MFA + account lockout after attempts</option></select></div>
+      <div class="match-row"><div class="left">Insider data leak</div>
+        <select class="track-field" data-id="match3"><option value="">Choose a control…</option>
+          <option>Staff access policy + least privilege</option><option>Traffic filtering / rate limiting</option>
+          <option>Staff training + email filtering</option><option>MFA + account lockout after attempts</option></select></div>
+      <div class="match-row"><div class="left">DDoS traffic flood</div>
+        <select class="track-field" data-id="match4"><option value="">Choose a control…</option>
+          <option>Staff access policy + least privilege</option><option>Traffic filtering / rate limiting</option>
+          <option>Staff training + email filtering</option><option>MFA + account lockout after attempts</option></select></div>
+    </div>
+
+    <div class="card">
+      <label class="q">Reflection — which disagreement (yours or one you heard) taught you something during the discussion?</label>
+      <textarea rows="3" class="track-field" data-id="reflection" placeholder="What was the disagreement, and what changed your mind (or theirs)?"></textarea>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section" id="sec4">
+    <div class="section-band">
+      <div class="num-circle">4</div>
+      <div>
+        <div class="section-label">Next Steps</div>
+        <h2 class="section-title">Exit ticket</h2>
+      </div>
+      <div class="badge red">Last section</div>
+    </div>
+
+    <div class="card">
+      <label class="q">1. Name one attack type and one control that defends against it — different from today's scenarios.</label>
+      <input type="text" class="track-field" data-id="exit-q1" placeholder="Attack type: ... — Control: ...">
+
+      <label class="q">2. Rate your confidence against today's success criteria.</label>
+      <div class="radio-row">
+        <label class="radio-opt"><input type="radio" name="confidence" value="1" class="track-field" data-id="exit-q2"> 1 — not confident</label>
+        <label class="radio-opt"><input type="radio" name="confidence" value="2" class="track-field" data-id="exit-q2"> 2</label>
+        <label class="radio-opt"><input type="radio" name="confidence" value="3" class="track-field" data-id="exit-q2"> 3</label>
+        <label class="radio-opt"><input type="radio" name="confidence" value="4" class="track-field" data-id="exit-q2"> 4</label>
+        <label class="radio-opt"><input type="radio" name="confidence" value="5" class="track-field" data-id="exit-q2"> 5 — very confident</label>
+      </div>
+
+      <label class="q">3. One question you still have about threats or controls.</label>
+      <textarea rows="2" class="track-field" data-id="exit-q3" placeholder="What's still unclear?"></textarea>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:0.8rem;">Self-assessment — where did you land today?</h3>
+      <div class="selfassess-row"><input type="checkbox" class="track-field" data-id="landed-F"><span><span class="tier-chip tier-F">🟢 Foundation</span> &nbsp;I could identify attack types and name a matching control.</span></div>
+      <div class="selfassess-row"><input type="checkbox" class="track-field" data-id="landed-D"><span><span class="tier-chip tier-D">🟡 Developing</span> &nbsp;I could explain the control gap and justify my recommendation.</span></div>
+      <div class="selfassess-row"><input type="checkbox" class="track-field" data-id="landed-E"><span><span class="tier-chip tier-E">🟣 Extending</span> &nbsp;I could evaluate trade-offs between different layers of defence.</span></div>
+      <p class="hint">Be honest — this isn't graded on tier reached. It tells your teacher what to revisit before the unit assessment.</p>
+    </div>
+
+    <div id="submitArea">
+      <button class="btn primary" id="btnSubmit" style="font-size:1rem; padding:0.7rem 1.6rem;">✅ Submit workbook</button>
+      <div id="submitMsg">Submitted! Your teacher can now see this in their gradebook.</div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="pagefoot">
+  Cybersecurity Unit — Checkpoint Lesson · <a class="site-link" href="U1_Cybersecurity_site.html" target="_blank">Open the unit reference site →</a>
+</footer>
+
+<script>
+  const LESSON_ID = 'y12-dt-cyber-u1-checkpoint1-incident-response';
+  const UNIT_ID   = 'y12-dt-cyber-u1';
+
+  // ---------- Theme ----------
+  const root = document.documentElement;
+  function applyTheme(t) { root.setAttribute('data-theme', t); }
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme');
+    applyTheme(cur === 'dark' ? 'light' : 'dark');
+  });
+
+  // ---------- DataService ----------
+  const DataService = {
+    studentId() {
+      return JSON.parse(localStorage.getItem('eduportal_session') || '{}').id || 'current_student';
+    },
+    collect() {
+      const data = {};
+      document.querySelectorAll('.track-field').forEach(el => {
+        const id = el.dataset.id;
+        if (!id) return;
+        if (el.type === 'checkbox') { data[id] = el.checked; }
+        else if (el.type === 'radio') { if (el.checked) data[id] = el.value; }
+        else { data[id] = el.value; }
+      });
+      data['_student'] = {
+        name: document.getElementById('fName').value,
+        class: document.getElementById('fClass').value,
+        date: document.getElementById('fDate').value,
+        teacher: document.getElementById('fTeacher').value,
+      };
+      return data;
+    },
+    save() {
+      const key = `eduportal_workbook_${this.studentId()}_${LESSON_ID}`;
+      localStorage.setItem(key, JSON.stringify(this.collect()));
+      document.getElementById('saveStatus').textContent = 'Saved ' + new Date().toLocaleTimeString();
+    },
+    load() {
+      const key = `eduportal_workbook_${this.studentId()}_${LESSON_ID}`;
+      const raw = localStorage.getItem(key);
+      if (!raw) { document.getElementById('saveStatus').textContent = 'No saved data'; return; }
+      const data = JSON.parse(raw);
+      Object.entries(data).forEach(([id, val]) => {
+        if (id === '_student') {
+          document.getElementById('fName').value = val.name || '';
+          document.getElementById('fClass').value = val.class || '';
+          document.getElementById('fDate').value = val.date || '';
+          document.getElementById('fTeacher').value = val.teacher || '';
+          return;
+        }
+        const els = document.querySelectorAll(`.track-field[data-id="${id}"]`);
+        els.forEach(el => {
+          if (el.type === 'checkbox') { el.checked = !!val; }
+          else if (el.type === 'radio') { el.checked = (el.value === val); }
+          else { el.value = val; }
+        });
+      });
+      document.getElementById('saveStatus').textContent = 'Loaded';
+      updateProgress();
+    },
+    autoSave: (() => {
+      let t;
+      return function () {
+        clearTimeout(t);
+        t = setTimeout(() => DataService.save(), 900);
+      };
+    })(),
+    autoLoad() { this.load(); },
+    submit() {
+      this.save();
+      this._syncProgress('submitted');
+      document.getElementById('submitMsg').style.display = 'block';
+    },
+    _syncProgress(status) {
+      const key = `eduportal_progress_${this.studentId()}_${LESSON_ID}`;
+      localStorage.setItem(key, JSON.stringify({ status, unit: UNIT_ID, lesson: LESSON_ID, updated: new Date().toISOString() }));
+    }
+  };
+
+  // ---------- Progress bar ----------
+  function updateProgress() {
+    const fields = Array.from(document.querySelectorAll('textarea.track-field, select.track-field, input[type=text].track-field'));
+    const radios = ['exit-q2'];
+    const checkboxes = Array.from(document.querySelectorAll('input[type=checkbox].track-field'));
+    let total = fields.length + radios.length + checkboxes.length;
+    let done = 0;
+    fields.forEach(f => { if (f.value && f.value.trim() !== '') done++; });
+    radios.forEach(name => { if (document.querySelector(`input[name="confidence"]:checked`)) done++; });
+    checkboxes.forEach(c => { if (c.checked) done++; });
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = pct + '% complete';
+  }
+
+  let firstEntry = true;
+  document.querySelectorAll('.track-field').forEach(el => {
+    el.addEventListener('input', () => {
+      if (firstEntry) { DataService._syncProgress('in-progress'); firstEntry = false; }
+      updateProgress();
+      DataService.autoSave();
+    });
+    el.addEventListener('change', () => {
+      if (firstEntry) { DataService._syncProgress('in-progress'); firstEntry = false; }
+      updateProgress();
+      DataService.autoSave();
+    });
+  });
+
+  document.getElementById('btnSave').addEventListener('click', () => DataService.save());
+  document.getElementById('btnLoad').addEventListener('click', () => DataService.load());
+  document.getElementById('btnExport').addEventListener('click', () => window.print());
+  document.getElementById('btnSubmit').addEventListener('click', () => DataService.submit());
+
+  window.addEventListener('load', () => { DataService.autoLoad(); updateProgress(); });
+</script>
+</body>
+</html>

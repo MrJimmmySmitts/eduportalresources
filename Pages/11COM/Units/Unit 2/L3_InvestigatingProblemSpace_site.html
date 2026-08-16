@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L3 — Investigating the Problem Space | Applied Computing Unit 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:     #12100E;
+    --ink2:    #2C2A28;
+    --ink3:    #6B6762;
+    --cream:   #F7F3EC;
+    --cream2:  #EDE8DF;
+    --white:   #FFFFFF;
+    --border:  #D8D3CA;
+    --pine:    #1B5E47;
+    --amber:   #B8620A;
+    --indigo:  #2B3A8C;
+    --crimson: #8C1F28;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--cream); color:var(--ink); font-family:'DM Sans',sans-serif; line-height:1.65; }
+
+  /* STICKY PROGRESS BAR */
+  #progress-bar {
+    position:sticky; top:0; z-index:100;
+    background:var(--ink); color:var(--white);
+    padding:0.5rem 1.5rem; display:flex; align-items:center; gap:1rem;
+    font-family:'DM Mono',monospace; font-size:0.8rem;
+  }
+  #progress-bar span { flex:1; }
+  #progress-bar a { color:var(--amber); text-decoration:none; margin-left:0.75rem; }
+  #progress-bar a:hover { text-decoration:underline; }
+
+  /* COVER */
+  .cover {
+    background:var(--ink); color:var(--white); padding:3rem 2.5rem 2.5rem;
+  }
+  .cover .eyebrow { font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--ink3); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.5rem; }
+  .cover .lesson-id { font-family:'DM Mono',monospace; font-size:0.8rem; color:var(--amber); margin-bottom:1.25rem; }
+  .cover h1 { font-family:'DM Serif Display',serif; font-size:2.8rem; font-weight:400; line-height:1.2; margin-bottom:0.75rem; }
+  .cover .subtitle { font-size:1.05rem; color:var(--cream2); margin-bottom:2rem; }
+  .student-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0.75rem; }
+  .student-grid label { display:block; font-size:0.72rem; font-family:'DM Mono',monospace; color:var(--ink3); margin-bottom:0.25rem; text-transform:uppercase; }
+  .student-grid input { width:100%; background:var(--ink2); border:1px solid #3a3836; color:var(--white); padding:0.45rem 0.6rem; font-family:'DM Sans',sans-serif; font-size:0.9rem; border-radius:4px; }
+
+  /* CONTENT WRAPPER */
+  main { max-width:900px; margin:0 auto; padding:2.5rem 1.5rem 4rem; }
+
+  /* SECTION BANDS */
+  .section-band { display:flex; align-items:center; gap:0.75rem; margin:2.5rem 0 1.25rem; padding-bottom:0.6rem; border-bottom:2px solid var(--border); }
+  .section-num { width:2rem; height:2rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'DM Mono',monospace; font-size:0.85rem; font-weight:500; flex-shrink:0; }
+  .section-tag { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--ink3); text-transform:uppercase; letter-spacing:0.06em; }
+  .section-title { font-family:'DM Serif Display',serif; font-size:1.5rem; font-weight:400; color:var(--ink); flex:1; }
+
+  /* CALLOUTS */
+  .callout { border-radius:8px; padding:1.1rem 1.25rem; margin:1.25rem 0; border-left:4px solid; }
+  .callout-info  { background:#eef0f8; border-color:var(--indigo); }
+  .callout-tip   { background:#e8f2ed; border-color:var(--pine); }
+  .callout-note  { background:#fdf0e6; border-color:var(--amber); }
+  .callout-extend{ background:#fce8ea; border-color:var(--crimson); }
+  .callout .callout-head { font-weight:700; font-size:0.82rem; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.35rem; }
+  .callout-info  .callout-head { color:var(--indigo); }
+  .callout-tip   .callout-head { color:var(--pine); }
+  .callout-note  .callout-head { color:var(--amber); }
+  .callout-extend .callout-head { color:var(--crimson); }
+
+  /* CARDS */
+  .card-grid { display:grid; gap:1rem; margin:1rem 0; }
+  .card-grid-2 { grid-template-columns:1fr 1fr; }
+  .card-grid-3 { grid-template-columns:1fr 1fr 1fr; }
+  .card { background:var(--white); border:1px solid var(--border); border-radius:8px; padding:1.1rem 1.25rem; }
+  .card .card-label { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--ink3); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.3rem; }
+  .card h3 { font-family:'DM Serif Display',serif; font-size:1.1rem; font-weight:400; color:var(--ink); margin-bottom:0.5rem; }
+  .card p, .card li { font-size:0.93rem; color:var(--ink2); }
+  .card ul { padding-left:1.1rem; }
+  .card.pine-border  { border-top:3px solid var(--pine); }
+  .card.amber-border { border-top:3px solid var(--amber); }
+  .card.indigo-border { border-top:3px solid var(--indigo); }
+  .card.crimson-border { border-top:3px solid var(--crimson); }
+
+  /* DEFINITION BOX */
+  .definition { background:var(--pine); color:var(--white); border-radius:8px; padding:1.25rem 1.5rem; margin:1rem 0; }
+  .definition .def-label { font-family:'DM Mono',monospace; font-size:0.72rem; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.4rem; }
+  .definition p { font-size:1.05rem; line-height:1.55; }
+
+  /* FORMULA BOX */
+  .formula { background:var(--ink); color:var(--white); border-radius:8px; padding:1.25rem 1.5rem; margin:1rem 0; }
+  .formula .formula-label { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--amber); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.6rem; }
+  .formula .formula-text { font-family:'DM Mono',monospace; font-size:1.05rem; line-height:1.7; color:var(--white); }
+  .formula .placeholder { color:var(--amber); }
+
+  /* TIER BADGES */
+  .tier { display:inline-flex; align-items:center; gap:0.3rem; font-family:'DM Mono',monospace; font-size:0.72rem; font-weight:500; padding:0.2rem 0.55rem; border-radius:20px; text-transform:uppercase; letter-spacing:0.04em; }
+  .tier-foundation { background:#d4ece3; color:var(--pine); }
+  .tier-developing  { background:#fde6cc; color:var(--amber); }
+  .tier-extending   { background:#d6dbf0; color:var(--indigo); }
+
+  /* SUCCESS CRITERIA TABLE */
+  .sc-table { width:100%; border-collapse:collapse; margin:1rem 0; }
+  .sc-table th { background:var(--ink2); color:var(--white); font-family:'DM Mono',monospace; font-size:0.78rem; text-transform:uppercase; padding:0.6rem 0.9rem; text-align:left; }
+  .sc-table td { padding:0.7rem 0.9rem; border-bottom:1px solid var(--border); font-size:0.93rem; }
+  .sc-table tr:nth-child(even) td { background:var(--cream2); }
+
+  /* QUESTION FLOW */
+  .question-list { display:flex; flex-direction:column; gap:0.75rem; margin:1rem 0; }
+  .question-item { display:flex; gap:0.9rem; align-items:flex-start; background:var(--white); border:1px solid var(--border); border-radius:8px; padding:0.9rem 1.1rem; }
+  .question-num { font-family:'DM Mono',monospace; font-size:1.3rem; font-weight:500; color:var(--pine); flex-shrink:0; width:2.5rem; }
+  .question-content h4 { font-size:1rem; font-weight:700; color:var(--ink); margin-bottom:0.25rem; }
+  .question-content p { font-size:0.9rem; color:var(--ink2); }
+
+  /* EXAMPLES */
+  .example { border-radius:8px; padding:1rem 1.25rem; margin:0.75rem 0; }
+  .example-good { background:#e8f2ed; border-left:4px solid var(--pine); }
+  .example-bad  { background:#fce8ea; border-left:4px solid var(--crimson); }
+  .example .ex-label { font-family:'DM Mono',monospace; font-size:0.72rem; font-weight:700; text-transform:uppercase; margin-bottom:0.35rem; }
+  .example-good .ex-label { color:var(--pine); }
+  .example-bad  .ex-label { color:var(--crimson); }
+  .example p { font-size:0.93rem; color:var(--ink2); }
+
+  /* LINKS */
+  .resource-links { display:flex; gap:0.75rem; flex-wrap:wrap; margin:1.5rem 0; }
+  .resource-link { display:inline-flex; align-items:center; gap:0.4rem; background:var(--ink); color:var(--white); padding:0.5rem 1rem; border-radius:6px; text-decoration:none; font-size:0.88rem; font-family:'DM Sans',sans-serif; }
+  .resource-link:hover { background:var(--ink2); }
+  .resource-link.amber { background:var(--amber); }
+  .resource-link.indigo { background:var(--indigo); }
+
+  /* TEXT UTILITIES */
+  h2 { font-family:'DM Serif Display',serif; font-size:1.4rem; font-weight:400; color:var(--ink); margin:1.5rem 0 0.75rem; }
+  h3 { font-family:'DM Sans',sans-serif; font-size:1.05rem; font-weight:700; color:var(--ink); margin:1.1rem 0 0.4rem; }
+  p { font-size:0.95rem; color:var(--ink2); margin-bottom:0.6rem; }
+  ul, ol { padding-left:1.3rem; margin:0.5rem 0; }
+  li { font-size:0.93rem; color:var(--ink2); margin-bottom:0.25rem; }
+  strong { color:var(--ink); }
+  code { font-family:'DM Mono',monospace; background:var(--cream2); padding:0.1em 0.35em; border-radius:3px; font-size:0.88em; }
+
+  @media(max-width:640px) {
+    .card-grid-2, .card-grid-3 { grid-template-columns:1fr; }
+    .student-grid { grid-template-columns:1fr 1fr; }
+    .cover h1 { font-size:2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar">
+  <span>📚 L3 Reference Website · Investigating the Problem Space</span>
+  <a href="#">📊 Slides</a>
+  <a href="#">📝 Workbook</a>
+</div>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="eyebrow">Year 11 Applied Computing · Unit 2 · Area of Study 1</div>
+  <div class="lesson-id">y11-ac-u2-l3-investigating-problem-space · Lesson 3 · D2.1</div>
+  <h1>Investigating the Problem Space</h1>
+  <p class="subtitle">Researching your topic · Understanding users · Spotting gaps in existing solutions</p>
+  <div class="student-grid">
+    <div><label>Name</label><input type="text" placeholder="Your full name"></div>
+    <div><label>Class</label><input type="text" placeholder="Class code"></div>
+    <div><label>Date</label><input type="date"></div>
+    <div><label>Teacher</label><input type="text" placeholder="Mr Smith" value="Mr Smith"></div>
+  </div>
+</div>
+
+<main>
+
+  <!-- QUICK NAV LINKS -->
+  <div class="resource-links">
+    <a class="resource-link" href="#">📊 Lesson Slides</a>
+    <a class="resource-link amber" href="#">📝 Open Workbook</a>
+    <a class="resource-link indigo" href="#">🏠 Unit Portal</a>
+  </div>
+
+  <!-- ── SECTION 1: LEARNING OBJECTIVE ── -->
+  <div class="section-band">
+    <div class="section-num" style="background:var(--indigo);color:#fff;">1</div>
+    <div>
+      <div class="section-tag">Objective</div>
+      <div class="section-title">Learning Objective &amp; Success Criteria</div>
+    </div>
+  </div>
+
+  <div class="definition">
+    <div class="def-label">Learning Objective</div>
+    <p>To be able to investigate a problem space, research existing solutions, and begin formulating a clear problem statement for your group's project.</p>
+  </div>
+
+  <table class="sc-table">
+    <thead>
+      <tr><th>Tier</th><th>I can…</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="tier tier-foundation">🟢 Foundation</span></td><td>I can describe a specific problem or need related to my group's topic area.</td></tr>
+      <tr><td><span class="tier tier-developing">🟡 Developing</span></td><td>I can research existing digital solutions, identify a gap, and connect it to a real user group.</td></tr>
+      <tr><td><span class="tier tier-extending">🔵 Extending</span></td><td>I can evaluate multiple perspectives on the problem and draft a problem statement that justifies why a new solution is needed.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ── SECTION 2: WHAT IS INVESTIGATION ── -->
+  <div class="section-band">
+    <div class="section-num" style="background:var(--pine);color:#fff;">2</div>
+    <div>
+      <div class="section-tag">Key Concept</div>
+      <div class="section-title">What is Investigation?</div>
+    </div>
+  </div>
+
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p>Investigation means <strong>deliberately gathering information to understand a problem — before you start designing.</strong> It is purposeful, structured, and focused on specific questions about users and their needs.</p>
+  </div>
+
+  <div class="callout callout-note">
+    <div class="callout-head">⚠️ Common Mistake</div>
+    <p>Investigation is <strong>not</strong> just Googling. It involves understanding who has the problem, looking at what solutions already exist, finding gaps, and asking who is affected and how.</p>
+  </div>
+
+  <h2>Two Types of Research</h2>
+  <div class="card-grid card-grid-2">
+    <div class="card amber-border">
+      <div class="card-label">Type 1</div>
+      <h3>Primary Research</h3>
+      <p><strong>You collect it yourself.</strong></p>
+      <ul>
+        <li>Surveys — questionnaires sent to real people</li>
+        <li>Interviews — direct conversation with users</li>
+        <li>Observations — watching how people interact with existing tools</li>
+      </ul>
+      <p style="margin-top:0.6rem;font-size:0.88rem;color:var(--ink3)">Best for: understanding user feelings, preferences, and direct experiences.</p>
+    </div>
+    <div class="card indigo-border">
+      <div class="card-label">Type 2</div>
+      <h3>Secondary Research</h3>
+      <p><strong>Already collected by someone else.</strong></p>
+      <ul>
+        <li>Articles and news reports</li>
+        <li>Government or academic statistics</li>
+        <li>Existing app/product reviews</li>
+        <li>Research reports and studies</li>
+      </ul>
+      <p style="margin-top:0.6rem;font-size:0.88rem;color:var(--ink3)">Best for: understanding the scale of a problem and what already exists.</p>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: ANALYSING EXISTING SOLUTIONS ── -->
+  <div class="section-band">
+    <div class="section-num" style="background:var(--pine);color:#fff;">3</div>
+    <div>
+      <div class="section-tag">Framework</div>
+      <div class="section-title">Analysing Existing Solutions</div>
+    </div>
+  </div>
+
+  <p>Before designing anything new, you must understand what already exists — and why it falls short. Use these four questions to structure your investigation.</p>
+
+  <div class="question-list">
+    <div class="question-item">
+      <div class="question-num">01</div>
+      <div class="question-content">
+        <h4>What exists?</h4>
+        <p>Name at least 2–3 digital solutions already attempting to address your topic area. These might be apps, websites, hardware devices, automated systems, or AI tools.</p>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="question-num">02</div>
+      <div class="question-content">
+        <h4>Who uses it?</h4>
+        <p>Describe the main users of these existing solutions. What problem does each solution try to solve for them? What is the context in which they use it?</p>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="question-num">03</div>
+      <div class="question-content">
+        <h4>What's missing?</h4>
+        <p>What do existing solutions <em>not</em> do well? What complaints, limitations, or gaps appear in user reviews, news coverage, or research reports? Where do people still struggle?</p>
+      </div>
+    </div>
+    <div class="question-item">
+      <div class="question-num">04</div>
+      <div class="question-content">
+        <h4>Why does the gap matter?</h4>
+        <p>Who is affected by this gap in existing solutions? How significant is the impact on these people? Is there evidence (statistics, examples, stories) that the gap causes a real problem?</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-head">📋 Copy into paper workbook</div>
+    <p>Write these four question headings in your paper workbook. You'll use them to structure your group's investigation research in class.</p>
+  </div>
+
+  <!-- ── SECTION 4: USER IDENTIFICATION ── -->
+  <div class="section-band">
+    <div class="section-num" style="background:var(--pine);color:#fff;">4</div>
+    <div>
+      <div class="section-tag">Key Concept</div>
+      <div class="section-title">Identifying Your Users</div>
+    </div>
+  </div>
+
+  <p>Identifying your users is one of the most important steps in investigation. Your design can only solve a problem if you understand <strong>who</strong> has the problem and <strong>what their experience is like</strong>.</p>
+
+  <div class="callout callout-note">
+    <div class="callout-head">⚠️ Keep It Focused</div>
+    <p>Your user group does not have to be every possible person. A <strong>focused, specific user group</strong> makes your investigation — and eventually your design — much stronger. <em>"Students aged 13–18 with a visual impairment"</em> is a better starting point than <em>"anyone who uses the internet."</em></p>
+  </div>
+
+  <h2>User Profile Template</h2>
+  <p>Use these four headings to document your user group. Copy them into your paper workbook.</p>
+
+  <div class="card-grid">
+    <div class="card pine-border">
+      <div class="card-label">User Profile Field 1</div>
+      <h3>Who are they?</h3>
+      <p>Describe in 1–2 sentences: age group, role, setting, or context. Be specific enough that you could picture a real person.</p>
+    </div>
+    <div class="card pine-border">
+      <div class="card-label">User Profile Field 2</div>
+      <h3>What problem do they face?</h3>
+      <p>Describe the specific difficulty, frustration, or unmet need they experience. Use their perspective, not yours.</p>
+    </div>
+    <div class="card pine-border">
+      <div class="card-label">User Profile Field 3</div>
+      <h3>What do they currently do?</h3>
+      <p>How do they handle the problem now? What tools, workarounds, or manual processes do they use? What are the limitations of those approaches?</p>
+    </div>
+    <div class="card pine-border">
+      <div class="card-label">User Profile Field 4</div>
+      <h3>What would make their life better?</h3>
+      <p>What outcome would genuinely solve the problem for them? Focus on the result they want, not the specific technology.</p>
+    </div>
+  </div>
+
+  <!-- ── SECTION 5: PROBLEM STATEMENT ── -->
+  <div class="section-band">
+    <div class="section-num" style="background:var(--crimson);color:#fff;">5</div>
+    <div>
+      <div class="section-tag">Key Skill</div>
+      <div class="section-title">Writing a Problem Statement</div>
+    </div>
+  </div>
+
+  <p>A <strong>problem statement</strong> is a clear, concise description of the problem your digital solution will address. It anchors your entire project — everything you design and build should connect back to it.</p>
+
+  <div class="formula">
+    <div class="formula-label">Problem Statement Formula</div>
+    <div class="formula-text">
+      <span class="placeholder">[USER GROUP]</span> need a way to <span class="placeholder">[ACCOMPLISH GOAL]</span><br>
+      because <span class="placeholder">[INSIGHT ABOUT THE PROBLEM]</span>
+    </div>
+  </div>
+
+  <h2>Strong vs Weak — Examples</h2>
+
+  <div class="example example-good">
+    <div class="ex-label">✅ Strong Problem Statement</div>
+    <p>"Elderly users in aged care facilities need a way to video call family members independently because existing platforms require too many steps and unfamiliar interfaces, causing frequent call failures and social isolation."</p>
+  </div>
+  <div class="callout callout-tip" style="margin-top:0.5rem;">
+    <div class="callout-head">Why it works</div>
+    <p>It names a <strong>specific user group</strong>, describes a <strong>concrete goal</strong>, and provides a <strong>clear insight</strong> grounded in the users' real experience (not just a vague complaint about "bad apps").</p>
+  </div>
+
+  <div class="example example-bad" style="margin-top:1rem;">
+    <div class="ex-label">❌ Weak Problem Statement</div>
+    <p>"People need a better app because the current apps are bad."</p>
+  </div>
+  <div class="callout callout-note" style="margin-top:0.5rem;">
+    <div class="callout-head">Why it fails</div>
+    <p>No specific user group. No specific goal. No evidence or insight — just a vague opinion. It gives you nothing useful to design from.</p>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-head">📋 Copy into paper workbook</div>
+    <p>Write the formula in your paper workbook. You'll use it in the workbook activity to draft your group's first problem statement.</p>
+  </div>
+
+  <!-- ── SECTION 6: GLOSSARY ── -->
+  <div class="section-band">
+    <div class="section-num" style="background:var(--ink3);color:#fff;">6</div>
+    <div>
+      <div class="section-tag">Reference</div>
+      <div class="section-title">Key Vocabulary</div>
+    </div>
+  </div>
+
+  <table class="sc-table">
+    <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Investigation</strong></td><td>Deliberately gathering information to understand a problem before designing a solution.</td></tr>
+      <tr><td><strong>Primary research</strong></td><td>Data you collect yourself — surveys, interviews, observations.</td></tr>
+      <tr><td><strong>Secondary research</strong></td><td>Data collected by others — articles, statistics, reports, reviews.</td></tr>
+      <tr><td><strong>User group</strong></td><td>The specific group of people who will use your digital solution or who are affected by the problem.</td></tr>
+      <tr><td><strong>Gap analysis</strong></td><td>Identifying what existing solutions fail to provide, or where they fall short of user needs.</td></tr>
+      <tr><td><strong>Problem statement</strong></td><td>A clear statement that defines who has a problem, what they need to accomplish, and why current solutions are insufficient.</td></tr>
+      <tr><td><strong>User profile</strong></td><td>A description of the characteristics, needs, and context of the main user group for a digital solution.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ── SECTION 7: COMING NEXT ── -->
+  <div class="section-band">
+    <div class="section-num" style="background:var(--amber);color:#fff;">7</div>
+    <div>
+      <div class="section-tag">Next Lesson</div>
+      <div class="section-title">What's Coming in D2.2</div>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-head">➡️ Next Lesson: D2.2 — Problem Scoping</div>
+    <p>In D2.2, your group will refine your problem statement, formally define your target user group, and establish the scope of your digital solution. Bring your secondary research homework — one piece of evidence relevant to your topic.</p>
+  </div>
+
+  <div class="callout callout-note">
+    <div class="callout-head">🏠 Homework — Due D2.2</div>
+    <p>Find <strong>one piece of secondary research</strong> relevant to your group's topic area. This could be a news article, a statistic, or a report. Note the source. You'll reference it when refining your problem statement next lesson.</p>
+  </div>
+
+</main>
+
+<script>
+const LESSON_ID   = 'y11-ac-u2-l3-investigating-problem-space';
+const STORAGE_KEY = 'wb_' + LESSON_ID;
+
+const DataService = {
+  studentId() {
+    return localStorage.getItem('eduportal_currentStudent') || 'current_student';
+  },
+  save() {
+    const d = { studentName: document.querySelector('input[placeholder="Your full name"]')?.value || '', savedAt: new Date().toISOString() };
+    localStorage.setItem(STORAGE_KEY + '_' + this.studentId(), JSON.stringify(d));
+  },
+  load() {
+    const raw = localStorage.getItem(STORAGE_KEY + '_' + this.studentId());
+    if (!raw) return null;
+    return JSON.parse(raw);
+  },
+  _syncProgress(status) {
+    const key = `eduportal_progress_${this.studentId()}_${LESSON_ID}`;
+    localStorage.setItem(key, JSON.stringify({ status, updatedAt: new Date().toISOString() }));
+  },
+  autoLoad() {
+    const data = this.load();
+    if (data?.studentName) {
+      const nameField = document.querySelector('input[placeholder="Your full name"]');
+      if (nameField) nameField.value = data.studentName;
+    }
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  DataService.autoLoad();
+  DataService._syncProgress('in-progress');
+});
+</script>
+</body>
+</html>

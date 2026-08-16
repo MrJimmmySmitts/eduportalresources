@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L3 Workbook — Investigating the Problem Space</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:     #12100E;
+    --ink2:    #2C2A28;
+    --ink3:    #6B6762;
+    --cream:   #F7F3EC;
+    --cream2:  #EDE8DF;
+    --white:   #FFFFFF;
+    --border:  #D8D3CA;
+    --pine:    #1B5E47;
+    --amber:   #B8620A;
+    --indigo:  #2B3A8C;
+    --crimson: #8C1F28;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--cream); color:var(--ink); font-family:'DM Sans',sans-serif; line-height:1.6; }
+
+  /* STICKY TOOLBAR */
+  #toolbar {
+    position:sticky; top:0; z-index:100;
+    background:var(--ink); color:var(--white); padding:0.55rem 1.5rem;
+    display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;
+    font-family:'DM Mono',monospace; font-size:0.8rem;
+  }
+  #toolbar .label { flex:1; }
+  #progress-fill {
+    width:120px; height:8px; background:#333; border-radius:4px; overflow:hidden;
+  }
+  #progress-fill-bar { height:100%; background:var(--pine); width:0%; transition:width 0.4s; border-radius:4px; }
+  #progress-pct { font-size:0.78rem; color:var(--amber); min-width:3ch; }
+  .tb-btn {
+    background:var(--ink2); color:var(--white); border:1px solid #3a3836;
+    padding:0.3rem 0.75rem; border-radius:4px; cursor:pointer;
+    font-size:0.8rem; font-family:'DM Mono',monospace;
+  }
+  .tb-btn:hover { background:#3a3836; }
+  .tb-btn.submit { background:var(--crimson); border-color:var(--crimson); }
+
+  /* COVER */
+  .cover { background:var(--ink); color:var(--white); padding:2.5rem 2rem 2rem; }
+  .cover .eyebrow { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--ink3); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem; }
+  .cover .lesson-tag { font-family:'DM Mono',monospace; font-size:0.8rem; color:var(--amber); margin-bottom:0.9rem; }
+  .cover h1 { font-family:'DM Serif Display',serif; font-size:2.3rem; font-weight:400; margin-bottom:0.5rem; }
+  .cover .subtitle { font-size:0.95rem; color:var(--cream2); margin-bottom:1.5rem; }
+  .info-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0.65rem; }
+  .info-grid label { display:block; font-size:0.7rem; font-family:'DM Mono',monospace; color:var(--ink3); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.2rem; }
+  .info-grid input { width:100%; background:var(--ink2); border:1px solid #3a3836; color:var(--white); padding:0.4rem 0.55rem; font-family:'DM Sans',sans-serif; font-size:0.88rem; border-radius:4px; }
+
+  /* MAIN */
+  main { max-width:860px; margin:0 auto; padding:2rem 1.5rem 5rem; }
+
+  /* SECTION BAND */
+  .section-band { display:flex; align-items:center; gap:0.7rem; margin:2.25rem 0 1rem; padding-bottom:0.55rem; border-bottom:2px solid var(--border); }
+  .section-num { width:2rem; height:2rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'DM Mono',monospace; font-size:0.82rem; font-weight:500; flex-shrink:0; }
+  .section-tag { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--ink3); text-transform:uppercase; letter-spacing:0.06em; }
+  .section-title { font-family:'DM Serif Display',serif; font-size:1.35rem; font-weight:400; color:var(--ink); flex:1; }
+
+  /* TIER BADGE */
+  .tier-badge { display:inline-flex; align-items:center; gap:0.3rem; font-family:'DM Mono',monospace; font-size:0.7rem; font-weight:700; padding:0.18rem 0.55rem; border-radius:20px; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.6rem; }
+  .tb-f { background:#d4ece3; color:var(--pine); }
+  .tb-d { background:#fde6cc; color:var(--amber); }
+  .tb-e { background:#d6dbf0; color:var(--indigo); }
+  .tb-et { background:#fce8ea; color:var(--crimson); }
+
+  /* CALLOUTS */
+  .callout { border-radius:8px; padding:0.9rem 1.1rem; margin:0.9rem 0; border-left:4px solid; }
+  .callout-info  { background:#eef0f8; border-color:var(--indigo); }
+  .callout-tip   { background:#e8f2ed; border-color:var(--pine); }
+  .callout-note  { background:#fdf0e6; border-color:var(--amber); }
+  .callout-head  { font-weight:700; font-size:0.8rem; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.3rem; }
+  .callout-info  .callout-head { color:var(--indigo); }
+  .callout-tip   .callout-head { color:var(--pine); }
+  .callout-note  .callout-head { color:var(--amber); }
+  .callout p { font-size:0.9rem; color:var(--ink2); }
+
+  /* TASK BLOCK */
+  .task-block { background:var(--white); border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.4rem; margin:1rem 0; }
+  .task-block .task-label { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--ink3); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.3rem; }
+  .task-block h3 { font-size:1rem; font-weight:700; color:var(--ink); margin-bottom:0.5rem; }
+  .task-block p { font-size:0.9rem; color:var(--ink2); margin-bottom:0.75rem; }
+  .task-block.pine-top   { border-top:3px solid var(--pine); }
+  .task-block.amber-top  { border-top:3px solid var(--amber); }
+  .task-block.indigo-top { border-top:3px solid var(--indigo); }
+  .task-block.crimson-top{ border-top:3px solid var(--crimson); }
+
+  /* FORM ELEMENTS */
+  textarea {
+    width:100%; min-height:90px; padding:0.65rem 0.75rem;
+    border:1.5px solid var(--border); border-radius:6px;
+    font-family:'DM Sans',sans-serif; font-size:0.9rem;
+    color:var(--ink); background:var(--white); resize:vertical;
+    transition:border-color 0.2s;
+  }
+  textarea:focus { outline:none; border-color:var(--indigo); }
+  textarea.tall { min-height:130px; }
+  textarea.short { min-height:65px; }
+  input[type="text"] {
+    width:100%; padding:0.55rem 0.75rem;
+    border:1.5px solid var(--border); border-radius:6px;
+    font-family:'DM Sans',sans-serif; font-size:0.9rem;
+    color:var(--ink); background:var(--white);
+    transition:border-color 0.2s;
+  }
+  input[type="text"]:focus { outline:none; border-color:var(--indigo); }
+  label.field-label { display:block; font-size:0.8rem; font-weight:600; color:var(--ink2); margin:0.75rem 0 0.3rem; }
+  select {
+    padding:0.5rem 0.75rem; border:1.5px solid var(--border); border-radius:6px;
+    font-family:'DM Sans',sans-serif; font-size:0.9rem; background:var(--white);
+    color:var(--ink);
+  }
+
+  /* SOLUTION TABLE */
+  .solution-table { width:100%; border-collapse:collapse; margin:0.75rem 0; }
+  .solution-table th { background:var(--ink2); color:var(--white); font-family:'DM Mono',monospace; font-size:0.72rem; text-transform:uppercase; padding:0.55rem 0.75rem; text-align:left; }
+  .solution-table td { padding:0.55rem 0.75rem; border-bottom:1px solid var(--border); vertical-align:top; }
+  .solution-table td input[type="text"] { border:none; padding:0; border-bottom:1px dashed var(--border); border-radius:0; font-size:0.88rem; }
+  .solution-table td input[type="text"]:focus { border-color:var(--indigo); }
+
+  /* RADIO GROUPS */
+  .radio-group { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0; }
+  .radio-option { display:flex; align-items:center; gap:0.35rem; background:var(--cream2); border:1.5px solid var(--border); border-radius:6px; padding:0.35rem 0.75rem; cursor:pointer; transition:all 0.15s; font-size:0.88rem; }
+  .radio-option input { display:none; }
+  .radio-option.selected { border-color:var(--indigo); background:#eef0f8; color:var(--indigo); font-weight:600; }
+
+  /* FORMULA DISPLAY */
+  .formula-ref { background:var(--ink); color:var(--white); border-radius:8px; padding:1rem 1.25rem; margin:0.75rem 0; font-family:'DM Mono',monospace; font-size:0.9rem; line-height:1.7; }
+  .formula-ref .ph { color:var(--amber); }
+
+  /* TEACHER PANEL */
+  .teacher-panel { border:2px solid var(--crimson); border-radius:10px; padding:1.25rem 1.4rem; margin:3rem 0 1rem; background:#fff8f8; }
+  .teacher-panel .tp-header { font-family:'DM Mono',monospace; font-size:0.75rem; font-weight:700; color:var(--crimson); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:0.75rem; }
+  .teacher-panel .mark-row { display:flex; align-items:center; gap:0.75rem; margin:0.5rem 0; flex-wrap:wrap; }
+  .teacher-panel .mark-row label { font-size:0.85rem; font-weight:600; color:var(--ink2); min-width:180px; }
+  .teacher-panel select { font-size:0.85rem; }
+  .teacher-panel textarea { min-height:70px; font-size:0.85rem; margin-top:0.4rem; }
+
+  /* REFERENCE LINK */
+  .ref-link { display:inline-flex; align-items:center; gap:0.3rem; color:var(--indigo); font-size:0.85rem; text-decoration:none; font-weight:600; margin:0.3rem 0; }
+  .ref-link:hover { text-decoration:underline; }
+
+  p { font-size:0.92rem; color:var(--ink2); margin-bottom:0.5rem; }
+  h2 { font-family:'DM Serif Display',serif; font-size:1.2rem; font-weight:400; color:var(--ink); margin:1rem 0 0.4rem; }
+
+  @media(max-width:600px) {
+    .info-grid { grid-template-columns:1fr 1fr; }
+    .task-block { padding:1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOOLBAR -->
+<div id="toolbar">
+  <span class="label">📝 L3 Workbook · Investigating the Problem Space</span>
+  <div id="progress-fill"><div id="progress-fill-bar"></div></div>
+  <span id="progress-pct">0%</span>
+  <button class="tb-btn" onclick="DataService.save()">💾 Save</button>
+  <button class="tb-btn" onclick="DataService.load()">📂 Load</button>
+  <button class="tb-btn" onclick="window.print()">🖨️ Export</button>
+  <button class="tb-btn submit" onclick="DataService.submit()">✅ Submit</button>
+</div>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="eyebrow">Year 11 Applied Computing · Unit 2 · Area of Study 1</div>
+  <div class="lesson-tag">y11-ac-u2-l3-investigating-problem-space · Lesson 3 · D2.1</div>
+  <h1>Investigating the Problem Space</h1>
+  <p class="subtitle">Digital Workbook — open at the Application of Learning phase only</p>
+  <div class="info-grid">
+    <div><label>Name</label><input type="text" id="studentName" placeholder="Your full name"></div>
+    <div><label>Class</label><input type="text" id="studentClass" placeholder="Class code"></div>
+    <div><label>Date</label><input type="date" id="studentDate"></div>
+    <div><label>Teacher</label><input type="text" id="studentTeacher" placeholder="Mr Smith"></div>
+  </div>
+</div>
+
+<main>
+
+  <div class="callout callout-note">
+    <div class="callout-head">📚 How to use this workbook</div>
+    <p>Use your <strong>paper notes</strong> and the <strong>lesson reference website</strong> to support your answers. Tasks are tiered: work through Foundation first, then Developing, then Extending if time allows. Your group discusses — you each write your own workbook.</p>
+    <a class="ref-link" href="#">→ Open the Lesson 3 Reference Website</a>
+  </div>
+
+  <!-- ────────────────────────────────────────────── -->
+  <!-- SECTION 1: EXISTING SOLUTIONS MAP (FOUNDATION) -->
+  <!-- ────────────────────────────────────────────── -->
+  <div class="section-band">
+    <div class="section-num" style="background:var(--pine);color:#fff;">1</div>
+    <div>
+      <div class="section-tag">Foundation · ~10 min</div>
+      <div class="section-title">Existing Solutions Map</div>
+    </div>
+  </div>
+
+  <span class="tier-badge tb-f">🟢 Foundation</span>
+
+  <div class="callout callout-info">
+    <div class="callout-head">📖 See Reference Website → Section 3</div>
+    <p>Use the "Analysing Existing Solutions" framework from the website and your paper notes. This task uses Questions 01 and 02 from the 4-question framework.</p>
+  </div>
+
+  <div class="task-block pine-top">
+    <div class="task-label">Task 1.1</div>
+    <h3>Your Group's Topic Area</h3>
+    <p>In one sentence, describe the topic area or domain your group is investigating.</p>
+    <label class="field-label">Our topic area is:</label>
+    <input type="text" id="f_topic" placeholder="Describe your group's topic in one sentence — e.g. 'AI tools for supporting students with learning difficulties'">
+  </div>
+
+  <div class="task-block pine-top">
+    <div class="task-label">Task 1.2</div>
+    <h3>3 Existing Digital Solutions</h3>
+    <p>Research and record at least 3 digital solutions that already address your topic area. For each, note the name, who it's for, what it does, and one limitation you can identify.</p>
+    <table class="solution-table" id="solutionTable">
+      <thead>
+        <tr>
+          <th style="width:20%">Solution Name</th>
+          <th style="width:25%">Who is it for?</th>
+          <th style="width:30%">What does it do?</th>
+          <th style="width:25%">One limitation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="text" class="sol-name" placeholder="e.g. App or website name"></td>
+          <td><input type="text" class="sol-who" placeholder="Main user group"></td>
+          <td><input type="text" class="sol-what" placeholder="Core function or feature"></td>
+          <td><input type="text" class="sol-limit" placeholder="What does it not do well?"></td>
+        </tr>
+        <tr>
+          <td><input type="text" class="sol-name" placeholder="e.g. App or website name"></td>
+          <td><input type="text" class="sol-who" placeholder="Main user group"></td>
+          <td><input type="text" class="sol-what" placeholder="Core function or feature"></td>
+          <td><input type="text" class="sol-limit" placeholder="What does it not do well?"></td>
+        </tr>
+        <tr>
+          <td><input type="text" class="sol-name" placeholder="e.g. App or website name"></td>
+          <td><input type="text" class="sol-who" placeholder="Main user group"></td>
+          <td><input type="text" class="sol-what" placeholder="Core function or feature"></td>
+          <td><input type="text" class="sol-limit" placeholder="What does it not do well?"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ────────────────────────────────────────────── -->
+  <!-- SECTION 2: USER PROFILE (DEVELOPING) -->
+  <!-- ────────────────────────────────────────────── -->
+  <div class="section-band">
+    <div class="section-num" style="background:var(--amber);color:#fff;">2</div>
+    <div>
+      <div class="section-tag">Developing · ~10 min</div>
+      <div class="section-title">User Profile</div>
+    </div>
+  </div>
+
+  <span class="tier-badge tb-d">🟡 Developing</span>
+
+  <div class="callout callout-info">
+    <div class="callout-head">📖 See Reference Website → Section 4</div>
+    <p>Use the User Profile template from the reference website and your paper notes to guide this task.</p>
+  </div>
+
+  <div class="task-block amber-top">
+    <div class="task-label">Task 2.1</div>
+    <h3>Identify Your Main User Group</h3>
+    <p>Based on your topic area and existing solutions research, who has the problem you want to address? Complete the user profile below. Be specific — avoid describing "everyone" or "all people".</p>
+
+    <label class="field-label">Who are they?</label>
+    <textarea id="up_who" placeholder="Describe their age group, role, or context in 1-2 sentences. Who specifically?"></textarea>
+
+    <label class="field-label">What problem do they face?</label>
+    <textarea id="up_problem" placeholder="Describe the specific difficulty or frustration from their point of view."></textarea>
+
+    <label class="field-label">What do they currently do about it?</label>
+    <textarea id="up_current" placeholder="How do they handle the problem now? What tools or workarounds do they use?"></textarea>
+
+    <label class="field-label">What would make their situation better?</label>
+    <textarea id="up_better" placeholder="What outcome — not which technology — would genuinely solve the problem for them?"></textarea>
+  </div>
+
+  <div class="task-block amber-top">
+    <div class="task-label">Task 2.2</div>
+    <h3>How specific is your user group?</h3>
+    <p>Rate the specificity of your user group so far. Be honest — it's fine if it's still broad at this stage.</p>
+    <div class="radio-group" id="specificity_group">
+      <label class="radio-option"><input type="radio" name="specificity" value="very_broad"> Very broad — almost everyone</label>
+      <label class="radio-option"><input type="radio" name="specificity" value="somewhat"> Somewhat specific — a category</label>
+      <label class="radio-option"><input type="radio" name="specificity" value="focused"> Focused — a clear group</label>
+      <label class="radio-option"><input type="radio" name="specificity" value="very_focused"> Very focused — a narrow group</label>
+    </div>
+    <label class="field-label">What could you do to make it more focused?</label>
+    <textarea id="up_focus" class="short" placeholder="What additional detail — age, context, location, role — would sharpen your user description?"></textarea>
+  </div>
+
+  <!-- ────────────────────────────────────────────── -->
+  <!-- SECTION 3: GAP ANALYSIS (DEVELOPING) -->
+  <!-- ────────────────────────────────────────────── -->
+  <div class="section-band">
+    <div class="section-num" style="background:var(--amber);color:#fff;">3</div>
+    <div>
+      <div class="section-tag">Developing · ~10 min</div>
+      <div class="section-title">Gap Analysis</div>
+    </div>
+  </div>
+
+  <span class="tier-badge tb-d">🟡 Developing</span>
+
+  <div class="callout callout-info">
+    <div class="callout-head">📖 See Reference Website → Section 3, Questions 03 and 04</div>
+    <p>Use your existing solutions map (Task 1.2) and your user profile (Section 2) to complete this analysis.</p>
+  </div>
+
+  <div class="task-block amber-top">
+    <div class="task-label">Task 3.1</div>
+    <h3>Identify the Key Gap</h3>
+    <p>Looking at the limitations you identified in Task 1.2, and comparing them to what your user group actually needs — what is the most significant gap that existing solutions fail to address?</p>
+    <label class="field-label">The main gap in existing solutions is:</label>
+    <textarea id="gap_main" class="tall" placeholder="Describe what existing tools don't do — focusing on what your specific users actually need."></textarea>
+  </div>
+
+  <div class="task-block amber-top">
+    <div class="task-label">Task 3.2</div>
+    <h3>Evidence for the Gap</h3>
+    <p>What evidence supports the claim that this gap causes a real problem? This could be from your research, a review, a statistic, a news article, or your own observations.</p>
+    <label class="field-label">Evidence or source:</label>
+    <textarea id="gap_evidence" class="short" placeholder="Describe the evidence and where it comes from. Don't invent statistics."></textarea>
+
+    <label class="field-label">How significant is this gap? Rate with a reason:</label>
+    <div class="radio-group" id="significance_group">
+      <label class="radio-option"><input type="radio" name="significance" value="minor"> Minor inconvenience</label>
+      <label class="radio-option"><input type="radio" name="significance" value="moderate"> Moderate problem</label>
+      <label class="radio-option"><input type="radio" name="significance" value="significant"> Significant impact</label>
+      <label class="radio-option"><input type="radio" name="significance" value="critical"> Critical / urgent need</label>
+    </div>
+    <label class="field-label">Explain your rating:</label>
+    <textarea id="gap_rating_reason" class="short" placeholder="Why did you choose that rating? What is the real-world impact on your users?"></textarea>
+  </div>
+
+  <!-- ────────────────────────────────────────────── -->
+  <!-- SECTION 4: DRAFT PROBLEM STATEMENT (EXTENDING) -->
+  <!-- ────────────────────────────────────────────── -->
+  <div class="section-band">
+    <div class="section-num" style="background:var(--indigo);color:#fff;">4</div>
+    <div>
+      <div class="section-tag">Extending · ~10 min</div>
+      <div class="section-title">First Draft Problem Statement</div>
+    </div>
+  </div>
+
+  <span class="tier-badge tb-e">🔵 Extending</span>
+
+  <div class="callout callout-info">
+    <div class="callout-head">📖 See Reference Website → Section 5</div>
+    <p>Use the problem statement formula from the reference website. Your response here should build directly on your gap analysis and user profile from Sections 2 and 3.</p>
+  </div>
+
+  <div class="formula-ref">
+    <span class="ph">[USER GROUP]</span> need a way to <span class="ph">[ACCOMPLISH GOAL]</span><br>
+    because <span class="ph">[INSIGHT ABOUT THE PROBLEM]</span>
+  </div>
+
+  <div class="task-block indigo-top">
+    <div class="task-label">Task 4.1</div>
+    <h3>Fill in the Formula</h3>
+    <p>Use your research from Sections 1–3 to complete each part of the formula below. This is a first draft — it doesn't have to be perfect, but it should be grounded in your research.</p>
+
+    <label class="field-label">User group (be specific — use your profile from Section 2):</label>
+    <input type="text" id="ps_user" placeholder="Who specifically? Age, context, role.">
+
+    <label class="field-label">Accomplish goal (what do they need to be able to do?):</label>
+    <input type="text" id="ps_goal" placeholder="Describe the outcome they need — not the technology.">
+
+    <label class="field-label">Insight about the problem (why don't existing solutions work for them?):</label>
+    <textarea id="ps_insight" class="short" placeholder="Connect this to your gap analysis in Section 3."></textarea>
+  </div>
+
+  <div class="task-block indigo-top">
+    <div class="task-label">Task 4.2</div>
+    <h3>Your Complete Problem Statement</h3>
+    <p>Write your group's full first-draft problem statement in a single, coherent sentence. Use your answers from Task 4.1 — don't just paste the formula with blanks filled in. Write it as a proper sentence.</p>
+    <textarea id="ps_full" class="tall" placeholder="Write a complete, fluent sentence — not just the formula template with words plugged in."></textarea>
+
+    <label class="field-label">What is one thing you'd want to improve about this statement once you've done more research?</label>
+    <textarea id="ps_improve" class="short" placeholder="Be honest: what part is weakest or least supported by evidence right now?"></textarea>
+  </div>
+
+  <!-- ────────────────────────────────────────────── -->
+  <!-- SECTION 5: EXIT TICKET -->
+  <!-- ────────────────────────────────────────────── -->
+  <div class="section-band">
+    <div class="section-num" style="background:var(--crimson);color:#fff;">5</div>
+    <div>
+      <div class="section-tag">Exit Ticket · ~7 min</div>
+      <div class="section-title">Check Your Understanding</div>
+    </div>
+  </div>
+
+  <span class="tier-badge tb-et">🎫 Exit Ticket</span>
+
+  <div class="callout callout-note">
+    <div class="callout-head">⚠️ No looking back at the website</div>
+    <p>These questions check what you remember from today's lesson. Q1 and Q2 are required. Q3 is Extending.</p>
+  </div>
+
+  <div class="task-block crimson-top">
+    <div class="task-label">Exit Ticket Q1 · Foundation</div>
+    <h3>Research Types</h3>
+    <p>In your own words: what is the difference between primary research and secondary research? Give one example of each.</p>
+    <textarea id="et_q1" class="tall" placeholder="Write from memory — explain both terms in your own words and give a concrete example of each."></textarea>
+  </div>
+
+  <div class="task-block crimson-top">
+    <div class="task-label">Exit Ticket Q2 · Developing</div>
+    <h3>Your Problem Statement — From Memory</h3>
+    <p>Without looking back at Section 4, write your group's first draft problem statement from memory. This tests whether the formula has stuck.</p>
+    <textarea id="et_q2" class="tall" placeholder="Write the problem statement without scrolling back. What do you actually remember?"></textarea>
+  </div>
+
+  <div class="task-block crimson-top">
+    <div class="task-label">Exit Ticket Q3 · Extending</div>
+    <h3>Justifying the Gap</h3>
+    <p>Explain why your identified user group is <strong>specific enough</strong>, and identify what evidence you used to justify that the gap you found is real and significant.</p>
+    <textarea id="et_q3" class="tall" placeholder="Justify your specificity and your evidence. Why is this gap genuine — not just an assumption?"></textarea>
+  </div>
+
+  <!-- ── SELF-ASSESSMENT ── -->
+  <div class="task-block" style="border-top:3px solid var(--ink2);margin-top:1.5rem;">
+    <div class="task-label">Self-Assessment</div>
+    <h3>Rate yourself against today's success criteria</h3>
+    <label class="field-label">🟢 Foundation: I can describe a specific problem or need related to my group's topic area.</label>
+    <div class="radio-group" id="sa_f">
+      <label class="radio-option"><input type="radio" name="sa_f" value="not_yet"> Not yet</label>
+      <label class="radio-option"><input type="radio" name="sa_f" value="almost"> Almost there</label>
+      <label class="radio-option"><input type="radio" name="sa_f" value="yes"> Yes</label>
+    </div>
+    <label class="field-label">🟡 Developing: I can research existing solutions, identify a gap, and connect it to a real user group.</label>
+    <div class="radio-group" id="sa_d">
+      <label class="radio-option"><input type="radio" name="sa_d" value="not_yet"> Not yet</label>
+      <label class="radio-option"><input type="radio" name="sa_d" value="almost"> Almost there</label>
+      <label class="radio-option"><input type="radio" name="sa_d" value="yes"> Yes</label>
+    </div>
+    <label class="field-label">🔵 Extending: I can draft a problem statement that justifies why a new solution is needed.</label>
+    <div class="radio-group" id="sa_e">
+      <label class="radio-option"><input type="radio" name="sa_e" value="not_yet"> Not yet</label>
+      <label class="radio-option"><input type="radio" name="sa_e" value="almost"> Almost there</label>
+      <label class="radio-option"><input type="radio" name="sa_e" value="yes"> Yes</label>
+    </div>
+
+    <label class="field-label">One thing I want to follow up on or improve before D2.2:</label>
+    <textarea id="sa_followup" class="short" placeholder="What's one question you still have, or something that could be stronger in your group's investigation?"></textarea>
+  </div>
+
+  <!-- TEACHER MARKING PANEL -->
+  <div class="teacher-panel">
+    <div class="tp-header">🔒 Teacher Marking Panel — Student Scroll Does Not Reach Here</div>
+    <div class="mark-row">
+      <label>Existing Solutions Map (Foundation)</label>
+      <select id="tm_solutions"><option value="">— Select —</option><option>Not evident</option><option>Partial</option><option>Meeting expectations</option><option>Exceeding expectations</option></select>
+    </div>
+    <div class="mark-row">
+      <label>User Profile (Developing)</label>
+      <select id="tm_user"><option value="">— Select —</option><option>Not evident</option><option>Partial</option><option>Meeting expectations</option><option>Exceeding expectations</option></select>
+    </div>
+    <div class="mark-row">
+      <label>Gap Analysis (Developing)</label>
+      <select id="tm_gap"><option value="">— Select —</option><option>Not evident</option><option>Partial</option><option>Meeting expectations</option><option>Exceeding expectations</option></select>
+    </div>
+    <div class="mark-row">
+      <label>Problem Statement (Extending)</label>
+      <select id="tm_ps"><option value="">— Select —</option><option>Not evident</option><option>Partial</option><option>Meeting expectations</option><option>Exceeding expectations</option></select>
+    </div>
+    <div class="mark-row">
+      <label>Exit Ticket Quality</label>
+      <select id="tm_exit"><option value="">— Select —</option><option>Incomplete</option><option>Partial</option><option>Complete</option><option>Strong</option></select>
+    </div>
+    <label class="field-label" style="margin-top:0.75rem;">Teacher feedback:</label>
+    <textarea id="tm_feedback" placeholder="Written feedback for the student…"></textarea>
+  </div>
+
+</main>
+
+<script>
+const LESSON_ID   = 'y11-ac-u2-l3-investigating-problem-space';
+const STORAGE_KEY = 'wb_' + LESSON_ID;
+
+// ── TRACKED FIELDS ──
+const FIELDS = [
+  'studentName','studentClass','studentDate','studentTeacher',
+  'f_topic',
+  'up_who','up_problem','up_current','up_better','up_focus',
+  'gap_main','gap_evidence','gap_rating_reason',
+  'ps_user','ps_goal','ps_insight','ps_full','ps_improve',
+  'et_q1','et_q2','et_q3','sa_followup',
+  'tm_feedback','tm_solutions','tm_user','tm_gap','tm_ps','tm_exit',
+];
+const RADIO_GROUPS = ['specificity','significance','sa_f','sa_d','sa_e'];
+
+// solution table fields
+function getSolutionData() {
+  const rows = document.querySelectorAll('#solutionTable tbody tr');
+  return Array.from(rows).map(r => ({
+    name:  r.querySelector('.sol-name')?.value || '',
+    who:   r.querySelector('.sol-who')?.value || '',
+    what:  r.querySelector('.sol-what')?.value || '',
+    limit: r.querySelector('.sol-limit')?.value || '',
+  }));
+}
+function setSolutionData(data) {
+  if (!data) return;
+  const rows = document.querySelectorAll('#solutionTable tbody tr');
+  data.forEach((d, i) => {
+    if (!rows[i]) return;
+    rows[i].querySelector('.sol-name').value = d.name || '';
+    rows[i].querySelector('.sol-who').value  = d.who  || '';
+    rows[i].querySelector('.sol-what').value = d.what || '';
+    rows[i].querySelector('.sol-limit').value= d.limit|| '';
+  });
+}
+
+// ── PROGRESS ──
+function calcProgress() {
+  let filled = 0, total = 0;
+  FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    total++;
+    if (el.tagName === 'SELECT') { if (el.value) filled++; }
+    else if (el.value?.trim()) filled++;
+  });
+  RADIO_GROUPS.forEach(name => {
+    total++;
+    if (document.querySelector(`input[name="${name}"]:checked`)) filled++;
+  });
+  // solution table
+  getSolutionData().forEach(row => {
+    total += 4;
+    if (row.name) filled++;
+    if (row.who)  filled++;
+    if (row.what) filled++;
+    if (row.limit) filled++;
+  });
+  return Math.round((filled / total) * 100);
+}
+function updateProgress() {
+  const pct = calcProgress();
+  document.getElementById('progress-fill-bar').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+}
+
+// ── RADIO UI ──
+document.querySelectorAll('.radio-option').forEach(opt => {
+  opt.addEventListener('click', () => {
+    const input = opt.querySelector('input[type="radio"]');
+    input.checked = true;
+    const name = input.name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+      r.parentElement.classList.remove('selected');
+    });
+    opt.classList.add('selected');
+    updateProgress();
+    DataService._syncProgress('in-progress', null);
+  });
+});
+
+// ── DATASERVICE ──
+const DataService = {
+  studentId() {
+    return localStorage.getItem('eduportal_currentStudent') || 'current_student';
+  },
+  collect() {
+    const data = {};
+    FIELDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) data[id] = el.value;
+    });
+    RADIO_GROUPS.forEach(name => {
+      const checked = document.querySelector(`input[name="${name}"]:checked`);
+      data['radio_' + name] = checked ? checked.value : '';
+    });
+    data['solutions'] = getSolutionData();
+    data['savedAt'] = new Date().toISOString();
+    return data;
+  },
+  apply(data) {
+    if (!data) return;
+    FIELDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && data[id] !== undefined) el.value = data[id];
+    });
+    RADIO_GROUPS.forEach(name => {
+      const val = data['radio_' + name];
+      if (val) {
+        const input = document.querySelector(`input[name="${name}"][value="${val}"]`);
+        if (input) {
+          input.checked = true;
+          input.parentElement.classList.add('selected');
+        }
+      }
+    });
+    if (data.solutions) setSolutionData(data.solutions);
+  },
+  save() {
+    const d = this.collect();
+    localStorage.setItem(STORAGE_KEY + '_' + this.studentId(), JSON.stringify(d));
+    this._syncProgress('in-progress', null);
+    console.log('Saved.');
+  },
+  load() {
+    const raw = localStorage.getItem(STORAGE_KEY + '_' + this.studentId());
+    if (!raw) { console.log('No saved data.'); return; }
+    this.apply(JSON.parse(raw));
+    updateProgress();
+    console.log('Loaded.');
+  },
+  autoSave(d) {
+    if (this._debounce) clearTimeout(this._debounce);
+    this._debounce = setTimeout(() => this.save(), 800);
+  },
+  autoLoad() { this.load(); },
+  submit() {
+    this.save();
+    this._syncProgress('done', null);
+    alert('Workbook submitted! Your teacher can now view your work.');
+  },
+  _syncProgress(status, score) {
+    const key = `eduportal_progress_${this.studentId()}_${LESSON_ID}`;
+    localStorage.setItem(key, JSON.stringify({ status, score, updatedAt: new Date().toISOString() }));
+  }
+};
+
+// ── AUTO-SAVE ON INPUT ──
+document.querySelectorAll('input, textarea, select').forEach(el => {
+  el.addEventListener('input', () => {
+    updateProgress();
+    DataService.autoSave();
+    DataService._syncProgress('in-progress', null);
+  });
+});
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  DataService.autoLoad();
+  updateProgress();
+  // set today's date if empty
+  const dateField = document.getElementById('studentDate');
+  if (dateField && !dateField.value) {
+    dateField.value = new Date().toISOString().split('T')[0];
+  }
+});
+</script>
+</body>
+</html>

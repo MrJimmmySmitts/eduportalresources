@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workbook · Curiosity, Ingenuity &amp; the UN SDGs · Lesson 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #12100E; --ink2: #2C2A28; --ink3: #6B6762;
+  --cream: #F7F3EC; --cream2: #EDE8DF; --white: #FFFFFF;
+  --border: #D8D3CA; --border2: #C4BFB6;
+  --pine: #1B5E47; --amber: #B8620A; --indigo: #2B3A8C; --crimson: #8C1F28;
+  --font-serif: 'DM Serif Display', Georgia, serif;
+  --font-sans: 'DM Sans', Arial, sans-serif;
+  --font-mono: 'DM Mono', 'Courier New', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); font-size: 16px; line-height: 1.6; color: var(--ink); background: var(--cream); }
+.page { max-width: 920px; margin: 0 auto; background: var(--white); box-shadow: 0 2px 16px rgba(0,0,0,0.07); padding-bottom: 60px; }
+
+.progress-bar { position: sticky; top: 0; z-index: 60; background: var(--ink); color: var(--white); padding: 12px 28px; display: flex; align-items: center; gap: 16px; font-family: var(--font-mono); font-size: 12px; }
+.progress-track { flex: 1; height: 8px; background: rgba(255,255,255,0.15); border-radius: 99px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--pine); width: 0%; transition: width 0.3s; }
+.progress-bar button { font-family: var(--font-sans); font-size: 12px; font-weight: 700; color: var(--white); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+.progress-bar button:hover { background: rgba(255,255,255,0.2); }
+
+.cover { background: var(--ink); padding: 44px 52px 32px; }
+.cover-meta { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em; color: #C9C4BA; margin-bottom: 14px; text-transform: uppercase; }
+.cover h1 { font-family: var(--font-serif); font-size: 34px; color: var(--white); line-height: 1.2; margin-bottom: 8px; }
+.cover .subtitle { color: #F0DDB8; font-style: italic; font-size: 15px; margin-bottom: 22px; }
+.cover-fields { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 14px 18px; }
+.cover-fields div { font-size: 12px; color: #C9C4BA; }
+.cover-fields div span { display: block; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; color: #8A857C; margin-bottom: 4px; }
+.cover-fields input { width: 100%; background: transparent; border: none; border-bottom: 1px solid #5A564C; color: var(--white); font-size: 13px; padding: 2px 0; font-family: var(--font-sans); }
+.cover-fields input:focus { outline: none; border-color: var(--pine); }
+
+.content { padding: 8px 52px 0; }
+.section { margin-top: 44px; border-top: 1px solid var(--border); padding-top: 32px; }
+.section:first-of-type { border-top: none; }
+.section-band { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.section-num { width: 36px; height: 36px; border-radius: 50%; background: var(--indigo); color: var(--white); display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-weight: 500; font-size: 14px; flex-shrink: 0; }
+.section-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink3); }
+.section h2 { font-family: var(--font-serif); font-size: 23px; color: var(--ink); margin-top: 2px; }
+
+p.instruction { color: var(--ink2); margin-bottom: 16px; }
+.refnote { font-size: 13px; color: var(--ink3); font-style: italic; margin-bottom: 18px; }
+.refnote a { color: var(--indigo); text-decoration: none; }
+
+.tier-badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--white); padding: 4px 11px; border-radius: 99px; margin-bottom: 10px; }
+.tier-foundation { background: var(--pine); } .tier-developing { background: var(--amber); } .tier-extending { background: var(--indigo); }
+
+.task { background: var(--cream2); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 16px; }
+.task label { display: block; font-weight: 700; font-size: 14.5px; margin-bottom: 10px; color: var(--ink); }
+.task textarea, .task input[type="text"] { width: 100%; border: 1px solid var(--border2); border-radius: 8px; padding: 10px 12px; font-family: var(--font-sans); font-size: 14px; color: var(--ink); background: var(--white); resize: vertical; }
+.task textarea:focus, .task input[type="text"]:focus { outline: none; border-color: var(--indigo); box-shadow: 0 0 0 3px rgba(43,58,140,0.12); }
+.task .feedback { font-size: 12.5px; margin-top: 8px; display: none; padding: 6px 10px; border-radius: 6px; }
+.task .feedback.correct { background: #E3F1EA; color: var(--pine); display: block; }
+.task .feedback.incorrect { background: #F7E8E9; color: var(--crimson); display: block; }
+
+.option-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 4px; }
+.option-pill { display: flex; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--border2); border-radius: 8px; padding: 9px 12px; font-size: 13.5px; cursor: pointer; }
+.option-pill input { width: 16px; height: 16px; accent-color: var(--indigo); flex-shrink: 0; }
+
+.member-row { display: flex; gap: 10px; margin-bottom: 10px; }
+.member-row input { flex: 1; border: 1px solid var(--border2); border-radius: 8px; padding: 9px 12px; font-family: var(--font-sans); font-size: 14px; }
+.member-row input:focus { outline: none; border-color: var(--indigo); }
+
+.exit-ticket { background: #FBEEEF; border: 1px solid #E3B6BA; border-radius: 10px; padding: 20px 22px; }
+.exit-ticket .task { background: var(--white); }
+
+.btn-row { display: flex; gap: 12px; margin-top: 22px; }
+.btn { font-family: var(--font-sans); font-weight: 700; font-size: 14px; border-radius: 8px; padding: 11px 22px; cursor: pointer; border: none; }
+.btn-primary { background: var(--pine); color: var(--white); }
+.btn-secondary { background: var(--white); color: var(--ink); border: 1px solid var(--border2); }
+.btn:hover { opacity: 0.92; }
+
+.marking-panel { margin: 50px 52px 0; border: 2px solid var(--crimson); border-radius: 10px; padding: 22px 24px; background: #FBF4F4; }
+.marking-panel h3 { font-family: var(--font-serif); color: var(--crimson); font-size: 19px; margin-bottom: 6px; }
+.marking-panel .note { font-size: 12.5px; color: var(--ink3); margin-bottom: 16px; font-style: italic; }
+.marking-row { display: flex; align-items: center; gap: 14px; padding: 8px 0; border-bottom: 1px solid #E8D3D4; font-size: 13.5px; }
+.marking-row:last-of-type { border-bottom: none; }
+.marking-row span.label { flex: 1; color: var(--ink2); }
+.marking-row select { font-family: var(--font-sans); font-size: 13px; padding: 5px 8px; border-radius: 6px; border: 1px solid var(--border2); }
+.marking-panel textarea { width: 100%; margin-top: 14px; border: 1px solid var(--border2); border-radius: 8px; padding: 10px; font-family: var(--font-sans); font-size: 13.5px; min-height: 70px; }
+
+@media (max-width: 760px) {
+  .cover-fields, .option-grid { grid-template-columns: repeat(2, 1fr); }
+  .cover, .content, .marking-panel { padding-left: 22px !important; padding-right: 22px !important; margin-left: 0; margin-right: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="progress-bar">
+    <span>0% complete</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <button onclick="saveWorkbook()">Save</button>
+    <button onclick="loadWorkbook()">Load</button>
+    <button onclick="window.print()">Export</button>
+  </div>
+
+  <div class="cover">
+    <div class="cover-meta">VCE Applied Computing · Unit 2 · Area of Study 1</div>
+    <h1>Workbook — Curiosity, Ingenuity &amp; the UN SDGs</h1>
+    <div class="subtitle">Lesson 1 of 45 · Outcome 1, Innovative Solutions</div>
+    <div class="cover-fields">
+      <div><span>Name</span><input type="text" id="studentName" placeholder="Your name"></div>
+      <div><span>Class</span><input type="text" id="studentClass" placeholder="Class"></div>
+      <div><span>Date</span><input type="text" id="studentDate" placeholder="DD/MM"></div>
+      <div><span>Teacher</span><input type="text" value="Mr Smith" disabled></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- SECTION 1: Warm up -->
+    <div class="section" id="sec1">
+      <div class="section-band">
+        <div class="section-num">1</div>
+        <div><div class="section-label">Warm Up</div><h2>What problem was this invented to solve?</h2></div>
+      </div>
+      <p class="instruction">Write your guess for each before the reveal — no notes, no internet.</p>
+
+      <div class="task"><label>A — Velcro</label><textarea rows="1" data-field="guess_velcro" placeholder="Your guess..."></textarea></div>
+      <div class="task"><label>B — The microwave oven</label><textarea rows="1" data-field="guess_microwave" placeholder="Your guess..."></textarea></div>
+      <div class="task"><label>C — Bubble wrap</label><textarea rows="1" data-field="guess_bubblewrap" placeholder="Your guess..."></textarea></div>
+      <div class="task"><label>D — The seatbelt</label><textarea rows="1" data-field="guess_seatbelt" placeholder="Your guess..."></textarea></div>
+    </div>
+
+    <!-- SECTION 2: Learning objective copy -->
+    <div class="section" id="sec2">
+      <div class="section-band">
+        <div class="section-num">2</div>
+        <div><div class="section-label">Learning Objective</div><h2>Copy this down</h2></div>
+      </div>
+      <div class="task">
+        <label>Learning objective (copy from the slide)</label>
+        <textarea rows="2" data-field="objectiveCopy" placeholder="To be able to..."></textarea>
+      </div>
+      <p class="refnote">Full success criteria (Foundation / Developing / Extending) are on the <a href="L1_LaunchInnovation_site.html#drivers" target="_blank">reference website</a>.</p>
+    </div>
+
+    <!-- SECTION 3: Check understanding (auto-marked) -->
+    <div class="section" id="sec3">
+      <div class="section-band">
+        <div class="section-num">3</div>
+        <div><div class="section-label">Learning</div><h2>Check your understanding</h2></div>
+      </div>
+      <p class="instruction">Type your answer for each. Single words or short phrases are fine.</p>
+
+      <div class="task">
+        <label>What word describes noticing a problem most people walk past?</label>
+        <input type="text" data-field="q_curiosity" data-answer="curiosity" data-text="1">
+        <div class="feedback"></div>
+      </div>
+      <div class="task">
+        <label>What word describes inventive, resourceful problem-solving?</label>
+        <input type="text" data-field="q_ingenuity" data-answer="ingenuity" data-text="1">
+        <div class="feedback"></div>
+      </div>
+      <div class="task">
+        <label>What three-letter acronym names the 17 global goals used as a lens for finding problems?</label>
+        <input type="text" data-field="q_sdgs" data-answer="sdgs" data-text="1">
+        <div class="feedback"></div>
+      </div>
+      <div style="text-align:right;">
+        <button class="btn btn-secondary" onclick="checkSection3()">Check my answers</button>
+      </div>
+    </div>
+
+    <!-- SECTION 4: Topic menu retrieval -->
+    <div class="section" id="sec4">
+      <div class="section-band">
+        <div class="section-num">4</div>
+        <div><div class="section-label">Learning</div><h2>The topic menu</h2></div>
+      </div>
+      <p class="instruction">Tick the topic areas you remember from the menu.</p>
+      <div class="option-grid">
+        <label class="option-pill"><input type="checkbox" data-field="topic_aiml"> AI, ML &amp; neural networks</label>
+        <label class="option-pill"><input type="checkbox" data-field="topic_assistive"> Assistive tech &amp; IoT</label>
+        <label class="option-pill"><input type="checkbox" data-field="topic_healthcare"> Smart healthcare devices</label>
+        <label class="option-pill"><input type="checkbox" data-field="topic_drones"> Drones, microcontrollers &amp; nanosatellites</label>
+        <label class="option-pill"><input type="checkbox" data-field="topic_games"> Games &amp; multimedia</label>
+        <label class="option-pill"><input type="checkbox" data-field="topic_mixedreality"> Mixed reality (AR/VR)</label>
+        <label class="option-pill"><input type="checkbox" data-field="topic_blockchain"> Blockchain</label>
+        <label class="option-pill"><input type="checkbox" data-field="topic_other"> Anything else innovative</label>
+      </div>
+    </div>
+
+    <!-- SECTION 5: Application — group formation (tiered) -->
+    <div class="section" id="sec5">
+      <div class="section-band">
+        <div class="section-num">5</div>
+        <div><div class="section-label">Applying</div><h2>Form your group</h2></div>
+      </div>
+      <p class="instruction">Work through all three with your group.</p>
+
+      <span class="tier-badge tier-foundation">Foundation</span>
+      <div class="task">
+        <label>Task 1 — Who is in your group?</label>
+        <div class="member-row"><input type="text" data-field="member1" placeholder="Member 1 (you)"></div>
+        <div class="member-row"><input type="text" data-field="member2" placeholder="Member 2"></div>
+        <div class="member-row"><input type="text" data-field="member3" placeholder="Member 3"></div>
+        <div class="member-row"><input type="text" data-field="member4" placeholder="Member 4 (optional)"></div>
+      </div>
+
+      <span class="tier-badge tier-developing">Developing</span>
+      <div class="task">
+        <label>Task 2 — Which topic area(s) is your group leaning toward, and why?</label>
+        <textarea rows="3" data-field="group_topic" placeholder="Name the area(s) and explain what made your group choose it."></textarea>
+      </div>
+
+      <span class="tier-badge tier-extending">Extending</span>
+      <div class="task">
+        <label>Task 3 — Propose a specific problem, need or opportunity within that area</label>
+        <textarea rows="3" data-field="group_problem" placeholder="Be specific — name a real situation or group of users, not just the general topic."></textarea>
+      </div>
+    </div>
+
+    <!-- SECTION 6: Discussion reflection -->
+    <div class="section" id="sec6">
+      <div class="section-band">
+        <div class="section-num">6</div>
+        <div><div class="section-label">Responsive Teaching</div><h2>Think · Pair · Share</h2></div>
+      </div>
+      <div class="task">
+        <label>Which SDG or topic area genuinely interests you, and why?</label>
+        <textarea rows="3" data-field="discussion_sdg" placeholder="Name an actual real-world example, not just the category name."></textarea>
+      </div>
+    </div>
+
+    <!-- SECTION 7: Exit ticket -->
+    <div class="section" id="sec7">
+      <div class="section-band">
+        <div class="section-num">7</div>
+        <div><div class="section-label">Exit Ticket</div><h2>Before you leave</h2></div>
+      </div>
+      <div class="exit-ticket">
+        <div class="task">
+          <label>Q1 — Name the two things that drive innovation in this unit</label>
+          <textarea rows="2" data-field="exit_q1" placeholder="Your answer..."></textarea>
+        </div>
+        <div class="task">
+          <label>Q2 — Who is in your group, and what topic direction are you leaning toward?</label>
+          <textarea rows="2" data-field="exit_q2" placeholder="Your answer..."></textarea>
+        </div>
+        <div class="task">
+          <label>Q3 — Name one UN SDG and a real technology example connected to it</label>
+          <textarea rows="2" data-field="exit_q3" placeholder="Your answer..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="submitWorkbook()">Submit Workbook</button>
+      <button class="btn btn-secondary" onclick="saveWorkbook()">Save Progress</button>
+    </div>
+
+  </div>
+
+  <div class="marking-panel">
+    <h3>Teacher marking panel</h3>
+    <p class="note">Restricted — for teacher use. Auto-marked items (Section 3) are scored automatically; the remaining sections require manual review.</p>
+    <div class="marking-row"><span class="label">Section 1 — Warm up retrieval</span><select><option>—</option><option>Complete</option><option>Partial</option><option>Not attempted</option></select></div>
+    <div class="marking-row"><span class="label">Section 3 — Check understanding (auto-marked)</span><span id="autoScoreDisplay" style="font-family: var(--font-mono); font-weight: 700; color: var(--crimson);">0 / 3</span></div>
+    <div class="marking-row"><span class="label">Section 5 — Group formation</span><select><option>—</option><option>Group confirmed</option><option>Still negotiating</option><option>No group yet</option></select></div>
+    <div class="marking-row"><span class="label">Section 7 — Exit ticket</span><select><option>—</option><option>Complete</option><option>Partial</option><option>Not attempted</option></select></div>
+    <textarea placeholder="Teacher comments..."></textarea>
+  </div>
+
+</div>
+
+<script>
+const LESSON_ID = 'y11-ac-u2-l1-launch-innovation';
+const STORAGE_KEY_PREFIX = 'wb_' + LESSON_ID;
+
+const DataService = {
+  studentId() { return localStorage.getItem('eduportal_currentStudent') || 'current_student'; },
+  _key() { return `${STORAGE_KEY_PREFIX}_${this.studentId()}`; },
+  collect() {
+    const data = {};
+    document.querySelectorAll('[data-field]').forEach(el => {
+      if (el.type === 'checkbox') data[el.dataset.field] = el.checked;
+      else data[el.dataset.field] = el.value;
+    });
+    data.studentName = document.getElementById('studentName').value;
+    data.studentClass = document.getElementById('studentClass').value;
+    data.studentDate = document.getElementById('studentDate').value;
+    return data;
+  },
+  save() {
+    try { localStorage.setItem(this._key(), JSON.stringify(this.collect())); return true; } catch (e) { return false; }
+  },
+  load() {
+    try {
+      const raw = localStorage.getItem(this._key());
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      Object.entries(data).forEach(([field, value]) => {
+        const el = document.querySelector(`[data-field="${field}"]`);
+        if (el) { if (el.type === 'checkbox') el.checked = value; else el.value = value; }
+      });
+      if (data.studentName) document.getElementById('studentName').value = data.studentName;
+      if (data.studentClass) document.getElementById('studentClass').value = data.studentClass;
+      if (data.studentDate) document.getElementById('studentDate').value = data.studentDate;
+      updateProgress();
+      return data;
+    } catch (e) { return null; }
+  },
+  autoSave() { this.save(); this._syncProgress('in-progress', null); },
+  autoLoad() { this.load(); },
+  submit() {
+    this.save();
+    const score = scoreSection3();
+    this._syncProgress('done', score);
+    alert('Workbook submitted. Section 3 auto-marked score: ' + score.correct + ' / ' + score.total);
+  },
+  _syncProgress(status, score) {
+    try { localStorage.setItem(`eduportal_progress_${this.studentId()}_${LESSON_ID}`, JSON.stringify({ status, score, updatedAt: new Date().toISOString() })); } catch (e) {}
+  },
+};
+
+function saveWorkbook() { const ok = DataService.save(); alert(ok ? 'Saved!' : 'Save failed — try again.'); }
+function loadWorkbook() { DataService.load(); }
+function submitWorkbook() { DataService.submit(); }
+
+function scoreSection3() {
+  const inputs = document.querySelectorAll('#sec3 input[data-answer]');
+  let correct = 0;
+  inputs.forEach(el => {
+    const isText = el.dataset.text === '1';
+    const val = el.value.trim();
+    const ans = el.dataset.answer.trim();
+    const isCorrect = isText ? val.toLowerCase() === ans.toLowerCase() : Math.abs(parseFloat(val) - parseFloat(ans)) < 1e-9;
+    if (isCorrect) correct++;
+  });
+  return { correct, total: inputs.length };
+}
+
+function checkSection3() {
+  const inputs = document.querySelectorAll('#sec3 input[data-answer]');
+  inputs.forEach(el => {
+    const isText = el.dataset.text === '1';
+    const val = el.value.trim();
+    const ans = el.dataset.answer.trim();
+    const isCorrect = val !== '' && (isText ? val.toLowerCase() === ans.toLowerCase() : Math.abs(parseFloat(val) - parseFloat(ans)) < 1e-9);
+    const fb = el.parentElement.querySelector('.feedback');
+    fb.classList.remove('correct', 'incorrect');
+    if (val === '') { fb.style.display = 'none'; return; }
+    if (isCorrect) { fb.textContent = 'Correct.'; fb.classList.add('correct'); }
+    else { fb.textContent = 'Not quite — check the reference website.'; fb.classList.add('incorrect'); }
+  });
+  const score = scoreSection3();
+  document.getElementById('autoScoreDisplay').textContent = score.correct + ' / ' + score.total;
+}
+
+function updateProgress() {
+  const fields = document.querySelectorAll('[data-field]');
+  let filled = 0;
+  fields.forEach(el => {
+    if (el.type === 'checkbox') { if (el.checked) filled++; }
+    else if (el.value && el.value.trim() !== '') filled++;
+  });
+  const pct = fields.length ? Math.round((filled / fields.length) * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.querySelector('.progress-bar span').textContent = pct + '% complete';
+}
+
+document.querySelectorAll('[data-field]').forEach(el => {
+  el.addEventListener('input', () => { updateProgress(); DataService.autoSave(); });
+  el.addEventListener('change', () => { updateProgress(); DataService.autoSave(); });
+});
+
+window.addEventListener('load', () => { DataService.autoLoad(); updateProgress(); });
+</script>
+
+</body>
+</html>

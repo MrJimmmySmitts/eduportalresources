@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en-AU" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L8 — Ethics and Improving Practices · Student Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#4361EE; --green:#10B981; --amber:#F59E0B; --purple:#8B5CF6; --red:#EF4444;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --read:'Atkinson Hyperlegible','DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono',ui-monospace,monospace;
+}
+html[data-theme="dark"]{
+  --bg:#0D1117; --surface:#151B24; --surface2:#1C232E; --border:#2A3441;
+  --text:#E6EAF0; --muted:#9AA6B6; --field:#0F1720;
+}
+html[data-theme="light"]{
+  --bg:#FFFFFF; --surface:#F7F8FB; --surface2:#FFFFFF; --border:#DDE2EA;
+  --text:#111827; --muted:#5B6472; --field:#FFFFFF;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--read);font-size:17px;line-height:1.6;}
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px 120px;}
+
+.topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--border);}
+.topbar-inner{max-width:1060px;margin:0 auto;padding:10px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.pct{font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap;}
+.track{flex:1;min-width:160px;height:8px;background:var(--surface2);border:1px solid var(--border);border-radius:99px;overflow:hidden;}
+.fill{height:100%;width:0;background:var(--blue);transition:width .3s;}
+button{font-family:var(--sans);font-size:13px;font-weight:700;border-radius:8px;border:1px solid var(--border);
+  background:var(--surface2);color:var(--text);padding:7px 13px;cursor:pointer;}
+button:hover{border-color:var(--blue);}
+button.primary{background:var(--blue);border-color:var(--blue);color:#fff;}
+.status{font-family:var(--mono);font-size:12px;color:var(--muted);}
+
+.cover{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:34px;margin-top:26px;}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--blue);font-weight:500;}
+.cover h1{font-family:var(--serif);font-size:40px;line-height:1.12;margin:12px 0 6px;font-weight:400;}
+.cover .sub{color:var(--muted);font-size:17px;margin-bottom:22px;}
+.idgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.idgrid label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);margin-bottom:5px;}
+input[type=text],select,textarea{
+  width:100%;background:var(--field);color:var(--text);border:1px solid var(--border);
+  border-radius:9px;padding:10px 12px;font-family:var(--read);font-size:16px;}
+textarea{resize:vertical;min-height:86px;line-height:1.55;}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue);}
+select{font-family:var(--sans);}
+
+section{margin-top:38px;}
+.band{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px;}
+.num{width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;
+  font-family:var(--mono);font-weight:500;font-size:16px;flex:none;}
+.band .lab{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted);display:block;}
+.band h2{font-family:var(--serif);font-size:26px;font-weight:400;margin:2px 0 0;line-height:1.2;}
+.badge{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;font-weight:500;padding:5px 11px;border-radius:99px;
+  border:1px solid var(--border);color:var(--muted);}
+.tier{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;font-weight:500;padding:5px 11px;border-radius:99px;color:#fff;}
+.t-f{background:var(--green)} .t-d{background:var(--amber)} .t-e{background:var(--purple)} .t-x{background:var(--red)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:16px;}
+.q{font-weight:700;margin-bottom:9px;}
+.hint{font-size:14.5px;color:var(--muted);font-style:italic;margin:7px 0 0;}
+.callout{border-radius:12px;padding:16px 18px;margin:16px 0;border:1px solid;}
+.c-info{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 10%,transparent);}
+.c-tip{border-color:var(--green);background:color-mix(in srgb,var(--green) 10%,transparent);}
+.c-note{border-color:var(--amber);background:color-mix(in srgb,var(--amber) 10%,transparent);}
+.c-ext{border-color:var(--purple);background:color-mix(in srgb,var(--purple) 10%,transparent);}
+.c-exit{border-color:var(--red);background:color-mix(in srgb,var(--red) 10%,transparent);}
+a{color:var(--blue);}
+.slideref{font-family:var(--mono);font-size:12px;color:var(--muted);}
+
+.item{border-top:1px solid var(--border);padding:14px 0;display:grid;grid-template-columns:1fr 250px 34px;gap:14px;align-items:center;}
+.item:first-of-type{border-top:none;}
+.item .mark{font-family:var(--mono);font-size:19px;text-align:center;}
+.ok{color:var(--green);} .no{color:var(--red);}
+.row{display:grid;gap:14px;}
+.row-2{grid-template-columns:1fr 1fr;}
+.row-3{grid-template-columns:1fr 1fr 1fr;}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:15px;}
+th,td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+th{background:var(--surface2);font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--muted);font-weight:500;}
+td textarea{min-height:70px;font-size:15px;}
+.small{font-size:14.5px;color:var(--muted);}
+.evidence{font-family:var(--mono);font-size:14.5px;background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;padding:14px 16px;margin:10px 0;line-height:1.55;}
+.checkline{display:flex;align-items:flex-start;gap:10px;margin:9px 0;}
+.checkline input{margin-top:5px;flex:none;width:17px;height:17px;accent-color:var(--blue);}
+.scorepill{font-family:var(--mono);font-size:13px;padding:6px 12px;border-radius:99px;border:1px solid var(--border);color:var(--muted);}
+.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;}
+.submitbar{margin-top:36px;border:1px solid var(--red);border-radius:14px;padding:22px;background:color-mix(in srgb,var(--red) 8%,transparent);}
+@media print{.topbar{display:none}.card{break-inside:avoid}}
+@media (max-width:820px){ .idgrid,.row-2,.row-3{grid-template-columns:1fr;} .item{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="pct" id="pctLabel">0% complete</span>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <button onclick="DataService.save(collect(),true)">Save</button>
+    <button onclick="DataService.autoLoad(true)">Load</button>
+    <button onclick="window.print()">Export</button>
+    <button onclick="toggleTheme()">Theme</button>
+    <span class="status" id="status"></span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="cover">
+  <span class="eyebrow">UNIT 4 · AREA OF STUDY 2 · CYBER SECURITY · LESSON 8</span>
+  <h1>Ethics and Improving Practices</h1>
+  <div class="sub">Where the law runs out · AI · Intellectual property · Onboarding · Training · Risk management plans</div>
+  <div class="idgrid">
+    <div><label>NAME</label><input type="text" id="stu_name" placeholder="Your full name"></div>
+    <div><label>CLASS</label><input type="text" id="stu_class" placeholder="Class code"></div>
+    <div><label>DATE</label><input type="text" id="stu_date" placeholder="YYYY-MM-DD"></div>
+    <div><label>TEACHER</label><input type="text" id="stu_teacher" placeholder="Teacher name"></div>
+  </div>
+  <div class="callout c-info" style="margin-bottom:0">
+    The last workbook of the unit. Section 4 is the closest thing to the SAC you will do before the SAC itself.
+    Full notes: <a href="U4_CyberSecuritySoftwareDev_site.html#y12-sd-u4-l8-ethics-improving-practices">Unit site → Lesson 8 →</a>
+  </div>
+</div>
+
+<!-- ===================== SECTION 1 ===================== -->
+<section id="s1">
+  <div class="band">
+    <div class="num">1</div>
+    <div><span class="lab">SECTION 1</span><h2>Legal, ethical, or both?</h2></div>
+    <span class="tier t-f">FOUNDATION</span><span class="badge">AUTO-MARKED</span>
+  </div>
+
+  <div class="card">
+    <p class="q">1.1 &nbsp;Classify each situation. Remember that an ethical issue is what remains objectionable <em>even when the organisation is fully compliant</em>.</p>
+    <p class="slideref">Slide 5</p>
+    <div id="q1">
+      <div class="item"><div>A company keeps user location history forever. Its privacy policy says so, and users agreed.</div>
+        <select data-a="e"><option value="">Choose…</option><option value="l">Legal issue only</option><option value="e">Ethical issue only</option><option value="b">Both</option><option value="n">Neither</option></select><div class="mark"></div></div>
+      <div class="item"><div>A $12m company stores customer credit card numbers unencrypted on a shared drive.</div>
+        <select data-a="b"><option value="">Choose…</option><option value="l">Legal issue only</option><option value="e">Ethical issue only</option><option value="b">Both</option><option value="n">Neither</option></select><div class="mark"></div></div>
+      <div class="item"><div>A developer studies how a competitor's feature behaves, then writes entirely original code that does the same thing.</div>
+        <select data-a="n"><option value="">Choose…</option><option value="l">Legal issue only</option><option value="e">Ethical issue only</option><option value="b">Both</option><option value="n">Neither</option></select><div class="mark"></div></div>
+      <div class="item"><div>A team ships a hiring model trained only on the company's own past hires, with no bias audit.</div>
+        <select data-a="e"><option value="">Choose…</option><option value="l">Legal issue only</option><option value="e">Ethical issue only</option><option value="b">Both</option><option value="n">Neither</option></select><div class="mark"></div></div>
+      <div class="item"><div>A product ships built on a GPL-licensed library, with no source released and no licence review.</div>
+        <select data-a="b"><option value="">Choose…</option><option value="l">Legal issue only</option><option value="e">Ethical issue only</option><option value="b">Both</option><option value="n">Neither</option></select><div class="mark"></div></div>
+      <div class="item"><div>A council app sends resident addresses to an overseas host under a contract silent on privacy.</div>
+        <select data-a="b"><option value="">Choose…</option><option value="l">Legal issue only</option><option value="e">Ethical issue only</option><option value="b">Both</option><option value="n">Neither</option></select><div class="mark"></div></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="check('q1')">Check answers</button><span class="scorepill" id="q1score">not checked</span></div>
+    <p class="hint">Two of these are defensible as either answer. Be ready to argue yours in 1.3.</p>
+  </div>
+
+  <div class="card">
+    <p class="q">1.2 &nbsp;Explain, in one sentence, the difference between a legal issue and an ethical one.</p>
+    <textarea id="f_diff" placeholder="One sentence. If the word 'illegal' appears twice, you have not separated them."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">1.3 &nbsp;Choose one item from 1.1 you would argue about. State your classification and defend it.</p>
+    <textarea id="f_argue" placeholder="Name the item, then say what makes it that classification rather than the neighbouring one."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">1.4 &nbsp;Give two reasons a legal remedy may be unavailable in practice, even where a law clearly applies.</p>
+    <textarea id="f_remedy" placeholder="Think about what it costs an individual to enforce a right, and about where the other party is."></textarea>
+  </div>
+</section>
+
+<!-- ===================== SECTION 2 ===================== -->
+<section id="s2">
+  <div class="band">
+    <div class="num">2</div>
+    <div><span class="lab">SECTION 2</span><h2>The four ethical issues</h2></div>
+    <span class="tier t-f">FOUNDATION</span><span class="badge">AUTO-MARKED</span>
+  </div>
+
+  <div class="card">
+    <p class="q">2.1 &nbsp;Which of the four ethical issues named in the study design does each describe?</p>
+    <p class="slideref">Slides 7–10</p>
+    <div id="q2">
+      <div class="item"><div>Users exposed to identity theft by a breach they had no say in and no way of foreseeing.</div>
+        <select data-a="s"><option value="">Choose…</option><option value="s">Ineffective security practices</option><option value="a">Use of AI in development</option><option value="i">Intellectual property</option><option value="c">Copyright issues</option></select><div class="mark"></div></div>
+      <div class="item"><div>Rights enforced so strictly that smaller companies cannot compete and progress slows.</div>
+        <select data-a="i"><option value="">Choose…</option><option value="s">Ineffective security practices</option><option value="a">Use of AI in development</option><option value="i">Intellectual property</option><option value="c">Copyright issues</option></select><div class="mark"></div></div>
+      <div class="item"><div>An idea is taken from its originator, built on and profited from, with no recognition given.</div>
+        <select data-a="c"><option value="">Choose…</option><option value="s">Ineffective security practices</option><option value="a">Use of AI in development</option><option value="i">Intellectual property</option><option value="c">Copyright issues</option></select><div class="mark"></div></div>
+      <div class="item"><div>Nobody can explain why a system reached the decision it did, so nobody can be held responsible.</div>
+        <select data-a="a"><option value="">Choose…</option><option value="s">Ineffective security practices</option><option value="a">Use of AI in development</option><option value="i">Intellectual property</option><option value="c">Copyright issues</option></select><div class="mark"></div></div>
+      <div class="item"><div>Public confidence in technology generally is eroded, not just confidence in one company.</div>
+        <select data-a="s"><option value="">Choose…</option><option value="s">Ineffective security practices</option><option value="a">Use of AI in development</option><option value="i">Intellectual property</option><option value="c">Copyright issues</option></select><div class="mark"></div></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="check('q2')">Check answers</button><span class="scorepill" id="q2score">not checked</span></div>
+  </div>
+
+  <div class="card">
+    <p class="q">2.2 &nbsp;Which of the five AI problems is at issue in each case?</p>
+    <div id="q3">
+      <div class="item"><div>A coding assistant suggests a function that turns out to be copied from a licensed project.</div>
+        <select data-a="p"><option value="">Choose…</option><option value="b">Bias</option><option value="t">Transparency and accountability</option><option value="c">Privacy and consent</option><option value="j">Job displacement</option><option value="p">Code provenance</option></select><div class="mark"></div></div>
+      <div class="item"><div>A model was trained on customer support transcripts nobody was asked about.</div>
+        <select data-a="c"><option value="">Choose…</option><option value="b">Bias</option><option value="t">Transparency and accountability</option><option value="c">Privacy and consent</option><option value="j">Job displacement</option><option value="p">Code provenance</option></select><div class="mark"></div></div>
+      <div class="item"><div>A screening tool consistently ranks one group of applicants lower than another.</div>
+        <select data-a="b"><option value="">Choose…</option><option value="b">Bias</option><option value="t">Transparency and accountability</option><option value="c">Privacy and consent</option><option value="j">Job displacement</option><option value="p">Code provenance</option></select><div class="mark"></div></div>
+      <div class="item"><div>An automated release caused an outage and nobody can say who was answerable for it.</div>
+        <select data-a="t"><option value="">Choose…</option><option value="b">Bias</option><option value="t">Transparency and accountability</option><option value="c">Privacy and consent</option><option value="j">Job displacement</option><option value="p">Code provenance</option></select><div class="mark"></div></div>
+      <div class="item"><div>Three junior testing roles are removed after an automation tool is introduced.</div>
+        <select data-a="j"><option value="">Choose…</option><option value="b">Bias</option><option value="t">Transparency and accountability</option><option value="c">Privacy and consent</option><option value="j">Job displacement</option><option value="p">Code provenance</option></select><div class="mark"></div></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="check('q3')">Check answers</button><span class="scorepill" id="q3score">not checked</span></div>
+  </div>
+
+  <div class="card">
+    <p class="q">2.3 &nbsp;The 2018 recruitment tool case: explain why nobody had to intend discrimination for the tool to discriminate.</p>
+    <textarea id="f_amazon" placeholder="What was the tool actually learning from, and what did that data record?"></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">2.4 &nbsp;Give the three takeaways from that case.</p>
+    <textarea id="f_amazon2" placeholder="One about the data, one about checking, one about people."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">2.5 &nbsp;"It passed the tests we wrote." Explain why this can be a complete legal defence and an inadequate ethical one.</p>
+    <textarea id="f_safe" placeholder="Who decided which tests to write, and what were they not looking for?"></textarea>
+  </div>
+</section>
+
+<!-- ===================== SECTION 3 ===================== -->
+<section id="s3">
+  <div class="band">
+    <div class="num">3</div>
+    <div><span class="lab">SECTION 3</span><h2>Improvement strategies and risk ratings</h2></div>
+    <span class="tier t-f">FOUNDATION</span><span class="badge">AUTO-MARKED</span>
+  </div>
+
+  <div class="card">
+    <p class="q">3.1 &nbsp;Which improvement strategy does each belong to?</p>
+    <p class="slideref">Slides 13–15</p>
+    <div id="q4">
+      <div class="item"><div>Pairing a new employee with an experienced colleague who models security protocols.</div>
+        <select data-a="o"><option value="">Choose…</option><option value="o">Onboarding / induction</option><option value="t">Developer training</option><option value="r">Risk management plan</option></select><div class="mark"></div></div>
+      <div class="item"><div>Defining communication protocols and recovery procedures before an incident happens.</div>
+        <select data-a="r"><option value="">Choose…</option><option value="o">Onboarding / induction</option><option value="t">Developer training</option><option value="r">Risk management plan</option></select><div class="mark"></div></div>
+      <div class="item"><div>Running a phishing simulation exercise across the whole development team.</div>
+        <select data-a="t"><option value="">Choose…</option><option value="o">Onboarding / induction</option><option value="t">Developer training</option><option value="r">Risk management plan</option></select><div class="mark"></div></div>
+      <div class="item"><div>An overview of company goals, values, policies and data protection standards in week one.</div>
+        <select data-a="o"><option value="">Choose…</option><option value="o">Onboarding / induction</option><option value="t">Developer training</option><option value="r">Risk management plan</option></select><div class="mark"></div></div>
+      <div class="item"><div>Reviewing whether new threats have emerged since the document was last updated.</div>
+        <select data-a="r"><option value="">Choose…</option><option value="o">Onboarding / induction</option><option value="t">Developer training</option><option value="r">Risk management plan</option></select><div class="mark"></div></div>
+      <div class="item"><div>Supporting a developer through a CSSLP certification.</div>
+        <select data-a="t"><option value="">Choose…</option><option value="o">Onboarding / induction</option><option value="t">Developer training</option><option value="r">Risk management plan</option></select><div class="mark"></div></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="check('q4')">Check answers</button><span class="scorepill" id="q4score">not checked</span></div>
+  </div>
+
+  <div class="card">
+    <p class="q">3.2 &nbsp;Give the rating for each probability-matrix score.</p>
+    <p class="slideref">Slide 16</p>
+    <div id="q5">
+      <div class="item"><div>Score of 8</div>
+        <select data-a="ex"><option value="">Choose…</option><option value="lo">LOW</option><option value="me">MEDIUM</option><option value="hi">HIGH</option><option value="se">SERIOUS</option><option value="ex">EXTREME</option><option value="ca">CATASTROPHIC</option></select><div class="mark"></div></div>
+      <div class="item"><div>Score of 3</div>
+        <select data-a="lo"><option value="">Choose…</option><option value="lo">LOW</option><option value="me">MEDIUM</option><option value="hi">HIGH</option><option value="se">SERIOUS</option><option value="ex">EXTREME</option><option value="ca">CATASTROPHIC</option></select><div class="mark"></div></div>
+      <div class="item"><div>Score of 6</div>
+        <select data-a="hi"><option value="">Choose…</option><option value="lo">LOW</option><option value="me">MEDIUM</option><option value="hi">HIGH</option><option value="se">SERIOUS</option><option value="ex">EXTREME</option><option value="ca">CATASTROPHIC</option></select><div class="mark"></div></div>
+      <div class="item"><div>Score of 4</div>
+        <select data-a="me"><option value="">Choose…</option><option value="lo">LOW</option><option value="me">MEDIUM</option><option value="hi">HIGH</option><option value="se">SERIOUS</option><option value="ex">EXTREME</option><option value="ca">CATASTROPHIC</option></select><div class="mark"></div></div>
+      <div class="item"><div>Score of 9</div>
+        <select data-a="ca"><option value="">Choose…</option><option value="lo">LOW</option><option value="me">MEDIUM</option><option value="hi">HIGH</option><option value="se">SERIOUS</option><option value="ex">EXTREME</option><option value="ca">CATASTROPHIC</option></select><div class="mark"></div></div>
+      <div class="item"><div>Score of 7</div>
+        <select data-a="se"><option value="">Choose…</option><option value="lo">LOW</option><option value="me">MEDIUM</option><option value="hi">HIGH</option><option value="se">SERIOUS</option><option value="ex">EXTREME</option><option value="ca">CATASTROPHIC</option></select><div class="mark"></div></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="check('q5')">Check answers</button><span class="scorepill" id="q5score">not checked</span></div>
+  </div>
+
+  <div class="card">
+    <p class="q">3.3 &nbsp;Name the four activities in a systematic risk assessment, in order.</p>
+    <textarea id="f_rmp4" placeholder="Four steps. The last one is the one organisations skip."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">3.4 &nbsp;A risk management plan is written, approved, and never opened again. Explain what has been lost.</p>
+    <textarea id="f_rmpstale" placeholder="What changes between writing it and needing it?"></textarea>
+  </div>
+</section>
+
+<!-- ===================== SECTION 4 ===================== -->
+<section id="s4">
+  <div class="band">
+    <div class="num">4</div>
+    <div><span class="lab">SECTION 4</span><h2>Aurora Ticketing — legal and ethical</h2></div>
+    <span class="tier t-d">DEVELOPING</span><span class="badge">EXTENDED WRITTEN</span>
+  </div>
+
+  <div class="callout c-info">
+    <strong>Aurora Ticketing</strong> builds ticketing and gate-scanning software for music festivals. Nine developers, two operations staff,
+    one hosted repository, one cloud environment, 400 000 customer records, payments through a third-party gateway. Turnover is $9 million.<br>
+    For each finding: write the legal analysis and the ethical analysis <em>separately</em>. If your ethical column names an Act, rewrite it.
+  </div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th style="width:22%">Finding</th><th style="width:39%">Legal issue — Act, principle, consequence</th><th style="width:39%">Ethical issue — who is harmed, and how</th></tr></thead>
+      <tbody id="ethRows"></tbody>
+    </table>
+    <p class="hint">For the ethical column, assume Aurora is fully compliant with everything you named on the left. What is still wrong?</p>
+  </div>
+
+  <div class="card">
+    <p class="q">4.1 &nbsp;Which of the four findings has the strongest ethical dimension relative to its legal one? Justify your choice.</p>
+    <textarea id="f_strongest" placeholder="Name it, then explain what makes the ethical harm larger than the legal exposure."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">4.2 &nbsp;For each of the same four findings, state how the issue could be resolved.</p>
+    <textarea id="f_resolve" placeholder="Four short answers. A resolution is something Aurora does, not something Aurora believes."></textarea>
+  </div>
+</section>
+
+<!-- ===================== SECTION 5 ===================== -->
+<section id="s5">
+  <div class="band">
+    <div class="num">5</div>
+    <div><span class="lab">SECTION 5</span><h2>Rate the risks, recommend the fixes</h2></div>
+    <span class="tier t-d">DEVELOPING</span><span class="badge">EXTENDED WRITTEN</span>
+  </div>
+
+  <div class="callout c-note">
+    Aurora's board has approved <strong>$40,000</strong> and <strong>one term</strong> of staff time. You cannot do everything. Prioritise, and say what you are consciously deferring.
+  </div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th style="width:30%">Risk</th><th style="width:14%">Score (1–9)</th><th style="width:28%">Rating &amp; required action</th><th style="width:28%">Your recommendation</th></tr></thead>
+      <tbody id="riskRows"></tbody>
+    </table>
+    <p class="hint">Your score has to be defensible. Say what makes the probability what it is, not just the impact.</p>
+  </div>
+
+  <div class="card">
+    <p class="q">5.1 &nbsp;Rank your four recommendations in the order Aurora should act on them, and justify the order.</p>
+    <textarea id="f_rank" placeholder="Rank them, then explain the ranking against risk and cost — not against how easy each one is."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">5.2 &nbsp;What are you deferring, and what would make you bring it forward?</p>
+    <textarea id="f_defer" placeholder="Name what you left out on purpose, and the event or evidence that would change your mind."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">5.3 &nbsp;Aurora has no incident response plan. Write what the first hour should look like if the customer database is found to be exposed on a Friday night.</p>
+    <textarea id="f_ir" placeholder="Who is called, in what order, and who is told what? Containment before communication, or the other way round?"></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">5.4 &nbsp;Aurora hires four graduate developers next month. Recommend an onboarding approach and name the specific threat from earlier lessons it mitigates.</p>
+    <textarea id="f_onboard" placeholder="The threat should come from Lesson 3. Which kind of insider is this actually about?"></textarea>
+  </div>
+</section>
+
+<!-- ===================== SECTION 6 ===================== -->
+<section id="s6">
+  <div class="band">
+    <div class="num">6</div>
+    <div><span class="lab">SECTION 6</span><h2>Arguing where the law is silent</h2></div>
+    <span class="tier t-e">EXTENDING</span><span class="badge">EXTENDED WRITTEN</span>
+  </div>
+
+  <div class="callout c-ext">
+    Attempt these once Sections 1–5 are complete. Each expects a paragraph with a position in it, not a summary of both sides.
+  </div>
+
+  <div class="card">
+    <p class="q">6.1 &nbsp;Aurora's developers use an AI coding assistant. It is fast, and nobody can say what its suggestions were trained on. Is continuing to use it defensible? Take a position.</p>
+    <textarea id="f_e1" placeholder="A position, then the strongest objection to it, then why you hold the position anyway."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">6.2 &nbsp;Aurora keeps every scan record from every festival indefinitely, disclosed in its privacy policy. No law is broken. Explain the ethical objection.</p>
+    <textarea id="f_e2" placeholder="Who agreed to what, and did they have a real alternative? What could this data reveal years later?"></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">6.3 &nbsp;"Copyright protects expression, not ideas." Argue whether that gap is a flaw in the law or a necessary feature of it.</p>
+    <textarea id="f_e3" placeholder="What would happen to software development if ideas were protected? Follow the consequence through."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">6.4 &nbsp;Write the full synthesis paragraph: how threats, controls, criteria, legislation and risk management plans fit together across this area of study.</p>
+    <textarea id="f_e4" placeholder="One paragraph, five moves, in order. This is your SAC opening — make it good."></textarea>
+  </div>
+</section>
+
+<!-- ===================== SECTION 7 ===================== -->
+<section id="s7">
+  <div class="band">
+    <div class="num">7</div>
+    <div><span class="lab">SECTION 7</span><h2>Exit ticket</h2></div>
+    <span class="tier t-x">EXIT</span><span class="badge">NO NOTES</span>
+  </div>
+
+  <div class="callout c-exit">
+    Five minutes, notes closed. The last exit ticket of the unit.
+  </div>
+
+  <div class="card">
+    <p class="q">7.1 &nbsp;Explain the difference between a legal issue and an ethical one, in one sentence.</p>
+    <textarea id="f_ex1" placeholder="From memory. One sentence."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">7.2 &nbsp;Name the four ethical issues that arise when developing software.</p>
+    <textarea id="f_ex2" placeholder="Four. No explanation needed."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">7.3 &nbsp;Name the three strategies for improving security practices covered today.</p>
+    <textarea id="f_ex3" placeholder="Three. One is a document, two are about people."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">7.4 &nbsp;A risk scores 8 on the probability matrix. What is its rating, and what action does it require?</p>
+    <textarea id="f_ex4" placeholder="Rating, then action. The action is the part people leave off."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">7.5 &nbsp;Self-assessment — tick what you can do now.</p>
+    <div class="checkline"><input type="checkbox" id="sc_f1"><label for="sc_f1"><strong style="color:var(--green)">Foundation ·</strong> I can explain the difference between a legal issue and an ethical one.</label></div>
+    <div class="checkline"><input type="checkbox" id="sc_f2"><label for="sc_f2"><strong style="color:var(--green)">Foundation ·</strong> I can name the four ethical issues and the three improvement strategies.</label></div>
+    <div class="checkline"><input type="checkbox" id="sc_d1"><label for="sc_d1"><strong style="color:var(--amber)">Developing ·</strong> I can identify an ethical issue in a case study and explain who is harmed by it.</label></div>
+    <div class="checkline"><input type="checkbox" id="sc_d2"><label for="sc_d2"><strong style="color:var(--amber)">Developing ·</strong> I can recommend improvement strategies and justify them against the organisation's constraints.</label></div>
+    <div class="checkline"><input type="checkbox" id="sc_e1"><label for="sc_e1"><strong style="color:var(--purple)">Extending ·</strong> I can argue a position on an ethical dilemma the law does not settle.</label></div>
+    <div class="checkline"><input type="checkbox" id="sc_e2"><label for="sc_e2"><strong style="color:var(--purple)">Extending ·</strong> I can rate a risk on a probability matrix and defend the action it implies.</label></div>
+  </div>
+
+  <div class="card">
+    <p class="q">7.6 &nbsp;Across the whole unit, which lesson's content do you most need to revise before the SAC?</p>
+    <textarea id="f_ex6" placeholder="Name one lesson. 'All of it' cannot be revised in a week."></textarea>
+  </div>
+
+  <div class="submitbar">
+    <strong>Ready to submit?</strong>
+    <p class="small" style="margin:6px 0 0">Submitting locks in your current answers and marks this lesson as submitted on your portal home page. You can keep editing and save again afterwards.</p>
+    <div class="actions">
+      <button class="primary" onclick="DataService.submit()">Submit workbook</button>
+      <span class="status" id="submitStatus"></span>
+    </div>
+  </div>
+</section>
+
+<p class="small" style="margin-top:34px">
+  Next: the practice SAC, then Outcome 2. Task format, answer structures and the revision checklist are on the
+  <a href="U4_CyberSecuritySoftwareDev_site.html#sac">unit site → SAC preparation</a>.
+  Full notes for this lesson: <a href="U4_CyberSecuritySoftwareDev_site.html#y12-sd-u4-l8-ethics-improving-practices">unit site → Lesson 8</a>.
+</p>
+
+</div>
+
+<script>
+/* ============================================================
+   EduPortal — Lesson 8 workbook
+   ============================================================ */
+const LESSON_ID = 'y12-sd-u4-l8-ethics-improving-practices';
+const UNIT_ID   = 'y12-sd-u4';
+
+/* ---------- Section 4: legal / ethical rows ---------- */
+const FINDINGS = [
+  ["All nine developers share one administrator login for the production server.",
+   "Which principle is about protecting information from unauthorised access?",
+   "Who bought a ticket, and what did they never agree to carry?"],
+  ["The live customer database is copied into the test environment each month.",
+   "Two things are wrong here — one about security, one about purpose.",
+   "Whose records are sitting in the lower-security environment, and do they know?"],
+  ["Scan records from every festival since 2019 are retained indefinitely.",
+   "One principle covers destroying data no longer needed. Another covers being open about it.",
+   "What could a five-year movement history reveal that a single scan could not?"],
+  ["A recommendation engine was built using an AI assistant; no licence review was done on its output.",
+   "Privacy is not the only legislation in this unit.",
+   "Which of the five AI problems is this, and who loses out?"]
+];
+
+(function buildEthRows(){
+  const tb = document.getElementById('ethRows');
+  FINDINGS.forEach((f,i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><strong>${f[0]}</strong></td>
+      <td><textarea id="et_l_${i}" placeholder="${f[1]}"></textarea></td>
+      <td><textarea id="et_e_${i}" placeholder="${f[2]}"></textarea></td>`;
+    tb.appendChild(tr);
+  });
+})();
+
+/* ---------- Section 5: risk rows ---------- */
+const RISKS = [
+  ["A shared administrator credential is stolen in a phishing attack.",
+   "How likely is phishing against a nine-person team with no training?"],
+  ["Live customer data is exposed from the test environment.",
+   "The environment is separated. What is not?"],
+  ["An unpatched third-party library is exploited in the payment flow.",
+   "214 dependencies, no inventory. What does that do to probability?"],
+  ["A developer leaves and their repository access is never revoked.",
+   "Has this already happened at Aurora? Check the earlier lessons."]
+];
+
+(function buildRiskRows(){
+  const tb = document.getElementById('riskRows');
+  RISKS.forEach((r,i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><strong>${r[0]}</strong></td>
+      <td><textarea id="rk_s_${i}" placeholder="${r[1]}"></textarea></td>
+      <td><textarea id="rk_r_${i}" placeholder="Rating from the table, then the action it requires."></textarea></td>
+      <td><textarea id="rk_c_${i}" placeholder="Anchored, specific, prioritised, re-measurable."></textarea></td>`;
+    tb.appendChild(tr);
+  });
+})();
+
+/* ---------- auto-marking ---------- */
+function check(groupId){
+  const g = document.getElementById(groupId);
+  const sels = g.querySelectorAll('select[data-a]');
+  let right=0, answered=0;
+  sels.forEach(sel=>{
+    const mark = sel.parentElement.querySelector('.mark');
+    if(!sel.value){ mark.textContent=''; mark.className='mark'; return; }
+    answered++;
+    if(sel.value === sel.dataset.a){ right++; mark.textContent='✓'; mark.className='mark ok'; }
+    else { mark.textContent='✗'; mark.className='mark no'; }
+  });
+  const pill = document.getElementById(groupId+'score');
+  pill.textContent = answered ? `${right} / ${sels.length} correct` : 'nothing answered yet';
+  pill.style.color = (right===sels.length) ? 'var(--green)' : 'var(--muted)';
+  DataService.autoSave(collect());
+}
+
+/* ---------- field registry ---------- */
+function allFields(){
+  return Array.from(document.querySelectorAll('input[type=text], textarea, select, input[type=checkbox]'))
+    .filter(el=>el.id);
+}
+function collect(){
+  const d = {};
+  allFields().forEach(el=>{ d[el.id] = (el.type==='checkbox') ? el.checked : el.value; });
+  return d;
+}
+function apply(d){
+  if(!d) return;
+  allFields().forEach(el=>{
+    if(!(el.id in d)) return;
+    if(el.type==='checkbox') el.checked = !!d[el.id]; else el.value = d[el.id];
+  });
+  updateProgress();
+}
+
+/* ---------- DataService ----------
+   localStorage-backed today; each method maps 1:1 onto a REST endpoint
+   so the storage layer can be swapped for the API without touching
+   anything above this comment.
+------------------------------------ */
+const DataService = {
+  studentId(){
+    try { return JSON.parse(localStorage.getItem('eduportal_session') || '{}').id || 'current_student'; }
+    catch(e){ return 'current_student'; }
+  },
+  _key(){ return `eduportal_workbook_${this.studentId()}_${LESSON_ID}`; },
+  _progressKey(){ return `eduportal_progress_${this.studentId()}_${LESSON_ID}`; },
+
+  // POST /api/workbooks/{studentId}/{lessonId}
+  save(data, announce){
+    try{
+      localStorage.setItem(this._key(), JSON.stringify({
+        lessonId: LESSON_ID, unitId: UNIT_ID, studentId: this.studentId(),
+        updated: new Date().toISOString().slice(0,10), data: data
+      }));
+      if(announce) setStatus('Saved ' + new Date().toISOString().slice(0,10));
+      return true;
+    } catch(e){ if(announce) setStatus('Save failed'); return false; }
+  },
+
+  // GET /api/workbooks/{studentId}/{lessonId}
+  load(){
+    try{ const raw = localStorage.getItem(this._key()); return raw ? JSON.parse(raw).data : null; }
+    catch(e){ return null; }
+  },
+
+  _timer:null,
+  autoSave(data){
+    clearTimeout(this._timer);
+    this._timer = setTimeout(()=>{
+      this.save(data,false);
+      this._syncProgress('in-progress');
+      setStatus('Autosaved');
+    }, 700);
+  },
+
+  autoLoad(announce){
+    const d = this.load();
+    if(d){ apply(d); if(announce) setStatus('Loaded your saved work'); }
+    else if(announce){ setStatus('Nothing saved yet'); }
+  },
+
+  // POST /api/workbooks/{studentId}/{lessonId}/submit
+  submit(){
+    this.save(collect(), false);
+    this._syncProgress('submitted');
+    document.getElementById('submitStatus').textContent =
+      'Submitted ' + new Date().toISOString().slice(0,10);
+    setStatus('Submitted');
+  },
+
+  _syncProgress(status){
+    try{
+      localStorage.setItem(this._progressKey(), JSON.stringify({
+        lessonId: LESSON_ID, unitId: UNIT_ID, studentId: this.studentId(),
+        status: status,                       // 'in-progress' | 'submitted' | 'marked'
+        completion: currentPercent(),
+        updated: new Date().toISOString().slice(0,10)
+      }));
+    } catch(e){ /* progress sync is best-effort */ }
+  }
+};
+window.DataService = DataService;
+
+/* ---------- progress ---------- */
+function currentPercent(){
+  const fields = allFields().filter(el=>el.type!=='checkbox' && !el.id.startsWith('stu_'));
+  const done = fields.filter(el=>String(el.value||'').trim().length>0).length;
+  return fields.length ? Math.round(done/fields.length*100) : 0;
+}
+function updateProgress(){
+  const p = currentPercent();
+  document.getElementById('fill').style.width = p + '%';
+  document.getElementById('pctLabel').textContent = p + '% complete';
+}
+function setStatus(t){
+  const s = document.getElementById('status');
+  s.textContent = t;
+  clearTimeout(setStatus._t);
+  setStatus._t = setTimeout(()=>{ s.textContent=''; }, 2600);
+}
+
+/* ---------- theme ---------- */
+function toggleTheme(){
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  try{ localStorage.setItem('eduportal_theme', next); }catch(e){}
+}
+(function initTheme(){
+  try{
+    const t = localStorage.getItem('eduportal_theme');
+    if(t) document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+
+/* ---------- wiring ---------- */
+let firstEntry = true;
+document.addEventListener('input', e=>{
+  if(!e.target.id) return;
+  updateProgress();
+  if(firstEntry){ firstEntry=false; DataService._syncProgress('in-progress'); }
+  DataService.autoSave(collect());
+});
+document.addEventListener('change', e=>{
+  if(!e.target.id) return;
+  updateProgress();
+  DataService.autoSave(collect());
+});
+
+window.addEventListener('DOMContentLoaded', ()=>{
+  DataService.autoLoad(false);
+  updateProgress();
+});
+</script>
+</body>
+</html>

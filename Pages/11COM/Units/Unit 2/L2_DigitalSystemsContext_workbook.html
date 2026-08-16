@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Systems in Context — Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #12100E; --ink2: #2C2A28; --ink3: #6B6762;
+    --cream: #F7F3EC; --cream2: #EDE8DF; --white: #FFFFFF;
+    --border: #D8D3CA; --border2: #C4BFB6;
+    --pine: #1B5E47; --amber: #B8620A; --indigo: #2B3A8C; --crimson: #8C1F28;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); line-height: 1.6; font-size: 17px; }
+  h1, h2, h3 { font-family: 'DM Serif Display', serif; font-weight: 400; color: var(--ink); }
+  .mono { font-family: 'DM Mono', monospace; }
+
+  .cover { background: var(--ink); color: var(--white); padding: 48px 8vw 40px; }
+  .cover-eyebrow { font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 2px; color: #C9C4BA; text-transform: uppercase; margin-bottom: 16px; }
+  .cover h1 { font-size: 40px; margin-bottom: 8px; }
+  .cover .subtitle { font-size: 18px; font-style: italic; color: #D8D3CA; margin-bottom: 28px; }
+  .student-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; max-width: 760px; }
+  .student-field { border: 1px solid #3A3733; border-radius: 8px; padding: 10px 14px; }
+  .student-field label { font-family: 'DM Mono', monospace; font-size: 11px; color: #9C978D; letter-spacing: 1px; display: block; margin-bottom: 4px; }
+  .student-field input {
+    background: transparent; border: none; border-bottom: 1px solid #565249; color: var(--white);
+    font-family: 'DM Sans', sans-serif; font-size: 15px; width: 100%; padding: 4px 0;
+  }
+  .student-field input:focus { outline: none; border-bottom-color: var(--white); }
+
+  .progress-bar {
+    position: sticky; top: 0; z-index: 50; background: var(--white); border-bottom: 1px solid var(--border);
+    padding: 12px 8vw; display: flex; align-items: center; gap: 16px; font-family: 'DM Mono', monospace; font-size: 13px;
+  }
+  .progress-track { flex: 1; height: 8px; background: var(--cream2); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--pine); width: 0%; transition: width 0.3s; }
+  .progress-btn { border: 1px solid var(--border2); background: var(--white); padding: 7px 14px; border-radius: 6px; cursor: pointer; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink2); }
+  .progress-btn:hover { border-color: var(--ink2); }
+  .progress-btn.primary { background: var(--pine); color: var(--white); border-color: var(--pine); }
+
+  main { max-width: 980px; margin: 0 auto; padding: 0 8vw 100px; }
+
+  .section-band { display: flex; align-items: center; gap: 16px; margin: 56px 0 22px; }
+  .section-num { width: 38px; height: 38px; border-radius: 50%; background: var(--ink); color: var(--white); display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-weight: 500; flex-shrink: 0; }
+  .section-label { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink3); letter-spacing: 1.5px; text-transform: uppercase; }
+  .section-title { font-size: 27px; }
+  .section-badge { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 11px; padding: 4px 10px; border-radius: 12px; background: var(--cream2); color: var(--ink3); }
+
+  .ref-link { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--indigo); margin: 6px 0 18px; display: block; }
+  .slide-ref { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--ink3); margin: 6px 0 18px; display: block; }
+
+  .task-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 24px 26px; margin: 18px 0; }
+  .tier-tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--white); padding: 5px 13px; border-radius: 6px; margin-bottom: 14px; }
+  .tier-foundation { background: var(--pine); }
+  .tier-developing { background: var(--amber); }
+  .tier-extending { background: var(--indigo); }
+
+  label.field-label { display: block; font-family: 'DM Mono', monospace; font-size: 13px; color: var(--ink2); margin: 14px 0 6px; }
+  input[type="text"], textarea, select {
+    width: 100%; border: 1px solid var(--border2); border-radius: 8px; padding: 10px 12px;
+    font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--ink); background: var(--cream);
+  }
+  textarea { resize: vertical; min-height: 70px; }
+  input[type="text"]:focus, textarea:focus, select:focus { outline: none; border-color: var(--indigo); background: var(--white); }
+
+  .sector-pick { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0 4px; }
+  .sector-pick label { display: flex; align-items: center; gap: 6px; background: var(--cream2); border: 1px solid var(--border); border-radius: 20px; padding: 7px 14px; font-size: 15px; cursor: pointer; }
+  .sector-pick input[type="checkbox"] { width: 16px; height: 16px; }
+
+  .func-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  .func-table th { text-align: left; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; color: var(--ink3); padding: 6px 8px; border-bottom: 2px solid var(--border); }
+  .func-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .func-table input, .func-table textarea { font-size: 15px; min-height: 44px; }
+
+  .mark-result {
+    display: none; margin-top: 8px; font-family: 'DM Mono', monospace; font-size: 13px; padding: 6px 12px;
+    border-radius: 6px; width: fit-content;
+  }
+  .mark-correct { background: #E1F0E6; color: var(--pine); }
+  .mark-incorrect { background: #F6E3E3; color: var(--crimson); }
+
+  .recap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+  .recap-item { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .recap-item .sector-name { font-weight: 700; margin-bottom: 6px; }
+
+  .self-assess { display: flex; gap: 12px; margin: 14px 0; flex-wrap: wrap; }
+  .self-assess label { flex: 1; min-width: 150px; text-align: center; padding: 14px; border-radius: 10px; border: 2px solid var(--border2); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 700; letter-spacing: 1px; }
+  .self-assess input { display: none; }
+  .self-assess input:checked + span { display: block; }
+  .self-assess label.sa-foundation { color: var(--pine); }
+  .self-assess label.sa-developing { color: var(--amber); }
+  .self-assess label.sa-extending { color: var(--indigo); }
+  .self-assess label:has(input:checked) { background: var(--cream2); border-color: currentColor; }
+
+  .exit-ticket { background: var(--crimson); color: var(--white); border-radius: 14px; padding: 28px 30px; margin: 18px 0; }
+  .exit-ticket h3 { color: var(--white); }
+  .exit-ticket textarea, .exit-ticket input[type="text"] { background: var(--white); }
+
+  .teacher-panel {
+    margin-top: 80px; border: 2px solid var(--crimson); border-radius: 14px; padding: 26px 28px;
+    background: #FBEFEF;
+  }
+  .teacher-panel h3 { color: var(--crimson); margin-bottom: 10px; }
+  .teacher-panel .mono { color: var(--crimson); font-size: 13px; }
+  .teacher-panel table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+  .teacher-panel th, .teacher-panel td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #E0BABA; font-size: 15px; }
+  .teacher-panel th { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--crimson); }
+
+  @media (max-width: 720px) {
+    .student-grid { grid-template-columns: repeat(2, 1fr); }
+    .recap-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-eyebrow">VCE Applied Computing · Victorian Curriculum (VCAA)</div>
+  <h1>Digital Systems in Context</h1>
+  <div class="subtitle">Unit 2 · Area of Study 1 (Outcome 1) · Lesson 2 — Student Workbook</div>
+  <div class="student-grid">
+    <div class="student-field"><label>NAME</label><input type="text" id="studentName"></div>
+    <div class="student-field"><label>CLASS</label><input type="text" id="studentClass"></div>
+    <div class="student-field"><label>DATE</label><input type="text" id="studentDate"></div>
+    <div class="student-field"><label>TEACHER</label><input type="text" id="studentTeacher" value="Mr Smith"></div>
+  </div>
+</div>
+
+<div class="progress-bar">
+  <span class="mono" id="progressLabel">0% complete</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <button class="progress-btn" onclick="manualSave()">Save</button>
+  <button class="progress-btn" onclick="manualLoad()">Load</button>
+  <button class="progress-btn" onclick="window.print()">Export</button>
+  <button class="progress-btn primary" onclick="submitWorkbook()">Submit</button>
+</div>
+
+<main>
+
+  <div class="section-band">
+    <div class="section-num mono">1</div>
+    <div><div class="section-label">Application of Learning</div><div class="section-title">Build the function/capability table</div></div>
+    <div class="section-badge">main task</div>
+  </div>
+  <div class="task-card">
+    <label class="field-label">Which success criteria tier are you aiming for today?</label>
+    <select id="loTierTarget" data-field="loTierTarget">
+      <option value="">Choose one...</option>
+      <option value="foundation">Foundation</option>
+      <option value="developing">Developing</option>
+      <option value="extending">Extending</option>
+    </select>
+  </div>
+  </div>
+  <span class="ref-link">See the lesson website for full sector notes →</span>
+
+  <div class="task-card">
+    <span class="tier-tag tier-foundation">FOUNDATION</span>
+    <p>Pick <strong>two</strong> sectors from the list below, then complete the table for each one.</p>
+    <div class="sector-pick">
+      <label><input type="checkbox" name="sectorPick" value="assistive" data-field="sectorPick1"> Assistive technologies</label>
+      <label><input type="checkbox" name="sectorPick" value="finance" data-field="sectorPick2"> Financial services</label>
+      <label><input type="checkbox" name="sectorPick" value="gps" data-field="sectorPick3"> GPS / location systems</label>
+      <label><input type="checkbox" name="sectorPick" value="robotics" data-field="sectorPick4"> Robotics</label>
+      <label><input type="checkbox" name="sectorPick" value="traffic" data-field="sectorPick5"> Traffic management</label>
+    </div>
+  </div>
+
+  <div class="task-card">
+    <span class="tier-tag tier-foundation">FOUNDATION</span> <span class="tier-tag tier-developing">DEVELOPING</span>
+    <p><strong>Sector 1</strong> — name the system you're focusing on within your first chosen sector.</p>
+    <table class="func-table">
+      <tr><th style="width: 22%;">Field</th><th>Your answer</th></tr>
+      <tr><td>System name</td><td><input type="text" data-field="s1_system" placeholder="e.g. a specific app, device or service"></td></tr>
+      <tr><td>Who uses it</td><td><input type="text" data-field="s1_who" placeholder="Who is the user — a person, a business, a government body?"></td></tr>
+      <tr><td>What problem it solves</td><td><textarea data-field="s1_problem" placeholder="What couldn't be done before this system existed?"></textarea></td></tr>
+      <tr><td>One capability (Developing)</td><td><textarea data-field="s1_capability" placeholder="What can the user now do, specifically, because of this system?"></textarea></td></tr>
+    </table>
+  </div>
+
+  <div class="task-card">
+    <span class="tier-tag tier-foundation">FOUNDATION</span> <span class="tier-tag tier-developing">DEVELOPING</span>
+    <p><strong>Sector 2</strong> — name the system you're focusing on within your second chosen sector.</p>
+    <table class="func-table">
+      <tr><th style="width: 22%;">Field</th><th>Your answer</th></tr>
+      <tr><td>System name</td><td><input type="text" data-field="s2_system" placeholder="e.g. a specific app, device or service"></td></tr>
+      <tr><td>Who uses it</td><td><input type="text" data-field="s2_who" placeholder="Who is the user — a person, a business, a government body?"></td></tr>
+      <tr><td>What problem it solves</td><td><textarea data-field="s2_problem" placeholder="What couldn't be done before this system existed?"></textarea></td></tr>
+      <tr><td>One capability (Developing)</td><td><textarea data-field="s2_capability" placeholder="What can the user now do, specifically, because of this system?"></textarea></td></tr>
+    </table>
+  </div>
+
+  <div class="task-card">
+    <span class="tier-tag tier-extending">EXTENDING</span>
+    <p>Bridge paragraph — link one of your two sectors to your own group's emerging topic area
+    from D1.1. You don't need to have a final topic yet; explain how this sector example points
+    your group toward a sharper direction.</p>
+    <textarea id="bridgeParagraph" data-field="bridgeParagraph" rows="4" placeholder="Which sector connects to your group's interest, and what does it suggest about the kind of problem you could solve?"></textarea>
+  </div>
+
+  <div class="section-band">
+    <div class="section-num mono">2</div>
+    <div><div class="section-label">Responsive Teaching</div><div class="section-title">Quickfire recap</div></div>
+    <div class="section-badge">formative — not marked</div>
+  </div>
+  <div class="task-card">
+    <p>Your class did a verbal quickfire recap earlier — write the capability you remember for
+    each sector now, checking your own recall against your paper notes rather than guessing fresh.</p>
+    <div class="recap-grid">
+      <div class="recap-item"><div class="sector-name">Assistive tech →</div><input type="text" data-field="recap_assistive" placeholder="One capability, in your own words"></div>
+      <div class="recap-item"><div class="sector-name">Financial services →</div><input type="text" data-field="recap_finance" placeholder="One capability, in your own words"></div>
+      <div class="recap-item"><div class="sector-name">GPS / location →</div><input type="text" data-field="recap_gps" placeholder="One capability, in your own words"></div>
+      <div class="recap-item"><div class="sector-name">Robotics →</div><input type="text" data-field="recap_robotics" placeholder="One capability, in your own words"></div>
+      <div class="recap-item"><div class="sector-name">Traffic management →</div><input type="text" data-field="recap_traffic" placeholder="One capability, in your own words"></div>
+    </div>
+  </div>
+
+  <div class="section-band">
+    <div class="section-num mono">3</div>
+    <div><div class="section-label">Next Steps</div><div class="section-title">Homework</div></div>
+    <div class="section-badge">before next lesson</div>
+  </div>
+  <div class="task-card">
+    <label class="field-label">Your homework example — one more real-world digital system related to your group's tentative topic</label>
+    <textarea id="homeworkExample" data-field="homeworkExample" placeholder="What system, and which sector does it belong to? Be ready to share it next lesson."></textarea>
+  </div>
+
+  <div class="section-band">
+    <div class="section-num mono">4</div>
+    <div><div class="section-label">Exit Ticket</div><div class="section-title">Before you go</div></div>
+    <div class="section-badge">submit this</div>
+  </div>
+  <div class="exit-ticket">
+    <h3>Name a system, name its capability</h3>
+    <label class="field-label" style="color: #FFD9D9;">Digital system from today's lesson</label>
+    <input type="text" id="exitSystem" data-field="exitSystem" placeholder="Name one digital system covered today">
+    <label class="field-label" style="color: #FFD9D9;">The capability it gives its users</label>
+    <textarea id="exitCapability" data-field="exitCapability" placeholder="What can a user now do because of this system?"></textarea>
+    <label class="field-label" style="color: #FFD9D9;">Self-assess — which tier did you reach today?</label>
+    <div class="self-assess">
+      <label class="sa-foundation"><input type="radio" name="selfAssess" value="foundation" data-field="selfAssess"><span>FOUNDATION</span></label>
+      <label class="sa-developing"><input type="radio" name="selfAssess" value="developing" data-field="selfAssess"><span>DEVELOPING</span></label>
+      <label class="sa-extending"><input type="radio" name="selfAssess" value="extending" data-field="selfAssess"><span>EXTENDING</span></label>
+    </div>
+  </div>
+
+  <!-- ================= TEACHER MARKING PANEL ================= -->
+  <div class="teacher-panel">
+    <h3>Teacher Marking Panel</h3>
+    <span class="mono">RESTRICTED — for teacher use only</span>
+    <table>
+      <tr><th style="width:55%;">Check</th><th>Status</th></tr>
+      <tr><td>Two sectors selected</td><td id="markSectors">—</td></tr>
+      <tr><td>Sector 1 table complete (system, who, problem, capability)</td><td id="markSector1">—</td></tr>
+      <tr><td>Sector 2 table complete (system, who, problem, capability)</td><td id="markSector2">—</td></tr>
+      <tr><td>Bridge paragraph written (Extending)</td><td id="markBridge">—</td></tr>
+      <tr><td>Exit ticket completed</td><td id="markExit">—</td></tr>
+      <tr><td>Self-assessed tier</td><td id="markTier">—</td></tr>
+    </table>
+    <button class="progress-btn" style="margin-top: 14px;" onclick="runTeacherCheck()">Run completion check</button>
+  </div>
+
+</main>
+
+<script>
+  const LESSON_ID = 'y11-ac-u2-l2-digital-systems-context';
+  const STORAGE_KEY = 'wb_' + LESSON_ID;
+
+  const DataService = {
+    studentId() {
+      return localStorage.getItem('eduportal_currentStudent') || 'current_student';
+    },
+    save(data) {
+      try {
+        localStorage.setItem(STORAGE_KEY + '_' + this.studentId(), JSON.stringify(data));
+        return true;
+      } catch (e) { return false; }
+    },
+    load() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY + '_' + this.studentId());
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) { return null; }
+    },
+    autoSave(data) { this.save(data); },
+    autoLoad() { return this.load(); },
+    submit() {
+      const data = collectData();
+      data._submitted = true;
+      data._submittedAt = new Date().toISOString();
+      this.save(data);
+      this._syncProgress('done', null);
+    },
+    _syncProgress(status, score) {
+      try {
+        const key = 'eduportal_progress_' + this.studentId() + '_' + LESSON_ID;
+        localStorage.setItem(key, JSON.stringify({ status, score, updatedAt: new Date().toISOString() }));
+      } catch (e) { /* ignore */ }
+    }
+  };
+
+  function getAllFields() {
+    return document.querySelectorAll('[data-field]');
+  }
+
+  function collectData() {
+    const data = {};
+    getAllFields().forEach(el => {
+      const key = el.dataset.field;
+      if (el.type === 'checkbox') {
+        data[key] = el.checked;
+      } else if (el.type === 'radio') {
+        if (el.checked) data[key] = el.value;
+      } else {
+        data[key] = el.value;
+      }
+    });
+    data.studentName = document.getElementById('studentName').value;
+    data.studentClass = document.getElementById('studentClass').value;
+    data.studentDate = document.getElementById('studentDate').value;
+    return data;
+  }
+
+  function applyData(data) {
+    if (!data) return;
+    getAllFields().forEach(el => {
+      const key = el.dataset.field;
+      if (!(key in data)) return;
+      if (el.type === 'checkbox') {
+        el.checked = !!data[key];
+      } else if (el.type === 'radio') {
+        el.checked = (el.value === data[key]);
+      } else {
+        el.value = data[key];
+      }
+    });
+    if (data.studentName) document.getElementById('studentName').value = data.studentName;
+    if (data.studentClass) document.getElementById('studentClass').value = data.studentClass;
+    if (data.studentDate) document.getElementById('studentDate').value = data.studentDate;
+    updateProgress();
+  }
+
+  let hasStartedEntry = false;
+  function onFieldChange() {
+    if (!hasStartedEntry) {
+      hasStartedEntry = true;
+      DataService._syncProgress('in-progress', null);
+    }
+    DataService.autoSave(collectData());
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const fields = getAllFields();
+    const total = new Set();
+    const filled = new Set();
+    fields.forEach(el => {
+      const key = el.dataset.field;
+      total.add(key);
+      if (el.type === 'checkbox') {
+        if (el.checked) filled.add(key);
+      } else if (el.type === 'radio') {
+        if (el.checked) filled.add(key);
+      } else if (el.value && el.value.trim().length > 0) {
+        filled.add(key);
+      }
+    });
+    const pct = total.size ? Math.round((filled.size / total.size) * 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = pct + '% complete';
+  }
+
+  function manualSave() {
+    DataService.save(collectData());
+    alert('Saved.');
+  }
+  function manualLoad() {
+    const data = DataService.load();
+    if (data) { applyData(data); alert('Loaded your last saved answers.'); }
+    else { alert('No saved answers found yet.'); }
+  }
+  function submitWorkbook() {
+    DataService.submit();
+    alert('Submitted! Your teacher will be able to see your completed workbook.');
+  }
+
+  function runTeacherCheck() {
+    const data = collectData();
+    const sectorsPicked = ['sectorPick1','sectorPick2','sectorPick3','sectorPick4','sectorPick5']
+      .filter(k => data[k]).length;
+    setCheck('markSectors', sectorsPicked >= 2);
+
+    const s1Complete = !!(data.s1_system && data.s1_who && data.s1_problem && data.s1_capability);
+    setCheck('markSector1', s1Complete);
+    const s2Complete = !!(data.s2_system && data.s2_who && data.s2_problem && data.s2_capability);
+    setCheck('markSector2', s2Complete);
+
+    setCheck('markBridge', !!(data.bridgeParagraph && data.bridgeParagraph.trim().length > 15));
+    setCheck('markExit', !!(data.exitSystem && data.exitCapability));
+
+    const tierEl = document.getElementById('markTier');
+    tierEl.textContent = data.selfAssess ? data.selfAssess.toUpperCase() : '—';
+    tierEl.style.color = data.selfAssess ? '#1B5E47' : '#8C1F28';
+  }
+
+  function setCheck(id, passed) {
+    const el = document.getElementById(id);
+    el.textContent = passed ? '✓ Complete' : '✗ Incomplete';
+    el.style.color = passed ? '#1B5E47' : '#8C1F28';
+    el.style.fontWeight = '700';
+  }
+
+  // Wire up auto-save listeners
+  getAllFields().forEach(el => {
+    el.addEventListener('input', onFieldChange);
+    el.addEventListener('change', onFieldChange);
+  });
+  document.getElementById('studentName').addEventListener('input', () => DataService.autoSave(collectData()));
+  document.getElementById('studentClass').addEventListener('input', () => DataService.autoSave(collectData()));
+  document.getElementById('studentDate').addEventListener('input', () => DataService.autoSave(collectData()));
+
+  // Auto-load on page open
+  window.addEventListener('DOMContentLoaded', () => {
+    const data = DataService.autoLoad();
+    if (data) applyData(data);
+    updateProgress();
+  });
+</script>
+
+</body>
+</html>

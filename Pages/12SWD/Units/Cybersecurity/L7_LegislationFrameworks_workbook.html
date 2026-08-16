@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en-AU" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L7 — Legislation and Industry Frameworks · Student Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#4361EE; --green:#10B981; --amber:#F59E0B; --purple:#8B5CF6; --red:#EF4444;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --read:'Atkinson Hyperlegible','DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono',ui-monospace,monospace;
+}
+html[data-theme="dark"]{
+  --bg:#0D1117; --surface:#151B24; --surface2:#1C232E; --border:#2A3441;
+  --text:#E6EAF0; --muted:#9AA6B6; --field:#0F1720;
+}
+html[data-theme="light"]{
+  --bg:#FFFFFF; --surface:#F7F8FB; --surface2:#FFFFFF; --border:#DDE2EA;
+  --text:#111827; --muted:#5B6472; --field:#FFFFFF;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--read);font-size:17px;line-height:1.6;}
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px 120px;}
+
+.topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--border);}
+.topbar-inner{max-width:1060px;margin:0 auto;padding:10px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.pct{font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap;}
+.track{flex:1;min-width:160px;height:8px;background:var(--surface2);border:1px solid var(--border);border-radius:99px;overflow:hidden;}
+.fill{height:100%;width:0;background:var(--blue);transition:width .3s;}
+button{font-family:var(--sans);font-size:13px;font-weight:700;border-radius:8px;border:1px solid var(--border);
+  background:var(--surface2);color:var(--text);padding:7px 13px;cursor:pointer;}
+button:hover{border-color:var(--blue);}
+button.primary{background:var(--blue);border-color:var(--blue);color:#fff;}
+.status{font-family:var(--mono);font-size:12px;color:var(--muted);}
+
+.cover{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:34px;margin-top:26px;}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--blue);font-weight:500;}
+.cover h1{font-family:var(--serif);font-size:40px;line-height:1.12;margin:12px 0 6px;font-weight:400;}
+.cover .sub{color:var(--muted);font-size:17px;margin-bottom:22px;}
+.idgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.idgrid label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);margin-bottom:5px;}
+input[type=text],select,textarea{
+  width:100%;background:var(--field);color:var(--text);border:1px solid var(--border);
+  border-radius:9px;padding:10px 12px;font-family:var(--read);font-size:16px;}
+textarea{resize:vertical;min-height:86px;line-height:1.55;}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue);}
+select{font-family:var(--sans);}
+
+section{margin-top:38px;}
+.band{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px;}
+.num{width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;
+  font-family:var(--mono);font-weight:500;font-size:16px;flex:none;}
+.band .lab{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted);display:block;}
+.band h2{font-family:var(--serif);font-size:26px;font-weight:400;margin:2px 0 0;line-height:1.2;}
+.badge{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;font-weight:500;padding:5px 11px;border-radius:99px;
+  border:1px solid var(--border);color:var(--muted);}
+.tier{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;font-weight:500;padding:5px 11px;border-radius:99px;color:#fff;}
+.t-f{background:var(--green)} .t-d{background:var(--amber)} .t-e{background:var(--purple)} .t-x{background:var(--red)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:16px;}
+.q{font-weight:700;margin-bottom:9px;}
+.hint{font-size:14.5px;color:var(--muted);font-style:italic;margin:7px 0 0;}
+.callout{border-radius:12px;padding:16px 18px;margin:16px 0;border:1px solid;}
+.c-info{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 10%,transparent);}
+.c-tip{border-color:var(--green);background:color-mix(in srgb,var(--green) 10%,transparent);}
+.c-note{border-color:var(--amber);background:color-mix(in srgb,var(--amber) 10%,transparent);}
+.c-ext{border-color:var(--purple);background:color-mix(in srgb,var(--purple) 10%,transparent);}
+.c-exit{border-color:var(--red);background:color-mix(in srgb,var(--red) 10%,transparent);}
+a{color:var(--blue);}
+.slideref{font-family:var(--mono);font-size:12px;color:var(--muted);}
+
+.item{border-top:1px solid var(--border);padding:14px 0;display:grid;grid-template-columns:1fr 250px 34px;gap:14px;align-items:center;}
+.item:first-of-type{border-top:none;}
+.item .mark{font-family:var(--mono);font-size:19px;text-align:center;}
+.ok{color:var(--green);} .no{color:var(--red);}
+.row{display:grid;gap:14px;}
+.row-2{grid-template-columns:1fr 1fr;}
+.row-3{grid-template-columns:1fr 1fr 1fr;}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:15px;}
+th,td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top;}
+th{background:var(--surface2);font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--muted);font-weight:500;}
+td textarea{min-height:70px;font-size:15px;}
+.small{font-size:14.5px;color:var(--muted);}
+.evidence{font-family:var(--mono);font-size:14.5px;background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;padding:14px 16px;margin:10px 0;line-height:1.55;}
+.checkline{display:flex;align-items:flex-start;gap:10px;margin:9px 0;}
+.checkline input{margin-top:5px;flex:none;width:17px;height:17px;accent-color:var(--blue);}
+.scorepill{font-family:var(--mono);font-size:13px;padding:6px 12px;border-radius:99px;border:1px solid var(--border);color:var(--muted);}
+.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;}
+.submitbar{margin-top:36px;border:1px solid var(--red);border-radius:14px;padding:22px;background:color-mix(in srgb,var(--red) 8%,transparent);}
+@media print{.topbar{display:none}.card{break-inside:avoid}}
+@media (max-width:820px){ .idgrid,.row-2,.row-3{grid-template-columns:1fr;} .item{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="pct" id="pctLabel">0% complete</span>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <button onclick="DataService.save(collect(),true)">Save</button>
+    <button onclick="DataService.autoLoad(true)">Load</button>
+    <button onclick="window.print()">Export</button>
+    <button onclick="toggleTheme()">Theme</button>
+    <span class="status" id="status"></span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="cover">
+  <span class="eyebrow">UNIT 4 · AREA OF STUDY 2 · CYBER SECURITY · LESSON 7</span>
+  <h1>Legislation and Industry Frameworks</h1>
+  <div class="sub">Copyright Act · Privacy Act · Privacy and Data Protection Act · Essential Eight · ISM</div>
+  <div class="idgrid">
+    <div><label>NAME</label><input type="text" id="stu_name" placeholder="Your full name"></div>
+    <div><label>CLASS</label><input type="text" id="stu_class" placeholder="Class code"></div>
+    <div><label>DATE</label><input type="text" id="stu_date" placeholder="YYYY-MM-DD"></div>
+    <div><label>TEACHER</label><input type="text" id="stu_teacher" placeholder="Teacher name"></div>
+  </div>
+  <div class="callout c-info" style="margin-bottom:0">
+    Sections 1–3 are recall drills. Do them from memory first, then check, then correct — checking before trying teaches you nothing.
+    Full notes: <a href="U4_CyberSecuritySoftwareDev_site.html#y12-sd-u4-l7-legislation-frameworks">Unit site → Lesson 7 →</a>
+  </div>
+</div>
+
+<!-- ===================== SECTION 1 ===================== -->
+<section id="s1">
+  <div class="band">
+    <div class="num">1</div>
+    <div><span class="lab">SECTION 1</span><h2>Law or framework?</h2></div>
+    <span class="tier t-f">FOUNDATION</span><span class="badge">AUTO-MARKED</span>
+  </div>
+
+  <div class="card">
+    <p class="q">1.1 &nbsp;For each instrument, choose whether it is <strong>legislation</strong> (breaching it carries penalties) or a <strong>framework</strong> (guidance, no penalty).</p>
+    <p class="slideref">Slide 5</p>
+    <div id="q1">
+      <div class="item"><div>Privacy Act 1988 (Cwlth)</div>
+        <select data-a="l"><option value="">Choose…</option><option value="l">Legislation</option><option value="f">Framework</option></select><div class="mark"></div></div>
+      <div class="item"><div>The Essential Eight</div>
+        <select data-a="f"><option value="">Choose…</option><option value="l">Legislation</option><option value="f">Framework</option></select><div class="mark"></div></div>
+      <div class="item"><div>Copyright Act 1968 (Cwlth)</div>
+        <select data-a="l"><option value="">Choose…</option><option value="l">Legislation</option><option value="f">Framework</option></select><div class="mark"></div></div>
+      <div class="item"><div>The Information Security Manual</div>
+        <select data-a="f"><option value="">Choose…</option><option value="l">Legislation</option><option value="f">Framework</option></select><div class="mark"></div></div>
+      <div class="item"><div>Privacy and Data Protection Act 2014</div>
+        <select data-a="l"><option value="">Choose…</option><option value="l">Legislation</option><option value="f">Framework</option></select><div class="mark"></div></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="check('q1')">Check answers</button><span class="scorepill" id="q1score">not checked</span></div>
+  </div>
+
+  <div class="card">
+    <p class="q">1.2 &nbsp;Which body publishes each of these?</p>
+    <div id="q2">
+      <div class="item"><div>The Essential Eight</div>
+        <select data-a="acsc"><option value="">Choose…</option><option value="acsc">Australian Cyber Security Centre</option><option value="oaic">Office of the Australian Information Commissioner</option><option value="vic">Victorian Government</option></select><div class="mark"></div></div>
+      <div class="item"><div>The Information Security Manual</div>
+        <select data-a="acsc"><option value="">Choose…</option><option value="acsc">Australian Cyber Security Centre</option><option value="oaic">Office of the Australian Information Commissioner</option><option value="vic">Victorian Government</option></select><div class="mark"></div></div>
+      <div class="item"><div>The Information Privacy Principles (IPPs)</div>
+        <select data-a="vic"><option value="">Choose…</option><option value="acsc">Australian Cyber Security Centre</option><option value="oaic">Office of the Australian Information Commissioner</option><option value="vic">Victorian Government</option></select><div class="mark"></div></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="check('q2')">Check answers</button><span class="scorepill" id="q2score">not checked</span></div>
+  </div>
+
+  <div class="card">
+    <p class="q">1.3 &nbsp;An organisation ignores the Essential Eight entirely. No law has been broken. Explain why a recommendation to adopt it can still be argued for.</p>
+    <textarea id="f_whyframe" placeholder="If there is no penalty, what is the argument built on instead?"></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">1.4 &nbsp;Copyright protects source code the moment it is written. Explain what this means for a developer who wants to protect their work.</p>
+    <textarea id="f_copyauto" placeholder="What does the developer have to do — and what do they not have to do?"></textarea>
+  </div>
+</section>
+
+<!-- ===================== SECTION 2 ===================== -->
+<section id="s2">
+  <div class="band">
+    <div class="num">2</div>
+    <div><span class="lab">SECTION 2</span><h2>Principles by number</h2></div>
+    <span class="tier t-f">FOUNDATION</span><span class="badge">AUTO-MARKED</span>
+  </div>
+
+  <div class="callout c-note">
+    Close your notes for 2.1 and 2.2. Getting these wrong now and correcting them is worth more than getting them right with the table open.
+  </div>
+
+  <div class="card">
+    <p class="q">2.1 &nbsp;Match each requirement to its Australian Privacy Principle.</p>
+    <p class="slideref">Slide 9</p>
+    <div id="q3">
+      <div class="item"><div>Take reasonable steps to protect information from unauthorised access, and destroy it when no longer needed.</div>
+        <select data-a="11"><option value="">Choose…</option><option value="1">APP 1</option><option value="6">APP 6</option><option value="8">APP 8</option><option value="9">APP 9</option><option value="11">APP 11</option></select><div class="mark"></div></div>
+      <div class="item"><div>Maintain a clearly expressed and up-to-date privacy policy.</div>
+        <select data-a="1"><option value="">Choose…</option><option value="1">APP 1</option><option value="6">APP 6</option><option value="8">APP 8</option><option value="9">APP 9</option><option value="11">APP 11</option></select><div class="mark"></div></div>
+      <div class="item"><div>Take steps to protect personal information before disclosing it overseas.</div>
+        <select data-a="8"><option value="">Choose…</option><option value="1">APP 1</option><option value="6">APP 6</option><option value="8">APP 8</option><option value="9">APP 9</option><option value="11">APP 11</option></select><div class="mark"></div></div>
+      <div class="item"><div>Do not adopt a tax file number or licence number as your own identifier for a person.</div>
+        <select data-a="9"><option value="">Choose…</option><option value="1">APP 1</option><option value="6">APP 6</option><option value="8">APP 8</option><option value="9">APP 9</option><option value="11">APP 11</option></select><div class="mark"></div></div>
+      <div class="item"><div>Use information only for the purpose it was collected for.</div>
+        <select data-a="6"><option value="">Choose…</option><option value="1">APP 1</option><option value="6">APP 6</option><option value="8">APP 8</option><option value="9">APP 9</option><option value="11">APP 11</option></select><div class="mark"></div></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="check('q3')">Check answers</button><span class="scorepill" id="q3score">not checked</span></div>
+  </div>
+
+  <div class="card">
+    <p class="q">2.2 &nbsp;Match each requirement to its Victorian Information Privacy Principle.</p>
+    <p class="slideref">Slide 11</p>
+    <div id="q4">
+      <div class="item"><div>If personal information travels outside Victoria, its protections must travel with it.</div>
+        <select data-a="9"><option value="">Choose…</option><option value="1">IPP 1</option><option value="2">IPP 2</option><option value="4">IPP 4</option><option value="5">IPP 5</option><option value="9">IPP 9</option></select><div class="mark"></div></div>
+      <div class="item"><div>Collect only the information the organisation actually needs.</div>
+        <select data-a="1"><option value="">Choose…</option><option value="1">IPP 1</option><option value="2">IPP 2</option><option value="4">IPP 4</option><option value="5">IPP 5</option><option value="9">IPP 9</option></select><div class="mark"></div></div>
+      <div class="item"><div>Protect information from misuse, loss and unauthorised access.</div>
+        <select data-a="4"><option value="">Choose…</option><option value="1">IPP 1</option><option value="2">IPP 2</option><option value="4">IPP 4</option><option value="5">IPP 5</option><option value="9">IPP 9</option></select><div class="mark"></div></div>
+      <div class="item"><div>Be transparent about what the organisation does with information.</div>
+        <select data-a="5"><option value="">Choose…</option><option value="1">IPP 1</option><option value="2">IPP 2</option><option value="4">IPP 4</option><option value="5">IPP 5</option><option value="9">IPP 9</option></select><div class="mark"></div></div>
+      <div class="item"><div>Use information only for the purpose it was collected for, or one a person would reasonably expect.</div>
+        <select data-a="2"><option value="">Choose…</option><option value="1">IPP 1</option><option value="2">IPP 2</option><option value="4">IPP 4</option><option value="5">IPP 5</option><option value="9">IPP 9</option></select><div class="mark"></div></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="check('q4')">Check answers</button><span class="scorepill" id="q4score">not checked</span></div>
+  </div>
+
+  <div class="card">
+    <p class="q">2.3 &nbsp;Three APP/IPP pairs cover nearly the same ground. Name the pairs and say what each pair is about.</p>
+    <textarea id="f_pairs" placeholder="Three lines, one per pair. Look for the same idea appearing under two different numbers."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">2.4 &nbsp;Write out what APP 11 requires, in full, without looking. Then check it and note anything you left out.</p>
+    <div class="row row-2">
+      <div><label class="small">From memory</label><textarea id="f_app11" placeholder="No looking. Write what you can, even if it is incomplete."></textarea></div>
+      <div><label class="small">What I left out</label><textarea id="f_app11b" placeholder="Compare against the table. What was missing?"></textarea></div>
+    </div>
+    <p class="hint">Most students remember the protection half and forget the second half entirely.</p>
+  </div>
+</section>
+
+<!-- ===================== SECTION 3 ===================== -->
+<section id="s3">
+  <div class="band">
+    <div class="num">3</div>
+    <div><span class="lab">SECTION 3</span><h2>The Essential Eight and the ISM</h2></div>
+    <span class="tier t-f">FOUNDATION</span><span class="badge">AUTO-MARKED</span>
+  </div>
+
+  <div class="card">
+    <p class="q">3.1 &nbsp;Is each of the following one of the Essential Eight mitigation strategies?</p>
+    <p class="slideref">Slide 14</p>
+    <div id="q5">
+      <div class="item"><div>Restrict administrative privileges</div>
+        <select data-a="y"><option value="">Choose…</option><option value="y">Yes — one of the eight</option><option value="n">No</option></select><div class="mark"></div></div>
+      <div class="item"><div>Encrypt all data at rest</div>
+        <select data-a="n"><option value="">Choose…</option><option value="y">Yes — one of the eight</option><option value="n">No</option></select><div class="mark"></div></div>
+      <div class="item"><div>Configure Microsoft Office macro settings</div>
+        <select data-a="y"><option value="">Choose…</option><option value="y">Yes — one of the eight</option><option value="n">No</option></select><div class="mark"></div></div>
+      <div class="item"><div>Conduct annual penetration testing</div>
+        <select data-a="n"><option value="">Choose…</option><option value="y">Yes — one of the eight</option><option value="n">No</option></select><div class="mark"></div></div>
+      <div class="item"><div>Application control</div>
+        <select data-a="y"><option value="">Choose…</option><option value="y">Yes — one of the eight</option><option value="n">No</option></select><div class="mark"></div></div>
+      <div class="item"><div>Regular backups</div>
+        <select data-a="y"><option value="">Choose…</option><option value="y">Yes — one of the eight</option><option value="n">No</option></select><div class="mark"></div></div>
+      <div class="item"><div>Mandatory security awareness training</div>
+        <select data-a="n"><option value="">Choose…</option><option value="y">Yes — one of the eight</option><option value="n">No</option></select><div class="mark"></div></div>
+      <div class="item"><div>User application hardening</div>
+        <select data-a="y"><option value="">Choose…</option><option value="y">Yes — one of the eight</option><option value="n">No</option></select><div class="mark"></div></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="check('q5')">Check answers</button><span class="scorepill" id="q5score">not checked</span></div>
+  </div>
+
+  <div class="card">
+    <p class="q">3.2 &nbsp;Which Essential Eight maturity level is being described?</p>
+    <div id="q6">
+      <div class="item"><div>Prepared for organised actors who exploit unpatched software, circumvent authentication and disguise their activity inside the organisation.</div>
+        <select data-a="3"><option value="">Choose…</option><option value="0">Level Zero</option><option value="1">Level One</option><option value="2">Level Two</option><option value="3">Level Three</option></select><div class="mark"></div></div>
+      <div class="item"><div>There are weaknesses in the organisation's overall posture.</div>
+        <select data-a="0"><option value="">Choose…</option><option value="0">Level Zero</option><option value="1">Level One</option><option value="2">Level Two</option><option value="3">Level Three</option></select><div class="mark"></div></div>
+      <div class="item"><div>Prepared for weak authentication and phishing exploits by actors intent on stealing or destroying data.</div>
+        <select data-a="2"><option value="">Choose…</option><option value="0">Level Zero</option><option value="1">Level One</option><option value="2">Level Two</option><option value="3">Level Three</option></select><div class="mark"></div></div>
+      <div class="item"><div>Focused on preventing access by malicious actors and mitigating simple exploits.</div>
+        <select data-a="1"><option value="">Choose…</option><option value="0">Level Zero</option><option value="1">Level One</option><option value="2">Level Two</option><option value="3">Level Three</option></select><div class="mark"></div></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="check('q6')">Check answers</button><span class="scorepill" id="q6score">not checked</span></div>
+  </div>
+
+  <div class="card">
+    <p class="q">3.3 &nbsp;Which of the ISM's four activities does each belong to?</p>
+    <p class="slideref">Slide 16</p>
+    <div id="q7">
+      <div class="item"><div>Collecting and analysing event logs to identify incidents.</div>
+        <select data-a="d"><option value="">Choose…</option><option value="g">Govern</option><option value="p">Protect</option><option value="d">Detect</option><option value="r">Respond</option></select><div class="mark"></div></div>
+      <div class="item"><div>Restricting access and encrypting data.</div>
+        <select data-a="p"><option value="">Choose…</option><option value="g">Govern</option><option value="p">Protect</option><option value="d">Detect</option><option value="r">Respond</option></select><div class="mark"></div></div>
+      <div class="item"><div>Reporting an incident externally and enacting recovery.</div>
+        <select data-a="r"><option value="">Choose…</option><option value="g">Govern</option><option value="p">Protect</option><option value="d">Detect</option><option value="r">Respond</option></select><div class="mark"></div></div>
+      <div class="item"><div>Identifying and documenting security risks before deployment.</div>
+        <select data-a="g"><option value="">Choose…</option><option value="g">Govern</option><option value="p">Protect</option><option value="d">Detect</option><option value="r">Respond</option></select><div class="mark"></div></div>
+      <div class="item"><div>Permitting only trusted users, systems and code to run.</div>
+        <select data-a="p"><option value="">Choose…</option><option value="g">Govern</option><option value="p">Protect</option><option value="d">Detect</option><option value="r">Respond</option></select><div class="mark"></div></div>
+    </div>
+    <div class="actions"><button class="primary" onclick="check('q7')">Check answers</button><span class="scorepill" id="q7score">not checked</span></div>
+  </div>
+
+  <div class="card">
+    <p class="q">3.4 &nbsp;Name the three ISM software development sections in the study design, and give one requirement from each.</p>
+    <textarea id="f_ism3" placeholder="Three sections. One line each — the section, then one thing it asks for."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">3.5 &nbsp;Explain the difference between <em>secure-by-design</em> and <em>secure-by-default</em>.</p>
+    <textarea id="f_sbd" placeholder="One is about when security is considered. The other is about what happens if nobody changes a setting."></textarea>
+  </div>
+</section>
+
+<!-- ===================== SECTION 4 ===================== -->
+<section id="s4">
+  <div class="band">
+    <div class="num">4</div>
+    <div><span class="lab">SECTION 4</span><h2>Which Act, which principle?</h2></div>
+    <span class="tier t-d">DEVELOPING</span><span class="badge">EXTENDED WRITTEN</span>
+  </div>
+
+  <div class="callout c-info">
+    Six organisations. For each: name the Act that applies, the specific principle at issue, and one sentence on the consequence.
+    Check what kind of organisation it is <em>before</em> you decide which Act applies — that decision governs everything after it.
+  </div>
+
+  <div class="card">
+    <p class="q">4.1 &nbsp;<strong>Meridian Freight</strong> — a logistics company, turnover $14 million. Driver licence numbers are used as the internal staff ID in every system.</p>
+    <div class="row row-3">
+      <div><label class="small">Act</label><textarea id="f_c1a" placeholder="Which Act — and what made you choose it?"></textarea></div>
+      <div><label class="small">Principle</label><textarea id="f_c1p" placeholder="Give the number and what it requires."></textarea></div>
+      <div><label class="small">Consequence</label><textarea id="f_c1c" placeholder="What follows for the organisation?"></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="q">4.2 &nbsp;<strong>Barrandale Shire Council</strong> — its resident reporting app stores photographs and addresses on a server located in Ireland. The contract with the hosting provider is silent on privacy.</p>
+    <div class="row row-3">
+      <div><label class="small">Act</label><textarea id="f_c2a" placeholder="What kind of body is a shire council?"></textarea></div>
+      <div><label class="small">Principle</label><textarea id="f_c2p" placeholder="Give the number and what it requires."></textarea></div>
+      <div><label class="small">Consequence</label><textarea id="f_c2c" placeholder="What follows for the organisation?"></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="q">4.3 &nbsp;<strong>Tallow Lane Dental</strong> — a two-chair practice with turnover of $480,000. Patient contact details collected for appointments are used to send promotional offers.</p>
+    <div class="row row-3">
+      <div><label class="small">Act</label><textarea id="f_c3a" placeholder="The turnover rule is not the only route into the Privacy Act. What else is this?"></textarea></div>
+      <div><label class="small">Principle</label><textarea id="f_c3p" placeholder="Give the number and what it requires."></textarea></div>
+      <div><label class="small">Consequence</label><textarea id="f_c3c" placeholder="What follows for the organisation?"></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="q">4.4 &nbsp;<strong>Kelp &amp; Co</strong> — a five-person start-up, turnover $210,000. It ships a paid app built on a library whose licence requires derived work to be released under the same terms. Nobody read the licence.</p>
+    <div class="row row-3">
+      <div><label class="small">Act</label><textarea id="f_c4a" placeholder="Privacy is not the only legislation in this unit."></textarea></div>
+      <div><label class="small">Principle / provision</label><textarea id="f_c4p" placeholder="What does this Act protect, and what has been done to it?"></textarea></div>
+      <div><label class="small">Consequence</label><textarea id="f_c4c" placeholder="Damages are one. What could happen to the product itself?"></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="q">4.5 &nbsp;<strong>Northbridge Water</strong> — a Victorian statutory authority. Its website has no privacy policy and has not published one since 2019.</p>
+    <div class="row row-3">
+      <div><label class="small">Act</label><textarea id="f_c5a" placeholder="Statutory authority of which government?"></textarea></div>
+      <div><label class="small">Principle</label><textarea id="f_c5p" placeholder="Give the number and what it requires."></textarea></div>
+      <div><label class="small">Consequence</label><textarea id="f_c5c" placeholder="This Act names a maximum penalty. What is it measured in?"></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="q">4.6 &nbsp;<strong>Verity Systems</strong> — a private software house, turnover $6 million, building a case-management system under contract for a Victorian government department. Test environments are loaded with live departmental records.</p>
+    <div class="row row-3">
+      <div><label class="small">Act(s)</label><textarea id="f_c6a" placeholder="Read the sentence twice. Is only one Act in play here?"></textarea></div>
+      <div><label class="small">Principle(s)</label><textarea id="f_c6p" placeholder="Give the numbers and what they require."></textarea></div>
+      <div><label class="small">Consequence</label><textarea id="f_c6c" placeholder="Who carries the responsibility — the department, the contractor, or both?"></textarea></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="q">4.7 &nbsp;Which of the six was hardest to decide, and what information would have made it straightforward?</p>
+    <textarea id="f_hardest" placeholder="Name the case. What single fact would have settled it?"></textarea>
+  </div>
+</section>
+
+<!-- ===================== SECTION 5 ===================== -->
+<section id="s5">
+  <div class="band">
+    <div class="num">5</div>
+    <div><span class="lab">SECTION 5</span><h2>Turn a framework into criteria</h2></div>
+    <span class="tier t-d">DEVELOPING</span><span class="badge">EXTENDED WRITTEN</span>
+  </div>
+
+  <div class="callout c-info">
+    <strong>Aurora Ticketing</strong> builds ticketing and gate-scanning software for music festivals. Nine developers, two operations staff,
+    one hosted code repository, one cloud environment, 400 000 customer records, payments through a third-party gateway.<br>
+    Four Essential Eight strategies are listed below. Turn each into a criterion Aurora could actually apply, using the four-part structure from Lesson 6.
+  </div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th style="width:20%">Strategy</th><th style="width:28%">Criterion</th><th style="width:26%">Data to collect</th><th style="width:26%">Measurement</th></tr></thead>
+      <tbody id="critRows"></tbody>
+    </table>
+    <p class="hint">Your measurement should end in a number, a percentage, or a direct comparison against a document.</p>
+  </div>
+
+  <div class="card">
+    <p class="q">5.1 &nbsp;Rewrite this weak recommendation so that it names a framework and a target: <em>"Aurora should improve its security."</em></p>
+    <textarea id="f_rec1" placeholder="What would you tell someone to do on Monday, and how would you know later whether it worked?"></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">5.2 &nbsp;Aurora sends nightly database backups to a storage service hosted in the United States. Name the legal issue, the principle, and what Aurora must do about it.</p>
+    <textarea id="f_rec2" placeholder="Three parts. The first one depends on where the data goes, not on what it is."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">5.3 &nbsp;Aurora's privacy policy was written in 2018 and describes a product it no longer sells. Name the principle breached and explain why an out-of-date policy is a legal problem and not just an untidy one.</p>
+    <textarea id="f_rec3" placeholder="What is the policy for? Who relies on it, and what do they lose when it is wrong?"></textarea>
+  </div>
+</section>
+
+<!-- ===================== SECTION 6 ===================== -->
+<section id="s6">
+  <div class="band">
+    <div class="num">6</div>
+    <div><span class="lab">SECTION 6</span><h2>Compliance is not security</h2></div>
+    <span class="tier t-e">EXTENDING</span><span class="badge">EXTENDED WRITTEN</span>
+  </div>
+
+  <div class="callout c-ext">
+    Attempt these once Sections 1–5 are complete. Each expects a paragraph, not a sentence.
+  </div>
+
+  <div class="card">
+    <p class="q">6.1 &nbsp;Essential Eight maturity is self-assessed and not externally accredited. Explain what that means for the value of an organisation's claim to be at Level Two, and what would make the claim credible.</p>
+    <textarea id="f_e1" placeholder="If nobody checks the claim, what would you need to see before believing it?"></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">6.2 &nbsp;An organisation meets every APP and every IPP that applies to it, and is still breached the following month. Is that possible? Explain your reasoning.</p>
+    <textarea id="f_e2" placeholder="What does the law actually require — an outcome, or something else?"></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">6.3 &nbsp;"Reasonable steps" is not defined in the Privacy Act. Explain how the artefacts you have built across this unit — controls, a threat model, a criteria-based evaluation — would be used to demonstrate that reasonable steps were taken.</p>
+    <textarea id="f_e3" placeholder="After an incident, someone asks what you did. What do you hand over?"></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">6.4 &nbsp;A recommendation reads: <em>"Adopt Essential Eight Maturity Level Three within six months."</em> Aurora has eleven staff and no dedicated security role. Judge the recommendation against the four qualities from Lesson 6.</p>
+    <textarea id="f_e4" placeholder="Anchored, specific, prioritised, re-measurable — which of the four does it fail, and why does that matter here?"></textarea>
+  </div>
+</section>
+
+<!-- ===================== SECTION 7 ===================== -->
+<section id="s7">
+  <div class="band">
+    <div class="num">7</div>
+    <div><span class="lab">SECTION 7</span><h2>Exit ticket</h2></div>
+    <span class="tier t-x">EXIT</span><span class="badge">NO NOTES</span>
+  </div>
+
+  <div class="callout c-exit">
+    Five minutes, notes closed. This is a check on what stayed, not a test.
+  </div>
+
+  <div class="card">
+    <p class="q">7.1 &nbsp;Name the three pieces of legislation and the two frameworks covered today.</p>
+    <textarea id="f_ex1" placeholder="Five names. Group them before you write."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">7.2 &nbsp;What does APP 11 require an organisation to do?</p>
+    <textarea id="f_ex2" placeholder="From memory. Both halves."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">7.3 &nbsp;A Victorian council mishandles resident data. Which Act applies, and which principle?</p>
+    <textarea id="f_ex3" placeholder="Act, then principle number, then what it requires."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">7.4 &nbsp;Name three of the Essential Eight, and explain why naming a framework strengthens a recommendation.</p>
+    <textarea id="f_ex4" placeholder="Three strategies, then one sentence on what the name adds."></textarea>
+  </div>
+
+  <div class="card">
+    <p class="q">7.5 &nbsp;Self-assessment — tick what you can do now.</p>
+    <div class="checkline"><input type="checkbox" id="sc_f1"><label for="sc_f1"><strong style="color:var(--green)">Foundation ·</strong> I can name the five key instruments and say whether each is law or guidance.</label></div>
+    <div class="checkline"><input type="checkbox" id="sc_f2"><label for="sc_f2"><strong style="color:var(--green)">Foundation ·</strong> I can state what APP 11 and IPP 4 require.</label></div>
+    <div class="checkline"><input type="checkbox" id="sc_d1"><label for="sc_d1"><strong style="color:var(--amber)">Developing ·</strong> I can decide which Act applies to an organisation and name the principle breached.</label></div>
+    <div class="checkline"><input type="checkbox" id="sc_d2"><label for="sc_d2"><strong style="color:var(--amber)">Developing ·</strong> I can list the Essential Eight and describe its four maturity levels.</label></div>
+    <div class="checkline"><input type="checkbox" id="sc_e1"><label for="sc_e1"><strong style="color:var(--purple)">Extending ·</strong> I can use a named framework to justify a recommendation.</label></div>
+    <div class="checkline"><input type="checkbox" id="sc_e2"><label for="sc_e2"><strong style="color:var(--purple)">Extending ·</strong> I can explain how a documented evaluation demonstrates reasonable steps.</label></div>
+  </div>
+
+  <div class="card">
+    <p class="q">7.6 &nbsp;Which principle number are you least confident about? Name it.</p>
+    <textarea id="f_ex6" placeholder="One number. Be honest — this is what gets revisited next lesson."></textarea>
+  </div>
+
+  <div class="submitbar">
+    <strong>Ready to submit?</strong>
+    <p class="small" style="margin:6px 0 0">Submitting locks in your current answers and marks this lesson as submitted on your portal home page. You can keep editing and save again afterwards.</p>
+    <div class="actions">
+      <button class="primary" onclick="DataService.submit()">Submit workbook</button>
+      <span class="status" id="submitStatus"></span>
+    </div>
+  </div>
+</section>
+
+<p class="small" style="margin-top:34px">
+  Next lesson: ethics and improving practices — where the law runs out, and the strategies that keep an organisation improving.
+  Full notes for this lesson: <a href="U4_CyberSecuritySoftwareDev_site.html#y12-sd-u4-l7-legislation-frameworks">unit site → Lesson 7</a>.
+</p>
+
+</div>
+
+<script>
+/* ============================================================
+   EduPortal — Lesson 7 workbook
+   ============================================================ */
+const LESSON_ID = 'y12-sd-u4-l7-legislation-frameworks';
+const UNIT_ID   = 'y12-sd-u4';
+
+/* ---------- criteria table rows ---------- */
+const PRACTICES = [
+  ["Multi-factor authentication","Every account, or only some? Decide the scope before you write the question."],
+  ["Patch applications","'Patched' is not the measurable part. What is?"],
+  ["Restrict administrative privileges","Who holds it now, and who should? Two different records."],
+  ["Regular backups","A backup that has never been restored from is not yet evidence of anything."]
+];
+
+(function buildCritRows(){
+  const tb = document.getElementById('critRows');
+  PRACTICES.forEach((p,i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><strong>${p[0]}</strong></td>
+      <td><textarea id="cr_k_${i}" placeholder="${p[1]}"></textarea></td>
+      <td><textarea id="cr_d_${i}" placeholder="Name the record, log or document — be specific."></textarea></td>
+      <td><textarea id="cr_m_${i}" placeholder="What do you do with that data to get an answer?"></textarea></td>`;
+    tb.appendChild(tr);
+  });
+})();
+
+/* ---------- auto-marking ---------- */
+function check(groupId){
+  const g = document.getElementById(groupId);
+  const sels = g.querySelectorAll('select[data-a]');
+  let right=0, answered=0;
+  sels.forEach(sel=>{
+    const mark = sel.parentElement.querySelector('.mark');
+    if(!sel.value){ mark.textContent=''; mark.className='mark'; return; }
+    answered++;
+    if(sel.value === sel.dataset.a){ right++; mark.textContent='✓'; mark.className='mark ok'; }
+    else { mark.textContent='✗'; mark.className='mark no'; }
+  });
+  const pill = document.getElementById(groupId+'score');
+  pill.textContent = answered ? `${right} / ${sels.length} correct` : 'nothing answered yet';
+  pill.style.color = (right===sels.length) ? 'var(--green)' : 'var(--muted)';
+  DataService.autoSave(collect());
+}
+
+/* ---------- field registry ---------- */
+function allFields(){
+  return Array.from(document.querySelectorAll('input[type=text], textarea, select, input[type=checkbox]'))
+    .filter(el=>el.id);
+}
+function collect(){
+  const d = {};
+  allFields().forEach(el=>{ d[el.id] = (el.type==='checkbox') ? el.checked : el.value; });
+  return d;
+}
+function apply(d){
+  if(!d) return;
+  allFields().forEach(el=>{
+    if(!(el.id in d)) return;
+    if(el.type==='checkbox') el.checked = !!d[el.id]; else el.value = d[el.id];
+  });
+  updateProgress();
+}
+
+/* ---------- DataService ----------
+   localStorage-backed today; each method maps 1:1 onto a REST endpoint
+   so the storage layer can be swapped for the API without touching
+   anything above this comment.
+------------------------------------ */
+const DataService = {
+  studentId(){
+    try { return JSON.parse(localStorage.getItem('eduportal_session') || '{}').id || 'current_student'; }
+    catch(e){ return 'current_student'; }
+  },
+  _key(){ return `eduportal_workbook_${this.studentId()}_${LESSON_ID}`; },
+  _progressKey(){ return `eduportal_progress_${this.studentId()}_${LESSON_ID}`; },
+
+  // POST /api/workbooks/{studentId}/{lessonId}
+  save(data, announce){
+    try{
+      localStorage.setItem(this._key(), JSON.stringify({
+        lessonId: LESSON_ID, unitId: UNIT_ID, studentId: this.studentId(),
+        updated: new Date().toISOString().slice(0,10), data: data
+      }));
+      if(announce) setStatus('Saved ' + new Date().toISOString().slice(0,10));
+      return true;
+    } catch(e){ if(announce) setStatus('Save failed'); return false; }
+  },
+
+  // GET /api/workbooks/{studentId}/{lessonId}
+  load(){
+    try{ const raw = localStorage.getItem(this._key()); return raw ? JSON.parse(raw).data : null; }
+    catch(e){ return null; }
+  },
+
+  _timer:null,
+  autoSave(data){
+    clearTimeout(this._timer);
+    this._timer = setTimeout(()=>{
+      this.save(data,false);
+      this._syncProgress('in-progress');
+      setStatus('Autosaved');
+    }, 700);
+  },
+
+  autoLoad(announce){
+    const d = this.load();
+    if(d){ apply(d); if(announce) setStatus('Loaded your saved work'); }
+    else if(announce){ setStatus('Nothing saved yet'); }
+  },
+
+  // POST /api/workbooks/{studentId}/{lessonId}/submit
+  submit(){
+    this.save(collect(), false);
+    this._syncProgress('submitted');
+    document.getElementById('submitStatus').textContent =
+      'Submitted ' + new Date().toISOString().slice(0,10);
+    setStatus('Submitted');
+  },
+
+  _syncProgress(status){
+    try{
+      localStorage.setItem(this._progressKey(), JSON.stringify({
+        lessonId: LESSON_ID, unitId: UNIT_ID, studentId: this.studentId(),
+        status: status,                       // 'in-progress' | 'submitted' | 'marked'
+        completion: currentPercent(),
+        updated: new Date().toISOString().slice(0,10)
+      }));
+    } catch(e){ /* progress sync is best-effort */ }
+  }
+};
+window.DataService = DataService;
+
+/* ---------- progress ---------- */
+function currentPercent(){
+  const fields = allFields().filter(el=>el.type!=='checkbox' && !el.id.startsWith('stu_'));
+  const done = fields.filter(el=>String(el.value||'').trim().length>0).length;
+  return fields.length ? Math.round(done/fields.length*100) : 0;
+}
+function updateProgress(){
+  const p = currentPercent();
+  document.getElementById('fill').style.width = p + '%';
+  document.getElementById('pctLabel').textContent = p + '% complete';
+}
+function setStatus(t){
+  const s = document.getElementById('status');
+  s.textContent = t;
+  clearTimeout(setStatus._t);
+  setStatus._t = setTimeout(()=>{ s.textContent=''; }, 2600);
+}
+
+/* ---------- theme ---------- */
+function toggleTheme(){
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  try{ localStorage.setItem('eduportal_theme', next); }catch(e){}
+}
+(function initTheme(){
+  try{
+    const t = localStorage.getItem('eduportal_theme');
+    if(t) document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+
+/* ---------- wiring ---------- */
+let firstEntry = true;
+document.addEventListener('input', e=>{
+  if(!e.target.id) return;
+  updateProgress();
+  if(firstEntry){ firstEntry=false; DataService._syncProgress('in-progress'); }
+  DataService.autoSave(collect());
+});
+document.addEventListener('change', e=>{
+  if(!e.target.id) return;
+  updateProgress();
+  DataService.autoSave(collect());
+});
+
+window.addEventListener('DOMContentLoaded', ()=>{
+  DataService.autoLoad(false);
+  updateProgress();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L4 — Problem Scoping & Data Collection · Y11 Applied Computing U2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #12100E; --ink2: #2C2A28; --ink3: #6B6762;
+    --cream: #F7F3EC; --cream2: #EDE8DF; --white: #FFFFFF;
+    --border: #D8D3CA; --border2: #C4BFB6;
+    --pine: #1B5E47; --amber: #B8620A; --indigo: #2B3A8C; --crimson: #8C1F28;
+    --pine-lt: #E8F2EE; --amber-lt: #FDF3E7; --indigo-lt: #ECEEF8; --crimson-lt: #F9ECED;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--cream); color: var(--ink); font-family: 'DM Sans', sans-serif; line-height: 1.6; }
+
+  /* ── Progress bar ── */
+  #progress-bar { position: sticky; top: 0; z-index: 100; background: var(--ink); display: flex; align-items: center; gap: 1rem; padding: 0.5rem 1.5rem; border-bottom: 2px solid var(--amber); }
+  #progress-bar .site-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--amber); letter-spacing: 0.08em; white-space: nowrap; }
+  #progress-bar .links { display: flex; gap: 0.75rem; margin-left: auto; }
+  #progress-bar .links a { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--ink3); text-decoration: none; padding: 0.2rem 0.6rem; border: 1px solid var(--ink3); border-radius: 4px; }
+  #progress-bar .links a:hover { color: var(--white); border-color: var(--white); }
+
+  /* ── Cover ── */
+  .cover { background: var(--ink2); padding: 3rem 2rem 2.5rem; }
+  .cover .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--ink3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .cover .subject { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--amber); margin-bottom: 1rem; }
+  .cover h1 { font-family: 'DM Serif Display', serif; font-size: 2.8rem; color: var(--white); line-height: 1.15; margin-bottom: 0.75rem; }
+  .cover .lo { font-size: 1rem; color: var(--ink3); max-width: 72ch; }
+  .cover .meta { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.25rem; }
+  .cover .tag { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--white); background: var(--ink); padding: 0.2rem 0.65rem; border-radius: 4px; border: 1px solid var(--border); }
+  .cover .tag.amber { background: var(--amber); border-color: var(--amber); }
+
+  /* ── Content ── */
+  main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .toc { background: var(--cream2); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 2.5rem; }
+  .toc h2 { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--ink3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.75rem; }
+  .toc ol { padding-left: 1.4rem; }
+  .toc li { margin-bottom: 0.3rem; }
+  .toc a { color: var(--indigo); text-decoration: none; font-size: 0.9rem; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* Section bands */
+  .section-band { display: flex; align-items: center; gap: 0.75rem; margin: 2.5rem 0 1.25rem; }
+  .section-num { width: 2rem; height: 2rem; background: var(--ink); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+  .section-meta { display: flex; flex-direction: column; }
+  .section-mono { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--ink3); letter-spacing: 0.06em; text-transform: uppercase; }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 1.45rem; color: var(--ink); }
+
+  h3 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--ink); margin: 1.5rem 0 0.5rem; }
+  h4 { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--ink2); margin: 1.1rem 0 0.3rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  p { margin-bottom: 0.85rem; color: var(--ink2); font-size: 0.95rem; }
+  ul, ol { padding-left: 1.4rem; margin-bottom: 0.85rem; }
+  li { color: var(--ink2); font-size: 0.95rem; margin-bottom: 0.25rem; }
+
+  /* Formula */
+  .formula { background: var(--ink); color: var(--amber); font-family: 'DM Mono', monospace; font-size: 0.85rem; padding: 1rem 1.25rem; border-radius: 8px; margin: 1rem 0; line-height: 1.8; }
+  .formula span { color: var(--white); }
+
+  /* Callouts */
+  .callout { border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; }
+  .callout-info { background: var(--indigo-lt); border-left: 3px solid var(--indigo); }
+  .callout-tip  { background: var(--pine-lt);   border-left: 3px solid var(--pine); }
+  .callout-note { background: var(--amber-lt);  border-left: 3px solid var(--amber); }
+  .callout-extend { background: var(--crimson-lt); border-left: 3px solid var(--crimson); }
+  .callout-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; margin-bottom: 0.4rem; }
+  .callout-info .callout-label { color: var(--indigo); }
+  .callout-tip .callout-label  { color: var(--pine); }
+  .callout-note .callout-label { color: var(--amber); }
+  .callout-extend .callout-label { color: var(--crimson); }
+  .callout p, .callout li { font-size: 0.9rem; color: var(--ink); }
+
+  /* Tier badges */
+  .tier { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'DM Mono', monospace; font-size: 0.7rem; font-weight: 500; padding: 0.18rem 0.6rem; border-radius: 4px; margin-right: 0.4rem; }
+  .tier-f { background: var(--pine-lt); color: var(--pine); border: 1px solid var(--pine); }
+  .tier-d { background: var(--amber-lt); color: var(--amber); border: 1px solid var(--amber); }
+  .tier-e { background: var(--indigo-lt); color: var(--indigo); border: 1px solid var(--indigo); }
+
+  /* Comparison table */
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.88rem; }
+  th { background: var(--ink); color: var(--white); padding: 0.6rem 0.85rem; text-align: left; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.82rem; }
+  th.pine { background: var(--pine); }
+  th.indigo { background: var(--indigo); }
+  td { padding: 0.55rem 0.85rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--cream2); }
+  .row-label { font-weight: 600; color: var(--ink3); font-size: 0.82rem; white-space: nowrap; }
+
+  /* Example pairs */
+  .example-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 0.75rem 0; }
+  .ex-bad, .ex-good { border-radius: 7px; padding: 0.75rem 1rem; font-size: 0.88rem; }
+  .ex-bad  { background: var(--crimson-lt); border: 1px solid var(--crimson); }
+  .ex-good { background: var(--pine-lt); border: 1px solid var(--pine); }
+  .ex-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; font-weight: 500; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .ex-bad .ex-label { color: var(--crimson); }
+  .ex-good .ex-label { color: var(--pine); }
+
+  /* Progress table */
+  .progress-tracker { display: flex; gap: 0; margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .pt-step { flex: 1; padding: 0.6rem 0.75rem; border-right: 1px solid var(--border); text-align: center; font-size: 0.75rem; }
+  .pt-step:last-child { border-right: none; }
+  .pt-step.done { background: var(--pine-lt); }
+  .pt-step.current { background: var(--amber); color: var(--white); }
+  .pt-step.todo { background: var(--cream2); color: var(--ink3); }
+  .pt-step .pt-id { font-family: 'DM Mono', monospace; font-size: 0.65rem; font-weight: 600; display: block; }
+  .pt-step .pt-name { font-size: 0.72rem; display: block; margin-top: 0.15rem; }
+
+  /* divider */
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+</style>
+</head>
+<body>
+
+<div id="progress-bar">
+  <span class="site-label">y11-ac-u2-l4 · REFERENCE SITE</span>
+  <div class="links">
+    <a href="#">Slides ↗</a>
+    <a href="#">Workbook ↗</a>
+  </div>
+</div>
+
+<div class="cover">
+  <p class="eyebrow">D2.2 Problem Scoping · D3.1 Data Collection Design</p>
+  <p class="subject">Year 11 Applied Computing — Unit 2 · AoS1 Innovative Solutions</p>
+  <h1>Problem Scoping &amp; Data Collection</h1>
+  <p class="lo">Learning Objective: To be able to scope a problem clearly and design a data collection instrument that investigates the identified user need.</p>
+  <div class="meta">
+    <span class="tag">Lesson 4</span>
+    <span class="tag amber">D2.2 + D3.1</span>
+    <span class="tag">Mr Smith</span>
+    <span class="tag">y11-ac-u2-l4-problem-scoping-data-collection</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- Success Criteria -->
+  <div class="callout callout-info" style="margin-bottom: 1.5rem;">
+    <p class="callout-label">Success Criteria</p>
+    <p><span class="tier tier-f">🟢 Foundation</span> I can refine my group's problem statement and identify a specific target user group.</p>
+    <p><span class="tier tier-d">🟡 Developing</span> I can choose an appropriate data collection method and draft a set of questions targeting the identified user need.</p>
+    <p><span class="tier tier-e">🔵 Extending</span> I can evaluate my data collection instrument for potential bias or limitation and explain how I would address it.</p>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#s1">Refining the Problem Statement</a></li>
+      <li><a href="#s2">Defining Your User — Who's IN and Who's OUT</a></li>
+      <li><a href="#s3">Primary vs Secondary Research</a></li>
+      <li><a href="#s4">Interviews vs Surveys — Side-by-Side</a></li>
+      <li><a href="#s5">Designing Good Questions</a></li>
+      <li><a href="#s6">Progress Tracker &amp; Next Steps</a></li>
+    </ol>
+  </div>
+
+  <!-- ─────────────────────────────────────────────── -->
+  <section id="s1">
+    <div class="section-band">
+      <div class="section-num">1</div>
+      <div class="section-meta">
+        <span class="section-mono">D2.2 · Problem Scoping</span>
+        <span class="section-title">Refining the Problem Statement</span>
+      </div>
+    </div>
+
+    <p>Your D2.1 investigation gave you a starting point — a rough problem statement based on your topic area. In D2.2, you sharpen that statement so it is specific enough to actually guide your research and eventual solution.</p>
+
+    <h3>The Formula</h3>
+    <div class="formula">
+      [USER GROUP] &nbsp;need a way to&nbsp; [ACCOMPLISH GOAL] &nbsp;because&nbsp; <span>[SPECIFIC INSIGHT ABOUT THE PROBLEM]</span>
+    </div>
+    <p>Each part does specific work:</p>
+    <ul>
+      <li><strong>[USER GROUP]</strong> — a specific, named group with shared characteristics. Not "people" or "students" — year level, context, and relevant circumstance.</li>
+      <li><strong>[ACCOMPLISH GOAL]</strong> — the task or outcome your solution will help with. Concrete and actionable, not vague.</li>
+      <li><strong>[SPECIFIC INSIGHT]</strong> — the <em>because</em> clause. This is where most problem statements fail. A strong because clause describes the mechanism of the problem: why the goal is currently difficult or impossible for this user group, in this specific context.</li>
+    </ul>
+
+    <h3>What Makes a Strong "Because" Clause?</h3>
+    <p>The because clause should contain new information — something that isn't obvious from the goal alone. It should describe a real constraint, circumstance, or pattern that your investigation uncovered.</p>
+
+    <div class="example-pair">
+      <div class="ex-bad">
+        <div class="ex-label">❌ Weak — no new insight</div>
+        <p>"Young people struggle with organisation <strong>because organisation is hard.</strong>"</p>
+        <p>This is circular. It tells us nothing useful about the user or the context.</p>
+      </div>
+      <div class="ex-good">
+        <div class="ex-label">✅ Strong — specific causal insight</div>
+        <p>"Year 11 students who hold part-time jobs need a way to plan study blocks around variable work rosters <strong>because they can't predict their schedule more than 3 days ahead</strong>, making long-range planning unreliable."</p>
+      </div>
+    </div>
+
+    <div class="callout callout-note">
+      <p class="callout-label">Paper Notes Reminder</p>
+      <p>Your refined problem statement was written on paper during the Explicit phase of this lesson. Section 1 of your workbook is where you transfer it digitally. The formula above is the reference — don't copy it verbatim into your answer.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ─────────────────────────────────────────────── -->
+  <section id="s2">
+    <div class="section-band">
+      <div class="section-num">2</div>
+      <div class="section-meta">
+        <span class="section-mono">D2.2 · Problem Scoping</span>
+        <span class="section-title">Defining Your User — Who's IN and Who's OUT</span>
+      </div>
+    </div>
+
+    <div class="callout callout-extend" style="margin-top: 0;">
+      <p class="callout-label">Core Principle</p>
+      <p><strong>Designing for everyone = designing for no one.</strong> Inclusion and exclusion are deliberate design decisions, not accidents. A well-scoped target user makes every design choice clearer.</p>
+    </div>
+
+    <h3>Who IS Your Target User?</h3>
+    <p>A specific target user description includes:</p>
+    <ul>
+      <li><strong>Age range or year level</strong> — e.g. "Year 11 students aged 16–17"</li>
+      <li><strong>Context</strong> — where and when they would use your solution</li>
+      <li><strong>Relevant circumstance</strong> — what makes them distinct from the general population (e.g. "holds a part-time job", "commutes to school", "is a primary carer")</li>
+      <li><strong>Access and capability level</strong> if relevant — digital literacy, device access, language</li>
+    </ul>
+
+    <h3>Who is NOT Your Target User?</h3>
+    <p>Naming at least one group your solution is not designed for is not discriminatory — it is good design practice. It forces you to make an explicit decision about scope, and prevents your solution from becoming unfocused.</p>
+
+    <div class="example-pair">
+      <div class="ex-bad">
+        <div class="ex-label">Example: who is OUT (and why)</div>
+        <p>"Not primary school students — the interface assumes Year 10+ reading comprehension and self-directed use."</p>
+      </div>
+      <div class="ex-good">
+        <div class="ex-label">Example: why drawing the line is useful</div>
+        <p>If your solution is student-facing, excluding teachers clarifies that you don't need a teacher dashboard, admin features, or class-management tools. That's a significant scope reduction.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ─────────────────────────────────────────────── -->
+  <section id="s3">
+    <div class="section-band">
+      <div class="section-num">3</div>
+      <div class="section-meta">
+        <span class="section-mono">D3.1 · Data Collection Design</span>
+        <span class="section-title">Primary vs Secondary Research</span>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Secondary Research</th>
+          <th class="pine">Primary Research</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-label">What it is</td>
+          <td>Using data that already exists — reports, articles, statistics, product reviews</td>
+          <td>Data you collect directly from real users or observations</td>
+        </tr>
+        <tr>
+          <td class="row-label">When to use it</td>
+          <td>To understand the context before you design your instruments; to supplement primary findings</td>
+          <td>To understand your specific users' needs, experiences, and behaviours — this lesson's focus</td>
+        </tr>
+        <tr>
+          <td class="row-label">Examples</td>
+          <td>Government stats, academic papers, app store reviews, industry reports</td>
+          <td>Interviews, surveys, observations, usability tests</td>
+        </tr>
+        <tr>
+          <td class="row-label">Limitation</td>
+          <td>May not reflect your exact user group; data may be outdated</td>
+          <td>Requires access to actual users; instruments must be carefully designed</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-tip">
+      <p class="callout-label">Today's Focus</p>
+      <p>D3.1 is about designing primary data collection instruments. Secondary research continues in parallel as you develop your SRS — but today, you're designing the tools that let you hear directly from your users.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ─────────────────────────────────────────────── -->
+  <section id="s4">
+    <div class="section-band">
+      <div class="section-num">4</div>
+      <div class="section-meta">
+        <span class="section-mono">D3.1 · Data Collection Design</span>
+        <span class="section-title">Interviews vs Surveys — Side-by-Side</span>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th class="pine">Interviews</th>
+          <th class="indigo">Surveys</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-label">Best when…</td>
+          <td>You need depth; you want to follow up on interesting answers; your user group is small or hard to survey</td>
+          <td>You need breadth; responses are more honest without social pressure; you need data from many people</td>
+        </tr>
+        <tr>
+          <td class="row-label">Type of data</td>
+          <td>Rich, detailed, qualitative — stories, explanations, unexpected themes</td>
+          <td>Scalable mix of quantitative (rating scales, counts) and qualitative (open-text boxes)</td>
+        </tr>
+        <tr>
+          <td class="row-label">Access needed</td>
+          <td>Time with individual users — can be remote (video call). Scheduling is the main constraint.</td>
+          <td>Only a link or printed form — asynchronous. Easy to distribute; hard to ensure quality responses.</td>
+        </tr>
+        <tr>
+          <td class="row-label">Main limitation</td>
+          <td>Takes longer per participant; interviewer bias — you might unconsciously guide the answer</td>
+          <td>Low response rate if too long; no ability to follow up on interesting answers</td>
+        </tr>
+        <tr>
+          <td class="row-label">Risk to watch</td>
+          <td>You might lead the conversation without realising — especially with questions that imply an answer</td>
+          <td>A single leading or ambiguous question skews every single response — instrument design is critical</td>
+        </tr>
+        <tr>
+          <td class="row-label">Also consider</td>
+          <td colspan="2"><strong>Observation</strong> — watching users perform a task in context. Captures what users actually do, not just what they say. Harder to structure formally; use an observation checklist.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-note">
+      <p class="callout-label">Survey Length Matters</p>
+      <p>Research on survey completion consistently shows that response rates drop sharply when surveys take more than 5–7 minutes to complete. Aim for the minimum number of questions that will give you the data you need — not the maximum your topic allows.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ─────────────────────────────────────────────── -->
+  <section id="s5">
+    <div class="section-band">
+      <div class="section-num">5</div>
+      <div class="section-meta">
+        <span class="section-mono">D3.1 · Data Collection Design</span>
+        <span class="section-title">Designing Good Questions</span>
+      </div>
+    </div>
+
+    <h3>Open vs Closed Questions</h3>
+    <table>
+      <thead>
+        <tr><th>Type</th><th>Description</th><th>Best for</th><th>Limitation</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-label">Closed</td>
+          <td>Fixed options: yes/no, rating scales (1–5), multiple choice</td>
+          <td>Spotting patterns across many respondents; easy to graph</td>
+          <td>Misses nuance; forces users into your categories</td>
+        </tr>
+        <tr>
+          <td class="row-label">Open</td>
+          <td>Free text — respondent writes their own answer</td>
+          <td>Understanding why; uncovering unexpected themes</td>
+          <td>Harder to summarise; requires more time to analyse</td>
+        </tr>
+      </tbody>
+    </table>
+    <p><strong>Rule of thumb:</strong> you need both types. Closed questions reveal patterns; open questions reveal reasons. A survey with only closed questions tells you <em>what</em> but not <em>why</em>.</p>
+
+    <h3>Leading Questions — What They Are and Why They Ruin Data</h3>
+    <p>A leading question is one that guides the respondent toward a particular answer — often by embedding an assumption, expressing your opinion, or using loaded language. Leading questions don't reveal the user's view; they confirm yours.</p>
+
+    <div class="example-pair">
+      <div class="ex-bad">
+        <div class="ex-label">❌ Leading — embeds your assumption</div>
+        <p>"Don't you find it frustrating when apps are slow to respond?"</p>
+        <p><em>Why it's leading:</em> "Don't you find it frustrating" assumes they do. The word "frustrating" is a loaded emotion the researcher chose, not the user.</p>
+      </div>
+      <div class="ex-good">
+        <div class="ex-label">✅ Neutral — lets the user respond freely</div>
+        <p>"Describe your experience when an app takes a long time to respond."</p>
+        <p><em>Why it works:</em> No assumed emotion. Open-ended. The user might say frustrated, annoyed, fine with it, or something you didn't expect.</p>
+      </div>
+    </div>
+
+    <h3>Asking About the Real Problem — Behaviour Anchoring</h3>
+    <p>Vague questions get vague answers. Anchoring questions to specific behaviours or situations produces more honest, detailed, and useful responses.</p>
+
+    <div class="example-pair">
+      <div class="ex-bad">
+        <div class="ex-label">❌ Vague — abstract and unmeasurable</div>
+        <p>"What problems do you have with organisation?"</p>
+      </div>
+      <div class="ex-good">
+        <div class="ex-label">✅ Behaviour-anchored — specific and concrete</div>
+        <p>"Walk me through how you tracked your deadlines during the last two weeks of term."</p>
+      </div>
+    </div>
+
+    <h3>Minimum Requirements for Instruments</h3>
+    <table>
+      <thead><tr><th>Method</th><th>Minimum requirements</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="row-label">Survey</td>
+          <td>At least 5 questions — mix of open and closed; at least one of each type</td>
+        </tr>
+        <tr>
+          <td class="row-label">Interview guide</td>
+          <td>At least 4 questions plus 2 follow-up prompts (e.g. "Can you tell me more about that?")</td>
+        </tr>
+        <tr>
+          <td class="row-label">Observation checklist</td>
+          <td>At least 5 specific behaviours or situations to record; must be observable, not inferred</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-extend">
+      <p class="callout-label">🔵 Extending — Evaluating Your Instrument</p>
+      <p>Before you finalise your instrument, read it back as if you are the user receiving it. Ask:</p>
+      <ul>
+        <li>Is there any question that implies what answer I "should" give?</li>
+        <li>Does every question make sense to someone who doesn't already know what my solution does?</li>
+        <li>Is there a hidden assumption (e.g. "assumes they have a smartphone", "assumes they read English fluently") that doesn't apply to all users in my target group?</li>
+        <li>If I could only keep one question, which one would give me the most useful data? Why?</li>
+      </ul>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ─────────────────────────────────────────────── -->
+  <section id="s6">
+    <div class="section-band">
+      <div class="section-num">6</div>
+      <div class="section-meta">
+        <span class="section-mono">Unit Progress</span>
+        <span class="section-title">Progress Tracker &amp; Next Steps</span>
+      </div>
+    </div>
+
+    <div class="progress-tracker">
+      <div class="pt-step done"><span class="pt-id">D1.1</span><span class="pt-name">Curiosity &amp; SDGs</span></div>
+      <div class="pt-step done"><span class="pt-id">D1.2</span><span class="pt-name">Digital Systems</span></div>
+      <div class="pt-step done"><span class="pt-id">D2.1</span><span class="pt-name">Problem Space</span></div>
+      <div class="pt-step current"><span class="pt-id">D2.2 + D3.1</span><span class="pt-name">Scoping &amp; Data ★</span></div>
+      <div class="pt-step todo"><span class="pt-id">D3.2</span><span class="pt-name">Creative Solutions</span></div>
+      <div class="pt-step todo"><span class="pt-id">D4+</span><span class="pt-name">Design &amp; Prototype</span></div>
+    </div>
+
+    <div class="callout callout-note">
+      <p class="callout-label">⚠ Milestone 1 — Week 4</p>
+      <p>Your refined problem statement and data collection instrument are both assessed in Milestone 1. Ensure your instrument is complete and your problem statement has been reviewed before the end of Week 4.</p>
+    </div>
+
+    <h3>Next Lesson — D3.2</h3>
+    <p>Characteristics of Creative &amp; Innovative Solutions. You'll evaluate ideation techniques and apply creative design thinking to the problem you've scoped today. Your refined problem statement and data collection instrument become the input for that lesson — keep them saved and accessible.</p>
+
+    <div class="callout callout-tip">
+      <p class="callout-label">Before D3.2</p>
+      <ul>
+        <li>Confirm your instrument is complete (all questions written and labelled)</li>
+        <li>Check: does every question connect back to your refined problem statement?</li>
+        <li>If time allows, pilot your instrument with one person not in your group to check for ambiguous or confusing wording</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<script>
+const LESSON_ID = 'y11-ac-u2-l4-problem-scoping-data-collection';
+const DataService = {
+  studentId() { return localStorage.getItem('eduportal_currentStudent') || 'current_student'; },
+  save() {},
+  load() {},
+  autoSave(d) {},
+  autoLoad() {},
+  submit() {},
+  _syncProgress(status, score) {
+    const sid = this.studentId();
+    localStorage.setItem(`eduportal_progress_${sid}_${LESSON_ID}`, JSON.stringify({ status, score, ts: Date.now() }));
+  }
+};
+</script>
+</body>
+</html>

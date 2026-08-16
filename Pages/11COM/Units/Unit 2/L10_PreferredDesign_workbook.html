@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L10 Workbook — Choosing Your Preferred Design · Y11 AC U2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark-bg: #0D1117; --light-bg: #FFFFFF;
+    --surface: #161B22; --surface2: #1F2530;
+    --border: #30363D;
+    --text: #E6EDF3; --text-dim: #9BA3AF;
+    --blue: #4361EE; --green: #10B981; --amber: #F59E0B; --purple: #8B5CF6; --red: #EF4444;
+    --blue-lt: rgba(67,97,238,0.12); --green-lt: rgba(16,185,129,0.12);
+    --amber-lt: rgba(245,158,11,0.12); --purple-lt: rgba(139,92,246,0.12); --red-lt: rgba(239,68,68,0.12);
+  }
+  body.light {
+    --dark-bg: #FFFFFF; --surface: #F6F8FA; --surface2: #EDF0F3;
+    --border: #D0D7DE; --text: #0D1117; --text-dim: #57606A;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--dark-bg); color: var(--text); font-family: 'DM Sans', sans-serif; line-height: 1.6; transition: background .2s, color .2s; }
+
+  #progress-bar { position: sticky; top: 0; z-index: 100; background: var(--surface); display: flex; align-items: center; gap: 1rem; padding: 0.5rem 1.5rem; border-bottom: 2px solid var(--blue); }
+  #progress-bar .wb-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--blue); letter-spacing: 0.08em; white-space: nowrap; }
+  #pct-display { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text); white-space: nowrap; }
+  #pct-bar { flex: 1; height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+  #pct-fill { height: 100%; background: var(--blue); border-radius: 2px; width: 0%; transition: width 0.4s; }
+  .bar-btns { display: flex; gap: 0.5rem; margin-left: auto; }
+  .bar-btns button { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text); background: transparent; border: 1px solid var(--border); border-radius: 4px; padding: 0.22rem 0.65rem; cursor: pointer; }
+  .bar-btns button:hover { border-color: var(--text); }
+  .bar-btns button.save { border-color: var(--blue); color: var(--blue); }
+  .bar-btns button.save:hover { background: var(--blue); color: #fff; }
+
+  .cover { background: var(--surface); padding: 2.5rem 2rem 2rem; border-bottom: 1px solid var(--border); }
+  .cover .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .cover .subject { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--blue); margin-bottom: 0.75rem; }
+  .cover h1 { font-family: 'DM Serif Display', serif; font-size: 2.1rem; color: var(--text); margin-bottom: 0.5rem; }
+  .cover .doc-type { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--amber); margin-bottom: 1.25rem; }
+
+  .milestone-flag { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--red-lt); border: 1px solid var(--red); border-radius: 6px; padding: 0.3rem 0.7rem; font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--red); letter-spacing: 0.05em; margin-bottom: 1.25rem; }
+
+  .student-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; }
+  .si-field { display: flex; flex-direction: column; gap: 0.25rem; }
+  .si-field label { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; }
+  .si-field input { background: var(--surface2); border: 1px solid var(--border); border-radius: 5px; padding: 0.45rem 0.65rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--text); outline: none; }
+  .si-field input:focus { border-color: var(--blue); }
+
+  main { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+
+  .section-band { display: flex; align-items: center; gap: 0.75rem; margin: 2.5rem 0 1.25rem; }
+  .section-num { width: 2rem; height: 2rem; background: var(--blue); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+  .section-meta { display: flex; flex-direction: column; }
+  .section-mono { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-dim); letter-spacing: 0.06em; text-transform: uppercase; }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--text); }
+
+  .callout { border-radius: 8px; padding: 1rem 1.25rem; border: 1px solid var(--border); }
+  .callout-info { background: var(--blue-lt); border-left: 3px solid var(--blue); }
+  .callout-tip  { background: var(--green-lt); border-left: 3px solid var(--green); }
+  .callout-note { background: var(--amber-lt); border-left: 3px solid var(--amber); }
+  .callout-extend { background: var(--purple-lt); border-left: 3px solid var(--purple); }
+  .callout-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; margin-bottom: 0.4rem; }
+  .callout-info .callout-label { color: var(--blue); }
+  .callout-tip .callout-label  { color: var(--green); }
+  .callout-note .callout-label { color: var(--amber); }
+  .callout-extend .callout-label { color: var(--purple); }
+  .callout p { font-size: 0.9rem; color: var(--text); font-family: 'Atkinson Hyperlegible', sans-serif; }
+
+  .chip { font-family: 'DM Mono', monospace; font-size: 0.62rem; padding: 0.1rem 0.5rem; border-radius: 4px; margin-left: 0.5rem; }
+  .chip-off { background: var(--red-lt); color: var(--red); border: 1px solid var(--red); }
+  .chip-on { background: var(--green-lt); color: var(--green); border: 1px solid var(--green); }
+
+  .q-block { margin: 1.5rem 0; }
+  .q-meta { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+  .q-num { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--text-dim); font-weight: 600; }
+  .tier { display: inline-flex; align-items: center; gap: 0.35rem; font-family: 'DM Mono', monospace; font-size: 0.68rem; font-weight: 500; padding: 0.16rem 0.55rem; border-radius: 4px; }
+  .tier-f { background: var(--green-lt); color: var(--green); border: 1px solid var(--green); }
+  .tier-d { background: var(--amber-lt); color: var(--amber); border: 1px solid var(--amber); }
+  .tier-e { background: var(--purple-lt); color: var(--purple); border: 1px solid var(--purple); }
+
+  .q-text { font-size: 0.95rem; color: var(--text); margin-bottom: 0.4rem; font-family: 'Atkinson Hyperlegible', sans-serif; }
+  .q-ref { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--blue); margin-bottom: 0.4rem; }
+  .q-hint { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 0.4rem; font-family: 'Atkinson Hyperlegible', sans-serif; }
+
+  textarea, input[type=text], input[type=number], select { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 7px; padding: 0.7rem 0.9rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--text); outline: none; resize: vertical; }
+  textarea { min-height: 80px; }
+  textarea:focus, input:focus, select:focus { border-color: var(--blue); }
+  textarea::placeholder, input::placeholder { color: var(--text-dim); }
+
+  .addbtn { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--blue); background: transparent; border: 1px dashed var(--blue); border-radius: 5px; padding: 0.35rem 0.9rem; cursor: pointer; margin-top: 0.6rem; }
+  .addbtn:hover { background: var(--blue-lt); }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  .exit-block { background: var(--surface2); border-radius: 10px; padding: 1.5rem; margin-top: 2rem; }
+
+  .signoff-grid { display: flex; flex-direction: column; gap: 0.5rem; margin: 1rem 0; }
+  .signoff-item { display: flex; align-items: flex-start; gap: 0.6rem; background: var(--surface); border: 1px solid var(--border); border-radius: 7px; padding: 0.65rem 0.9rem; }
+  .signoff-item input { width: auto; margin-top: 0.2rem; }
+  .signoff-item span { font-size: 0.88rem; color: var(--text); font-family: 'Atkinson Hyperlegible', sans-serif; }
+
+  /* ── Design option rows (Section 1) ──────────────────────────────── */
+  .design-row { display: grid; grid-template-columns: 1fr 2fr 2.2rem; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .design-row input { font-size: 0.88rem; }
+  .design-row .del-btn { background: transparent; border: 1px solid var(--border); border-radius: 4px; color: var(--red); cursor: pointer; font-size: 0.85rem; width: 1.9rem; height: 2.6rem; }
+  .design-row .del-btn:hover { background: var(--red-lt); }
+
+  /* ── Decision matrix cards (Section 2) ───────────────────────────── */
+  .matrix-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.1rem; margin-bottom: 1rem; }
+  .matrix-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.7rem; gap: 0.6rem; }
+  .matrix-card-head .m-num { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--blue); font-weight: 600; white-space: nowrap; }
+  .matrix-card-head input.name-field { font-size: 0.92rem; font-weight: 600; }
+  .matrix-card-head .del-btn { background: transparent; border: 1px solid var(--border); border-radius: 4px; color: var(--red); cursor: pointer; font-size: 0.85rem; width: 1.9rem; height: 1.9rem; flex-shrink: 0; }
+  .matrix-card-head .del-btn:hover { background: var(--red-lt); }
+  .score-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin-bottom: 0.7rem; }
+  .score-field label { display: block; font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.25rem; }
+  .total-row { display: flex; align-items: center; justify-content: space-between; background: var(--blue-lt); border-radius: 6px; padding: 0.5rem 0.8rem; }
+  .total-row .total-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--blue); text-transform: uppercase; letter-spacing: 0.05em; }
+  .total-row .total-value { font-family: 'DM Mono', monospace; font-size: 1.1rem; font-weight: 600; color: var(--blue); }
+  .preferred-toggle { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.7rem; }
+  .preferred-toggle span { font-size: 0.82rem; color: var(--text); font-family: 'Atkinson Hyperlegible', sans-serif; }
+  @media (max-width: 640px) { .score-grid { grid-template-columns: 1fr 1fr; } .design-row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div id="progress-bar">
+  <span class="wb-label">STUDENT WORKBOOK</span>
+  <span id="pct-display">0%</span>
+  <div id="pct-bar"><div id="pct-fill"></div></div>
+  <div class="bar-btns">
+    <button onclick="document.body.classList.toggle('light')">Theme</button>
+    <button class="save" onclick="DS.save()">Save</button>
+    <button onclick="DS.load()">Load</button>
+    <button onclick="window.print()">Print</button>
+  </div>
+</div>
+
+<div class="cover">
+  <p class="eyebrow">D7.1 Choosing Your Preferred Design</p>
+  <p class="subject">Year 11 Applied Computing — Unit 2 · AoS1 Innovative Solutions</p>
+  <h1>Choosing Your Preferred Design</h1>
+  <p class="doc-type">STUDENT WORKBOOK · Lesson 10 · y11-ac-u2-l10-preferred-design</p>
+  <div class="milestone-flag">⚑ GROUP MILESTONE 2 — sign-off required this lesson</div>
+  <div class="student-grid">
+    <div class="si-field"><label>Student Name</label><input id="si-name" type="text" autocomplete="off" placeholder="Your name"></div>
+    <div class="si-field"><label>Class</label><input id="si-class" type="text" autocomplete="off" placeholder="e.g. 11AC-1"></div>
+    <div class="si-field"><label>Date</label><input id="si-date" type="text" autocomplete="off" placeholder="YYYY-MM-DD"></div>
+    <div class="si-field"><label>Teacher</label><input id="si-teacher" type="text" autocomplete="off" placeholder="Mr Smith"></div>
+  </div>
+</div>
+
+<main>
+
+  <!-- SECTION 1 — List Your Design Options -->
+  <div class="section-band">
+    <div class="section-num">1</div>
+    <div class="section-meta">
+      <span class="section-mono">Foundation · D7.1</span>
+      <span class="section-title">List Your Design Options</span>
+    </div>
+  </div>
+
+  <div class="callout callout-tip" style="margin-bottom: 1rem;">
+    <p class="callout-label">Laptop Gate <span class="chip chip-on">DEVICES ON</span></p>
+    <p>Open your Lesson 7–8 mock-ups, storyboards, pseudocode and sitemaps. List each candidate design your group is still considering.</p>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q1</span><span class="tier tier-f">🟢 Foundation</span></div>
+    <p class="q-text">Enter your group's 2–4 candidate designs from Lessons 7–8, each with a one-line description.</p>
+    <div id="design-rows"></div>
+    <button class="addbtn" onclick="addDesignRow()" type="button">+ Add design option</button>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 2 — Build the Decision Matrix -->
+  <div class="section-band">
+    <div class="section-num">2</div>
+    <div class="section-meta">
+      <span class="section-mono">Developing · D7.1</span>
+      <span class="section-title">Build the Decision Matrix</span>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q2</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">Score each design against your Lesson 9 evaluation criteria. Use your four most important criteria — score each 1 (poor) to 5 (excellent).</p>
+    <p class="q-ref">→ <a href="L9_EvaluationCriteria_workbook.html" style="color:inherit;">See your L9 criteria table</a> for the standards to score against.</p>
+    <div id="matrix-cards"></div>
+    <button class="addbtn" onclick="addMatrixCard()" type="button">+ Add design to matrix</button>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 3 — Converge & Justify -->
+  <div class="section-band">
+    <div class="section-num">3</div>
+    <div class="section-meta">
+      <span class="section-mono">Extending · D7.1</span>
+      <span class="section-title">Converge &amp; Justify</span>
+    </div>
+  </div>
+
+  <div class="callout callout-extend" style="margin-bottom: 1rem;">
+    <p class="callout-label">Check the totals above</p>
+    <p>Identify the highest-scoring design. Discuss as a group whether the number matches your instinct — and if not, why not.</p>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q3</span><span class="tier tier-e">🟣 Extending</span></div>
+    <p class="q-text">Name your group's preferred design and justify the decision — link it back to specific scores, not just a general impression.</p>
+    <textarea id="q3" data-field="q3" placeholder="Name the design and explain, using the scores above, why it's the strongest choice."></textarea>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q4</span><span class="tier tier-e">🟣 Extending</span></div>
+    <p class="q-text">Explain why the runner-up design wasn't chosen. What would have needed to be true for it to win instead?</p>
+    <textarea id="q4" data-field="q4" placeholder="Name the runner-up and explain what held its total back."></textarea>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 4 — Milestone 2 Sign-Off -->
+  <div class="section-band">
+    <div class="section-num">4</div>
+    <div class="section-meta">
+      <span class="section-mono">Developing · Milestone 2</span>
+      <span class="section-title">Sign-Off Checklist</span>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q5</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">Confirm each element is genuinely present before calling your teacher over.</p>
+    <div class="signoff-grid">
+      <label class="signoff-item"><input type="checkbox" data-field="q5-a"><span>Preferred design is named and documented above.</span></label>
+      <label class="signoff-item"><input type="checkbox" data-field="q5-b"><span>Decision matrix is complete — every design scored against every criterion.</span></label>
+      <label class="signoff-item"><input type="checkbox" data-field="q5-c"><span>Written justification links the decision to specific scores.</span></label>
+      <label class="signoff-item"><input type="checkbox" data-field="q5-d"><span>Runner-up design and why it wasn't chosen is explained.</span></label>
+      <label class="signoff-item"><input type="checkbox" data-field="q5-e"><span>Every group member can explain the decision, not just one person.</span></label>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 5 — Exit Ticket -->
+  <div class="exit-block">
+    <div class="section-band" style="margin-top:0;">
+      <div class="section-num" style="background:var(--red);">5</div>
+      <div class="section-meta">
+        <span class="section-mono">Exit Ticket</span>
+        <span class="section-title" style="color: var(--text);">Exit Ticket</span>
+      </div>
+    </div>
+
+    <div class="callout callout-note" style="margin-bottom: 1rem;">
+      <p class="callout-label">Devices OFF <span class="chip chip-off">DEVICES OFF</span></p>
+      <p>Complete this section from memory — no scrolling back to check your earlier answers.</p>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q6</span><span class="tier tier-f">🟢 Foundation</span></div>
+      <p class="q-text">What is a decision matrix, and what problem does it solve?</p>
+      <textarea id="q6" data-field="q6" placeholder="Explain, in your own words."></textarea>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q7</span><span class="tier tier-d">🟡 Developing</span></div>
+      <p class="q-text">Name two things your group should do if two designs score almost the same.</p>
+      <textarea id="q7" data-field="q7" placeholder="List both, from memory."></textarea>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q8</span><span class="tier tier-e">🟣 Extending</span></div>
+      <p class="q-text">Explain, in one sentence, why your group's preferred design was chosen.</p>
+      <textarea id="q8" data-field="q8" placeholder="Write your one-sentence justification, from memory."></textarea>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── Constants ─────────────────────────────────────────────────────────────────
+const LESSON_ID = 'y11-ac-u2-l10-preferred-design';
+
+function escAttr(s) { return String(s).replace(/"/g, '&quot;'); }
+
+// ── Section 1: Design option rows ───────────────────────────────────────────
+let designCount = 0;
+function addDesignRow(name, desc) {
+  designCount++;
+  const n = designCount;
+  const wrap = document.getElementById('design-rows');
+  const row = document.createElement('div');
+  row.className = 'design-row';
+  row.id = 'design-row-' + n;
+  row.innerHTML = `
+    <input type="text" data-field="design-${n}-name" placeholder="Design ${n} name" value="${name ? escAttr(name) : ''}">
+    <input type="text" data-field="design-${n}-desc" placeholder="One-line description" value="${desc ? escAttr(desc) : ''}">
+    <button class="del-btn" type="button" onclick="removeDesignRow(${n})" title="Remove">×</button>`;
+  wrap.appendChild(row);
+  attachFieldListeners(row);
+  updateProgress();
+}
+function removeDesignRow(n) {
+  const row = document.getElementById('design-row-' + n);
+  if (row) row.remove();
+  updateProgress();
+}
+for (let i = 0; i < 3; i++) addDesignRow();
+
+// ── Section 2: Decision matrix cards ────────────────────────────────────────
+let matrixCount = 0;
+function addMatrixCard() {
+  matrixCount++;
+  const n = matrixCount;
+  const wrap = document.getElementById('matrix-cards');
+  const card = document.createElement('div');
+  card.className = 'matrix-card';
+  card.id = 'matrix-card-' + n;
+  card.innerHTML = `
+    <div class="matrix-card-head">
+      <span class="m-num">DESIGN ${n}</span>
+      <input type="text" class="name-field" data-field="m-${n}-name" placeholder="Design name">
+      <button class="del-btn" type="button" onclick="removeMatrixCard(${n})" title="Remove">×</button>
+    </div>
+    <div class="score-grid">
+      <div class="score-field"><label>Efficiency</label><input type="number" min="1" max="5" data-field="m-${n}-c1" data-matrix="${n}"></div>
+      <div class="score-field"><label>Effectiveness</label><input type="number" min="1" max="5" data-field="m-${n}-c2" data-matrix="${n}"></div>
+      <div class="score-field"><label>Feasibility</label><input type="number" min="1" max="5" data-field="m-${n}-c3" data-matrix="${n}"></div>
+      <div class="score-field"><label>User Fit</label><input type="number" min="1" max="5" data-field="m-${n}-c4" data-matrix="${n}"></div>
+    </div>
+    <div class="total-row">
+      <span class="total-label">Total (out of 20)</span>
+      <span class="total-value" id="m-${n}-total">0</span>
+    </div>
+    <label class="preferred-toggle">
+      <input type="checkbox" data-field="m-${n}-preferred">
+      <span>Mark as our group's preferred design</span>
+    </label>`;
+  wrap.appendChild(card);
+  attachFieldListeners(card);
+  card.querySelectorAll('input[data-matrix]').forEach(el => {
+    el.addEventListener('input', () => updateMatrixTotal(n));
+  });
+  updateProgress();
+}
+function removeMatrixCard(n) {
+  const card = document.getElementById('matrix-card-' + n);
+  if (card) card.remove();
+  updateProgress();
+}
+function updateMatrixTotal(n) {
+  let total = 0;
+  document.querySelectorAll(`input[data-matrix="${n}"]`).forEach(el => {
+    const v = parseInt(el.value, 10);
+    if (!isNaN(v)) total += v;
+  });
+  const el = document.getElementById('m-' + n + '-total');
+  if (el) el.textContent = total;
+}
+for (let i = 0; i < 3; i++) addMatrixCard();
+
+// ── DataService (canonical EduPortal pattern) ──────────────────────────────────
+const DataService = {
+  getStudentId() {
+    return JSON.parse(localStorage.getItem('eduportal_session') || '{}').id || 'current_student';
+  },
+  workbookKey(lessonId) { return 'eduportal_workbook_' + this.getStudentId() + '_' + lessonId; },
+  _getData() {
+    const data = {};
+    document.querySelectorAll('[data-field]').forEach(el => {
+      const key = el.dataset.field;
+      if (el.type === 'checkbox') data[key] = el.checked;
+      else data[key] = el.value;
+    });
+    ['name','class','date','teacher'].forEach(f => {
+      const el = document.getElementById('si-' + f);
+      if (el) data['si-' + f] = el.value;
+    });
+    data['_designCount'] = designCount;
+    data['_matrixCount'] = matrixCount;
+    return data;
+  },
+  _setData(data) {
+    if (data['_designCount'] && data['_designCount'] > designCount) {
+      const toAdd = data['_designCount'] - designCount;
+      for (let i = 0; i < toAdd; i++) addDesignRow();
+    }
+    if (data['_matrixCount'] && data['_matrixCount'] > matrixCount) {
+      const toAdd = data['_matrixCount'] - matrixCount;
+      for (let i = 0; i < toAdd; i++) addMatrixCard();
+    }
+    document.querySelectorAll('[data-field]').forEach(el => {
+      const key = el.dataset.field;
+      if (data[key] === undefined) return;
+      if (el.type === 'checkbox') el.checked = !!data[key];
+      else el.value = data[key];
+    });
+    ['name','class','date','teacher'].forEach(f => {
+      const el = document.getElementById('si-' + f);
+      if (el && data['si-' + f]) el.value = data['si-' + f];
+    });
+    for (let i = 1; i <= matrixCount; i++) updateMatrixTotal(i);
+  },
+  save() {
+    const data = this._getData();
+    localStorage.setItem(this.workbookKey(LESSON_ID), JSON.stringify(data));
+    this._syncProgress('in-progress');
+    const btn = document.querySelector('.bar-btns .save');
+    const orig = btn.textContent;
+    btn.textContent = 'Saved ✓';
+    setTimeout(() => btn.textContent = orig, 1800);
+  },
+  load() {
+    const raw = localStorage.getItem(this.workbookKey(LESSON_ID));
+    if (raw) { try { this._setData(JSON.parse(raw)); updateProgress(); } catch(e){} }
+  },
+  autoSave() {
+    clearTimeout(DataService._timer);
+    DataService._timer = setTimeout(() => DataService.save(), 1200);
+  },
+  autoLoad() { this.load(); },
+  submit() {
+    this.save();
+    this._syncProgress('submitted');
+    alert('Workbook submitted. See your teacher to confirm.');
+  },
+  _syncProgress(status) {
+    localStorage.setItem(`eduportal_progress_${this.getStudentId()}_${LESSON_ID}`, JSON.stringify({ status, ts: Date.now() }));
+  }
+};
+const DS = DataService; // short alias used by inline handlers
+
+// ── Progress tracking ────────────────────────────────────────────────────────
+function countFilled() {
+  let filled = 0, total = 0;
+  document.querySelectorAll('textarea[data-field]').forEach(el => {
+    total++;
+    if (el.value.trim().length > 5) filled++;
+  });
+  document.querySelectorAll('input[type="text"][data-field]').forEach(el => {
+    total++;
+    if (String(el.value).trim().length > 0) filled++;
+  });
+  document.querySelectorAll('input[type="number"][data-field]').forEach(el => {
+    total++;
+    if (String(el.value).trim().length > 0) filled++;
+  });
+  document.querySelectorAll('select[data-field]').forEach(el => {
+    total++;
+    if (el.value) filled++;
+  });
+  document.querySelectorAll('input[type="checkbox"][data-field]').forEach(el => {
+    total++;
+    if (el.checked) filled++;
+  });
+  return { filled, total };
+}
+function updateProgress() {
+  const { filled, total } = countFilled();
+  const pct = total ? Math.round((filled / total) * 100) : 0;
+  document.getElementById('pct-fill').style.width = pct + '%';
+  document.getElementById('pct-display').textContent = pct + '%';
+}
+
+// ── Field listeners ───────────────────────────────────────────────────────────
+function attachFieldListeners(root) {
+  root.querySelectorAll('[data-field]').forEach(el => {
+    el.addEventListener('input', () => { updateProgress(); DataService.autoSave(); });
+    el.addEventListener('change', () => { updateProgress(); DataService.autoSave(); });
+  });
+}
+attachFieldListeners(document);
+
+// ── Auto-load on open ────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  DataService.autoLoad();
+  updateProgress();
+  document.querySelectorAll('[data-field]').forEach(el => {
+    el.addEventListener('input', function firstEntry() {
+      DataService._syncProgress('in-progress');
+      el.removeEventListener('input', firstEntry);
+    }, { once: true });
+  });
+});
+</script>
+</body>
+</html>

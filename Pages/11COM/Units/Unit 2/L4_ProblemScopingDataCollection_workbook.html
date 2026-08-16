@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L4 Workbook — Problem Scoping & Data Collection · Y11 AC U2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #12100E; --ink2: #2C2A28; --ink3: #6B6762;
+    --cream: #F7F3EC; --cream2: #EDE8DF; --white: #FFFFFF;
+    --border: #D8D3CA; --border2: #C4BFB6;
+    --pine: #1B5E47; --amber: #B8620A; --indigo: #2B3A8C; --crimson: #8C1F28;
+    --pine-lt: #E8F2EE; --amber-lt: #FDF3E7; --indigo-lt: #ECEEF8; --crimson-lt: #F9ECED;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--cream); color: var(--ink); font-family: 'DM Sans', sans-serif; line-height: 1.6; }
+
+  /* ── Progress bar ── */
+  #progress-bar {
+    position: sticky; top: 0; z-index: 100; background: var(--ink);
+    display: flex; align-items: center; gap: 1rem; padding: 0.5rem 1.5rem;
+    border-bottom: 2px solid var(--pine);
+  }
+  #progress-bar .wb-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--pine); letter-spacing: 0.08em; white-space: nowrap; }
+  #pct-display { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--white); white-space: nowrap; }
+  #pct-bar { flex: 1; height: 4px; background: var(--ink2); border-radius: 2px; overflow: hidden; }
+  #pct-fill { height: 100%; background: var(--pine); border-radius: 2px; width: 0%; transition: width 0.4s; }
+  .bar-btns { display: flex; gap: 0.5rem; margin-left: auto; }
+  .bar-btns button {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--white);
+    background: transparent; border: 1px solid var(--ink3); border-radius: 4px;
+    padding: 0.22rem 0.65rem; cursor: pointer;
+  }
+  .bar-btns button:hover { border-color: var(--white); }
+  .bar-btns button.save { border-color: var(--pine); color: var(--pine); }
+  .bar-btns button.save:hover { background: var(--pine); color: var(--white); }
+
+  /* ── Cover ── */
+  .cover { background: var(--ink); padding: 2.5rem 2rem 2rem; }
+  .cover .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--ink3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .cover .subject { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--pine); margin-bottom: 0.75rem; }
+  .cover h1 { font-family: 'DM Serif Display', serif; font-size: 2.2rem; color: var(--white); margin-bottom: 0.5rem; }
+  .cover .doc-type { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--amber); margin-bottom: 1.25rem; }
+
+  .student-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; }
+  .si-field { display: flex; flex-direction: column; gap: 0.25rem; }
+  .si-field label { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.06em; }
+  .si-field input { background: var(--ink2); border: 1px solid var(--border); border-radius: 5px; padding: 0.45rem 0.65rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--white); outline: none; }
+  .si-field input:focus { border-color: var(--pine); }
+
+  /* ── Main ── */
+  main { max-width: 820px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+
+  /* Section bands */
+  .section-band { display: flex; align-items: center; gap: 0.75rem; margin: 2.5rem 0 1.25rem; }
+  .section-num { width: 2rem; height: 2rem; background: var(--ink); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+  .section-meta { display: flex; flex-direction: column; }
+  .section-mono { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--ink3); letter-spacing: 0.06em; text-transform: uppercase; }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--ink); }
+
+  /* Question blocks */
+  .q-block { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; margin-bottom: 1rem; }
+  .q-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .q-num { font-family: 'DM Mono', monospace; font-size: 0.68rem; font-weight: 600; color: var(--ink3); }
+  .tier { display: inline-flex; align-items: center; gap: 0.3rem; font-family: 'DM Mono', monospace; font-size: 0.65rem; font-weight: 500; padding: 0.15rem 0.5rem; border-radius: 4px; }
+  .tier-f { background: var(--pine-lt); color: var(--pine); border: 1px solid var(--pine); }
+  .tier-d { background: var(--amber-lt); color: var(--amber); border: 1px solid var(--amber); }
+  .tier-e { background: var(--indigo-lt); color: var(--indigo); border: 1px solid var(--indigo); }
+  .q-text { font-size: 0.92rem; color: var(--ink); margin-bottom: 0.65rem; }
+  .q-text strong { color: var(--ink2); }
+  .q-hint { font-size: 0.8rem; color: var(--ink3); font-style: italic; margin-bottom: 0.5rem; }
+  .q-ref { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--indigo); margin-bottom: 0.6rem; }
+
+  textarea, input[type="text"], select {
+    width: 100%; border: 1px solid var(--border2); border-radius: 6px;
+    padding: 0.55rem 0.7rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    color: var(--ink); background: var(--cream); outline: none; resize: vertical;
+  }
+  textarea:focus, input[type="text"]:focus, select:focus { border-color: var(--pine); background: var(--white); }
+  textarea { min-height: 90px; }
+  textarea.tall { min-height: 200px; }
+  textarea.xtall { min-height: 320px; }
+  select { cursor: pointer; }
+
+  /* Radio groups */
+  .radio-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .radio-opt { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; background: var(--cream2); border: 1px solid var(--border); border-radius: 6px; padding: 0.35rem 0.75rem; }
+  .radio-opt input[type="radio"], .radio-opt input[type="checkbox"] { accent-color: var(--pine); cursor: pointer; }
+  .radio-opt span { font-size: 0.88rem; }
+  .radio-opt:has(input:checked) { background: var(--pine-lt); border-color: var(--pine); }
+
+  /* Callouts */
+  .callout { border-radius: 8px; padding: 0.9rem 1.1rem; margin: 0.75rem 0; }
+  .callout-info { background: var(--indigo-lt); border-left: 3px solid var(--indigo); }
+  .callout-tip  { background: var(--pine-lt);   border-left: 3px solid var(--pine); }
+  .callout-note { background: var(--amber-lt);  border-left: 3px solid var(--amber); }
+  .callout-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; margin-bottom: 0.3rem; }
+  .callout-info .callout-label { color: var(--indigo); }
+  .callout-tip .callout-label  { color: var(--pine); }
+  .callout-note .callout-label { color: var(--amber); }
+  .callout p, .callout li { font-size: 0.88rem; color: var(--ink); }
+
+  /* Device chips */
+  .chip { display: inline-flex; align-items: center; gap: 0.3rem; font-family: 'DM Mono', monospace; font-size: 0.65rem; font-weight: 600; padding: 0.18rem 0.55rem; border-radius: 4px; letter-spacing: 0.05em; }
+  .chip-off { background: #5C1419; color: #FFCDD2; }
+  .chip-on  { background: #0F3D2D; color: #C8E6C9; }
+
+  /* Scaffold grid for instrument */
+  .scaffold-grid { display: grid; gap: 0.6rem; margin-top: 0.5rem; }
+  .scaffold-row { display: grid; grid-template-columns: auto 1fr auto; gap: 0.5rem; align-items: start; }
+  .scaffold-label { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--ink3); padding-top: 0.6rem; white-space: nowrap; }
+  .scaffold-row textarea { min-height: 60px; }
+  .scaffold-row select { min-height: auto; }
+
+  /* Section 5 exit ticket */
+  .exit-block { background: var(--crimson); border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem; }
+  .exit-block .q-block { background: var(--crimson-lt); border-color: transparent; }
+  .exit-block .section-band { margin-top: 0; }
+  .exit-block .section-num { background: var(--crimson); }
+  .exit-block .section-title { color: var(--white); }
+  .exit-block .section-mono { color: rgba(255,255,255,0.6); }
+  .exit-block .chip-off { margin-left: 0.5rem; }
+
+  /* Marking panel */
+  .marking-panel { background: var(--crimson-lt); border: 2px solid var(--crimson); border-radius: 10px; padding: 1.25rem; margin-top: 3rem; }
+  .marking-panel h2 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--crimson); margin-bottom: 0.3rem; }
+  .marking-panel .mp-note { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--crimson); margin-bottom: 1rem; }
+  .mp-row { display: grid; grid-template-columns: 2fr 3fr 1fr; gap: 0.5rem; align-items: start; margin-bottom: 0.5rem; }
+  .mp-row label { font-size: 0.85rem; color: var(--ink2); padding-top: 0.5rem; }
+  .mp-row textarea { min-height: 55px; border-color: var(--border2); background: var(--white); }
+  .mp-grade { display: flex; gap: 0.3rem; align-items: center; }
+  .mp-grade select { min-height: auto; }
+  .mp-divider { border: none; border-top: 1px solid var(--crimson); opacity: 0.3; margin: 0.75rem 0; }
+  
+  hr { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+  p { font-size: 0.92rem; color: var(--ink2); }
+</style>
+</head>
+<body>
+
+<div id="progress-bar">
+  <span class="wb-label">STUDENT WORKBOOK</span>
+  <span id="pct-display">0%</span>
+  <div id="pct-bar"><div id="pct-fill"></div></div>
+  <div class="bar-btns">
+    <button class="save" onclick="DS.save()">Save</button>
+    <button onclick="DS.load()">Load</button>
+    <button onclick="window.print()">Print</button>
+  </div>
+</div>
+
+<div class="cover">
+  <p class="eyebrow">D2.2 Problem Scoping · D3.1 Data Collection Design</p>
+  <p class="subject">Year 11 Applied Computing — Unit 2 · AoS1 Innovative Solutions</p>
+  <h1>Problem Scoping &amp; Data Collection</h1>
+  <p class="doc-type">STUDENT WORKBOOK · Lesson 4 · y11-ac-u2-l4-problem-scoping-data-collection</p>
+  <div class="student-grid">
+    <div class="si-field"><label>Student Name</label><input id="si-name" type="text" autocomplete="off" placeholder="Your name"></div>
+    <div class="si-field"><label>Class</label><input id="si-class" type="text" autocomplete="off" placeholder="e.g. 11AC-1"></div>
+    <div class="si-field"><label>Date</label><input id="si-date" type="text" autocomplete="off" placeholder="dd/mm/yyyy"></div>
+    <div class="si-field"><label>Teacher</label><input id="si-teacher" type="text" autocomplete="off" placeholder="Mr Smith"></div>
+  </div>
+</div>
+
+<main>
+
+  <!-- SECTION 1 — Paper to Digital Transfer -->
+  <div class="section-band">
+    <div class="section-num">1</div>
+    <div class="section-meta">
+      <span class="section-mono">Foundation · D2.2 Problem Scoping</span>
+      <span class="section-title">Refining the Problem Statement</span>
+    </div>
+  </div>
+
+  <div class="callout callout-note" style="margin-bottom: 1rem;">
+    <p class="callout-label">Paper Notes Phase <span class="chip chip-off">DEVICES OFF</span></p>
+    <p>This section was completed on paper during the explicit teaching phase. Transfer your refined problem statement and user scope notes here after the laptop gate. Do not copy from the slides or website — write from your own group's work.</p>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q1</span><span class="tier tier-f">🟢 Foundation</span></div>
+    <p class="q-text">Write your group's <strong>refined problem statement</strong> using the formula: <em>[USER GROUP] need a way to [ACCOMPLISH GOAL] because [SPECIFIC INSIGHT].</em></p>
+    <p class="q-hint">Transfer this from your paper notes. What is more specific or sharper than your D2.1 draft?</p>
+    <textarea id="q1" data-field="q1" placeholder="Write your group's refined problem statement here."></textarea>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q2</span><span class="tier tier-f">🟢 Foundation</span></div>
+    <p class="q-text">Who IS your target user? Be specific — include age range, context, and any relevant circumstance. (2–3 sentences.)</p>
+    <textarea id="q2" data-field="q2" placeholder="Describe your target user specifically — not 'people' or 'students'."></textarea>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q3</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">Who is explicitly <strong>NOT</strong> your target user? Name at least one group your solution is not designed for, and explain why drawing that line is useful for your design.</p>
+    <p class="q-ref">→ See <em>Reference Site: Section 2</em> for why scoping exclusions matters.</p>
+    <textarea id="q3" data-field="q3" placeholder="Name a group outside your scope and explain the decision behind that boundary."></textarea>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 2 — Choosing a Data Collection Method -->
+  <div class="section-band">
+    <div class="section-num">2</div>
+    <div class="section-meta">
+      <span class="section-mono">Developing · D3.1 Data Collection Design</span>
+      <span class="section-title">Choosing a Data Collection Method</span>
+    </div>
+  </div>
+
+  <div class="callout callout-tip" style="margin-bottom: 1rem;">
+    <p class="callout-label">Laptop Gate <span class="chip chip-on">DEVICES ON</span></p>
+    <p>The digital workbook opens here. Work through Sections 2, 3, and 4 using your paper notes from the explicit phase for reference. Section 5 returns to paper at the end of the lesson.</p>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q4</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">Which data collection method(s) will your group use? Select all that apply.</p>
+    <div class="radio-group" style="margin-top: 0.35rem;">
+      <label class="radio-opt"><input type="checkbox" data-field="q4-interview"><span>Interview</span></label>
+      <label class="radio-opt"><input type="checkbox" data-field="q4-survey"><span>Survey</span></label>
+      <label class="radio-opt"><input type="checkbox" data-field="q4-observation"><span>Observation</span></label>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q5</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">Why is your chosen method appropriate for your specific user group? Consider: How accessible are your users? How much detail do you need? How many people do you need to hear from?</p>
+    <p class="q-ref">→ See <em>Reference Site: Section 4</em> — Interviews vs Surveys table.</p>
+    <textarea id="q5" data-field="q5" placeholder="Explain why this method fits your user group and what you need to find out."></textarea>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q6</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">What is one limitation of your chosen method? How could you reduce the impact of that limitation?</p>
+    <textarea id="q6" data-field="q6" placeholder="Name the limitation, then explain what you'd do to reduce it."></textarea>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 3 — Designing the Instrument -->
+  <div class="section-band">
+    <div class="section-num">3</div>
+    <div class="section-meta">
+      <span class="section-mono">Developing → Extending · D3.1 Data Collection Design</span>
+      <span class="section-title">Designing the Instrument</span>
+    </div>
+  </div>
+
+  <div class="callout callout-info" style="margin-bottom: 1rem;">
+    <p class="callout-label">Main Output of This Lesson</p>
+    <p>This section is your primary deliverable. Produce a full survey <em>or</em> interview guide <em>or</em> observation checklist — whichever you chose in Section 2. Minimum requirements are shown in the task below. Allow around 15 minutes for this section.</p>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q7</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">Write your data collection instrument below. Minimum requirements:</p>
+    <ul style="margin: 0.4rem 0 0.75rem 1.2rem; font-size: 0.88rem; color: var(--ink2);">
+      <li>Survey: at least 5 questions — mix of open and closed</li>
+      <li>Interview guide: at least 4 questions plus 2 follow-up prompts</li>
+      <li>Observation checklist: at least 5 specific behaviours or situations to record</li>
+    </ul>
+
+    <div class="scaffold-grid" id="instrument-grid">
+      <!-- Rows generated by JS -->
+    </div>
+    <button onclick="addInstrumentRow()" style="margin-top: 0.75rem; font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--indigo); background: transparent; border: 1px dashed var(--indigo); border-radius: 5px; padding: 0.3rem 0.85rem; cursor: pointer;">+ Add question / item</button>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q8</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">Look at your labels in Q7. Do you have at least one open question <em>and</em> at least one closed question?</p>
+    <div class="radio-group" style="margin: 0.35rem 0 0.75rem;">
+      <label class="radio-opt"><input type="radio" name="q8-check" data-field="q8" value="yes_both"><span>Yes — I have both open and closed</span></label>
+      <label class="radio-opt"><input type="radio" name="q8-check" data-field="q8" value="no_added"><span>No — I added one now</span></label>
+    </div>
+    <p class="q-text" style="margin-top: 0.25rem;">If you added a question, write it here and note which type it is:</p>
+    <textarea id="q8-addition" data-field="q8-addition" style="min-height: 65px;" placeholder="Write the question you added and label it as open or closed."></textarea>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q9</span><span class="tier tier-e">🔵 Extending</span></div>
+    <p class="q-text">Read your instrument back as if you are the user receiving it. Find <strong>one question</strong> that could be leading, ambiguous, or off-putting. Write it below, then rewrite it and explain what you changed and why.</p>
+    <p class="q-ref">→ See <em>Reference Site: Section 5</em> — Leading Questions.</p>
+    <label style="font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--ink3); display: block; margin-bottom: 0.3rem;">Original question (copy it here):</label>
+    <textarea id="q9-original" data-field="q9-original" style="min-height: 60px;" placeholder="Paste or write the original question that you want to improve."></textarea>
+    <label style="font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--ink3); display: block; margin: 0.6rem 0 0.3rem;">Your rewritten version:</label>
+    <textarea id="q9-rewrite" data-field="q9-rewrite" style="min-height: 60px;" placeholder="Write the improved version."></textarea>
+    <label style="font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--ink3); display: block; margin: 0.6rem 0 0.3rem;">What did you change and why?</label>
+    <textarea id="q9-explain" data-field="q9-explain" style="min-height: 70px;" placeholder="Explain what was problematic about the original and what your rewrite fixes."></textarea>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 4 — Evaluating the Instrument -->
+  <div class="section-band">
+    <div class="section-num">4</div>
+    <div class="section-meta">
+      <span class="section-mono">Extending · D3.1 Data Collection Design</span>
+      <span class="section-title">Evaluating the Instrument</span>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q10</span><span class="tier tier-e">🔵 Extending</span></div>
+    <p class="q-text">What <strong>assumption</strong> is baked into your instrument that might not be true for all members of your user group? For example: assuming they have a smartphone; assuming they're comfortable reading long questions; assuming they already know what your project is about.</p>
+    <p class="q-hint">Think about who might be in your user group but different from your mental image of a "typical" user.</p>
+    <textarea id="q10" data-field="q10" placeholder="Describe the assumption, and which users it might not apply to."></textarea>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q11</span><span class="tier tier-e">🔵 Extending</span></div>
+    <p class="q-text">If you could only ask your user group <strong>one question</strong>, which of your questions would you keep? Explain your reasoning — what does this question tell you that the others can't replace?</p>
+    <textarea id="q11" data-field="q11" placeholder="Name the question and explain why it's the most valuable one in your instrument."></textarea>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 5 — Exit Ticket -->
+  <div class="exit-block">
+    <div class="section-band">
+      <div class="section-num">5</div>
+      <div class="section-meta">
+        <span class="section-mono">Exit Ticket</span>
+        <span class="section-title" style="color: var(--white);">Exit Ticket</span>
+      </div>
+    </div>
+
+    <div class="callout callout-note" style="margin-bottom: 1rem;">
+      <p class="callout-label">Devices OFF <span class="chip chip-off">DEVICES OFF</span></p>
+      <p>Complete this section on paper — your teacher will provide an exit ticket slip, or complete it here from memory without looking back at your earlier answers. No looking back at previous sections.</p>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q12</span><span class="tier tier-f">🟢 Foundation</span></div>
+      <p class="q-text">Write your group's refined problem statement <strong>from memory</strong>. No looking back at Section 1.</p>
+      <textarea id="q12" data-field="q12" placeholder="Write from memory — don't scroll back to check."></textarea>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q13</span><span class="tier tier-d">🟡 Developing</span></div>
+      <p class="q-text">What data collection method did your group choose, and what is the strongest reason for that choice?</p>
+      <textarea id="q13" data-field="q13" placeholder="Name the method and give one strong justification — not just 'it's easy'."></textarea>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q14</span><span class="tier tier-e">🔵 Extending</span></div>
+      <p class="q-text">Name one way your instrument could produce misleading or incomplete data, and what you would do about it.</p>
+      <textarea id="q14" data-field="q14" placeholder="Describe the risk and your response to it."></textarea>
+    </div>
+  </div>
+
+  <!-- Marking Panel -->
+  <div class="marking-panel" id="marking-panel" style="display:none;">
+    <h2>Teacher Marking Panel</h2>
+    <p class="mp-note">TEACHER USE ONLY — hidden from students. Toggle with Ctrl+Shift+M.</p>
+
+    <div class="mp-row">
+      <label>Problem Statement (Q1, Q2, Q3)</label>
+      <textarea id="mp-ps" placeholder="Notes on specificity of user group and because clause..."></textarea>
+      <div class="mp-grade"><select><option>—</option><option>F</option><option>D</option><option>E</option></select></div>
+    </div>
+    <hr class="mp-divider">
+    <div class="mp-row">
+      <label>Method Justification (Q4–Q6)</label>
+      <textarea id="mp-method" placeholder="Is the choice justified? Is the limitation realistic?"></textarea>
+      <div class="mp-grade"><select><option>—</option><option>F</option><option>D</option><option>E</option></select></div>
+    </div>
+    <hr class="mp-divider">
+    <div class="mp-row">
+      <label>Instrument Quality (Q7–Q9)</label>
+      <textarea id="mp-instrument" placeholder="Question quality, mix of types, presence of leading questions identified and fixed..."></textarea>
+      <div class="mp-grade"><select><option>—</option><option>F</option><option>D</option><option>E</option></select></div>
+    </div>
+    <hr class="mp-divider">
+    <div class="mp-row">
+      <label>Evaluation (Q10–Q11)</label>
+      <textarea id="mp-eval" placeholder="Quality of assumption identification and single-question prioritisation rationale..."></textarea>
+      <div class="mp-grade"><select><option>—</option><option>F</option><option>D</option><option>E</option></select></div>
+    </div>
+    <hr class="mp-divider">
+    <div class="mp-row">
+      <label>Overall Comment</label>
+      <textarea id="mp-overall" placeholder="Overall feedback for the group..."></textarea>
+      <div class="mp-grade"><select><option>—</option><option>F</option><option>D</option><option>E</option></select></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── Constants ─────────────────────────────────────────────────────────────────
+const LESSON_ID   = 'y11-ac-u2-l4-problem-scoping-data-collection';
+const STORAGE_KEY = 'wb_' + LESSON_ID;
+
+// ── Instrument scaffold ───────────────────────────────────────────────────────
+let instrumentRows = 0;
+function addInstrumentRow(label, text, type) {
+  instrumentRows++;
+  const num = instrumentRows;
+  const grid = document.getElementById('instrument-grid');
+  const row = document.createElement('div');
+  row.className = 'scaffold-row';
+  row.innerHTML = `
+    <span class="scaffold-label">Q${num}</span>
+    <textarea data-field="instr-q${num}" placeholder="Write your question or observation item here.">${text || ''}</textarea>
+    <select data-field="instr-t${num}" style="min-width:90px;">
+      <option value="">Type…</option>
+      <option value="open" ${type==='open'?'selected':''}>Open</option>
+      <option value="closed" ${type==='closed'?'selected':''}>Closed</option>
+      <option value="followup" ${type==='followup'?'selected':''}>Follow-up</option>
+      <option value="observe" ${type==='observe'?'selected':''}>Observe</option>
+    </select>`;
+  grid.appendChild(row);
+  attachFieldListeners(row);
+  updateProgress();
+}
+
+// Initialise with 5 blank rows
+for (let i = 0; i < 5; i++) addInstrumentRow();
+
+// ── DataService ───────────────────────────────────────────────────────────────
+const DS = {
+  studentId() { return localStorage.getItem('eduportal_currentStudent') || 'current_student'; },
+  _getData() {
+    const data = {};
+    document.querySelectorAll('[data-field]').forEach(el => {
+      const key = el.dataset.field;
+      if (el.type === 'checkbox') data[key] = el.checked;
+      else if (el.type === 'radio') { if (el.checked) data[key] = el.value; }
+      else data[key] = el.value;
+    });
+    // Student info
+    ['name','class','date','teacher'].forEach(f => {
+      const el = document.getElementById('si-' + f);
+      if (el) data['si-' + f] = el.value;
+    });
+    // Instrument row count
+    data['_instrumentRows'] = instrumentRows;
+    return data;
+  },
+  _setData(data) {
+    // Restore instrument rows first
+    if (data['_instrumentRows'] && data['_instrumentRows'] > instrumentRows) {
+      const toAdd = data['_instrumentRows'] - instrumentRows;
+      for (let i = 0; i < toAdd; i++) addInstrumentRow();
+    }
+    document.querySelectorAll('[data-field]').forEach(el => {
+      const key = el.dataset.field;
+      if (data[key] === undefined) return;
+      if (el.type === 'checkbox') el.checked = !!data[key];
+      else if (el.type === 'radio') el.checked = el.value === data[key];
+      else el.value = data[key];
+    });
+    ['name','class','date','teacher'].forEach(f => {
+      const el = document.getElementById('si-' + f);
+      if (el && data['si-' + f]) el.value = data['si-' + f];
+    });
+  },
+  save() {
+    const sid = this.studentId();
+    const data = this._getData();
+    localStorage.setItem(`${STORAGE_KEY}_${sid}`, JSON.stringify(data));
+    this._syncProgress('in-progress', null);
+    const btn = document.querySelector('.bar-btns .save');
+    const orig = btn.textContent;
+    btn.textContent = 'Saved ✓';
+    setTimeout(() => btn.textContent = orig, 1800);
+  },
+  load() {
+    const sid = this.studentId();
+    const raw = localStorage.getItem(`${STORAGE_KEY}_${sid}`);
+    if (raw) { try { this._setData(JSON.parse(raw)); updateProgress(); } catch(e){} }
+  },
+  autoSave() {
+    clearTimeout(DS._timer);
+    DS._timer = setTimeout(() => DS.save(), 1200);
+  },
+  submit() {
+    this.save();
+    this._syncProgress('done', null);
+    alert('Workbook submitted. See your teacher to confirm.');
+  },
+  _syncProgress(status, score) {
+    const sid = this.studentId();
+    localStorage.setItem(`eduportal_progress_${sid}_${LESSON_ID}`, JSON.stringify({ status, score, ts: Date.now() }));
+  }
+};
+
+// ── Progress tracking ─────────────────────────────────────────────────────────
+function countFilled() {
+  let filled = 0, total = 0;
+  document.querySelectorAll('textarea[data-field], input[type="text"][data-field]').forEach(el => {
+    total++;
+    if (el.value.trim().length > 5) filled++;
+  });
+  return { filled, total };
+}
+function updateProgress() {
+  const { filled, total } = countFilled();
+  const pct = total ? Math.round((filled / total) * 100) : 0;
+  document.getElementById('pct-fill').style.width = pct + '%';
+  document.getElementById('pct-display').textContent = pct + '%';
+}
+
+// ── Field listeners ───────────────────────────────────────────────────────────
+function attachFieldListeners(root) {
+  root.querySelectorAll('[data-field]').forEach(el => {
+    el.addEventListener('input', () => { updateProgress(); DS.autoSave(); });
+    el.addEventListener('change', () => { updateProgress(); DS.autoSave(); });
+  });
+}
+attachFieldListeners(document);
+
+// ── Marking panel toggle ──────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.shiftKey && e.key === 'M') {
+    const mp = document.getElementById('marking-panel');
+    mp.style.display = mp.style.display === 'none' ? 'block' : 'none';
+  }
+});
+
+// ── Auto-load on open ─────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  DS.load();
+  updateProgress();
+  // First entry tracking
+  document.querySelectorAll('[data-field]').forEach(el => {
+    el.addEventListener('input', function firstEntry() {
+      DS._syncProgress('in-progress', null);
+      el.removeEventListener('input', firstEntry);
+    }, { once: true });
+  });
+});
+</script>
+</body>
+</html>

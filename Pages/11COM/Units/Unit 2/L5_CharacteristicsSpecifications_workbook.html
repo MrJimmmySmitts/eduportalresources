@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L5 Workbook — Characteristics &amp; Solution Specifications · Y11 AC U2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark-bg: #0D1117; --light-bg: #FFFFFF;
+    --surface: #161B22; --surface2: #1F2530;
+    --border: #30363D;
+    --text: #E6EDF3; --text-dim: #9BA3AF;
+    --blue: #4361EE; --green: #10B981; --amber: #F59E0B; --purple: #8B5CF6; --red: #EF4444;
+    --blue-lt: rgba(67,97,238,0.12); --green-lt: rgba(16,185,129,0.12);
+    --amber-lt: rgba(245,158,11,0.12); --purple-lt: rgba(139,92,246,0.12); --red-lt: rgba(239,68,68,0.12);
+  }
+  body.light {
+    --dark-bg: #FFFFFF; --surface: #F6F8FA; --surface2: #EDF0F3;
+    --border: #D0D7DE; --text: #0D1117; --text-dim: #57606A;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--dark-bg); color: var(--text); font-family: 'DM Sans', sans-serif; line-height: 1.6; transition: background .2s, color .2s; }
+
+  #progress-bar { position: sticky; top: 0; z-index: 100; background: var(--surface); display: flex; align-items: center; gap: 1rem; padding: 0.5rem 1.5rem; border-bottom: 2px solid var(--blue); }
+  #progress-bar .wb-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--blue); letter-spacing: 0.08em; white-space: nowrap; }
+  #pct-display { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text); white-space: nowrap; }
+  #pct-bar { flex: 1; height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+  #pct-fill { height: 100%; background: var(--blue); border-radius: 2px; width: 0%; transition: width 0.4s; }
+  .bar-btns { display: flex; gap: 0.5rem; margin-left: auto; }
+  .bar-btns button { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text); background: transparent; border: 1px solid var(--border); border-radius: 4px; padding: 0.22rem 0.65rem; cursor: pointer; }
+  .bar-btns button:hover { border-color: var(--text); }
+  .bar-btns button.save { border-color: var(--blue); color: var(--blue); }
+  .bar-btns button.save:hover { background: var(--blue); color: #fff; }
+
+  .cover { background: var(--surface); padding: 2.5rem 2rem 2rem; border-bottom: 1px solid var(--border); }
+  .cover .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .cover .subject { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--blue); margin-bottom: 0.75rem; }
+  .cover h1 { font-family: 'DM Serif Display', serif; font-size: 2.1rem; color: var(--text); margin-bottom: 0.5rem; }
+  .cover .doc-type { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--amber); margin-bottom: 1.25rem; }
+
+  .student-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; }
+  .si-field { display: flex; flex-direction: column; gap: 0.25rem; }
+  .si-field label { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; }
+  .si-field input { background: var(--surface2); border: 1px solid var(--border); border-radius: 5px; padding: 0.45rem 0.65rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--text); outline: none; }
+  .si-field input:focus { border-color: var(--blue); }
+
+  main { max-width: 820px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+
+  .section-band { display: flex; align-items: center; gap: 0.75rem; margin: 2.5rem 0 1.25rem; }
+  .section-num { width: 2rem; height: 2rem; background: var(--blue); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+  .section-meta { display: flex; flex-direction: column; }
+  .section-mono { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-dim); letter-spacing: 0.06em; text-transform: uppercase; }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--text); }
+
+  .callout { border-radius: 8px; padding: 1rem 1.25rem; border: 1px solid var(--border); }
+  .callout-info { background: var(--blue-lt); border-left: 3px solid var(--blue); }
+  .callout-tip  { background: var(--green-lt); border-left: 3px solid var(--green); }
+  .callout-note { background: var(--amber-lt); border-left: 3px solid var(--amber); }
+  .callout-extend { background: var(--purple-lt); border-left: 3px solid var(--purple); }
+  .callout-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; margin-bottom: 0.4rem; }
+  .callout-info .callout-label { color: var(--blue); }
+  .callout-tip .callout-label  { color: var(--green); }
+  .callout-note .callout-label { color: var(--amber); }
+  .callout-extend .callout-label { color: var(--purple); }
+  .callout p { font-size: 0.9rem; color: var(--text); font-family: 'Atkinson Hyperlegible', sans-serif; }
+
+  .chip { font-family: 'DM Mono', monospace; font-size: 0.62rem; padding: 0.1rem 0.5rem; border-radius: 4px; margin-left: 0.5rem; }
+  .chip-off { background: var(--red-lt); color: var(--red); border: 1px solid var(--red); }
+  .chip-on { background: var(--green-lt); color: var(--green); border: 1px solid var(--green); }
+
+  .q-block { margin: 1.5rem 0; }
+  .q-meta { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+  .q-num { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--text-dim); font-weight: 600; }
+  .tier { display: inline-flex; align-items: center; gap: 0.35rem; font-family: 'DM Mono', monospace; font-size: 0.68rem; font-weight: 500; padding: 0.16rem 0.55rem; border-radius: 4px; }
+  .tier-f { background: var(--green-lt); color: var(--green); border: 1px solid var(--green); }
+  .tier-d { background: var(--amber-lt); color: var(--amber); border: 1px solid var(--amber); }
+  .tier-e { background: var(--purple-lt); color: var(--purple); border: 1px solid var(--purple); }
+
+  .q-text { font-size: 0.95rem; color: var(--text); margin-bottom: 0.4rem; font-family: 'Atkinson Hyperlegible', sans-serif; }
+  .q-ref { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--blue); margin-bottom: 0.4rem; }
+  .q-hint { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 0.4rem; font-family: 'Atkinson Hyperlegible', sans-serif; }
+
+  textarea, .rate-select { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 7px; padding: 0.7rem 0.9rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--text); outline: none; resize: vertical; min-height: 80px; }
+  textarea:focus, .rate-select:focus { border-color: var(--blue); }
+  textarea::placeholder { color: var(--text-dim); }
+
+  .radio-group { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+  .radio-opt { display: flex; align-items: center; gap: 0.4rem; font-size: 0.88rem; color: var(--text); cursor: pointer; }
+
+  .rate-row { display: grid; grid-template-columns: 160px 1fr; gap: 0.9rem; align-items: start; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; margin-bottom: 0.75rem; }
+  .rate-row .rate-char { display: flex; flex-direction: column; gap: 0.4rem; }
+  .rate-row .rate-char-name { font-family: 'DM Serif Display', serif; font-size: 0.95rem; color: var(--text); }
+  .rate-scale { display: flex; gap: 0.3rem; }
+  .rate-scale label { display: flex; flex-direction: column; align-items: center; gap: 0.15rem; font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text-dim); cursor: pointer; }
+  .rate-scale input { accent-color: var(--blue); }
+
+  .scaffold-grid { display: flex; flex-direction: column; gap: 0.6rem; }
+  .scaffold-row { display: grid; grid-template-columns: 3.2rem 1fr; gap: 0.6rem; align-items: start; }
+  .scaffold-label { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text-dim); padding-top: 0.7rem; }
+  .scaffold-row textarea { min-height: 55px; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  .exit-block { background: var(--surface2); border-radius: 10px; padding: 1.5rem; margin-top: 2rem; }
+
+  @media (max-width: 600px) {
+    .rate-row { grid-template-columns: 1fr; }
+    .scaffold-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar">
+  <span class="wb-label">STUDENT WORKBOOK</span>
+  <span id="pct-display">0%</span>
+  <div id="pct-bar"><div id="pct-fill"></div></div>
+  <div class="bar-btns">
+    <button onclick="document.body.classList.toggle('light')">Theme</button>
+    <button class="save" onclick="DS.save()">Save</button>
+    <button onclick="DS.load()">Load</button>
+    <button onclick="window.print()">Print</button>
+  </div>
+</div>
+
+<div class="cover">
+  <p class="eyebrow">D3.2 Characteristics of Innovative Solutions · D4.1 Solution Specifications</p>
+  <p class="subject">Year 11 Applied Computing — Unit 2 · AoS1 Innovative Solutions</p>
+  <h1>Characteristics &amp; Solution Specifications</h1>
+  <p class="doc-type">STUDENT WORKBOOK · Lesson 5 · y11-ac-u2-l5-characteristics-specifications</p>
+  <div class="student-grid">
+    <div class="si-field"><label>Student Name</label><input id="si-name" type="text" autocomplete="off" placeholder="Your name"></div>
+    <div class="si-field"><label>Class</label><input id="si-class" type="text" autocomplete="off" placeholder="e.g. 11AC-1"></div>
+    <div class="si-field"><label>Date</label><input id="si-date" type="text" autocomplete="off" placeholder="YYYY-MM-DD"></div>
+    <div class="si-field"><label>Teacher</label><input id="si-teacher" type="text" autocomplete="off" placeholder="Mr Smith"></div>
+  </div>
+</div>
+
+<main>
+
+  <!-- SECTION 1 — Rating the Concept -->
+  <div class="section-band">
+    <div class="section-num">1</div>
+    <div class="section-meta">
+      <span class="section-mono">Foundation → Developing · D3.2</span>
+      <span class="section-title">Rate Your Emerging Concept</span>
+    </div>
+  </div>
+
+  <div class="callout callout-tip" style="margin-bottom: 1rem;">
+    <p class="callout-label">Laptop Gate <span class="chip chip-on">DEVICES ON</span></p>
+    <p>Bring your group's emerging solution concept and any data collected in Lesson 4. Rate your concept honestly against each characteristic — a low rating here is useful information, not a failure.</p>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q1</span><span class="tier tier-f">🟢 Foundation</span></div>
+    <p class="q-text">In one or two sentences, describe your group's current emerging solution concept — the idea you're leaning toward right now.</p>
+    <textarea id="q1" data-field="q1" placeholder="Describe the idea your group is currently leaning toward."></textarea>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q2</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">Rate your concept against each of the four characteristics (1 = not yet present, 5 = strongly present), then justify each rating in one sentence.</p>
+    <p class="q-ref">→ See Reference Site: Section 6 — The Four-Characteristic Lens.</p>
+
+    <div class="rate-row">
+      <div class="rate-char"><span class="rate-char-name">1 · Originality</span>
+        <div class="rate-scale">
+          <label>1<input type="radio" name="rate-orig" data-field="rate-orig" value="1"></label>
+          <label>2<input type="radio" name="rate-orig" data-field="rate-orig" value="2"></label>
+          <label>3<input type="radio" name="rate-orig" data-field="rate-orig" value="3"></label>
+          <label>4<input type="radio" name="rate-orig" data-field="rate-orig" value="4"></label>
+          <label>5<input type="radio" name="rate-orig" data-field="rate-orig" value="5"></label>
+        </div>
+      </div>
+      <textarea data-field="rate-orig-just" style="min-height:50px;" placeholder="Has someone already solved this exact problem, for this exact user, this way?"></textarea>
+    </div>
+
+    <div class="rate-row">
+      <div class="rate-char"><span class="rate-char-name">2 · Effectiveness</span>
+        <div class="rate-scale">
+          <label>1<input type="radio" name="rate-eff" data-field="rate-eff" value="1"></label>
+          <label>2<input type="radio" name="rate-eff" data-field="rate-eff" value="2"></label>
+          <label>3<input type="radio" name="rate-eff" data-field="rate-eff" value="3"></label>
+          <label>4<input type="radio" name="rate-eff" data-field="rate-eff" value="4"></label>
+          <label>5<input type="radio" name="rate-eff" data-field="rate-eff" value="5"></label>
+        </div>
+      </div>
+      <textarea data-field="rate-eff-just" style="min-height:50px;" placeholder="Complete: 'my idea lets [user] achieve [goal] by ___.' Can you fill the blank concretely?"></textarea>
+    </div>
+
+    <div class="rate-row">
+      <div class="rate-char"><span class="rate-char-name">3 · User-Centred</span>
+        <div class="rate-scale">
+          <label>1<input type="radio" name="rate-user" data-field="rate-user" value="1"></label>
+          <label>2<input type="radio" name="rate-user" data-field="rate-user" value="2"></label>
+          <label>3<input type="radio" name="rate-user" data-field="rate-user" value="3"></label>
+          <label>4<input type="radio" name="rate-user" data-field="rate-user" value="4"></label>
+          <label>5<input type="radio" name="rate-user" data-field="rate-user" value="5"></label>
+        </div>
+      </div>
+      <textarea data-field="rate-user-just" style="min-height:50px;" placeholder="What specific evidence from your data collection backs this decision (not an assumption)?"></textarea>
+    </div>
+
+    <div class="rate-row">
+      <div class="rate-char"><span class="rate-char-name">4 · Disruptive Potential</span>
+        <div class="rate-scale">
+          <label>1<input type="radio" name="rate-disr" data-field="rate-disr" value="1"></label>
+          <label>2<input type="radio" name="rate-disr" data-field="rate-disr" value="2"></label>
+          <label>3<input type="radio" name="rate-disr" data-field="rate-disr" value="3"></label>
+          <label>4<input type="radio" name="rate-disr" data-field="rate-disr" value="4"></label>
+          <label>5<input type="radio" name="rate-disr" data-field="rate-disr" value="5"></label>
+        </div>
+      </div>
+      <textarea data-field="rate-disr-just" style="min-height:50px;" placeholder="Does this change the underlying routine, or just add something on top of it?"></textarea>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 2 — Strengthening the Weakest Characteristic -->
+  <div class="section-band">
+    <div class="section-num">2</div>
+    <div class="section-meta">
+      <span class="section-mono">Developing → Extending · D3.2</span>
+      <span class="section-title">Strengthen Your Weakest Characteristic</span>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q3</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">Which characteristic scored lowest for your group in Q2? Name it.</p>
+    <div class="radio-group" style="margin-bottom: 0.5rem;">
+      <label class="radio-opt"><input type="radio" name="q3-weak" data-field="q3-weak" value="orig"><span>Originality</span></label>
+      <label class="radio-opt"><input type="radio" name="q3-weak" data-field="q3-weak" value="eff"><span>Effectiveness</span></label>
+      <label class="radio-opt"><input type="radio" name="q3-weak" data-field="q3-weak" value="user"><span>User-centred</span></label>
+      <label class="radio-opt"><input type="radio" name="q3-weak" data-field="q3-weak" value="disr"><span>Disruptive potential</span></label>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q4</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">Propose one specific, concrete change to your concept that would strengthen this characteristic. Avoid vague fixes like "make it better" — describe an actual change to the idea.</p>
+    <textarea id="q4" data-field="q4" placeholder="Describe the specific change you'd make and which characteristic it targets."></textarea>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q5</span><span class="tier tier-e">🟣 Extending</span></div>
+    <p class="q-text">Would your proposed change in Q4 weaken any of the <em>other</em> three characteristics? Explain your reasoning either way.</p>
+    <p class="q-hint">Think about trade-offs — a change that boosts disruption might sometimes cost effectiveness, for example.</p>
+    <textarea id="q5" data-field="q5" placeholder="Explain whether the change creates a trade-off with another characteristic."></textarea>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 3 — Functional Requirements -->
+  <div class="section-band">
+    <div class="section-num">3</div>
+    <div class="section-meta">
+      <span class="section-mono">Developing · D4.1 Solution Specifications</span>
+      <span class="section-title">Functional Requirements</span>
+    </div>
+  </div>
+
+  <div class="callout callout-info" style="margin-bottom: 1rem;">
+    <p class="callout-label">What you're building</p>
+    <p>Functional requirements describe what your solution must <em>do</em> — specific actions or features. This is your first draft — it will be refined as your design develops.</p>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q6</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">List at least four functional requirements for your (possibly strengthened) concept. Each one should describe a specific action the solution must perform.</p>
+    <p class="q-ref">→ See Reference Site: Section 8 — Functional vs Non-Functional Requirements.</p>
+    <div class="scaffold-grid" id="func-grid"><!-- rows generated by JS --></div>
+    <button onclick="addFuncRow()" style="margin-top: 0.75rem; font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--blue); background: transparent; border: 1px dashed var(--blue); border-radius: 5px; padding: 0.3rem 0.85rem; cursor: pointer;">+ Add requirement</button>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q7</span><span class="tier tier-e">🟣 Extending</span></div>
+    <p class="q-text">Pick one functional requirement above. Is it specific enough that two different people building it would end up with the same behaviour? If not, rewrite it to be more precise.</p>
+    <textarea id="q7" data-field="q7" placeholder="Name the requirement, explain the ambiguity, and rewrite it more precisely."></textarea>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 4 — Non-Functional Requirements, Constraints & Scope -->
+  <div class="section-band">
+    <div class="section-num">4</div>
+    <div class="section-meta">
+      <span class="section-mono">Developing → Extending · D4.1 Solution Specifications</span>
+      <span class="section-title">Non-Functional Requirements, Constraints &amp; Scope</span>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q8</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">List at least two non-functional requirements — qualities of <em>how</em> your solution performs (e.g. speed, usability, accessibility, reliability, security).</p>
+    <p class="q-ref">→ See Reference Site: Section 8 — Functional vs Non-Functional Requirements.</p>
+    <textarea id="q8" data-field="q8" placeholder="List at least two non-functional requirements for your solution."></textarea>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q9</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">List at least two constraints on your project — real limits on budget, time, available technology, or your group's skills that will shape what you can realistically build.</p>
+    <p class="q-ref">→ See Reference Site: Section 9 — Constraints &amp; Scope.</p>
+    <textarea id="q9" data-field="q9" placeholder="Name at least two real constraints affecting your project."></textarea>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q10</span><span class="tier tier-d">🟡 Developing</span></div>
+    <p class="q-text">Define your scope: what will your solution definitely <strong>include</strong>, and what will it deliberately <strong>exclude</strong> for now?</p>
+    <label style="font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-dim); display: block; margin-bottom: 0.3rem;">In scope:</label>
+    <textarea id="q10-in" data-field="q10-in" style="min-height: 60px;" placeholder="What will definitely be included in your solution?"></textarea>
+    <label style="font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-dim); display: block; margin: 0.6rem 0 0.3rem;">Out of scope:</label>
+    <textarea id="q10-out" data-field="q10-out" style="min-height: 60px;" placeholder="What will you deliberately leave out, at least for this version?"></textarea>
+  </div>
+
+  <div class="q-block">
+    <div class="q-meta"><span class="q-num">Q11</span><span class="tier tier-e">🟣 Extending</span></div>
+    <p class="q-text">Choose one constraint from Q9. Explain specifically how it will shape a design decision you make later — not just that it "makes things harder".</p>
+    <textarea id="q11" data-field="q11" placeholder="Name the constraint and explain the specific design decision it will shape."></textarea>
+  </div>
+
+  <hr>
+
+  <!-- SECTION 5 — Exit Ticket -->
+  <div class="exit-block">
+    <div class="section-band" style="margin-top:0;">
+      <div class="section-num" style="background:var(--red);">5</div>
+      <div class="section-meta">
+        <span class="section-mono">Exit Ticket</span>
+        <span class="section-title" style="color: var(--text);">Exit Ticket</span>
+      </div>
+    </div>
+
+    <div class="callout callout-note" style="margin-bottom: 1rem;">
+      <p class="callout-label">Devices OFF <span class="chip chip-off">DEVICES OFF</span></p>
+      <p>Complete this section from memory — no scrolling back to check your earlier answers.</p>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q12</span><span class="tier tier-f">🟢 Foundation</span></div>
+      <p class="q-text">Name the four characteristics of a creative and innovative solution, from memory.</p>
+      <textarea id="q12" data-field="q12" placeholder="List the four characteristics — no looking back."></textarea>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q13</span><span class="tier tier-d">🟡 Developing</span></div>
+      <p class="q-text">In your own words, what is the difference between a functional requirement and a non-functional requirement?</p>
+      <textarea id="q13" data-field="q13" placeholder="Explain the difference in your own words, with an example of each if you can."></textarea>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">Q14</span><span class="tier tier-e">🟣 Extending</span></div>
+      <p class="q-text">Name one constraint on your project and explain how it connects to something you defined as "out of scope".</p>
+      <textarea id="q14" data-field="q14" placeholder="Explain the connection between one constraint and one scope decision."></textarea>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── Constants ─────────────────────────────────────────────────────────────────
+const LESSON_ID = 'y11-ac-u2-l5-characteristics-specifications';
+
+// ── Functional requirement scaffold ────────────────────────────────────────────
+let funcRows = 0;
+function addFuncRow(text) {
+  funcRows++;
+  const num = funcRows;
+  const grid = document.getElementById('func-grid');
+  const row = document.createElement('div');
+  row.className = 'scaffold-row';
+  row.innerHTML = `
+    <span class="scaffold-label">FR${num}</span>
+    <textarea data-field="fr${num}" placeholder="The system must be able to...">${text || ''}</textarea>`;
+  grid.appendChild(row);
+  attachFieldListeners(row);
+  updateProgress();
+}
+for (let i = 0; i < 4; i++) addFuncRow();
+
+// ── DataService (canonical EduPortal pattern) ──────────────────────────────────
+const DataService = {
+  getStudentId() {
+    return JSON.parse(localStorage.getItem('eduportal_session') || '{}').id || 'current_student';
+  },
+  workbookKey(lessonId) { return 'eduportal_workbook_' + this.getStudentId() + '_' + lessonId; },
+  _getData() {
+    const data = {};
+    document.querySelectorAll('[data-field]').forEach(el => {
+      const key = el.dataset.field;
+      if (el.type === 'checkbox') data[key] = el.checked;
+      else if (el.type === 'radio') { if (el.checked) data[key] = el.value; }
+      else data[key] = el.value;
+    });
+    ['name','class','date','teacher'].forEach(f => {
+      const el = document.getElementById('si-' + f);
+      if (el) data['si-' + f] = el.value;
+    });
+    data['_funcRows'] = funcRows;
+    return data;
+  },
+  _setData(data) {
+    if (data['_funcRows'] && data['_funcRows'] > funcRows) {
+      const toAdd = data['_funcRows'] - funcRows;
+      for (let i = 0; i < toAdd; i++) addFuncRow();
+    }
+    document.querySelectorAll('[data-field]').forEach(el => {
+      const key = el.dataset.field;
+      if (data[key] === undefined) return;
+      if (el.type === 'checkbox') el.checked = !!data[key];
+      else if (el.type === 'radio') el.checked = el.value === data[key];
+      else el.value = data[key];
+    });
+    ['name','class','date','teacher'].forEach(f => {
+      const el = document.getElementById('si-' + f);
+      if (el && data['si-' + f]) el.value = data['si-' + f];
+    });
+  },
+  save() {
+    const data = this._getData();
+    localStorage.setItem(this.workbookKey(LESSON_ID), JSON.stringify(data));
+    this._syncProgress('in-progress');
+    const btn = document.querySelector('.bar-btns .save');
+    const orig = btn.textContent;
+    btn.textContent = 'Saved ✓';
+    setTimeout(() => btn.textContent = orig, 1800);
+  },
+  load() {
+    const raw = localStorage.getItem(this.workbookKey(LESSON_ID));
+    if (raw) { try { this._setData(JSON.parse(raw)); updateProgress(); } catch(e){} }
+  },
+  autoSave() {
+    clearTimeout(DataService._timer);
+    DataService._timer = setTimeout(() => DataService.save(), 1200);
+  },
+  autoLoad() { this.load(); },
+  submit() {
+    this.save();
+    this._syncProgress('submitted');
+    alert('Workbook submitted. See your teacher to confirm.');
+  },
+  _syncProgress(status) {
+    localStorage.setItem(`eduportal_progress_${this.getStudentId()}_${LESSON_ID}`, JSON.stringify({ status, ts: Date.now() }));
+  }
+};
+const DS = DataService; // short alias used by inline handlers
+
+// ── Progress tracking (uses a plain Set, never DOMStringMap, to avoid invalid
+//    dataset property names such as 'counted-rate-orig') ───────────────────────
+function countFilled() {
+  let filled = 0, total = 0;
+  const seenRadioGroups = new Set();
+  document.querySelectorAll('textarea[data-field]').forEach(el => {
+    total++;
+    if (el.value.trim().length > 5) filled++;
+  });
+  document.querySelectorAll('input[type="radio"][data-field]').forEach(el => {
+    const name = el.name;
+    if (seenRadioGroups.has(name)) return;
+    seenRadioGroups.add(name);
+    total++;
+    if (document.querySelector(`input[name="${name}"]:checked`)) filled++;
+  });
+  return { filled, total };
+}
+function updateProgress() {
+  const { filled, total } = countFilled();
+  const pct = total ? Math.round((filled / total) * 100) : 0;
+  document.getElementById('pct-fill').style.width = pct + '%';
+  document.getElementById('pct-display').textContent = pct + '%';
+}
+
+// ── Field listeners ───────────────────────────────────────────────────────────
+function attachFieldListeners(root) {
+  root.querySelectorAll('[data-field]').forEach(el => {
+    el.addEventListener('input', () => { updateProgress(); DataService.autoSave(); });
+    el.addEventListener('change', () => { updateProgress(); DataService.autoSave(); });
+  });
+}
+attachFieldListeners(document);
+
+// ── First entry tracking + auto-load on open ───────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  DataService.autoLoad();
+  updateProgress();
+  document.querySelectorAll('[data-field]').forEach(el => {
+    el.addEventListener('input', function firstEntry() {
+      DataService._syncProgress('in-progress');
+      el.removeEventListener('input', firstEntry);
+    }, { once: true });
+  });
+});
+</script>
+</body>
+</html>

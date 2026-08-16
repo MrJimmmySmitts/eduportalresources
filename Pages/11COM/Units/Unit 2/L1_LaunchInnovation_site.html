@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curiosity, Ingenuity &amp; the UN SDGs · Lesson 1 · VCE Applied Computing Unit 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:        #12100E;
+  --ink2:       #2C2A28;
+  --ink3:       #6B6762;
+  --cream:      #F7F3EC;
+  --cream2:     #EDE8DF;
+  --white:      #FFFFFF;
+  --border:     #D8D3CA;
+  --border2:    #C4BFB6;
+  --pine:       #1B5E47;
+  --amber:      #B8620A;
+  --indigo:     #2B3A8C;
+  --crimson:    #8C1F28;
+
+  --font-serif: 'DM Serif Display', Georgia, serif;
+  --font-sans:  'DM Sans', Arial, sans-serif;
+  --font-mono:  'DM Mono', 'Courier New', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-sans); font-size: 16px; line-height: 1.65; color: var(--ink); background: var(--cream); }
+.page { max-width: 920px; margin: 0 auto; background: var(--white); box-shadow: 0 2px 16px rgba(0,0,0,0.07); }
+
+.utility-bar { position: sticky; top: 0; z-index: 50; background: var(--ink); color: var(--white); display: flex; align-items: center; justify-content: space-between; padding: 10px 24px; font-family: var(--font-mono); font-size: 12px; }
+.utility-bar .links a { color: #CADCFC; text-decoration: none; margin-left: 18px; }
+.utility-bar .links a:hover { text-decoration: underline; }
+
+.cover { background: var(--ink); padding: 52px 52px 40px; position: relative; overflow: hidden; }
+.cover::after { content: "?"; position: absolute; right: 10px; top: -60px; font-family: var(--font-serif); font-size: 280px; color: rgba(255,255,255,0.04); pointer-events: none; line-height: 1; }
+.cover-meta { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em; color: #C9C4BA; margin-bottom: 18px; text-transform: uppercase; }
+.cover h1 { font-family: var(--font-serif); font-size: 42px; color: var(--white); line-height: 1.15; margin-bottom: 10px; max-width: 700px; }
+.cover .subtitle { color: #F0DDB8; font-style: italic; font-size: 16px; margin-bottom: 28px; }
+.cover-fields { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 16px 20px; }
+.cover-fields div { font-size: 12px; color: #C9C4BA; }
+.cover-fields div span { display: block; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: #8A857C; margin-bottom: 4px; }
+.cover-fields .fill-line { display: inline-block; border-bottom: 1px solid #5A564C; min-width: 90%; height: 16px; }
+
+.nav-pills { display: flex; gap: 8px; flex-wrap: wrap; padding: 18px 52px; background: var(--cream2); border-bottom: 1px solid var(--border); }
+.nav-pills a { font-family: var(--font-mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink2); background: var(--white); border: 1px solid var(--border2); padding: 6px 12px; border-radius: 99px; text-decoration: none; }
+.nav-pills a:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+.content { padding: 8px 52px 60px; }
+.section { margin-top: 48px; }
+.section-band { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.section-num { width: 38px; height: 38px; border-radius: 50%; background: var(--indigo); color: var(--white); display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-weight: 500; font-size: 15px; flex-shrink: 0; }
+.section-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink3); }
+.section h2 { font-family: var(--font-serif); font-size: 26px; color: var(--ink); margin-top: 2px; }
+.section-badge { margin-left: auto; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; padding: 4px 10px; border-radius: 99px; color: var(--white); flex-shrink: 0; }
+.badge-warmup { background: var(--ink3); } .badge-learn { background: var(--indigo); } .badge-apply { background: var(--pine); } .badge-reflect { background: var(--crimson); }
+
+p { margin-bottom: 14px; color: var(--ink2); }
+.lead { font-size: 17px; color: var(--ink); }
+ul.clean { list-style: none; margin: 0 0 16px; }
+ul.clean li { padding-left: 26px; position: relative; margin-bottom: 10px; color: var(--ink2); }
+ul.clean li::before { content: "→"; position: absolute; left: 0; color: var(--indigo); font-weight: 700; }
+
+.callout { border-radius: 10px; padding: 18px 22px; margin: 20px 0; border: 1px solid; }
+.callout-title { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; margin-bottom: 8px; }
+.callout-info { background: #EEF0FA; border-color: #C7CCEF; } .callout-info .callout-title { color: var(--indigo); }
+.callout-tip  { background: #E9F2EE; border-color: #BEDACB; } .callout-tip .callout-title { color: var(--pine); }
+.callout-note { background: #FBF0E2; border-color: #ECCB9B; } .callout-note .callout-title { color: var(--amber); }
+.callout-extend { background: #F7E8E9; border-color: #E3B6BA; } .callout-extend .callout-title { color: var(--crimson); }
+.callout p:last-child { margin-bottom: 0; }
+.callout p { color: var(--ink2); }
+
+.driver-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 18px 0; }
+.driver-card { background: var(--cream2); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+.driver-card h3 { font-family: var(--font-serif); font-size: 19px; margin-bottom: 8px; color: var(--ink); }
+.driver-card p { font-size: 13.5px; margin-bottom: 0; }
+
+.form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0; }
+.form-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.form-card h4 { font-size: 14.5px; font-weight: 700; margin-bottom: 6px; color: var(--ink); }
+.form-card p { font-size: 12.5px; color: var(--ink3); margin-bottom: 0; }
+
+.sdg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 18px 0 8px; }
+.sdg-card { background: var(--cream2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 13px; font-weight: 700; color: var(--ink); text-align: center; }
+
+.topic-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 18px 0; }
+.topic-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.topic-card h4 { font-size: 14.5px; font-weight: 700; margin-bottom: 4px; color: var(--ink); }
+.topic-card p { font-size: 12.5px; color: var(--ink3); margin-bottom: 0; }
+
+.checklist-ref { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 18px 0; }
+.checklist-ref .row { display: flex; align-items: center; gap: 12px; padding: 11px 16px; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+.checklist-ref .row:last-child { border-bottom: none; }
+.checklist-ref .row.done { background: #EEF5F1; }
+.checklist-ref .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.dot-done { background: var(--pine); } .dot-pending { background: var(--border2); }
+
+.footer-nav { display: flex; justify-content: space-between; align-items: center; padding: 28px 52px; background: var(--cream2); border-top: 1px solid var(--border); font-size: 13px; }
+.footer-nav a { color: var(--indigo); text-decoration: none; font-weight: 500; }
+
+@media (max-width: 760px) {
+  .cover-fields, .driver-grid, .form-grid, .sdg-grid, .topic-grid { grid-template-columns: repeat(2, 1fr); }
+  .cover, .nav-pills, .content, .footer-nav { padding-left: 24px; padding-right: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="utility-bar">
+    <span>EduPortal · Reference Website</span>
+    <span class="links">
+      <a id="slidesLink" href="#">Open Slides</a>
+      <a id="workbookLink" href="#">Open Workbook</a>
+    </span>
+  </div>
+
+  <div class="cover">
+    <div class="cover-meta">VCE Applied Computing · Unit 2 · Area of Study 1</div>
+    <h1>Curiosity, Ingenuity &amp; the UN SDGs</h1>
+    <div class="subtitle">Lesson 1 of 45 · Outcome 1, Innovative Solutions · Double period</div>
+    <div class="cover-fields">
+      <div><span>Name</span><span class="fill-line"></span></div>
+      <div><span>Class</span><span class="fill-line"></span></div>
+      <div><span>Date</span><span class="fill-line"></span></div>
+      <div><span>Teacher</span><span class="fill-line">Mr Smith</span></div>
+    </div>
+  </div>
+
+  <div class="nav-pills">
+    <a href="#drivers">Curiosity &amp; ingenuity</a>
+    <a href="#sdgs">UN SDGs</a>
+    <a href="#characteristics">Innovative solutions</a>
+    <a href="#topics">Topic menu</a>
+    <a href="#groups">Forming groups</a>
+    <a href="#roadmap">Where this is heading</a>
+  </div>
+
+  <div class="content">
+
+    <div class="section" id="drivers">
+      <div class="section-band">
+        <div class="section-num">1</div>
+        <div><div class="section-label">The big idea</div><h2>What drives innovation</h2></div>
+        <div class="section-badge badge-learn">Learning</div>
+      </div>
+      <p class="lead">Every piece of technology you use started as someone noticing a problem worth solving — Velcro, the microwave, bubble wrap, the seatbelt. Two things make that happen.</p>
+      <div class="driver-grid">
+        <div class="driver-card"><h3>Curiosity</h3><p>Noticing a problem, need or gap that most people walk straight past.</p></div>
+        <div class="driver-card"><h3>Ingenuity</h3><p>Inventive, resourceful problem-solving — finding a workable way to address what you noticed.</p></div>
+      </div>
+      <p>Your end result this term can take any of these three forms — all equally valid:</p>
+      <div class="form-grid">
+        <div class="form-card"><h4>Proof of concept</h4><p>Shows the idea could work — doesn't need to be fully built.</p></div>
+        <div class="form-card"><h4>Prototype</h4><p>An early working version, rough around the edges.</p></div>
+        <div class="form-card"><h4>Product</h4><p>A more finished, polished solution.</p></div>
+      </div>
+      <div class="callout callout-tip">
+        <div class="callout-title">Common misconception</div>
+        <p>You do not need a fully working app or finished product to succeed in this project. A genuine proof of concept, well documented and evaluated, is just as valid as a polished product.</p>
+      </div>
+    </div>
+
+    <div class="section" id="sdgs">
+      <div class="section-band">
+        <div class="section-num">2</div>
+        <div><div class="section-label">A lens for finding problems</div><h2>The UN Sustainable Development Goals</h2></div>
+        <div class="section-badge badge-learn">Learning</div>
+      </div>
+      <p>The UN Sustainable Development Goals are 17 global goals, agreed by almost every country, naming the problems most worth solving — from health and education to climate and inequality. They're a useful lens for finding a real problem your project could address.</p>
+      <div class="sdg-grid">
+        <div class="sdg-card">Good Health &amp; Wellbeing</div>
+        <div class="sdg-card">Quality Education</div>
+        <div class="sdg-card">Climate Action</div>
+        <div class="sdg-card">Reduced Inequalities</div>
+        <div class="sdg-card">Clean Water &amp; Sanitation</div>
+        <div class="sdg-card">Sustainable Cities</div>
+      </div>
+      <p style="font-size:13px; color:var(--ink3); font-style:italic;">This is a sample of six — there are 17 in total. Search "UN Sustainable Development Goals" for the complete list if you want to explore further.</p>
+      <div class="callout callout-info">
+        <div class="callout-title">Example</div>
+        <p>"Clean Water &amp; Sanitation" could inspire a low-cost sensor that detects unsafe drinking water — a real problem, solvable with a digital system.</p>
+      </div>
+    </div>
+
+    <div class="section" id="characteristics">
+      <div class="section-band">
+        <div class="section-num">3</div>
+        <div><div class="section-label">A quick preview</div><h2>What makes a solution "innovative"?</h2></div>
+        <div class="section-badge badge-learn">Learning</div>
+      </div>
+      <p>We'll go deeper on these in Week 3 — for now, just be aware of the four characteristics that will eventually shape how your solution is judged.</p>
+      <ul class="clean">
+        <li><strong>Originality</strong> — something genuinely new, not just a copy of an existing solution</li>
+        <li><strong>Effectiveness</strong> — it actually solves the problem it was designed for</li>
+        <li><strong>User-centred</strong> — built around what real users need, not just what's easy to build</li>
+        <li><strong>Disruptiveness</strong> — changes how people approach the problem, not just a small improvement</li>
+      </ul>
+    </div>
+
+    <div class="section" id="topics">
+      <div class="section-band">
+        <div class="section-num">4</div>
+        <div><div class="section-label">This term's options</div><h2>The topic menu</h2></div>
+        <div class="section-badge badge-learn">Learning</div>
+      </div>
+      <div class="topic-grid">
+        <div class="topic-card"><h4>AI, ML &amp; neural networks</h4><p>Dashboards from prompts, predicting trends, image classification</p></div>
+        <div class="topic-card"><h4>Assistive tech &amp; IoT</h4><p>Communication aids, proximity sensors, smart braille displays</p></div>
+        <div class="topic-card"><h4>Smart healthcare devices</h4><p>Fall detection, automated pill dispensers</p></div>
+        <div class="topic-card"><h4>Drones, microcontrollers &amp; nanosatellites</h4><p>Sensors collecting and transmitting environmental data</p></div>
+        <div class="topic-card"><h4>Games &amp; multimedia</h4><p>Narrative games, simulations, fitness or mindfulness programs</p></div>
+        <div class="topic-card"><h4>Mixed reality (AR/VR)</h4><p>Educational avatars, virtual relaxation spaces</p></div>
+        <div class="topic-card"><h4>Blockchain</h4><p>Supply chain tracking, industry demonstration games</p></div>
+        <div class="topic-card"><h4>Anything else innovative</h4><p>Explicitly allowed by the study design — bring a genuine idea to Mr Smith</p></div>
+      </div>
+    </div>
+
+    <div class="section" id="groups">
+      <div class="section-band">
+        <div class="section-num">5</div>
+        <div><div class="section-label">Today's task</div><h2>Forming your group</h2></div>
+        <div class="section-badge badge-apply">Applying</div>
+      </div>
+      <ul class="clean">
+        <li><strong>Form a group of 3–4</strong> — negotiate with classmates, groups aren't assigned, even numbers aren't required</li>
+        <li><strong>Browse the topic menu together</strong> — discuss the seven areas as a group, looking for something that interests everyone</li>
+        <li><strong>Narrow to 1–2 shared areas</strong> — no final decision needed today, just a direction to investigate before Week 2</li>
+      </ul>
+      <div class="callout callout-note">
+        <div class="callout-title">Haven't found a group?</div>
+        <p>See Mr Smith before you leave today — every student will have a group before next lesson.</p>
+      </div>
+    </div>
+
+    <div class="section" id="roadmap">
+      <div class="section-band">
+        <div class="section-num">6</div>
+        <div><div class="section-label">The big picture</div><h2>Where this is heading</h2></div>
+        <div class="section-badge badge-reflect">Reflecting</div>
+      </div>
+      <p>Today is day 1 of 45 sessions across this unit. Three group milestones mark the major transitions in your project:</p>
+      <div class="checklist-ref">
+        <div class="row done"><span class="dot dot-done"></span> Group formed, topic direction chosen</div>
+        <div class="row"><span class="dot dot-pending"></span> Problem statement &amp; project plan due — Milestone 1, Week 4</div>
+        <div class="row"><span class="dot dot-pending"></span> Preferred design finalised — Milestone 2, Week 7</div>
+        <div class="row"><span class="dot dot-pending"></span> Build substantially complete — Milestone 3, Week 12</div>
+        <div class="row"><span class="dot dot-pending"></span> Outcome 1 submission — group presentations, Week 17</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-nav">
+    <span>Lesson 1 of 45 — Curiosity, Ingenuity &amp; the UN SDGs</span>
+    <a id="nextLink" href="#">Next: D1.2 Digital systems in context →</a>
+  </div>
+
+</div>
+
+<script>
+const LESSON_ID = 'y11-ac-u2-l1-launch-innovation';
+const WORKBOOK_URL = 'L1_LaunchInnovation_workbook.html';
+document.getElementById('slidesLink').href = '#';
+document.getElementById('workbookLink').href = WORKBOOK_URL;
+document.getElementById('nextLink').href = '#';
+
+const DataService = {
+  studentId() { return localStorage.getItem('eduportal_currentStudent') || 'current_student'; },
+  save(data) { try { localStorage.setItem(`site_${LESSON_ID}_${this.studentId()}`, JSON.stringify(data)); } catch (e) {} },
+  load() { try { return JSON.parse(localStorage.getItem(`site_${LESSON_ID}_${this.studentId()}`)); } catch (e) { return null; } },
+};
+</script>
+
+</body>
+</html>

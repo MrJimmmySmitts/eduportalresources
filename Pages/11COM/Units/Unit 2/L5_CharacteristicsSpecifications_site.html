@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L5 — Characteristics &amp; Solution Specifications · Y11 Applied Computing U2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark-bg: #0D1117; --light-bg: #FFFFFF;
+    --surface: #161B22; --surface2: #1F2530;
+    --border: #30363D;
+    --text: #E6EDF3; --text-dim: #9BA3AF;
+    --blue: #4361EE; --green: #10B981; --amber: #F59E0B; --purple: #8B5CF6; --red: #EF4444;
+    --blue-lt: rgba(67,97,238,0.12); --green-lt: rgba(16,185,129,0.12);
+    --amber-lt: rgba(245,158,11,0.12); --purple-lt: rgba(139,92,246,0.12); --red-lt: rgba(239,68,68,0.12);
+  }
+  body.light {
+    --dark-bg: #FFFFFF; --surface: #F6F8FA; --surface2: #EDF0F3;
+    --border: #D0D7DE; --text: #0D1117; --text-dim: #57606A;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--dark-bg); color: var(--text); font-family: 'DM Sans', sans-serif; line-height: 1.65; transition: background .2s, color .2s; }
+
+  #topbar { position: sticky; top: 0; z-index: 100; background: var(--surface); display: flex; align-items: center; gap: 1rem; padding: 0.6rem 1.5rem; border-bottom: 2px solid var(--blue); }
+  #topbar .site-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--blue); letter-spacing: 0.08em; white-space: nowrap; }
+  #topbar .links { display: flex; gap: 0.6rem; margin-left: auto; }
+  #topbar .links a, #topbar .links button { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-dim); text-decoration: none; padding: 0.22rem 0.65rem; border: 1px solid var(--border); border-radius: 4px; background: transparent; cursor: pointer; }
+  #topbar .links a:hover, #topbar .links button:hover { color: var(--text); border-color: var(--text-dim); }
+
+  .cover { background: var(--surface); padding: 3rem 2rem 2.5rem; border-bottom: 1px solid var(--border); }
+  .cover .eyebrow { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .cover .subject { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--blue); margin-bottom: 1rem; }
+  .cover h1 { font-family: 'DM Serif Display', serif; font-size: 2.4rem; color: var(--text); line-height: 1.15; margin-bottom: 0.75rem; }
+  .cover .lo { font-size: 1rem; color: var(--text-dim); max-width: 72ch; font-family: 'Atkinson Hyperlegible', sans-serif; }
+  .cover .meta { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.25rem; }
+  .cover .tag { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text); background: var(--surface2); padding: 0.2rem 0.65rem; border-radius: 4px; border: 1px solid var(--border); }
+  .cover .tag.blue { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+  main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 2.5rem; }
+  .toc h2 { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.75rem; }
+  .toc ol { padding-left: 1.4rem; }
+  .toc li { margin-bottom: 0.3rem; }
+  .toc a { color: var(--blue); text-decoration: none; font-size: 0.9rem; }
+  .toc a:hover { text-decoration: underline; }
+
+  .section-band { display: flex; align-items: center; gap: 0.75rem; margin: 2.5rem 0 1.25rem; }
+  .section-num { width: 2rem; height: 2rem; background: var(--blue); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
+  .section-meta { display: flex; flex-direction: column; }
+  .section-mono { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-dim); letter-spacing: 0.06em; text-transform: uppercase; }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 1.45rem; color: var(--text); }
+
+  h3 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--text); margin: 1.5rem 0 0.5rem; }
+  h4 { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); margin: 1.1rem 0 0.3rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  p { margin-bottom: 0.85rem; color: var(--text-dim); font-size: 0.95rem; font-family: 'Atkinson Hyperlegible', sans-serif; }
+  ul, ol { padding-left: 1.4rem; margin-bottom: 0.85rem; }
+  li { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 0.3rem; font-family: 'Atkinson Hyperlegible', sans-serif; }
+
+  .formula { background: var(--surface2); color: var(--amber); font-family: 'DM Mono', monospace; font-size: 0.85rem; padding: 1rem 1.25rem; border-radius: 8px; margin: 1rem 0; line-height: 1.8; border: 1px solid var(--border); }
+  .formula span { color: var(--text); }
+
+  .callout { border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; border: 1px solid var(--border); }
+  .callout-info { background: var(--blue-lt); border-left: 3px solid var(--blue); }
+  .callout-tip  { background: var(--green-lt); border-left: 3px solid var(--green); }
+  .callout-note { background: var(--amber-lt); border-left: 3px solid var(--amber); }
+  .callout-extend { background: var(--purple-lt); border-left: 3px solid var(--purple); }
+  .callout-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; margin-bottom: 0.4rem; }
+  .callout-info .callout-label { color: var(--blue); }
+  .callout-tip .callout-label  { color: var(--green); }
+  .callout-note .callout-label { color: var(--amber); }
+  .callout-extend .callout-label { color: var(--purple); }
+  .callout p, .callout li { font-size: 0.9rem; color: var(--text); }
+
+  .tier { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'DM Mono', monospace; font-size: 0.7rem; font-weight: 500; padding: 0.18rem 0.6rem; border-radius: 4px; margin-right: 0.4rem; }
+  .tier-f { background: var(--green-lt); color: var(--green); border: 1px solid var(--green); }
+  .tier-d { background: var(--amber-lt); color: var(--amber); border: 1px solid var(--amber); }
+  .tier-e { background: var(--purple-lt); color: var(--purple); border: 1px solid var(--purple); }
+
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.88rem; }
+  th { background: var(--surface2); color: var(--text); padding: 0.6rem 0.85rem; text-align: left; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.82rem; border-bottom: 2px solid var(--border); }
+  th.blue { background: var(--blue); color: #fff; }
+  td { padding: 0.55rem 0.85rem; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text-dim); }
+  tr:nth-child(even) td { background: var(--surface); }
+  .row-label { font-weight: 600; color: var(--text); font-size: 0.82rem; white-space: nowrap; }
+
+  .example-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 0.75rem 0; }
+  .ex-bad, .ex-good { border-radius: 7px; padding: 0.75rem 1rem; font-size: 0.88rem; border: 1px solid var(--border); }
+  .ex-bad  { background: var(--red-lt); border-color: var(--red); }
+  .ex-good { background: var(--green-lt); border-color: var(--green); }
+  .ex-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; font-weight: 500; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .ex-bad .ex-label { color: var(--red); }
+  .ex-good .ex-label { color: var(--green); }
+
+  .char-card { display: flex; gap: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.3rem; margin: 1rem 0; }
+  .char-card .char-icon { width: 2.4rem; height: 2.4rem; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: #fff; }
+  .char-card h4 { margin-top: 0; }
+
+  .wb-link { display: inline-block; margin-top: 0.5rem; font-family: 'DM Mono', monospace; font-size: 0.85rem; color: var(--blue); text-decoration: none; border: 1px solid var(--blue); border-radius: 6px; padding: 0.5rem 1rem; }
+  .wb-link:hover { background: var(--blue); color: #fff; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <span class="site-label">y11-ac-u2-l5 · REFERENCE SITE (read-only)</span>
+  <div class="links">
+    <button onclick="document.body.classList.toggle('light')">Toggle theme</button>
+    <a href="L5_CharacteristicsSpecifications_workbook.html">Workbook ↗</a>
+  </div>
+</div>
+
+<div class="cover">
+  <p class="eyebrow">D3.2 Characteristics of Innovative Solutions · D4.1 Solution Specifications</p>
+  <p class="subject">Year 11 Applied Computing — Unit 2 · AoS1 Innovative Solutions</p>
+  <h1>Characteristics &amp; Solution Specifications</h1>
+  <p class="lo">Learning Objective: To be able to evaluate a solution concept against the characteristics of a creative and innovative solution, and draft the functional and non-functional requirements, constraints and scope of that solution.</p>
+  <div class="meta">
+    <span class="tag">Lesson 5</span>
+    <span class="tag blue">D3.2 + D4.1</span>
+    <span class="tag">Milestone 1 due next lesson (D4.2)</span>
+  </div>
+</div>
+
+<main>
+
+  <div class="toc">
+    <h2>On this page</h2>
+    <ol>
+      <li><a href="#s1">Novelty vs Innovation</a></li>
+      <li><a href="#s2">Characteristics 1 &amp; 2 — Originality, Effectiveness</a></li>
+      <li><a href="#s3">Characteristics 3 &amp; 4 — User-Centred, Disruptive Potential</a></li>
+      <li><a href="#s4">The Four-Characteristic Lens — Recap</a></li>
+      <li><a href="#s5">From Characteristics to Specifications</a></li>
+      <li><a href="#s6">Functional vs Non-Functional Requirements</a></li>
+      <li><a href="#s7">Constraints &amp; Scope</a></li>
+      <li><a href="#s8">Specification Checklist — Recap</a></li>
+    </ol>
+  </div>
+
+  <!-- SECTION 1 -->
+  <section id="s1">
+    <div class="section-band">
+      <div class="section-num">1</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D3.2</span>
+        <span class="section-title">Novelty vs Innovation</span>
+      </div>
+    </div>
+
+    <p>Being <strong>new</strong> is not the same as being <strong>innovative</strong>. A solution can be completely original and still be useless — and a solution can reuse existing technology in a new context and be genuinely innovative.</p>
+
+    <div class="formula">
+      <span>Innovation</span> = new (or newly applied) idea <span>+</span> genuine value for a real user, in a real context.
+    </div>
+
+    <p>Novelty on its own is just difference. Innovation requires that difference to actually improve something for someone. This is why "characteristics of creative and innovative solutions" is a checklist of four separate qualities — a solution needs more than one of them to count as genuinely innovative.</p>
+
+    <div class="callout callout-info">
+      <p class="callout-label">Why this matters for your project</p>
+      <p>Your group already has a refined problem statement and — if you've started collecting data — some early evidence about your user's needs. Today you'll use that evidence to test whether your emerging concept is actually innovative, then turn the strengthened idea into a first draft specification.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- SECTION 2 -->
+  <section id="s2">
+    <div class="section-band">
+      <div class="section-num">2</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · Characteristics 1 &amp; 2</span>
+        <span class="section-title">Originality &amp; Effectiveness</span>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-icon" style="background:var(--blue);">1</div>
+      <div>
+        <h4>Originality</h4>
+        <p style="margin-bottom:0;">Does this idea bring something genuinely new — a new feature, a new combination of existing technologies, or a new way of applying something familiar to this specific problem? It does not need to be a world-first. It needs to be original <em>for your user, in your context</em>.</p>
+      </div>
+    </div>
+    <p><strong>Test:</strong> has someone already solved this exact problem, for this exact user group, in this exact way?</p>
+
+    <div class="example-pair">
+      <div class="ex-bad">
+        <p class="ex-label">Low originality</p>
+        <p style="margin-bottom:0;">"Students forget equipment for class, so we'll put a lost-property box at the front of the room."</p>
+      </div>
+      <div class="ex-good">
+        <p class="ex-label">Higher originality</p>
+        <p style="margin-bottom:0;">"We'll build a peer buddy-check-in system, backed by a shared reminder app, that catches the gap before class starts — not after."</p>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-icon" style="background:var(--green);">2</div>
+      <div>
+        <h4>Effectiveness</h4>
+        <p style="margin-bottom:0;">Does the idea actually solve the problem named in your refined problem statement — for the user you scoped in Lesson 4? An original idea that doesn't address the real need fails this characteristic.</p>
+      </div>
+    </div>
+
+    <div class="formula">
+      [USER GROUP] <span>need a way to</span> [ACCOMPLISH GOAL] <span>because</span> [SPECIFIC INSIGHT]
+    </div>
+
+    <div class="callout callout-tip">
+      <p class="callout-label">Quick self-test</p>
+      <p>Finish this sentence about your own idea: <em>"My idea is effective because it lets [user] achieve [goal] by ___."</em> If you can't complete the blank with something concrete, effectiveness is your weakest characteristic today.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- SECTION 3 -->
+  <section id="s3">
+    <div class="section-band">
+      <div class="section-num">3</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · Characteristics 3 &amp; 4</span>
+        <span class="section-title">User-Centred &amp; Disruptive Potential</span>
+      </div>
+    </div>
+
+    <div class="char-card">
+      <div class="char-icon" style="background:var(--amber);">3</div>
+      <div>
+        <h4>User-Centred</h4>
+        <p style="margin-bottom:0;">Is the idea built around evidence about what your user actually said, does, or struggles with — or around what your group assumed they'd want?</p>
+      </div>
+    </div>
+
+    <div class="example-pair">
+      <div class="ex-bad">
+        <p class="ex-label">Assumption-centred</p>
+        <p style="margin-bottom:0;">"We think students would like reminders, so we're adding a notification feature."</p>
+      </div>
+      <div class="ex-good">
+        <p class="ex-label">User-centred</p>
+        <p style="margin-bottom:0;">"Three of our five interviewees said they forget equipment because they pack the night before — so our reminder needs to trigger at the morning check point, not the night before."</p>
+      </div>
+    </div>
+
+    <div class="callout callout-note">
+      <p class="callout-label">If you haven't collected data yet</p>
+      <p>You can still apply this characteristic using your predicted answers from Lesson 4 — but flag clearly in your workbook that this is a prediction, not evidence.</p>
+    </div>
+
+    <div class="char-card">
+      <div class="char-icon" style="background:var(--purple);">4</div>
+      <div>
+        <h4>Disruptive Potential</h4>
+        <p style="margin-bottom:0;">Does the idea change how people actually do something — or does it just bolt a small feature onto an existing routine? Disruptive does not have to mean huge or expensive. It means the underlying behaviour or process shifts.</p>
+      </div>
+    </div>
+
+    <table>
+      <tr><th class="blue">Low disruption</th><th class="blue">Higher disruption</th></tr>
+      <tr><td>Adds a reminder on top of an unchanged routine.</td><td>Removes the need for the user to remember at all, by shifting the check to a point they can't skip.</td></tr>
+      <tr><td>Digitises an existing paper process exactly as-is.</td><td>Changes who is responsible for a step, or when it happens, not just what medium it's recorded in.</td></tr>
+    </table>
+  </section>
+
+  <hr>
+
+  <!-- SECTION 4 -->
+  <section id="s4">
+    <div class="section-band">
+      <div class="section-num">4</div>
+      <div class="section-meta">
+        <span class="section-mono">Recap</span>
+        <span class="section-title">The Four-Characteristic Lens</span>
+      </div>
+    </div>
+
+    <table>
+      <tr><th class="blue">Characteristic</th><th class="blue">Ask yourself</th></tr>
+      <tr><td class="row-label">1 · Originality</td><td>Has someone already solved this exact problem, for this exact user, this exact way?</td></tr>
+      <tr><td class="row-label">2 · Effectiveness</td><td>Can I complete "my idea lets [user] achieve [goal] by ___" with something concrete?</td></tr>
+      <tr><td class="row-label">3 · User-centred</td><td>Can I point to a specific piece of evidence — not an assumption — behind this decision?</td></tr>
+      <tr><td class="row-label">4 · Disruptive potential</td><td>Does this change the underlying routine, or just add a small extra on top of it?</td></tr>
+    </table>
+
+    <div class="callout callout-extend">
+      <p class="callout-label">Extending</p>
+      <p>A strong concept rarely scores well on all four characteristics on the first attempt. Identifying your weakest characteristic honestly — and proposing one specific, concrete change to strengthen it — is more valuable than claiming a perfect score.</p>
+    </div>
+
+    <p>Open the workbook to rate your group's emerging concept, then continue below to turn your (strengthened) concept into a first draft specification.</p>
+  </section>
+
+  <hr>
+
+  <!-- SECTION 5 -->
+  <section id="s5">
+    <div class="section-band">
+      <div class="section-num">5</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D4.1</span>
+        <span class="section-title">From Characteristics to Specifications</span>
+      </div>
+    </div>
+
+    <p>Rating your concept tells you whether it's a good <em>direction</em>. A specification turns that direction into something a group can actually build against — a shared, precise description of what the solution must do and be, so every group member is building toward the same thing.</p>
+
+    <div class="callout callout-info">
+      <p class="callout-label">Four parts of a specification</p>
+      <p>Today you'll draft the first version of all four: <strong>functional requirements</strong> (what it does), <strong>non-functional requirements</strong> (how well it does it), <strong>constraints</strong> (real limits on the project), and <strong>scope</strong> (what's in and what's deliberately left out).</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- SECTION 6 -->
+  <section id="s6">
+    <div class="section-band">
+      <div class="section-num">6</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D4.1</span>
+        <span class="section-title">Functional vs Non-Functional Requirements</span>
+      </div>
+    </div>
+
+    <table>
+      <tr><th class="blue">Functional requirement</th><th class="blue">Non-functional requirement</th></tr>
+      <tr><td><strong>What</strong> the solution must do — a specific action or feature.</td><td><strong>How well</strong> the solution performs — a quality that applies across many features.</td></tr>
+      <tr><td>"The system must send a reminder notification at a time the user sets."</td><td>"The reminder must arrive within 10 seconds of the scheduled time."</td></tr>
+      <tr><td>"The system must let a user mark a checklist item as complete."</td><td>"The interface must be usable by someone with no prior experience within 2 minutes."</td></tr>
+    </table>
+
+    <div class="callout callout-tip">
+      <p class="callout-label">Common non-functional categories</p>
+      <p>Performance (speed, responsiveness), usability/accessibility (can the target user actually use it easily), reliability (does it work consistently), and security/privacy (is user data protected). You don't need all four today — pick the ones that matter most for your specific concept.</p>
+    </div>
+
+    <div class="callout callout-note">
+      <p class="callout-label">Writing a precise functional requirement</p>
+      <p>A vague requirement like "the app should be good with reminders" can't be built against directly — two different developers would build two different things. A precise one names the trigger, the action, and the outcome: "when the check-in time is reached and a buddy hasn't confirmed, the system must send both users a notification."</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- SECTION 7 -->
+  <section id="s7">
+    <div class="section-band">
+      <div class="section-num">7</div>
+      <div class="section-meta">
+        <span class="section-mono">Explicit Explanation · D4.1</span>
+        <span class="section-title">Constraints &amp; Scope</span>
+      </div>
+    </div>
+
+    <h3>Constraints</h3>
+    <p>Constraints are real limits on your project — not design choices, but things imposed on you. Common constraints for a group project like this: the devices and software actually available at school, the time remaining before Outcome 1 submission, and the programming or design skills currently within your group.</p>
+
+    <div class="callout callout-info">
+      <p class="callout-label">Constraints shape decisions — they don't excuse them</p>
+      <p>Naming "we don't have much time" as a constraint is only useful if you can say what it means for a specific decision — for example, choosing a simpler notification method because building a full mobile app isn't realistic in the time available.</p>
+    </div>
+
+    <h3>Scope</h3>
+    <p>Scope defines the boundary of your solution — what version you're actually committing to build. This is the same "IS / IS NOT" thinking you used for your target user in Lesson 4, applied now to features instead of people.</p>
+
+    <div class="example-pair">
+      <div class="ex-good">
+        <p class="ex-label">In scope</p>
+        <p style="margin-bottom:0;">A shared reminder that notifies both buddies at a set check-in time.</p>
+      </div>
+      <div class="ex-bad">
+        <p class="ex-label">Out of scope (for now)</p>
+        <p style="margin-bottom:0;">Automatically detecting whether equipment is actually packed (would need extra hardware) — noted as a possible future extension instead.</p>
+      </div>
+    </div>
+
+    <p>Being explicit about what's out of scope isn't a weakness — it protects your group from quietly running out of time trying to build everything at once.</p>
+  </section>
+
+  <hr>
+
+  <!-- SECTION 8 -->
+  <section id="s8">
+    <div class="section-band">
+      <div class="section-num">8</div>
+      <div class="section-meta">
+        <span class="section-mono">Recap</span>
+        <span class="section-title">Specification Checklist</span>
+      </div>
+    </div>
+
+    <table>
+      <tr><th class="blue">Part</th><th class="blue">Ask yourself</th></tr>
+      <tr><td class="row-label">Functional requirements</td><td>Have I named at least four specific things the solution must do?</td></tr>
+      <tr><td class="row-label">Non-functional requirements</td><td>Have I named at least two qualities of how well it must perform?</td></tr>
+      <tr><td class="row-label">Constraints</td><td>Have I named real limits on budget, time, technology, or skills?</td></tr>
+      <tr><td class="row-label">Scope</td><td>Is it clear what's in, and what's deliberately left out?</td></tr>
+    </table>
+
+    <div class="callout callout-extend">
+      <p class="callout-label">Looking ahead</p>
+      <p>Milestone 1 is due next lesson (D4.2): your refined problem statement and a full project plan (Gantt chart), signed off by your teacher before design work begins. Today's specification draft is the input your group will build that plan around.</p>
+    </div>
+
+    <p>Open the workbook to draft your specification.</p>
+    <a class="wb-link" href="L5_CharacteristicsSpecifications_workbook.html">Open the Workbook →</a>
+  </section>
+
+</main>
+</body>
+</html>
