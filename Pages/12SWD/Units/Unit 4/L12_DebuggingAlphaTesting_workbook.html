@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Debugging &amp; Alpha Testing — Workbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ═══ EduPortal workbook — tokens ═══════════════════════════════════════
+   Named to match what scripts/wire-workbook-api.py bridges into the shared
+   top bar. Renaming any of these silently un-styles the injected bar and,
+   in review mode, the marking panel. */
+:root{
+  --bg:#0D1117; --panel:#151B24; --panel2:rgba(255,255,255,.04);
+  --edge:#252D3B; --edge2:#333C4E;
+  --text:#E8ECF4; --text2:#9AA4BC; --text3:#616B85;
+  --primary:#4361EE; --found:#10B981; --devel:#F59E0B; --extend:#8B5CF6; --exit:#EF4444;
+  --mono:'DM Mono',ui-monospace,monospace;
+  --display:'DM Serif Display',Georgia,serif;
+  --ui:'DM Sans',system-ui,sans-serif;
+  --read:'Atkinson Hyperlegible','DM Sans',system-ui,sans-serif;
+  --r:12px;
+}
+html[data-theme="light"]{
+  --bg:#FFFFFF; --panel:#F6F8FA; --panel2:rgba(0,0,0,.03);
+  --edge:#D0D7DE; --edge2:#B9C2CC;
+  --text:#1F2328; --text2:#57606A; --text3:#6E7781;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--ui);
+  font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--primary)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px 80px}
+
+/* ── the workbook's own bar. class "top" so the injected CSS parks it
+      directly beneath the shared EduPortal bar rather than over it. ── */
+.top{background:var(--panel);border-bottom:1px solid var(--edge);
+  display:flex;gap:12px;align-items:center;padding:9px 22px;flex-wrap:wrap}
+.top .meter{flex:1;min-width:180px;height:8px;border-radius:99px;background:var(--panel2);
+  border:1px solid var(--edge);overflow:hidden}
+.top .meter i{display:block;height:100%;width:0;background:var(--found);transition:width .3s}
+.top .pct{font-family:var(--mono);font-size:12px;color:var(--text2);min-width:112px}
+.btn{font-family:var(--ui);font-size:13px;font-weight:500;padding:7px 13px;border-radius:9px;
+  border:1px solid var(--edge2);background:var(--panel2);color:var(--text);cursor:pointer}
+.btn:hover{border-color:var(--primary)}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+#status{font-size:12.5px;color:var(--text2);padding:7px 22px;min-height:32px;
+  border-bottom:1px solid var(--edge);background:var(--bg)}
+
+/* ── cover ── */
+.cover{padding:38px 0 26px;border-bottom:1px solid var(--edge)}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--primary);font-weight:500}
+.cover h1{font-family:var(--display);font-size:44px;line-height:1.1;margin:.24em 0 .18em;font-weight:400}
+.cover .sub{color:var(--text2);font-size:17px;max-width:70ch;font-family:var(--read)}
+.idgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:26px}
+.idgrid label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--text3);margin-bottom:5px}
+input[type=text],input[type=date],textarea,select{width:100%;font-family:var(--read);font-size:15px;
+  padding:9px 11px;border-radius:9px;border:1px solid var(--edge2);background:var(--panel);
+  color:var(--text)}
+textarea{min-height:92px;resize:vertical;line-height:1.5}
+input:focus-visible,textarea:focus-visible,select:focus-visible,.btn:focus-visible{
+  outline:2px solid var(--primary);outline-offset:2px}
+
+/* ── sections ── */
+.sec{border:1px solid var(--edge);border-radius:var(--r);margin:22px 0;background:var(--panel);
+  overflow:hidden}
+.sec-h{display:flex;gap:14px;align-items:center;padding:15px 18px;cursor:pointer;user-select:none}
+.sec-h:hover{background:var(--panel2)}
+.sn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex:none;
+  font-family:var(--mono);font-size:14px;font-weight:500;color:#fff}
+.si{flex:1;min-width:0}
+.slbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--text3)}
+.stit{font-family:var(--display);font-size:21px;line-height:1.2}
+.chev{color:var(--text3);transition:transform .2s;font-size:13px}
+.sec.open .chev{transform:rotate(90deg)}
+.sec-b{display:none;padding:4px 18px 20px;border-top:1px solid var(--edge)}
+.sec.open .sec-b{display:block}
+
+.task{border:1px solid var(--edge);border-radius:10px;padding:15px 16px;margin:16px 0;
+  background:var(--bg)}
+.tlbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--text3);margin-bottom:8px}
+.q{font-family:var(--read);font-size:16px;margin:0 0 11px}
+.hint{font-size:13px;color:var(--text3);margin-top:7px;font-style:italic}
+.tier{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.06em;
+  padding:3px 9px;border-radius:99px;margin-left:8px;vertical-align:2px}
+.t-f{background:rgba(16,185,129,.14);color:var(--found);border:1px solid rgba(16,185,129,.34)}
+.t-d{background:rgba(245,158,11,.14);color:var(--devel);border:1px solid rgba(245,158,11,.34)}
+.t-e{background:rgba(139,92,246,.14);color:var(--extend);border:1px solid rgba(139,92,246,.34)}
+
+/* ── callouts ── */
+.callout{border-radius:10px;padding:13px 15px;margin:14px 0;font-family:var(--read);font-size:14.5px}
+.c-info{background:rgba(67,97,238,.10);border:1px solid rgba(67,97,238,.32)}
+.c-note{background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.32)}
+.c-extend{background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.32)}
+.callout b{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;
+  text-transform:uppercase;margin-bottom:6px}
+.c-info b{color:var(--primary)} .c-note b{color:var(--devel)} .c-extend b{color:var(--extend)}
+
+/* ── auto-marked controls ── */
+.opts{display:grid;gap:8px;margin:4px 0 2px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-radius:9px;
+  border:1px solid var(--edge2);background:var(--panel);cursor:pointer;font-family:var(--read);
+  font-size:15px}
+.opt:hover{border-color:var(--primary)}
+.opt input{margin:3px 0 0;flex:none;accent-color:var(--primary)}
+.opt.right{border-color:var(--found);background:rgba(16,185,129,.10)}
+.opt.wrong{border-color:var(--exit);background:rgba(239,68,68,.10)}
+.tf{display:flex;gap:8px;margin:2px 0}
+.tf button{font-family:var(--mono);font-size:13px;font-weight:500;padding:7px 20px;border-radius:9px;
+  border:1px solid var(--edge2);background:var(--panel);color:var(--text);cursor:pointer}
+.tf button[aria-pressed="true"]{border-color:var(--primary);background:rgba(67,97,238,.18)}
+.tf button.right{border-color:var(--found);background:rgba(16,185,129,.14)}
+.tf button.wrong{border-color:var(--exit);background:rgba(239,68,68,.14)}
+.short{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.short input{max-width:280px}
+.fb{font-size:13px;margin-top:8px;min-height:18px;font-family:var(--mono)}
+.fb.ok{color:var(--found)} .fb.no{color:var(--exit)}
+
+/* ── testing table ── */
+.tt-wrap{overflow-x:auto;margin:4px 0 10px}
+table.tt{width:100%;border-collapse:collapse;min-width:860px}
+table.tt th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text3);text-align:left;padding:0 6px 7px;font-weight:500}
+table.tt td{padding:0 6px 8px;vertical-align:top}
+table.tt textarea{min-height:64px;font-size:14px}
+table.tt td.rn{width:30px;padding-top:10px;font-family:var(--mono);font-size:12px;color:var(--text3)}
+.tt-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.checkrow{display:flex;gap:10px;align-items:center;padding:8px 0;font-family:var(--read);font-size:15px}
+.checkrow input{accent-color:var(--found);width:17px;height:17px}
+.exit{border:1px solid rgba(239,68,68,.4);background:rgba(239,68,68,.07)}
+.exit .tlbl{color:var(--exit)}
+.foot{color:var(--text3);font-size:13px;margin-top:26px;text-align:center;font-family:var(--mono)}
+@media print{
+  .top,#status,.sec-h .chev,.tt-tools,.btn{display:none!important}
+  .sec-b{display:block!important} body{background:#fff;color:#000}
+}
+</style>
+<!-- EDU_BACK_BEGIN generated by scripts/wire-workbook-api.py - do not hand-edit -->
+<!-- kit inlined by --standalone; re-run without it to link the shared files -->
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   EduPortal UI kit — the single copy.
+
+   This file replaces the block that used to be pasted into every page. Five
+   copies existed (login, change-password, both dashboards, profile) and the
+   comment at the top of each one asked for exactly this. They had already
+   drifted: dashboard-student.html was missing the accent glow on .avatar. That
+   is fixed here by construction, because there is now only one definition.
+
+   WHAT BELONGS HERE: design tokens, the theme cascade, and the top bar every
+   page shares. Nothing page-specific. If a rule is only used by one page it
+   stays in that page's <style>.
+
+   --accent IS THE ONE PER-PAGE VARIABLE. Each page sets it in its own <style>
+   AFTER this file loads:
+
+       :root{--accent:var(--jade);}          /* student  */
+       :root{--accent:var(--cobalt);}        /* teacher, profile */
+
+   Everything tinted by role - the EP mark, the avatar, focus rings - follows
+   from that one line.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --jade:#00D97E;--jade-d:#00B868;--jade-bg:rgba(0,217,126,.15);
+  --coral:#FF4757;--coral-d:#E8303E;--coral-bg:rgba(255,71,87,.15);
+  --gold:#FFB830;--gold-d:#E09E1A;--gold-bg:rgba(255,184,48,.15);
+  --cobalt:#2979FF;--cobalt-d:#1A5FE8;--cobalt-bg:rgba(41,121,255,.15);
+  --violet:#C678FF;--violet-d:#A84EE8;--violet-bg:rgba(198,120,255,.15);
+  --jade-glow:rgba(0,217,126,.30);--cobalt-glow:rgba(41,121,255,.32);
+  --coral-glow:rgba(255,71,87,.30);--gold-glow:rgba(255,184,48,.28);--violet-glow:rgba(198,120,255,.30);
+  --jade-br:rgba(0,217,126,.34);--cobalt-br:rgba(41,121,255,.34);--coral-br:rgba(255,71,87,.34);
+  --gold-br:rgba(255,184,48,.34);--violet-br:rgba(198,120,255,.34);
+  --font:'Plus Jakarta Sans',sans-serif; --mono:'DM Mono',monospace;
+  --r:14px;--rsm:8px;--rpill:999px;
+  --trans:background .3s,color .3s,border-color .3s;
+}
+[data-theme="dark"]{
+  --bg:#0A0E14;--bg2:#111620;--bg3:#181E2C;--bg4:#202840;--bg5:#2A3452;
+  --canvas:#05080D;--panel:#0D121B;--panel-2:#131A27;--panel-raised:#171F2E;--panel-top:#1E2839;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --edge-dark:rgba(0,0,0,.6);--edge-light:rgba(255,255,255,.055);
+  --hover:rgba(255,255,255,.055);--active:rgba(255,255,255,.09);--input-bg:var(--canvas);
+  --grid-line:rgba(255,255,255,.026);--overlay-bg:rgba(4,7,12,.62);
+  --text:#EEF0F8;--text2:#98A0BE;--text3:#5A648A;
+  --shadow-sm:0 2px 10px rgba(0,0,0,.38);--shadow:0 4px 24px rgba(0,0,0,.55);--shadow-lg:0 16px 56px rgba(0,0,0,.75);
+  --sh-top:0 6px 22px rgba(0,0,0,.35);--sh-rail:8px 0 24px rgba(0,0,0,.35);
+  --sh-mid:6px 0 18px rgba(0,0,0,.25);--sh-insp:-10px 0 30px rgba(0,0,0,.4);
+  --sh-hdr:0 8px 16px -10px rgba(0,0,0,.55);
+  --sh-canvas:inset 8px 0 20px rgba(0,0,0,.4);
+  --sh-row:0 4px 14px rgba(0,0,0,.4);--sh-row-hover:0 10px 26px rgba(0,0,0,.5);
+  --sh-inset:inset 0 1px 4px rgba(0,0,0,.3);
+}
+[data-theme="light"]{
+  --bg:#F2F4FA;--bg2:#FFFFFF;--bg3:#EEF1FA;--bg4:#E4E8F5;--bg5:#D8DEEF;
+  --canvas:#E4E9F4;--panel:#F1F4FA;--panel-2:#F8FAFD;--panel-raised:#FFFFFF;--panel-top:#FFFFFF;
+  --border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.13);
+  --edge-dark:rgba(14,20,37,.10);--edge-light:rgba(255,255,255,.9);
+  --hover:rgba(14,20,37,.045);--active:rgba(14,20,37,.08);--input-bg:#F7F9FD;
+  --grid-line:rgba(14,20,37,.04);--overlay-bg:rgba(14,20,37,.42);
+  --text:#0E1425;--text2:#4A5280;--text3:#858DAF;
+  --shadow-sm:0 2px 8px rgba(14,20,37,.07);--shadow:0 4px 24px rgba(14,20,37,.10);--shadow-lg:0 16px 56px rgba(14,20,37,.16);
+  --sh-top:0 4px 14px rgba(14,20,37,.06);--sh-rail:6px 0 18px rgba(14,20,37,.06);
+  --sh-mid:5px 0 14px rgba(14,20,37,.04);--sh-insp:-8px 0 22px rgba(14,20,37,.07);
+  --sh-hdr:0 6px 12px -8px rgba(14,20,37,.10);
+  --sh-canvas:inset 6px 0 14px rgba(14,20,37,.05);
+  --sh-row:0 2px 6px rgba(14,20,37,.07);--sh-row-hover:0 8px 20px rgba(14,20,37,.13);
+  --sh-inset:inset 0 1px 2px rgba(14,20,37,.05);
+}
+body{font-family:var(--font);background:var(--canvas);color:var(--text);font-size:15px;line-height:1.55;transition:var(--trans);}
+
+/* ── TOP BAR ─────────────────────────────────────────────── */
+.topbar{display:flex;align-items:center;gap:14px;padding:0 18px;border-bottom:1px solid var(--edge-dark);
+  background:var(--panel-top);position:relative;z-index:20;
+  box-shadow:inset 0 1px 0 var(--edge-light),var(--sh-top);}
+/* ── HOME / BRAND ─────────────────────────────────────────────
+   The wordmark is the way home, so it has to look like a control rather than a
+   label. The EP mark is the same one the login screen uses, tinted with the
+   page's own --accent, so student and teacher stay visually distinct while the
+   shape stays identical. The negative margin keeps the text optically aligned
+   with the topbar padding despite the button's own padding. */
+.brand{font-weight:800;font-size:.98rem;letter-spacing:-.02em;display:flex;align-items:center;gap:9px;
+  white-space:nowrap;text-decoration:none;color:inherit;cursor:pointer;
+  padding:5px 9px;margin-left:-9px;border-radius:11px;border:1px solid transparent;
+  background:none;font-family:inherit;transition:all .18s;}
+.brand:hover{background:var(--hover);border-color:var(--border2);}
+.brand:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.brand-mark{width:26px;height:26px;border-radius:8px;background:var(--accent);color:#0A0E14;
+  font-family:var(--mono);font-size:10.5px;font-weight:800;letter-spacing:.01em;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 0 14px var(--accent-glow);transition:transform .18s;}
+.brand:hover .brand-mark{transform:translateY(-1px) scale(1.04);}
+.brand:active .brand-mark{transform:translateY(0) scale(.98);}
+/* Leftmost control in the bar, so its tooltip opens rightwards or it clips. */
+.tip.start{right:auto;left:0;}
+.chip{font-family:var(--mono);font-size:9px;font-weight:500;padding:3px 8px;border-radius:var(--rpill);
+  letter-spacing:.1em;background:var(--accent);color:#0A0E14;}
+.icon-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border2);background:var(--hover);
+  color:var(--text2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;flex-shrink:0;}
+.icon-btn:hover{background:var(--active);color:var(--text);border-color:var(--accent-br);}
+/* ── LOGOUT ──────────────────────────────────────────────────
+   Deliberately louder than its neighbours in the top bar: coral tint at rest so
+   it reads as "this ends your session" at a glance, solid coral on hover. It
+   keeps the .icon-btn geometry, so the tip-wrap hover label still works. */
+.icon-btn-danger{background:var(--coral-bg);border-color:var(--coral-br);color:var(--coral);}
+.icon-btn-danger:hover{background:var(--coral);border-color:var(--coral);color:#fff;
+  box-shadow:0 0 14px var(--coral-glow);}
+.icon-btn-danger:focus-visible{outline:2px solid var(--coral);outline-offset:2px;}
+.icon-btn-danger:disabled{opacity:.5;cursor:not-allowed;}
+[data-theme="light"] .icon-btn-danger{color:#C4192A;}
+[data-theme="light"] .icon-btn-danger:hover{color:#fff;}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#0A0E14;font-size:11.5px;
+  font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 0 16px var(--accent-glow);}
+.spacer{margin-left:auto;}
+
+/* ── TOOLTIPS ─────────────────────────────────────────────── */
+.tip-wrap{position:relative;display:flex;align-items:center;flex-shrink:0;}
+.tip{position:absolute;top:calc(100% + 8px);right:0;white-space:nowrap;
+  background:var(--panel-top);color:var(--text);border:1px solid var(--border2);
+  border-radius:var(--rsm);padding:5px 10px;font-size:11.5px;font-weight:600;
+  box-shadow:var(--shadow);opacity:0;pointer-events:none;transform:translateY(-3px);
+  transition:opacity .15s,transform .15s;z-index:60;}
+.tip.mid{right:auto;left:50%;transform:translate(-50%,-3px);}
+.tip-wrap:hover .tip{opacity:1;transform:translateY(0);}
+.tip-wrap:hover .tip.mid{opacity:1;transform:translate(-50%,0);}
+.tip-wrap:has(:focus-visible) .tip{opacity:1;transform:translateY(0);}
+.tip-wrap:has(:focus-visible) .tip.mid{opacity:1;transform:translate(-50%,0);}
+
+/* ── THE BAR IS STICKY ────────────────────────────────────────
+   It carries the way home, the way out, and the identity of whoever is signed
+   in. All three are worth having within reach on a long page, and a workbook
+   can run to several screens. */
+.topbar{position:sticky;top:0;}
+
+/* ── SECOND BAR ───────────────────────────────────────────────
+   For page-specific chrome that used to sit inside the top bar: the student's
+   progress meter, the teacher's marking tally, a workbook's score meters and
+   its save/submit controls. Keeping it separate is what lets the bar above it
+   be identical everywhere.
+
+   Sticks directly beneath the top bar. The offset is the top bar's height, so
+   the two move as one. */
+.subbar{position:sticky;top:52px;z-index:19;display:flex;align-items:center;gap:14px;
+  padding:0 18px;min-height:44px;flex-wrap:wrap;
+  background:var(--panel);border-bottom:1px solid var(--edge-dark);
+  box-shadow:inset 0 1px 0 var(--edge-light);}
+.subbar:empty{display:none;}
+@media (max-width:720px){
+  .topbar{position:static;}
+  .subbar{position:static;}
+}
+
+</style>
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   EduPortal UI kit — shared top-bar behaviour.
+
+   The companion to eduportal-kit.css. Between them, every page gets the same
+   bar: the same markup, the same theme handling, the same logout, the same
+   avatar. A page that wants something of its own puts it in the second bar.
+
+   WHY THE MARKUP IS RENDERED RATHER THAN PASTED. Identical-by-copy lasted
+   about five files before it drifted. Identical-by-construction cannot drift:
+   there is one template, here, and every page calls it.
+
+   USAGE — one line in <head>, one element in <body>:
+
+       <link rel="stylesheet" href="/static/eduportal-kit.css">
+       <script src="/static/eduportal-kit.js" defer><\/script>
+       ...
+       <header class="topbar" data-edu-bar data-chip="STUDENT"></header>
+       <div class="subbar" id="subbar"><!-- page-specific --></div>
+
+   data-chip is optional and static; omit it and the chip shows the role from
+   the session instead. The bar renders immediately from markup and fills in
+   the identity-dependent parts when GET /auth/me answers, so nothing jumps.
+
+   IDs THE BAR PROVIDES, because existing page code binds to them:
+   homeLink, roleChip, themeBtn, logoutBtn, navAvatar.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  var API = '/api/v1';
+  var LOGIN_PATH = '/login.html';
+  var DASHBOARD = { student: '/dashboard-student.html', teacher: '/dashboard-teacher.html' };
+
+  /* Cosmetic only. Nothing here is ever consulted for an access decision - the
+     session cookie is the only thing that decides what anyone can see.
+     Every access is wrapped because Safari's private mode throws on
+     localStorage rather than returning null, and an unguarded read there takes
+     the whole page down on load. */
+  var PREF_THEME = 'eduportal-theme';
+  var PREF_ROLE = 'eduportal-role';   // cached ONLY so the accent does not flash
+
+  /* The bar is tinted by role, not by page. A student's workbook and a
+     student's dashboard should look like the same product; before this the
+     workbook followed its own --primary and came out blue beside a jade
+     dashboard. Set inline on <html> so it wins over any page stylesheet
+     without needing !important. */
+  var ROLE_ACCENT = { student: 'jade', teacher: 'cobalt' };
+  function applyAccent(role) {
+    var name = ROLE_ACCENT[role || readPref(PREF_ROLE, '')] || 'cobalt';
+    var st = document.documentElement.style;
+    st.setProperty('--accent', 'var(--' + name + ')');
+    st.setProperty('--accent-br', 'var(--' + name + '-br)');
+    st.setProperty('--accent-glow', 'var(--' + name + '-glow)');
+    st.setProperty('--accent-bg', 'var(--' + name + '-bg)');
+  }
+
+  function readPref(k, fallback) {
+    try { return localStorage.getItem(k) || fallback; } catch (e) { return fallback; }
+  }
+  function writePref(k, v) {
+    try { localStorage.setItem(k, v); } catch (e) { /* private mode */ }
+  }
+
+  function resolveTheme(pref) {
+    if (pref === 'system') {
+      try {
+        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      } catch (e) { return 'dark'; }
+    }
+    return pref === 'light' ? 'light' : 'dark';
+  }
+
+  function applyTheme() {
+    var theme = resolveTheme(readPref(PREF_THEME, 'dark'));
+    document.documentElement.setAttribute('data-theme', theme);
+    var btn = document.getElementById('themeBtn');
+    if (btn) {
+      btn.textContent = theme === 'dark' ? '\u{1F319}' : '☀️';
+      btn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+    }
+  }
+
+  function toggleTheme() {
+    writePref(PREF_THEME, document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    applyTheme();
+  }
+
+  /* Applied before first paint so a light-theme user does not see a dark flash.
+     The rest of the bar can wait for the DOM; this cannot. */
+  applyTheme();
+  applyAccent(null);          // from the cached role, so it does not flash
+  try {
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function () {
+      if (readPref(PREF_THEME, 'dark') === 'system') { applyTheme(); }
+    });
+  } catch (e) { /* older Safari has no addEventListener on MediaQueryList */ }
+
+  function request(method, path) {
+    return fetch(API + path, { method: method, credentials: 'include' }).then(function (res) {
+      return res.text().then(function (text) {
+        var data = null;
+        try { data = text ? JSON.parse(text) : null; } catch (e) { data = text; }
+        if (res.ok) { return data; }
+        var err = new Error((data && (data.detail || data.title)) || ('Request failed (HTTP ' + res.status + ').'));
+        err.status = res.status;
+        throw err;
+      });
+    });
+  }
+
+  /* The session cookie is HttpOnly, so GET /auth/me is the only way a page can
+     learn who it belongs to. One call, cached on the kit, shared by every
+     consumer on the page. */
+  var mePromise = null;
+  function me() {
+    if (!mePromise) {
+      mePromise = request('GET', '/auth/me').then(function (d) { return (d && d.user) || d || {}; });
+    }
+    return mePromise;
+  }
+
+  /* The session cookie is HttpOnly, so only the server can clear it. We always
+     redirect on success, but a failed call means the session is still live
+     server-side, and saying so is better than pretending otherwise. */
+  function logout() {
+    var btn = document.getElementById('logoutBtn');
+    if (btn) { btn.disabled = true; }
+    return request('POST', '/auth/logout').then(function () {
+      window.location.href = LOGIN_PATH;
+    }).catch(function (err) {
+      if (err && err.status === 401) { window.location.href = LOGIN_PATH; return; }  // already gone
+      if (btn) { btn.disabled = false; }
+      if (typeof window.showError === 'function') {
+        window.showError('Could not log out — your session may still be active. Close your browser to be sure.');
+      } else if (typeof window.showToast === 'function') {
+        window.showToast('Could not log out — your session may still be active.');
+      } else {
+        window.alert('Could not log out — your session may still be active. Close your browser to be sure.');
+      }
+    });
+  }
+
+  var BAR = [
+    '<span class="tip-wrap">',
+    '  <a class="brand" id="homeLink" href="/" aria-label="Go to your dashboard">',
+    '    <span class="brand-mark" aria-hidden="true">EP</span><span>EduPortal</span>',
+    '  </a>',
+    '  <span class="tip start" aria-hidden="true">Go to your dashboard</span>',
+    '</span>',
+    '<span class="chip" id="roleChip">…</span>',
+    '<div class="spacer"></div>',
+    '<span class="tip-wrap">',
+    '  <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle theme">\u{1F319}</button>',
+    '  <span class="tip" aria-hidden="true">Toggle theme</span>',
+    '</span>',
+    '<span class="tip-wrap">',
+    '  <button class="icon-btn icon-btn-danger" id="logoutBtn" type="button" aria-label="Log out">⏻</button>',
+    '  <span class="tip" aria-hidden="true">Log out</span>',
+    '</span>',
+    '<span class="tip-wrap">',
+    '  <a class="avatar" id="navAvatar" href="/profile.html" aria-label="View profile">—</a>',
+    '  <span class="tip" aria-hidden="true">View profile</span>',
+    '</span>'
+  ].join('\n');
+
+  function mount() {
+    var host = document.querySelector('[data-edu-bar]');
+    if (!host) { return; }
+    host.classList.add('topbar');
+    host.innerHTML = BAR;
+
+    var chip = host.getAttribute('data-chip');
+    if (chip) { document.getElementById('roleChip').textContent = chip; }
+
+    document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+    applyTheme();
+
+    /* A page that wants the wordmark to do something other than navigate -
+       resetting a dashboard to its default view, say - sets window.eduOnHome.
+       The href stays real either way, so middle-click still opens a new tab. */
+    var home = document.getElementById('homeLink');
+    home.addEventListener('click', function (e) {
+      if (typeof window.eduOnHome === 'function') { e.preventDefault(); window.eduOnHome(e); }
+    });
+
+    me().then(function (u) {
+      var role = u.role || readPref(PREF_ROLE, '');
+      if (role) { writePref(PREF_ROLE, role); }
+      applyAccent(role);
+      if (!chip) { document.getElementById('roleChip').textContent = (role || 'user').toUpperCase(); }
+      document.getElementById('navAvatar').textContent = u.initials || '?';
+      home.href = DASHBOARD[role] || LOGIN_PATH;
+      document.dispatchEvent(new CustomEvent('edu:session', { detail: u }));
+    }).catch(function (err) {
+      if (err && err.status === 401) { window.location.href = LOGIN_PATH; }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', mount);
+  } else {
+    mount();
+  }
+
+  /* Pages still call some of this directly, and the workbook needs `me` so it
+     does not make a second /auth/me call of its own. */
+  window.EduKit = {
+    me: me, logout: logout, applyTheme: applyTheme, toggleTheme: toggleTheme,
+    readPref: readPref, writePref: writePref, request: request, applyAccent: applyAccent,
+    DASHBOARD: DASHBOARD, LOGIN_PATH: LOGIN_PATH, PREF_THEME: PREF_THEME
+  };
+})();
+
+</script>
+<style>
+/* The kit's tokens are named for the app pages; workbooks use their own set.
+   Bridge the few the bar needs so it renders identically in both. */
+:root{--accent:var(--primary,#4361EE);
+  --accent-glow:rgba(67,97,238,.30);--accent-br:rgba(67,97,238,.34);
+  --panel-top:var(--panel,#151B24);--border2:var(--edge2,#333C4E);
+  --edge-dark:var(--edge,#252D3B);--edge-light:rgba(255,255,255,.05);
+  --text3:var(--text3,#616B85);--rsm:8px;--rpill:999px;
+  --hover:rgba(255,255,255,.055);--active:rgba(255,255,255,.09);
+  --coral:#FF4757;--coral-bg:rgba(255,71,87,.15);--coral-br:rgba(255,71,87,.34);
+  --coral-glow:rgba(255,71,87,.30);--shadow:0 4px 24px rgba(0,0,0,.55);}
+
+/* The shared bar gets its 52px from the .app grid on the dashboard pages
+   (grid-template-rows: 52px ...). A workbook has no such grid, so the bar
+   collapsed to its content height - 39px - while the rule below still parked
+   the second bar at 52. The 13px difference showed as the workbook's own bar
+   overlapping the line beneath it. State the height here instead of inheriting
+   it from a layout the workbook does not have. */
+.topbar[data-edu-bar]{min-height:52px;}
+
+/* The workbook's own header is the second bar. */
+.top,.topbar.tb-outer{position:sticky;top:52px;z-index:19;}
+
+/* ── MARKING PANEL ────────────────────────────────────────────
+   Docked beside the work, because marking is read-then-judge and a teacher
+   should not have to hold a page in their head across a tab switch. It writes
+   to the SUBMISSION, never to the workbook. */
+.edu-mark{position:fixed;top:0;right:0;bottom:0;width:340px;z-index:250;display:flex;flex-direction:column;
+  background:var(--panel,#151B24);border-left:1px solid var(--edge,#252D3B);
+  box-shadow:-8px 0 28px rgba(0,0,0,.34);font-family:inherit}
+.edu-mark[hidden]{display:none}
+body.edu-marking{padding-right:340px}
+.edu-mark-h{padding:14px 16px;border-bottom:1px solid var(--edge,#252D3B)}
+.edu-mark-h b{display:block;font-size:14px;letter-spacing:-.01em;color:var(--text,#E8ECF4)}
+.edu-mark-h span{font-family:var(--mono,monospace);font-size:10.5px;color:var(--text3,#616B85)}
+.edu-mark-b{padding:14px 16px;overflow:auto;flex:1}
+.edu-mark-b label{display:block;font-family:var(--mono,monospace);font-size:10px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--text3,#616B85);margin:0 0 5px}
+.edu-mark-b input,.edu-mark-b textarea{width:100%;font-family:inherit;font-size:14px;padding:9px 11px;
+  border-radius:8px;border:1px solid var(--edge2,#333C4E);
+  background:var(--bg,#0D1117);color:var(--text,#E8ECF4)}
+.edu-mark-b textarea{min-height:150px;resize:vertical}
+.edu-mark-tally{font-family:var(--mono,monospace);font-size:11px;color:var(--text2,#9AA4BC);
+  background:var(--panel2,rgba(255,255,255,.04));border-radius:8px;padding:8px 11px;margin-bottom:14px}
+.edu-mark-f{padding:12px 16px;border-top:1px solid var(--edge,#252D3B);display:flex;gap:8px;flex-wrap:wrap}
+.edu-mark-f .btn{flex:1;min-width:112px}
+.edu-mark-msg{font-size:12px;margin-top:9px;min-height:16px}
+.edu-mark-msg.err{color:var(--exit,#EF4444)}
+.edu-mark-msg.ok{color:var(--found,#10B981)}
+.edu-mark-nav{display:flex;gap:6px;align-items:center;margin-top:10px;
+  font-family:var(--mono,monospace);font-size:11px;color:var(--text3,#616B85)}
+.edu-mark-nav button{flex:none;padding:4px 9px;font-size:11px}
+.edu-review{margin-left:12px;font-family:var(--mono,monospace);font-size:11px;font-weight:600;
+  letter-spacing:.04em;padding:4px 10px;border-radius:99px;
+  color:var(--devel,#F59E0B);background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.32)}
+@media (max-width:900px){.edu-mark{position:static;width:auto;border-left:none;
+  border-top:1px solid var(--edge,#252D3B)}body.edu-marking{padding-right:0}}
+@media print{.edu-mark,.topbar{display:none}body.edu-marking{padding-right:0}}
+
+/* ── OFFLINE TAG ──────────────────────────────────────────────
+   Deliberately loud. A standalone workbook keeps work in one browser on one
+   machine, and the failure mode of not noticing that is losing it. */
+.edu-offline{margin-left:12px;font-family:var(--mono,monospace);font-size:11px;font-weight:600;
+  letter-spacing:.04em;padding:4px 10px;border-radius:99px;
+  color:var(--exit,#EF4444);background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.34)}
+</style>
+<!-- EDU_BACK_END -->
+</head>
+<body>
+<!-- EDU_BACK_BEGIN generated by scripts/wire-workbook-api.py - do not hand-edit -->
+<header class="topbar" data-edu-bar></header>
+<aside class="edu-mark" id="eduMark" hidden aria-label="Marking">
+  <div class="edu-mark-h"><b id="eduMarkWho">—</b><span id="eduMarkWhen"></span></div>
+  <div class="edu-mark-b">
+    <div class="edu-mark-tally" id="eduMarkTally"></div>
+    <label for="eduMarkScore">Mark (%)</label>
+    <input id="eduMarkScore" type="number" min="0" max="100" step="0.5" inputmode="decimal">
+    <label for="eduMarkFb" style="margin-top:14px">Feedback</label>
+    <textarea id="eduMarkFb" placeholder="What they did well, and what to work on before the next lesson"></textarea>
+    <div class="edu-mark-msg" id="eduMarkMsg"></div>
+    <div class="edu-mark-nav" id="eduMarkNav"></div>
+  </div>
+  <div class="edu-mark-f">
+    <button class="btn primary" id="eduMarkSave" type="button">Save mark</button>
+    <button class="btn" id="eduMarkNext" type="button" hidden>Save &amp; next</button>
+  </div>
+</aside>
+<!-- EDU_BACK_END -->
+
+<!-- The workbook's own bar. The shared EduPortal bar is injected above this
+     one by scripts/wire-workbook-api.py — do not author a second wordmark. -->
+<header class="top">
+  <span class="pct" id="pctLabel">0 / 0 auto-marked</span>
+  <span class="meter"><i id="meterFill"></i></span>
+  <button class="btn" id="saveBtn" type="button">Save</button>
+  <button class="btn" id="loadBtn" type="button">Load</button>
+  <button class="btn" id="printBtn" type="button">Print</button>
+  <button class="btn primary" id="submitBtn" type="button">Submit</button>
+</header>
+<div id="status" role="status" aria-live="polite">Loading your work…</div>
+
+<div class="wrap">
+
+  <div class="cover">
+    <div class="eyebrow">VCE Applied Computing · Software Development · Unit 4 · Outcome 1 · Criterion 8</div>
+    <h1>Debugging &amp; Alpha Testing</h1>
+    <p class="sub">Breakpoints, commenting out, test data and testing tables — building the evidence
+    that every module of your solution actually works.
+    <a href="U4_SoftwareDevelopment_site.html#y12-sd-u4-l12-debug-alpha-1">Full notes on the unit site →</a></p>
+    <div class="idgrid">
+      <div><label for="sName">Name</label><input type="text" id="sName"></div>
+      <div><label for="sClass">Class</label><input type="text" id="sClass"></div>
+      <div><label for="sDate">Date</label><input type="date" id="sDate" placeholder="YYYY-MM-DD"></div>
+      <div><label for="sTeacher">Teacher</label><input type="text" id="sTeacher"></div>
+    </div>
+  </div>
+
+  <!-- ══ 1 ══════════════════════════════════════════════════════════════ -->
+  <section class="sec nav-sec" id="sec1">
+    <div class="sec-h" data-toggle>
+      <div class="sn" style="background:var(--primary)">1</div>
+      <div class="si"><div class="slbl">Before you start · auto-marked</div>
+        <div class="stit">Checking the ideas</div></div>
+      <span class="chev">▶</span>
+    </div>
+    <div class="sec-b">
+      <div class="callout c-info"><b>Why this comes first</b>
+        These are marked as soon as you answer, so you find out now — not next week — whether the
+        ideas behind today's tasks have landed. Slides 4 to 7 and 11 to 13 cover all of it.</div>
+
+      <div class="task">
+        <div class="tlbl">True or false <span class="tier t-f">🟢 Foundation</span></div>
+        <p class="q">1. Beta testing can begin before every module has passed alpha testing.</p>
+        <div class="tf" data-tf="t1">
+          <button type="button" data-v="T">True</button><button type="button" data-v="F">False</button>
+        </div><div class="fb" data-fb="t1"></div>
+
+        <p class="q" style="margin-top:16px">2. Commenting out a block lets you test the rest of the
+        program without losing that code.</p>
+        <div class="tf" data-tf="t2">
+          <button type="button" data-v="T">True</button><button type="button" data-v="F">False</button>
+        </div><div class="fb" data-fb="t2"></div>
+
+        <p class="q" style="margin-top:16px">3. A test case that passed should be left out of your
+        testing table.</p>
+        <div class="tf" data-tf="t3">
+          <button type="button" data-v="T">True</button><button type="button" data-v="F">False</button>
+        </div><div class="fb" data-fb="t3"></div>
+
+        <p class="q" style="margin-top:16px">4. Invalid test data is data your validation should reject.</p>
+        <div class="tf" data-tf="t4">
+          <button type="button" data-v="T">True</button><button type="button" data-v="F">False</button>
+        </div><div class="fb" data-fb="t4"></div>
+      </div>
+
+      <div class="task">
+        <div class="tlbl">Multiple choice <span class="tier t-d">🟡 Developing</span></div>
+        <p class="q">5. Your program crashes at line 80. Where is the most useful place for your
+        <em>first</em> breakpoint?</p>
+        <div class="opts" data-mc="m1">
+          <label class="opt"><input type="radio" name="m1" value="a"><span>On line 80, where the error appears</span></label>
+          <label class="opt"><input type="radio" name="m1" value="b"><span>Earlier in the flow, before the values reach line 80</span></label>
+          <label class="opt"><input type="radio" name="m1" value="c"><span>On the last line of the program</span></label>
+          <label class="opt"><input type="radio" name="m1" value="d"><span>In a module unrelated to the error</span></label>
+        </div><div class="fb" data-fb="m1"></div>
+
+        <p class="q" style="margin-top:18px">6. An application checks that a user is 18 or over.
+        Which single value is the most worth testing?</p>
+        <div class="opts" data-mc="m2">
+          <label class="opt"><input type="radio" name="m2" value="a"><span>25</span></label>
+          <label class="opt"><input type="radio" name="m2" value="b"><span>100</span></label>
+          <label class="opt"><input type="radio" name="m2" value="c"><span>18</span></label>
+          <label class="opt"><input type="radio" name="m2" value="d"><span>0</span></label>
+        </div><div class="fb" data-fb="m2"></div>
+
+        <p class="q" style="margin-top:18px">7. Entering exactly 18 into that check is which kind of
+        test data?</p>
+        <div class="opts" data-mc="m3">
+          <label class="opt"><input type="radio" name="m3" value="a"><span>Valid</span></label>
+          <label class="opt"><input type="radio" name="m3" value="b"><span>Valid but unusual</span></label>
+          <label class="opt"><input type="radio" name="m3" value="c"><span>Invalid</span></label>
+          <label class="opt"><input type="radio" name="m3" value="d"><span>Not test data at all</span></label>
+        </div><div class="fb" data-fb="m3"></div>
+
+        <p class="q" style="margin-top:18px">8. What belongs in the <em>Actual result</em> column of a
+        testing table?</p>
+        <div class="opts" data-mc="m4">
+          <label class="opt"><input type="radio" name="m4" value="a"><span>What the code is supposed to do</span></label>
+          <label class="opt"><input type="radio" name="m4" value="b"><span>What actually happened when you ran the test</span></label>
+          <label class="opt"><input type="radio" name="m4" value="c"><span>The change you made afterwards</span></label>
+          <label class="opt"><input type="radio" name="m4" value="d"><span>The test data you used</span></label>
+        </div><div class="fb" data-fb="m4"></div>
+      </div>
+
+      <div class="task">
+        <div class="tlbl">One word <span class="tier t-f">🟢 Foundation</span></div>
+        <p class="q">9. What is the name for testing you do yourself, in your own environment, before
+        anyone outside the team sees the solution?</p>
+        <div class="short">
+          <input type="text" data-check="s1" autocomplete="off" placeholder="One word">
+        </div><div class="fb" data-fb="s1"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 2 ══════════════════════════════════════════════════════════════ -->
+  <section class="sec" id="sec2">
+    <div class="sec-h" data-toggle>
+      <div class="sn" style="background:var(--devel)">2</div>
+      <div class="si"><div class="slbl">Part A · on devices</div>
+        <div class="stit">The bug log</div></div>
+      <span class="chev">▶</span>
+    </div>
+    <div class="sec-b">
+      <div class="callout c-note"><b>📋 From the slides</b>
+        Put the breakpoint <em>before</em> the line you suspect, not on it. The cause is usually
+        upstream of the symptom. Commenting out a block answers one question: does the fault still
+        happen?</div>
+
+      <p class="q">Work through the modules you have already built. Log every bug you find — not just
+      the first one. A single entry is one bug; use as many as you need.</p>
+
+      <div class="task">
+        <div class="tlbl">Bug 1 <span class="tier t-d">🟡 Developing</span></div>
+        <p class="q">What went wrong — what did you see the program do?</p>
+        <textarea data-field="b1what" placeholder="Describe the behaviour, not the cause — the cause comes later."></textarea>
+        <p class="q" style="margin-top:12px">Which technique revealed it, and how did you use it?</p>
+        <textarea data-field="b1how" placeholder="Name the technique, then say where you placed it or what you disabled."></textarea>
+        <p class="q" style="margin-top:12px">What was the fix, and did you re-run to confirm it?</p>
+        <textarea data-field="b1fix" placeholder="What you changed, and what happened when you ran it again."></textarea>
+      </div>
+
+      <div class="task">
+        <div class="tlbl">Bug 2 <span class="tier t-d">🟡 Developing</span></div>
+        <p class="q">What went wrong?</p>
+        <textarea data-field="b2what" placeholder="Describe the behaviour, not the cause."></textarea>
+        <p class="q" style="margin-top:12px">Which technique revealed it, and how did you use it?</p>
+        <textarea data-field="b2how" placeholder="Was this a different technique from bug 1? Why?"></textarea>
+        <p class="q" style="margin-top:12px">What was the fix, and did you re-run to confirm it?</p>
+        <textarea data-field="b2fix" placeholder="What you changed, and what happened when you ran it again."></textarea>
+      </div>
+
+      <div class="task">
+        <div class="tlbl">Bug 3 <span class="tier t-e">🟣 Extending</span></div>
+        <p class="q">What went wrong?</p>
+        <textarea data-field="b3what" placeholder="Describe the behaviour, not the cause."></textarea>
+        <p class="q" style="margin-top:12px">Which technique revealed it, and how did you use it?</p>
+        <textarea data-field="b3how" placeholder="Name the technique and where you applied it."></textarea>
+        <p class="q" style="margin-top:12px">What was the fix, and did you re-run to confirm it?</p>
+        <textarea data-field="b3fix" placeholder="What you changed, and what happened when you ran it again."></textarea>
+      </div>
+
+      <div class="callout c-note"><b>⚠ Before you submit the SAT</b>
+        Restore or delete every block you commented out. Dead code left in the finished solution
+        works against "clear and concise code", which is assessed separately.</div>
+    </div>
+  </section>
+
+  <!-- ══ 3 ══════════════════════════════════════════════════════════════ -->
+  <section class="sec" id="sec3">
+    <div class="sec-h" data-toggle>
+      <div class="sn" style="background:var(--devel)">3</div>
+      <div class="si"><div class="slbl">Part B · on devices</div>
+        <div class="stit">The testing table</div></div>
+      <span class="chev">▶</span>
+    </div>
+    <div class="sec-b">
+      <div class="callout c-note"><b>📋 All five columns, every row</b>
+        What was tested · how it was tested (the actual data) · expected result · actual result ·
+        the fix, if one was needed. <em>Actual result</em> is what happened, not what should have
+        happened.</div>
+
+      <p class="q">Build a testing table for at least one module. Cover valid, valid-but-unusual and
+      invalid data — add a row for every test case you run.
+      <span class="tier t-d">🟡 Developing</span></p>
+
+      <div class="tt-wrap">
+        <table class="tt">
+          <thead><tr>
+            <th></th><th>What was tested</th><th>How — the test data</th><th>Expected result</th>
+            <th>Actual result</th><th>Fix, if needed</th>
+          </tr></thead>
+          <tbody id="ttBody"></tbody>
+        </table>
+      </div>
+      <div class="tt-tools">
+        <button class="btn" type="button" id="ttAdd">+ Add a row</button>
+        <button class="btn" type="button" id="ttDel">Remove last row</button>
+        <span class="hint" style="font-style:normal" id="ttCount"></span>
+      </div>
+
+      <div class="task">
+        <div class="tlbl">All-modules confirmation <span class="tier t-e">🟣 Extending</span></div>
+        <p class="q">Name each module in your own design and tick it once it is alpha-tested and
+        functioning. Leave unused rows blank.</p>
+        <div id="modBox"></div>
+      </div>
+
+      <div class="callout c-extend"><b>The gate before beta</b>
+        Every module must be alpha-tested and functioning before beta testing begins next lesson.
+        Beta testing assumes a working solution — if a module still fails, flag it rather than
+        pushing on.</div>
+    </div>
+  </section>
+
+  <!-- ══ 4 ══════════════════════════════════════════════════════════════ -->
+  <section class="sec" id="sec4">
+    <div class="sec-h" data-toggle>
+      <div class="sn" style="background:var(--exit)">4</div>
+      <div class="si"><div class="slbl">Exit ticket · marked by your teacher</div>
+        <div class="stit">Before you leave</div></div>
+      <span class="chev">▶</span>
+    </div>
+    <div class="sec-b">
+      <div class="task exit">
+        <div class="tlbl">Exit ticket</div>
+        <p class="q">1. Why does alpha testing happen before beta testing, and not the other way round?</p>
+        <textarea data-field="x1" placeholder="Think about what beta testers are giving you, and what they need in order to give it."></textarea>
+        <p class="q" style="margin-top:14px">2. Which module took the most rounds of debugging, and what
+        was the recurring issue?</p>
+        <textarea data-field="x2" placeholder="Name the module, then the pattern you kept running into."></textarea>
+      </div>
+      <div class="task">
+        <div class="tlbl">Self-check <span class="tier t-f">🟢 Foundation</span></div>
+        <div class="checkrow"><input type="checkbox" data-field="sc1" id="sc1"><label for="sc1">I can describe the debugging process in order.</label></div>
+        <div class="checkrow"><input type="checkbox" data-field="sc2" id="sc2"><label for="sc2">I have isolated and fixed at least one real bug, and logged it.</label></div>
+        <div class="checkrow"><input type="checkbox" data-field="sc3" id="sc3"><label for="sc3">My testing table uses valid, valid-but-unusual and invalid data.</label></div>
+        <div class="checkrow"><input type="checkbox" data-field="sc4" id="sc4"><label for="sc4">Every module in my design is alpha-tested and functioning.</label></div>
+      </div>
+    </div>
+  </section>
+
+  <p class="foot">VCE Applied Computing · Software Development</p>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   Workbook engine.
+
+   Persistence is server-backed: DataService talks to the EduPortal API and
+   this file holds no student work of its own. Identity comes from the
+   session cookie via GET /auth/me; the lesson and unit IDs come from the
+   directory this file sits in. See the EDU_API block below.
+
+   The DataService object and the DOMContentLoaded block below are
+   PLACEHOLDERS. scripts/wire-workbook-api.py replaces both wholesale — do
+   not hand-write persistence here, and do not rename anything the injected
+   block calls into: STATE, ORDER, INDEX, computeTotals, applyState,
+   setStatus, build, wire, refresh.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Fallbacks only. The injected block overwrites both from the directory
+   path, which is authoritative because the application generates the file
+   into it. They survive only when the workbook is opened off the file:
+   scheme, where the path segments mean nothing. */
+var LESSON_ID = 'y12-sd-u4-l12-debug-alpha';
+var UNIT_ID = 'y12-sd-u4';
+
+var STATE = { fields: {}, q: {} };
+
+/* Auto-marked questions only. Everything else is a field: written answers
+   are the teacher's to judge, and a workbook that pretended to mark them
+   would be lying about a number the student can see. */
+var INDEX = {
+  t1: { type: 'tf', ans: 'F', marks: 1 },
+  t2: { type: 'tf', ans: 'T', marks: 1 },
+  t3: { type: 'tf', ans: 'F', marks: 1 },
+  t4: { type: 'tf', ans: 'T', marks: 1 },
+  m1: { type: 'mc', ans: 'b', marks: 1 },
+  m2: { type: 'mc', ans: 'c', marks: 1 },
+  m3: { type: 'mc', ans: 'b', marks: 1 },
+  m4: { type: 'mc', ans: 'b', marks: 1 },
+  s1: { type: 'txt', ans: ['alpha', 'alpha testing'], marks: 1 }
+};
+var ORDER = ['t1', 't2', 't3', 't4', 'm1', 'm2', 'm3', 'm4', 's1'];
+
+var TT_COLS = ['what', 'how', 'exp', 'act', 'fix'];
+var TT_PLACEHOLDER = {
+  what: 'Which feature or input?',
+  how: 'The actual data you entered',
+  exp: 'What should happen?',
+  act: 'What did happen?',
+  fix: 'What you changed, and the re-test'
+};
+var MOD_ROWS = 6;
+
+function ttRows() {
+  var n = parseInt(STATE.fields.tt_rows, 10);
+  return (isFinite(n) && n > 0) ? Math.min(n, 40) : 3;
+}
+
+function setStatus(msg) {
+  var el = document.getElementById('status');
+  if (el) { el.textContent = msg || ''; }
+}
+
+/* ── marking ───────────────────────────────────────────────────────────
+   `resolved` counts answered, `earned` counts correct. They are separate
+   because an unanswered question and a wrong one are different facts, and
+   the submit summary reports both. */
+function isRight(id) {
+  var q = INDEX[id], v = (STATE.q[id] || {}).val;
+  if (!q || v === undefined || v === null || v === '') { return false; }
+  if (q.type === 'txt') {
+    var norm = String(v).trim().toLowerCase();
+    for (var i = 0; i < q.ans.length; i++) {
+      if (norm === q.ans[i]) { return true; }
+    }
+    return false;
+  }
+  return String(v).toUpperCase() === String(q.ans).toUpperCase();
+}
+
+function computeTotals() {
+  var items = 0, possible = 0, resolved = 0, earned = 0;
+  ORDER.forEach(function (id) {
+    var q = INDEX[id];
+    if (!q) { return; }
+    items += 1;
+    possible += q.marks;
+    var v = (STATE.q[id] || {}).val;
+    if (v !== undefined && v !== null && v !== '') { resolved += 1; }
+    if (isRight(id)) { earned += q.marks; }
+  });
+  return { items: items, possible: possible, resolved: resolved, earned: earned };
+}
+
+/* ── rendering ─────────────────────────────────────────────────────────
+   build() creates everything whose shape depends on saved state; applyState()
+   pushes values into the DOM; refresh() recolours and re-counts. The
+   injected boot calls build() then wire() then refresh(), and applyState()
+   again after the load resolves - so build() must be safe to run before any
+   state exists, and applyState() must be safe to run repeatedly. */
+function build() {
+  renderTable();
+  renderModules();
+}
+
+function renderTable() {
+  var body = document.getElementById('ttBody');
+  if (!body) { return; }
+  var n = ttRows(), html = '';
+  for (var r = 1; r <= n; r++) {
+    html += '<tr><td class="rn">' + r + '</td>';
+    for (var c = 0; c < TT_COLS.length; c++) {
+      var key = 'tt_' + r + '_' + TT_COLS[c];
+      html += '<td><textarea data-field="' + key + '" placeholder="' +
+              TT_PLACEHOLDER[TT_COLS[c]] + '"></textarea></td>';
+    }
+    html += '</tr>';
+  }
+  body.innerHTML = html;
+  var count = document.getElementById('ttCount');
+  if (count) { count.textContent = n + (n === 1 ? ' row' : ' rows'); }
+}
+
+function renderModules() {
+  var box = document.getElementById('modBox');
+  if (!box) { return; }
+  var html = '';
+  for (var i = 1; i <= MOD_ROWS; i++) {
+    html += '<div class="checkrow">' +
+            '<input type="checkbox" data-field="mod' + i + '_ok" id="mod' + i + '_ok">' +
+            '<input type="text" data-field="mod' + i + '_name" ' +
+            'placeholder="Module ' + i + ' — name it as it appears in your design" ' +
+            'style="max-width:520px">' +
+            '</div>';
+  }
+  box.innerHTML = html;
+}
+
+function applyState() {
+  /* The table has to be rebuilt before its values are pushed in: the number
+     of rows is itself saved state, and the inputs for rows 4+ do not exist
+     until it is read back. */
+  renderTable();
+
+  document.querySelectorAll('[data-field]').forEach(function (el) {
+    var k = el.getAttribute('data-field'), v = STATE.fields[k];
+    if (el.type === 'checkbox') { el.checked = !!v; }
+    else { el.value = (v === undefined || v === null) ? '' : v; }
+  });
+  ['sName', 'sClass', 'sDate', 'sTeacher'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) { el.value = STATE.fields[id] || ''; }
+  });
+
+  document.querySelectorAll('[data-tf]').forEach(function (box) {
+    var id = box.getAttribute('data-tf'), v = (STATE.q[id] || {}).val || '';
+    box.querySelectorAll('button').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-v') === v ? 'true' : 'false');
+    });
+  });
+  document.querySelectorAll('[data-mc]').forEach(function (box) {
+    var id = box.getAttribute('data-mc'), v = (STATE.q[id] || {}).val || '';
+    box.querySelectorAll('input[type=radio]').forEach(function (r) {
+      r.checked = (r.value === v);
+    });
+  });
+  document.querySelectorAll('[data-check]').forEach(function (el) {
+    el.value = (STATE.q[el.getAttribute('data-check')] || {}).val || '';
+  });
+
+  refresh();
+}
+
+/* Feedback appears only once a question has been answered - marking an
+   untouched question wrong on page load tells the student nothing and reads
+   as the workbook being broken. */
+function refresh() {
+  ORDER.forEach(function (id) {
+    var q = INDEX[id], v = (STATE.q[id] || {}).val;
+    var answered = !(v === undefined || v === null || v === '');
+    var right = isRight(id);
+    var fb = document.querySelector('[data-fb="' + id + '"]');
+    if (fb) {
+      fb.textContent = !answered ? '' : (right ? '✓ Correct' : '✗ Not yet — have another go');
+      fb.className = 'fb' + (!answered ? '' : (right ? ' ok' : ' no'));
+    }
+    if (q.type === 'tf') {
+      var box = document.querySelector('[data-tf="' + id + '"]');
+      if (box) {
+        box.querySelectorAll('button').forEach(function (b) {
+          b.classList.remove('right', 'wrong');
+          if (answered && b.getAttribute('data-v') === v) {
+            b.classList.add(right ? 'right' : 'wrong');
+          }
+        });
+      }
+    }
+    if (q.type === 'mc') {
+      var mc = document.querySelector('[data-mc="' + id + '"]');
+      if (mc) {
+        mc.querySelectorAll('.opt').forEach(function (o) {
+          o.classList.remove('right', 'wrong');
+          var inp = o.querySelector('input');
+          if (answered && inp && inp.value === v) { o.classList.add(right ? 'right' : 'wrong'); }
+        });
+      }
+    }
+  });
+
+  var t = computeTotals();
+  var fill = document.getElementById('meterFill');
+  var pct = document.getElementById('pctLabel');
+  if (fill) { fill.style.width = (t.items ? Math.round(t.resolved / t.items * 100) : 0) + '%'; }
+  if (pct) { pct.textContent = t.earned + ' / ' + t.possible + ' marks · ' + t.resolved + '/' + t.items + ' answered'; }
+}
+
+/* ── input ─────────────────────────────────────────────────────────────
+   Delegated, because the testing table's inputs do not exist when wire()
+   runs and rebinding after every added row is how listeners get doubled. */
+function setQ(id, val) {
+  STATE.q[id] = { val: val };
+  refresh();
+  DataService.autoSave();
+}
+
+function wire() {
+  document.addEventListener('input', function (e) {
+    var el = e.target;
+    if (el.hasAttribute && el.hasAttribute('data-field') && el.type !== 'checkbox') {
+      STATE.fields[el.getAttribute('data-field')] = el.value;
+      DataService.autoSave();
+    } else if (el.hasAttribute && el.hasAttribute('data-check')) {
+      setQ(el.getAttribute('data-check'), el.value);
+    } else if (el.id && ['sName', 'sClass', 'sDate', 'sTeacher'].indexOf(el.id) >= 0) {
+      STATE.fields[el.id] = el.value;
+      DataService.autoSave();
+    }
+  });
+
+  document.addEventListener('change', function (e) {
+    var el = e.target;
+    if (el.type === 'checkbox' && el.hasAttribute('data-field')) {
+      STATE.fields[el.getAttribute('data-field')] = el.checked;
+      DataService.autoSave();
+    }
+    if (el.type === 'radio' && el.name && INDEX[el.name] && INDEX[el.name].type === 'mc') {
+      setQ(el.name, el.value);
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest ? e.target.closest('[data-tf] button') : null;
+    if (btn) {
+      var id = btn.parentNode.getAttribute('data-tf');
+      var cur = (STATE.q[id] || {}).val;
+      var v = btn.getAttribute('data-v');
+      setQ(id, cur === v ? '' : v);       // clicking the chosen answer clears it
+      return;
+    }
+    var head = e.target.closest ? e.target.closest('[data-toggle]') : null;
+    if (head) { head.parentNode.classList.toggle('open'); }
+  });
+
+  var add = document.getElementById('ttAdd');
+  if (add) {
+    add.addEventListener('click', function () {
+      STATE.fields.tt_rows = ttRows() + 1;
+      applyState();
+      DataService.autoSave();
+      var rows = document.querySelectorAll('#ttBody tr');
+      var last = rows[rows.length - 1];
+      if (last) { last.querySelector('textarea').focus(); }
+    });
+  }
+  var del = document.getElementById('ttDel');
+  if (del) {
+    del.addEventListener('click', function () {
+      var n = ttRows();
+      if (n <= 1) { setStatus('The testing table needs at least one row.'); return; }
+      /* Only offer to drop a row that has nothing in it. Silently deleting a
+         filled row would destroy evidence the student is being marked on. */
+      var used = TT_COLS.some(function (c) {
+        return String(STATE.fields['tt_' + n + '_' + c] || '').trim() !== '';
+      });
+      if (used && !window.confirm('Row ' + n + ' has content. Remove it anyway?')) { return; }
+      TT_COLS.forEach(function (c) { delete STATE.fields['tt_' + n + '_' + c]; });
+      STATE.fields.tt_rows = n - 1;
+      applyState();
+      DataService.autoSave();
+    });
+  }
+
+  var save = document.getElementById('saveBtn');
+  if (save) { save.addEventListener('click', function () { DataService.save(false); }); }
+  var load = document.getElementById('loadBtn');
+  if (load) { load.addEventListener('click', function () { DataService.load(true); }); }
+  var sub = document.getElementById('submitBtn');
+  if (sub) { sub.addEventListener('click', function () { DataService.submit(); }); }
+  var pr = document.getElementById('printBtn');
+  if (pr) { pr.addEventListener('click', function () { window.print(); }); }
+}
+
+/* ══ EDU_API_BEGIN ══ generated by scripts/wire-workbook-api.py — do not hand-edit ══ */
+/* ── EduPortal API ─────────────────────────────────────────────────────────
+   Server-backed persistence. Replaces the localStorage placeholder that
+   shipped with the generated workbook.
+
+   IDENTITY. The eduportal-session cookie is HttpOnly, so this page cannot read
+   who it belongs to. GET /api/v1/auth/me is the only way to find out, and it
+   is the same call index.html, both dashboards and profile.html already make.
+   Fetched once on first use and cached for the life of the page.
+
+   The studentID still travels in the path because that is what the endpoints
+   take today. The server ignores it as an input - every workbook validator
+   asserts `u.ID != request.StudentID -> 403`, so it is a value the client must
+   guess correctly rather than one it supplies. If those paths later drop the
+   parameter, this block is the only place that changes.
+
+   LESSON AND UNIT IDS ARE DERIVED FROM THE PATH. The application generates a
+   workbook into  <subject>/<unit>/<lesson>/<name>_workbook.html , so the
+   directory names ARE the identifiers and cannot drift from the file's
+   location. They drifted once already: a workbook in .../y7-m-u1-l1/ declared
+   LESSON_ID = 'y7-ma-u1-l1-algebra-revision'. Wired up, that would have written
+   drafts against a lesson ID with no matching row in `lessons` - and
+   workbook_drafts has no foreign key, so SQLite would have accepted every one
+   of them silently. The generator's literals are kept as a fallback for a
+   workbook opened outside that layout (offline, say).
+
+   THE HOME BUTTON IS BUILT, NOT AUTHORED. A workbook is opened from a dashboard
+   and needs a way back to it, but which dashboard depends on who is looking:
+   a teacher previewing a lesson should not be dumped on the student view. The
+   role is already in the cached /auth/me response, so the destination costs no
+   extra request. The control is injected rather than written into each
+   workbook, so every generated workbook gets it without the generator
+   remembering to.
+
+   REVIEW MODE. `?submission=<id>` turns the workbook into a read-only view of
+   one submitted attempt, which is how a teacher reads the work while marking.
+   It loads from GET /submissions/{submissionID} - teacher-only - instead of
+   the student's draft, and every write path is disabled.
+
+   Without it, a teacher opening a workbook from the marking queue would call
+   /auth/me, get their OWN id, load their own empty draft, and autosave their
+   poking-about as a teacher-owned row in workbook_drafts. The mode exists
+   because the link is useless and slightly harmful without it.
+
+   PROGRESS IS NOT WRITTEN FROM HERE. The placeholder called _syncProgress() on
+   every save and submit. POST /api/v1/progress/{studentID}/{lessonID} is
+   teacher-only - a student gets 403 - so that call can never succeed and has
+   been removed rather than left to fail quietly. Progress has to become a
+   server-side effect of save and submit; see the Up Soon plan, P3/P4.
+   ────────────────────────────────────────────────────────────────────────── */
+var EDU_API_BASE = '/api/v1';
+var EDU_LOGIN_PATH = '/login.html';
+
+/* A workbook opened straight off disk. Two things break at once, so it is
+   worth detecting up front rather than discovering each separately:
+
+   - fetch() refuses the file: scheme outright, so there is no server to reach
+     and no point probing for one;
+   - the path segments are wherever the file happens to sit. A workbook opened
+     from C:\Users\...\Downloads\ derives LESSON_ID = 'Downloads'. Under file:
+     the generator's literals are the only trustworthy IDs, so the path
+     derivation below is skipped entirely. */
+var EDU_FILE = (function () {
+  try { return window.location.protocol === 'file:'; } catch (e) { return false; }
+})();
+
+/* Last two directory segments before the filename. */
+var EDU_IDS = (function () {
+  try {
+    var parts = window.location.pathname.split('/').filter(Boolean);
+    parts.pop();                                   // the filename
+    var lesson = parts.pop() || '';
+    var unit = parts.pop() || '';
+    return { lessonID: decodeURIComponent(lesson), unitID: decodeURIComponent(unit) };
+  } catch (e) { return { lessonID: '', unitID: '' }; }
+})();
+if (!EDU_FILE && EDU_IDS.lessonID) { LESSON_ID = EDU_IDS.lessonID; }
+if (!EDU_FILE && EDU_IDS.unitID) { UNIT_ID = EDU_IDS.unitID; }
+
+var EDU_DASHBOARD = { student: '/dashboard-student.html', teacher: '/dashboard-teacher.html' };
+
+/* Non-null when a teacher opened this workbook to read one submission. */
+var EDU_REVIEW = (function () {
+  try { return new URLSearchParams(window.location.search).get('submission') || null; }
+  catch (e) { return null; }
+})();
+
+/* ── OFFLINE FALLBACK ──────────────────────────────────────────────────────
+   Only present in a --standalone build, and only active when there is
+   provably no EduPortal to talk to. It exists so a workbook can be authored
+   and walked through before the server is live; it is NOT a student
+   persistence path and must never become one.
+
+   WHAT COUNTS AS OFFLINE, precisely:
+     - the file: scheme, which cannot fetch at all; or
+     - fetch() rejecting, i.e. nothing is listening; or
+     - 404 from GET /auth/me, i.e. something is serving files but not the API.
+   WHAT DOES NOT: 401. That is a live EduPortal with a dead session. Falling
+   back there would quietly fork a student's work into a browser-local copy
+   the server never sees and the teacher never receives - the exact failure
+   the no-browser-storage rule exists to prevent. 401 still goes to login.
+
+   The store is keyed per lesson, so several workbooks open in one browser do
+   not overwrite each other. */
+var EDU_OFFLINE = EDU_FILE;
+
+var EduPortalOffline = {
+  key: function () { return 'eduportal-standalone:' + (UNIT_ID || '?') + '/' + (LESSON_ID || '?'); },
+
+  read: function () {
+    try {
+      var raw = localStorage.getItem(this.key());
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  },
+
+  write: function (payload) {
+    try {
+      localStorage.setItem(this.key(), JSON.stringify(payload));
+      return true;
+    } catch (e) { return false; }     // private mode, or quota
+  },
+
+  /* Idempotent, and called more than once on purpose: the shared kit replaces
+     the bar's innerHTML when it mounts, so a tag painted before that is gone
+     afterwards. Cheap enough to simply re-assert. */
+  enter: function (why) {
+    EDU_OFFLINE = true;
+    this.paint();
+    setTimeout(function () { EduPortalOffline.paint(); }, 0);
+    setTimeout(function () { EduPortalOffline.paint(); }, 400);
+    if (why) { setStatus(why); }
+  },
+
+  paint: function () {
+    if (!EDU_OFFLINE) { return; }
+    var bar = document.querySelector('[data-edu-bar]');
+    if (bar && !document.getElementById('eduOfflineTag')) {
+      var tag = document.createElement('span');
+      tag.id = 'eduOfflineTag';
+      tag.className = 'edu-offline';
+      /* EDU_TESTING: this tag, and the whole offline fallback, exist only
+         until the server is live. data-edu-test makes it findable and
+         hideable - see the TESTING-ONLY block in eduportal-kit.css. */
+      tag.setAttribute('data-edu-test', '');
+      tag.textContent = 'OFFLINE · saved in this browser only';
+      tag.title = 'No EduPortal server. Work is kept in this browser on this machine, '
+                + 'is not visible to a teacher, and will not follow you to another device.';
+      bar.appendChild(tag);
+    }
+    /* The kit leaves these mid-flight when /auth/me never answers - an
+       ellipsis chip and an em-dash avatar read as "still loading" forever. */
+    var chip = document.getElementById('roleChip');
+    if (chip && (chip.textContent === '…' || !chip.textContent)) {
+      chip.textContent = 'PREVIEW';                       /* EDU_TESTING */
+      chip.setAttribute('data-edu-test', '');
+    }
+    var av = document.getElementById('navAvatar');
+    if (av && av.textContent === '—') { av.style.display = 'none'; }
+  }
+};
+
+var EduPortalAPI = {
+  _studentID: null,
+  _role: null,
+
+  request: function (method, path, body) {
+    var opts = { method: method, credentials: 'include', headers: {} };
+    if (body !== undefined) {
+      opts.headers['Content-Type'] = 'application/json';
+      opts.body = JSON.stringify(body);
+    }
+    return fetch(EDU_API_BASE + path, opts).then(null, function (e) {
+      /* fetch rejects only for transport failures - DNS, refused connection,
+         an unsupported scheme. An HTTP error status resolves, so this branch
+         means there is nothing listening at all. */
+      var err = new Error('Cannot reach the EduPortal server.');
+      err.offline = true;
+      throw err;
+    }).then(function (res) {
+      return res.text().then(function (text) {
+        var data = null;
+        try { data = text ? JSON.parse(text) : null; } catch (e) { data = text; }
+        if (res.ok) { return data; }
+        var err = new Error((data && (data.detail || data.title)) ||
+                            ('Request failed (HTTP ' + res.status + ').'));
+        err.status = res.status;
+        throw err;
+      });
+    });
+  },
+
+  studentID: function () {
+    if (EDU_OFFLINE) { return Promise.resolve('offline'); }
+    if (this._studentID) { return Promise.resolve(this._studentID); }
+    var self = this;
+    var viaKit = this.studentIDFromKit();
+    var p = viaKit || this.request('GET', '/auth/me').then(function (data) {
+      var u = (data && data.user) || data || {};
+      self._studentID = u.ID || u.id || null;
+      self._role = u.role || null;
+      if (!self._studentID) { throw new Error('Signed in, but your account could not be identified.'); }
+      return self._studentID;
+    });
+    return p.then(function (id) {
+      if (!id) { throw new Error('Signed in, but your account could not be identified.'); }
+      return id;
+    }, function (err) {
+      /* No transport, or files are being served but the API is not mounted.
+         Anything else - 401 above all - is a real server saying no. */
+      if (err && (err.offline || err.status === 404 || (err instanceof TypeError))) {
+        EduPortalOffline.enter(null);
+        return 'offline';
+      }
+      throw err;
+    });
+  },
+
+  /* The back link is hidden until /auth/me answers: a link that might go to the
+     wrong dashboard is worse than one that appears a moment late. An unknown
+     role falls back to the student view, which is the common case. */
+  /* The top bar is rendered by /static/eduportal-kit.js, which also owns the
+     home link, the theme toggle, logout and the avatar. Nothing to mount here
+     any more - this only borrows the identity the kit has already fetched, so
+     the page makes one /auth/me call rather than two. */
+  studentIDFromKit: function () {
+    if (window.EduKit && window.EduKit.me) {
+      var self = this;
+      return window.EduKit.me().then(function (u) {
+        self._studentID = u.ID || u.id || null;
+        self._role = u.role || null;
+        return self._studentID;
+      });
+    }
+    return null;
+  },
+
+  /* GET /api/v1/submissions/{submissionID} - teacher-only. The submitted
+     snapshot, not the live draft: what the student handed in is what gets
+     marked, even if they have kept working since. */
+  loadSubmission: function (announce) {
+    return this.request('GET', '/submissions/' + encodeURIComponent(EDU_REVIEW)).then(function (sub) {
+      var c = sub && sub.content;
+      if (c) {
+        STATE.fields = c.fields || {};
+        STATE.q = c.questions || {};
+        applyState();
+      }
+      EduPortalAPI.lockForReview(sub, c ? null : 'This submission carries no answer data.');
+      return true;
+    }).catch(function (err) {
+      EduPortalAPI.lockForReview(null, (err && err.message) || 'Could not load that submission.');
+      if (err && err.status === 401) { window.location.href = EDU_LOGIN_PATH; }
+      return false;
+    });
+  },
+
+  /* Read-only means read-only: inputs and answer controls are disabled, and the
+     save/load/submit controls are removed rather than disabled, because a
+     greyed-out Submit still reads as "something I could do here".
+
+     Section headers and the theme toggle stay live - they are navigation, not
+     input - and every section is opened, since a marker wants the whole script
+     at once rather than a click per section. */
+  lockForReview: function (sub, problem) {
+    document.querySelectorAll('input, textarea, select').forEach(function (el) { el.disabled = true; });
+    document.querySelectorAll('[data-check], [data-tf]').forEach(function (el) { el.disabled = true; });
+    ['saveBtn', 'loadBtn', 'submitBtn', 'submitBtn2', 'printBtn'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el && el.parentNode) { el.parentNode.removeChild(el); }
+    });
+    document.querySelectorAll('.sec').forEach(function (el) { el.classList.add('open'); });
+
+    var bar = document.querySelector('[data-edu-bar]');
+    if (bar && !document.getElementById('eduReviewTag')) {
+      var tag = document.createElement('span');
+      tag.id = 'eduReviewTag';
+      tag.className = 'edu-review';
+      tag.textContent = problem
+        ? 'Review \u2014 ' + problem
+        : 'Reviewing ' + ((sub && (sub.studentName || sub.studentID)) || 'a submission') + ' \u00b7 read only';
+      bar.appendChild(tag);
+    }
+    setStatus(problem || 'Read-only view of submitted work. Nothing here is saved.');
+    if (sub) { EduPortalMark.open(sub); }
+  },
+
+  /* Shared failure handling. A 401 means the session went away underneath us -
+     there is nothing the page can do except send the student back to sign in.
+     Anything else is reported and swallowed, because none of the call sites
+     read a return value and an unhandled rejection would be invisible. */
+  fail: function (err, message) {
+    if (err && err.status === 401) { window.location.href = EDU_LOGIN_PATH; return false; }
+    setStatus(message + ' — ' + ((err && err.message) || 'please try again.'));
+    return false;
+  },
+
+  wbPath: function (studentID, suffix) {
+    return '/workbooks/' + encodeURIComponent(studentID) +
+           '/' + encodeURIComponent(LESSON_ID) + (suffix || '');
+  }
+};
+
+/* ── Marking ───────────────────────────────────────────────────────────────
+   The panel a teacher marks from, docked beside the work in review mode.
+
+   It writes to the SUBMISSION and never to the workbook. The student's answers
+   are the record of what was handed in; a mark is a separate fact about that
+   record, which is why score and feedback go to /submissions/{id} and nothing
+   here touches workbook_drafts.
+
+   POST /mark for a first mark, PATCH for an amendment - the same split the
+   teacher dashboard uses, and for the same reason: the mark endpoint moves
+   status and score together, PATCH is for corrections afterwards. */
+var EduPortalMark = {
+  sub: null,
+  queue: null,     // sibling submissions for this lesson, for Save & next
+  index: -1,
+
+  open: function (sub) {
+    this.sub = sub;
+    var el = document.getElementById('eduMark');
+    if (!el) { return; }
+    document.getElementById('eduMarkWho').textContent = sub.studentName || sub.studentID || 'Submission';
+    document.getElementById('eduMarkWhen').textContent =
+      (sub.status || 'submitted') + (sub.submittedAt ? ' · ' + String(sub.submittedAt).slice(0, 10) : '');
+    var t = sub.content && sub.content.totals;
+    document.getElementById('eduMarkTally').textContent = t
+      ? 'auto-marked ' + (t.earned || 0) + ' / ' + (t.possible || 0) +
+        ' · ' + (t.resolved || 0) + '/' + (t.items || 0) + ' answered'
+      : 'no auto-marked total on this submission';
+    if (sub.score != null) { document.getElementById('eduMarkScore').value = sub.score; }
+    if (sub.feedback) { document.getElementById('eduMarkFb').value = sub.feedback; }
+
+    /* Inputs were disabled wholesale by lockForReview - that pass runs over the
+       whole document, and this panel is part of it. Re-enable just these. */
+    ['eduMarkScore', 'eduMarkFb', 'eduMarkSave', 'eduMarkNext'].forEach(function (id) {
+      var c = document.getElementById(id); if (c) { c.disabled = false; }
+    });
+
+    el.hidden = false;
+    document.body.classList.add('edu-marking');
+    document.getElementById('eduMarkSave').onclick = function () { EduPortalMark.save(false); };
+    document.getElementById('eduMarkNext').onclick = function () { EduPortalMark.save(true); };
+    this.loadQueue();
+  },
+
+  msg: function (text, kind) {
+    var m = document.getElementById('eduMarkMsg');
+    if (m) { m.textContent = text || ''; m.className = 'edu-mark-msg' + (kind ? ' ' + kind : ''); }
+  },
+
+  /* The rest of this lesson's submissions, so a teacher can work the whole
+     class without going back to the dashboard between each one. */
+  loadQueue: function () {
+    var self = this;
+    return EduPortalAPI.request('GET', '/lessons/' + encodeURIComponent(LESSON_ID) + '/submissions?sort=name')
+      .then(function (rows) {
+        self.queue = Array.isArray(rows) ? rows : [];
+        var mine = self.sub.ID || self.sub.id;
+        self.index = -1;
+        self.queue.forEach(function (r, i) { if ((r.ID || r.id) === mine) { self.index = i; } });
+        self.paintNav();
+      }).catch(function () { /* navigation is a convenience; marking works without it */ });
+  },
+
+  paintNav: function () {
+    var nav = document.getElementById('eduMarkNav');
+    if (!nav || !this.queue || this.index < 0) { return; }
+    var self = this;
+    nav.innerHTML = '';
+    var prev = document.createElement('button');
+    prev.className = 'btn'; prev.type = 'button'; prev.textContent = '←';
+    prev.disabled = this.index <= 0;
+    prev.onclick = function () { self.go(self.index - 1); };
+    var next = document.createElement('button');
+    next.className = 'btn'; next.type = 'button'; next.textContent = '→';
+    next.disabled = this.index >= this.queue.length - 1;
+    next.onclick = function () { self.go(self.index + 1); };
+    var pos = document.createElement('span');
+    pos.textContent = (this.index + 1) + ' of ' + this.queue.length + ' in this lesson';
+    nav.appendChild(prev); nav.appendChild(next); nav.appendChild(pos);
+    var adv = document.getElementById('eduMarkNext');
+    if (adv) { adv.hidden = this.index >= this.queue.length - 1; }
+  },
+
+  /* A full navigation rather than swapping state in place: the workbook's own
+     rendering is driven by applyState() at boot, and re-running it against a
+     different submission would leave the previous student's feedback banners
+     on screen. */
+  go: function (i) {
+    if (!this.queue || i < 0 || i >= this.queue.length) { return; }
+    var id = this.queue[i].ID || this.queue[i].id;
+    var u = new URL(window.location.href);
+    u.searchParams.set('submission', id);
+    window.location.href = u.toString();
+  },
+
+  save: function (advance) {
+    var self = this;
+    var id = this.sub && (this.sub.ID || this.sub.id);
+    if (!id) { return Promise.resolve(false); }
+    var score = parseFloat(document.getElementById('eduMarkScore').value);
+    var feedback = document.getElementById('eduMarkFb').value.trim();
+
+    /* 0 is a legitimate mark, so this tests isFinite rather than truthiness. */
+    if (!isFinite(score)) { this.msg('Enter a mark.', 'err'); return Promise.resolve(false); }
+    if (score < 0 || score > 100) {
+      this.msg('A mark is a percentage — ' + score + ' is outside 0–100.', 'err');
+      return Promise.resolve(false);
+    }
+
+    var btn = document.getElementById(advance ? 'eduMarkNext' : 'eduMarkSave');
+    btn.disabled = true;
+    this.msg('Saving…');
+
+    var already = this.sub.score != null;
+    var req = already
+      ? EduPortalAPI.request('PATCH', '/submissions/' + encodeURIComponent(id),
+          { score: score, feedback: feedback })
+      : EduPortalAPI.request('POST', '/submissions/' + encodeURIComponent(id) + '/mark',
+          { score: score, feedback: feedback });
+
+    return req.then(function () {
+      self.sub.score = score; self.sub.feedback = feedback;
+      btn.disabled = false;
+      if (advance) { self.go(self.index + 1); return true; }
+      self.msg('Saved.', 'ok');
+      return true;
+    }).catch(function (err) {
+      btn.disabled = false;
+      if (err && err.status === 401) { window.location.href = EDU_LOGIN_PATH; return false; }
+      self.msg((err && err.message) || 'Could not save this mark.', 'err');
+      return false;
+    });
+  }
+};
+
+var DataService = {
+  /* The cached ID, or null before the first /auth/me resolves. Synchronous
+     because the one caller that remains only wants it for display. */
+  studentId: function () { return EduPortalAPI._studentID; },
+
+  /* WorkbookSubmission has exactly two properties: __tf, and `content` which
+     holds everything else this workbook wants to keep.
+
+     THE NESTING IS LOAD-BEARING. The schema used to be an open object -
+     `additionalProperties: true` at the top level - which made oapi-codegen
+     give it a `map[string]interface{}` field tagged `json:"-"` plus a custom
+     MarshalJSON to fold it back in. The generated single-object response
+     wrappers are DEFINED types, not aliases, and a defined type in Go does not
+     inherit its underlying type's methods - so that marshaller never ran on the
+     way out and every response was `{"__tf":{}}`. Work saved perfectly and came
+     back empty. A named property is an ordinary tagged field, so nothing
+     special has to happen for it to survive.
+
+     lessonId and unitId are deliberately NOT sent. The path already establishes
+     both, and v3.0 removed duplicate identifiers from MarkedSubmission for
+     exactly this reason: a duplicate is a second source of truth that can
+     disagree with the first. */
+  payload: function () {
+    /* __tf KEYS MUST BE INTEGERS, NOT QUESTION IDS. The submit validator runs
+       strconv.ParseUint(key, 10, 16) over every key and 400s the whole request
+       on the first one that is not a number, so a key like "t16" rejects the
+       submission outright. The keys are the 1-based position of the question
+       among the true/false questions, in document order - which is what the
+       seed fixtures use: {"1":"T","2":"F","3":"T"}.
+
+       The counter increments for every true/false question, answered or not, so
+       an id keeps the same index no matter what order the student answers in.
+       Increment first, then decide whether there is a value to record. */
+    var tf = {};
+    var tfIndex = 0;
+    ORDER.forEach(function (id) {
+      var q = INDEX[id];
+      if (!q || q.type !== 'tf') { return; }
+      tfIndex += 1;
+      var v = String((STATE.q[id] || {}).val || '').toUpperCase();
+      if (v === 'T' || v === 'F') { tf[String(tfIndex)] = v; }
+    });
+    return {
+      __tf: tf,
+      content: {
+        fields: STATE.fields,
+        questions: STATE.q,
+        totals: computeTotals(),
+        updatedAt: new Date().toISOString()
+      }
+    };
+  },
+
+  /* POST /api/v1/workbooks/{studentID}/{lessonID} */
+  save: function (quiet) {
+    if (EDU_REVIEW) { return Promise.resolve(false); }
+    var self = this;
+    return EduPortalAPI.studentID().then(function (sid) {
+      if (EDU_OFFLINE) {
+        var ok = EduPortalOffline.write(self.payload());
+        if (!quiet) {
+          setStatus(ok ? 'Saved in this browser only — no server, so nothing has been sent to a teacher.'
+                       : 'Could not save: this browser is blocking local storage.');
+        }
+        return ok ? 'offline' : Promise.reject(new Error('local storage unavailable'));
+      }
+      return EduPortalAPI.request('POST', EduPortalAPI.wbPath(sid), self.payload());
+    }).then(function (r) {
+      if (r === 'offline') { return true; }
+      if (!quiet) { setStatus('Saved — your work is on the server.'); }
+      return true;
+    }).catch(function (err) {
+      /* Worth being blunt: before, a failed save left the work in localStorage.
+         Now a failed save means this tab is the only copy. */
+      return EduPortalAPI.fail(err, 'Could not save. Your work is still on screen, so keep this tab open');
+    });
+  },
+
+  /* GET /api/v1/workbooks/{studentID}/{lessonID}
+     404 is the documented "no workbook saved yet" and is a normal first visit,
+     not an error. */
+  load: function (announce) {
+    if (EDU_REVIEW && !EDU_OFFLINE) { return EduPortalAPI.loadSubmission(announce); }
+    /* This is the first call the page makes, so it is where offline gets
+       detected. studentID() resolves either way - it never rejects for a
+       missing server - so the branch below reads the local store instead. */
+    return EduPortalAPI.studentID().then(function (sid) {
+      if (EDU_OFFLINE) {
+        EduPortalOffline.paint();
+        return EduPortalOffline.read();
+      }
+      return EduPortalAPI.request('GET', EduPortalAPI.wbPath(sid));
+    }).then(function (d) {
+      if (EDU_OFFLINE && !d) {
+        setStatus('No EduPortal server — this workbook is in preview mode and saves to this browser only.');
+        return false;
+      }
+      var c = d && d.content;
+      if (!c) {
+        if (announce) { setStatus('No saved work found for this workbook yet.'); }
+        return false;
+      }
+      STATE.fields = c.fields || {};
+      STATE.q = c.questions || {};
+      applyState();               // ends with refresh()
+      if (EDU_OFFLINE) {
+        setStatus('Loaded work saved in this browser. There is no server — nothing here has reached a teacher.');
+      } else if (announce) { setStatus('Loaded your saved work.'); }
+      return true;
+    }).catch(function (err) {
+      if (err && err.status === 404) {
+        if (announce) { setStatus('No saved work found for this workbook yet.'); }
+        return false;
+      }
+      return EduPortalAPI.fail(err, 'Could not load your saved work');
+    });
+  },
+
+  autoSave: (function () {
+    var t = null;
+    return function () {
+      clearTimeout(t);
+      t = setTimeout(function () { DataService.save(true); }, 1500);
+    };
+  })(),
+
+  /* POST /api/v1/workbooks/{studentID}/{lessonID}/submit
+     Saves first: submit sends its own snapshot, but leaving the draft behind
+     stale would mean reopening the workbook showed older work than the teacher
+     is looking at. */
+  submit: function () {
+    if (EDU_REVIEW) { return Promise.resolve(false); }
+    var self = this;
+    var tot = computeTotals();
+    var unanswered = tot.items - tot.resolved;
+    var tail = EDU_OFFLINE
+      ? '\n\nTHERE IS NO SERVER. This is a preview of the submit step: the snapshot ' +
+        'is kept in this browser and NOT sent to anyone.'
+      : '\n\nYou can keep working after submitting, but your teacher sees this snapshot.';
+    var msg = (EDU_OFFLINE ? 'Preview the submit step?' : 'Submit your workbook to your teacher?') + '\n\n' +
+              'Score: ' + tot.earned + ' / ' + tot.possible + ' marks\n' +
+              'Questions completed: ' + tot.resolved + ' / ' + tot.items +
+              (unanswered > 0 ? '\n\n' + unanswered + ' question(s) are still unanswered.' : '') +
+              tail;
+    if (!window.confirm(msg)) { return Promise.resolve(false); }
+
+    if (EDU_OFFLINE) {
+      /* Deliberately does not say "Submitted". Nothing was submitted. */
+      return this.save(true).then(function () {
+        setStatus('Preview only — the snapshot is in this browser and has not been sent to a teacher.');
+        window.alert('Not submitted.\n\nAuto-marked score: ' + tot.earned + ' / ' + tot.possible +
+                     ' marks.\n\nThere is no EduPortal server, so this went no further than this browser.');
+        return false;
+      });
+    }
+
+    setStatus('Submitting…');
+    return this.save(true).then(function () {
+      return EduPortalAPI.studentID();
+    }).then(function (sid) {
+      return EduPortalAPI.request('POST', EduPortalAPI.wbPath(sid, '/submit'), self.payload());
+    }).then(function (acc) {
+      setStatus('Submitted. Your teacher can now review this workbook.');
+      window.alert('Submitted.\n\nAuto-marked score: ' + tot.earned + ' / ' + tot.possible +
+                   ' marks.\n\nWritten-response questions are marked by your teacher separately.');
+      return (acc && acc.submissionID) || true;
+    }).catch(function (err) {
+      /* Not the same as a failed save: nothing was sent to the teacher, and the
+         student needs to know that rather than assume it went through. */
+      return EduPortalAPI.fail(err, 'Could not submit. Nothing has been sent to your teacher yet');
+    });
+  }
+};
+/* ══ EDU_API_END ══ */
+
+/* ══ EDU_API_BEGIN ══ generated by scripts/wire-workbook-api.py — do not hand-edit ══ */
+/* ── boot ──────────────────────────────────────────────────────────────────
+   Loading is a network round-trip now, so anything that depends on restored
+   state has to run after it resolves. The date default in particular: setting
+   it before the load completes would be wiped by `STATE.fields = d.fields`,
+   leaving the input showing a date the saved state does not contain, which the
+   next save would then drop. */
+document.addEventListener('DOMContentLoaded', function () {
+  build();
+  wire();
+  document.querySelector('.nav-sec').classList.add('open');
+  refresh();
+
+  DataService.load(false).then(function () {
+    var d = document.getElementById('sDate');
+    if (d && !d.value) { d.value = new Date().toISOString().slice(0, 10); }
+    if (d) { STATE.fields.sDate = d.value; }
+  });
+});
+/* ══ EDU_API_END ══ */
+
+</script>
+</body>
+</html>
